@@ -77,7 +77,10 @@ Vec_Int_t * Sim_NtkComputeSwitching( Abc_Ntk_t * pNtk, int nPatterns )
     {
         pSimInfo = (unsigned *)Vec_PtrEntry(vSimInfo, pNode->Id);
         Sim_UtilSimulateNodeOne( pNode, vSimInfo, nSimWords, 0 );
+        Vec_IntPrint(&vSimInfo);
+        //Vec_VecPrintInt(&vSimInfo,0);
         pSwitching[pNode->Id] = Sim_ComputeSwitching( pSimInfo, nSimWords );
+        printf("node:%i; nSim:%i; pSimInfo:%i; pSwitching:%.5f\n", pNode->Id, nSimWords, &pSimInfo,pSwitching[pNode->Id]);
     }
     Vec_PtrFree( vNodes );
     Sim_UtilInfoFree( vSimInfo );
