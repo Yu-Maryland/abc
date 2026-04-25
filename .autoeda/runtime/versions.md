@@ -667,3 +667,54 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap13: guard-hit instrumentation`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap13` shows the lower-moderate bucket is heavily exercised on `ode` and `syn2`, but actual middle-slack relief is concentrated in `syn2` (`12`) and lightly in `or1200` (`2`) while `ode` has none. For `stmap14`, keep the counters and test a behavior change that admits lower-moderate middle-slack relief only when the candidate clears a stronger area-saving ratio or when the rejection is arrival-neutral and occurs in the `syn2`-like high lower-bucket/high middle-slack profile.
+
+## version14 / stmap14
+
+- hypothesis: Keeping the `stmap13` guard counters and lower-moderate middle-slack bucket, but requiring middle-slack relief to save at least two inverter areas instead of one, can reduce downstream area risk from marginal lower-bucket exact-area choices while preserving final `stime` delay wins.
+- motivation: `stmap13` showed that middle-slack relief was concentrated in `syn2` (`12`) and lightly in `or1200` (`2`), while `ode` had no admitted relief. The next-step recommendation was to test a stronger area-saving ratio before tuning more shape gates. `stmap14` makes that single threshold change while preserving instrumentation.
+- command name: `stmap14`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_14.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap14/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap14` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 15` into the mapper. Mode `15` preserves the `stmap13` guard-stat path and the `stmap12`/`stmap13` lower-moderate, tight-depth, arrival-neutral middle-slack window, but the candidate must now save more than `2.0 * AreaInv` in mapper area flow before the exact-area guard admits it. Modes `0` through `14` retain their previous behavior; `mapperCore.c` prints `stmap13 guard stats` for mode `14` and `stmap14 guard stats` for mode `15`.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap14/build.log`.
+  - help: `./abc -c "stmap14 -h"` printed usage text with default `-G 250.00` and the stronger lower-moderate middle-slack guard enabled. Log: `.autoeda/runtime/results/stmap14/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap14; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap14/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap14/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-relief `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-relief `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `578.80 ps`, area `4853.16`; delay delta `-8.28 ps` (`-1.41%`), area delta `+54.82` (`+1.14%`); guard stats: exact-risk `22683`, middle-relief `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `493.07 ps`, area `21554.37`; delay delta `-15.75 ps` (`-3.10%`), area delta `+257.77` (`+1.21%`); guard stats: exact-risk `98466`, middle-relief `1`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_14.c`.
+  - numbered command exists and is registered as `stmap14`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat parsing passed and is recorded in `.autoeda/runtime/results/stmap14/guard_stats.csv`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap14/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap14/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap14/review_pass1_supported.log`.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap14/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap14/review_pass2_supported.log`.
+- accepted findings: none.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none.
+- commit: local commit created with message `stmap14: strengthen middle-slack area relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap14` reduces the `or1200` area cost relative to `stmap13`, but gives back much of the `or1200` delay gain and increases `syn2` area while admitting only one middle-slack relief. For `stmap15`, keep the counters and test an adaptive lower-moderate rule that restores relief only for high middle-slack/high lower-bucket profiles, or add a timing-quality discriminator to distinguish the `syn2` delay-positive relief from area-expensive downstream sizing effects.

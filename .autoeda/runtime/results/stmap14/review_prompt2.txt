@@ -1,0 +1,19 @@
+Second review pass for the uncommitted stmap14 AutoEDA iteration.
+
+No source changes were made after review pass 1. Review pass 1 reported no
+correctness regression. Please independently re-check for source or validation
+issues before the iteration is counted.
+
+Key points to verify:
+- stmap14 is registered and build-integrated without affecting older stmap0
+  through stmap13 commands.
+- fSkipFanout mode 15 preserves mode 14/stmap13 guard-stat behavior except for
+  the intended middle-slack threshold change from one inverter area to two.
+- stmap13 still prints `stmap13 guard stats`, while stmap14 prints `stmap14
+  guard stats`.
+- Validation artifacts under .autoeda/runtime/results/stmap14/ include build,
+  help, smoke, full benchmark metrics, guard_stats.csv, summary.json, CEC logs,
+  and review logs.
+
+Please report only actionable correctness, build, validation, or campaign-log
+findings, with file/line references where applicable.

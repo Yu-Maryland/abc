@@ -1,0 +1,7 @@
+missing_required_artifacts: PASS
+summary_all_metrics_parseable: PASS True
+summary_all_cec_equivalent: PASS True
+version_log_contains_stmap14: PASS
+state_completed_iterations_15: PASS 15
+state_next_iteration_15: PASS 15
+state_status_iteration_complete: PASS iteration-complete

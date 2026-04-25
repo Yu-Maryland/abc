@@ -1,0 +1,24 @@
+Review the uncommitted stmap14 AutoEDA iteration in this ABC repository.
+
+Focus on correctness and regression risk. The intended hypothesis is:
+stmap14 keeps stmap13 guard-stat instrumentation and stmap12 lower-moderate
+middle-slack bucket selection, but tightens middle-slack relief by requiring a
+candidate exact-area match to save two inverter areas instead of one.
+
+Expected implementation shape:
+- New command file: src/base/abci/abcStmap_14.c
+- Registration/build integration: src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp
+- Mapper mode: fSkipFanout == 15 in src/map/mapper/mapperMatch.c
+- Guard-stat print supports mode 14 as stmap13 and mode 15 as stmap14 in src/map/mapper/mapperCore.c
+- Existing stmap0 through stmap13 behavior should remain buildable and comparable.
+
+Validation already run before this review:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap14 -h"
+- smoke flow on benchmarks/i10.aig
+- full baseline/candidate flow on all four required benchmarks
+- guard-stat parsing
+- CEC on all four required benchmarks
+
+Artifacts are under .autoeda/runtime/results/stmap14/.
+Please report findings by severity with file/line references, and distinguish source-code findings from required post-review logging/state updates.
