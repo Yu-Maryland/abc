@@ -1623,3 +1623,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap30: penalize strong load seed`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap30` shows that the refs-5 strong seed at node `2318` can be blocked without changing final required-benchmark QoR, so it is likely redundant rather than beneficial. For `stmap31`, either lower the strong-seed penalty to find the threshold where node `2318` re-enters, or replace the reference-count proxy with a direct SCL/load diagnostic so the penalty distinguishes redundant high-reference strong seeds from genuinely timing-critical ones.
+
+## version31 / stmap31
+
+- hypothesis: Damping the high-reference strong deep seed gain-slope penalty can find the acceptance threshold where `syn2` node `2318` re-enters, while preserving the `stmap30` moderate-seed penalty that blocks the harmful node `37979`.
+- motivation: `stmap30` blocked the refs-5 strong seed at node `2318` with no final QoR change, indicating that the seed may be redundant. A threshold probe is useful before replacing the reference-count proxy with a richer downstream load signal: if node `2318` re-enters at a lower penalty and QoR remains unchanged, the strong-seed penalty can be treated as a diagnostic load-risk control rather than a timing-critical rule.
+- command name: `stmap31`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_31.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap31/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap31` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 32` into the mapper. Mode 32 preserves `stmap30`'s continuous moderate deep seed penalty and its high-reference strong seed eligibility shape, but changes only the strong-seed penalty factor by reducing the gain-ratio slope from `0.09` to `0.05`. The penalty keeps the `0.18 * (refs - 4)` reference term, the `0.16` tight-slack term, and the `0.75` cap. A preliminary `0.07` gain slope still blocked node `2318` with area margin `0.929144`, so the final validation used `0.05`, which admitted the seed with factor `0.300` and area margin `0.909667`. Existing `map` and `stmap0` through `stmap30` remain on their prior mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap31/build.log`.
+  - help: `./abc -c "stmap31 -h"` printed usage text with default `-G 250.00` and the damped strong deep seed load penalty enabled. Log: `.autoeda/runtime/results/stmap31/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap31; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap31/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap31/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `relief_diag.csv`, `near_miss_diag.csv`, `moderate_penalty_block_diag.csv`, `strong_penalty_seed_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `1`, strong blocked `0`.
+- penalty diagnostics:
+  - `benchmarks/syn2.abc.blif`: `stmap31` admits the refs-5 strong seed at node `2318`, level `29`, leaves `4`, phase `0`, slack `7.430023`, area saving `0.93`, arrival delta `-10.130005`, arrival-gain margin `1.585`, penalty factor `0.300`, and area margin `0.909667`.
+  - `benchmarks/syn2.abc.blif`: `stmap31` continues to reject the moderate refs-5 seed at node `37979` twice with factor `0.349` and area margin `0.944093`, preserving the `stmap29`/`stmap30` moderate load-risk blocker.
+  - Final required-benchmark QoR is identical to `stmap29` and `stmap30`; node `2318` re-entry does not change final `syn2` delay or area in this downstream flow.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_31.c`.
+  - numbered command exists and is registered as `stmap31`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, relief, moderate-penalty-block, strong-penalty-seed, and near-miss diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap31/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap31/`.
+  - artifact and version-log checks passed after the canonical log entry was added.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap31/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap31/review_pass1_supported.log`.
+  - accepted findings: none; the reviewer reported no discrete correctness, build integration, or maintainability issues.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap31/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap31/review_pass2_supported.log`.
+  - accepted findings: none; the reviewer reported no discrete correctness issues in command wiring, mode-32 gating, diagnostics, or validation artifacts.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none.
+- commit: local commit created with message `stmap31: damp strong load penalty`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap31` confirms the strong node `2318` can re-enter without changing final QoR, while the moderate node `37979` remains the active blocker. For `stmap32`, move beyond reference count by adding a direct downstream-aware diagnostic or penalty input, such as SCL load, slew, or post-buffer capacitance correlation, so strong and moderate high-reference seeds can be separated by observed load behavior instead of mapper reference count alone.

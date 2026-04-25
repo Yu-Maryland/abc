@@ -1,0 +1,20 @@
+Review the uncommitted stmap31 AutoEDA iteration in this ABC repository.
+
+Context:
+- The project pack requires a numbered stmapN command, preserved older variants, build/help/smoke/full benchmark metrics, CEC, review, logging, and commit.
+- stmap31 adds command `stmap31` with mapper mode `fSkipFanout = 32`.
+- Hypothesis: keep the stmap30 moderate-seed load penalty but damp the strong deep high-reference gain slope to 0.05 so the syn2 strong seed at node 2318 re-enters; this probes the threshold without changing older stmap modes.
+
+Please review for concrete correctness issues only:
+- command declaration/registration/build integration for `stmap31`
+- mode-32 range handling in `mapperMatch.c`, `mapperCore.c`, and `mapperInt.h`
+- whether older stmap0 through stmap30 behavior remains preserved
+- counter/diagnostic correctness and uninitialized or stale mode-specific data risks
+- any evaluation artifact or correctness-gate issue visible from the uncommitted changes
+
+Validation already run before review:
+- `make ABC_USE_NO_READLINE=1`
+- `./abc -c "stmap31 -h"`
+- smoke flow on `benchmarks/i10.aig`
+- full baseline/candidate metrics on all four required benchmarks
+- CEC for original strashed designs versus post-flow stmap31 outputs on all four required benchmarks

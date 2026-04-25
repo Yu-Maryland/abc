@@ -1,0 +1,12 @@
+Second review pass for the uncommitted stmap31 AutoEDA iteration.
+
+Pass 1 reported no discrete correctness, build integration, or maintainability issues, and no source changes were made after pass 1.
+
+Please independently re-check:
+- `stmap31` command registration and build inclusion
+- mapper mode 32 range gates and diagnostic counters
+- preservation of modes 0 through 31 / `stmap0` through `stmap30`
+- whether the damped strong-seed penalty can use uninitialized factors or record misleading diagnostics
+- whether the validation artifacts satisfy the project-pack gates
+
+Validation available in `.autoeda/runtime/results/stmap31/` includes build, help, smoke, full benchmark metrics, parsed diagnostics, and CEC summary.

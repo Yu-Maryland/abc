@@ -1,0 +1,1 @@
+Preliminary stmap31 coefficient 0.07 still blocked syn2 node 2318 with area-margin 0.929144 against rounded area-save 0.930000; final validation uses 0.05 to force the threshold re-entry probe.

@@ -1,0 +1,6 @@
+required_files_present: PASS
+summary_valid_metrics: PASS
+metrics_rows_8: PASS
+comparison_rows_4: PASS
+cec_all_equivalent: PASS
+review_logs_present: PASS

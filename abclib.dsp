@@ -603,6 +603,10 @@ SOURCE=.\src\base\abci\abcStmap_30.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\base\abci\abcStmap_31.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\base\abci\abcStrash.c
 # End Source File
 # Begin Source File
