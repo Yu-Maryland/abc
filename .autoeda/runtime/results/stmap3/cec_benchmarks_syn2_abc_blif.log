@@ -1,0 +1,8 @@
+$ ./abc -c "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap3/cec_benchmarks_syn2_abc_blif_orig.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap3/cec_benchmarks_syn2_abc_blif_stmap3.aig"
+
+[stdout]
+======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap3/cec_benchmarks_syn2_abc_blif_orig.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap3/cec_benchmarks_syn2_abc_blif_stmap3.aig"
+Networks are equivalent.  Time =     2.50 sec
+
+
+[stderr]

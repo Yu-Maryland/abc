@@ -204,7 +204,7 @@
       "remote_url": "https://github.com/Yu-Maryland/abc",
       "branch": "master",
       "commit_message_template": "{family}{iteration}: {summary}",
-      "push_mode": "disabled",
+      "push_mode": "normal",
       "require_clean_tree": false,
       "canary": {
         "push_mode_override": "disabled",
@@ -226,12 +226,13 @@
         "preserve_unrelated_user_changes": true
       },
       "push_policy": {
-        "full_campaign": "disabled by default; enable only after the user explicitly changes push_mode and confirms the remote target",
+        "full_campaign": "enabled; push each successful non-canary iteration to origin/master after validation, review, and commit",
         "canary": "disabled"
       },
       "safety_notes": [
-        "The configured origin is https://github.com/Yu-Maryland/abc on branch master, so autonomous pushes are disabled in this pack.",
-        "Successful iterations may still create local commits when commit_policy requirements pass.",
+        "The configured origin is https://github.com/Yu-Maryland/abc on branch master, and the user has explicitly enabled autonomous pushes for future full-campaign iterations.",
+        "Canary pushes remain disabled unless the user explicitly changes canary.push_mode_override and canary.push_allowed.",
+        "Successful iterations should create local commits when commit_policy requirements pass, then push when push_mode is normal and canary policy does not override it.",
         "Do not run automatic pull --rebase or other history-rewriting recovery; preserve unrelated user and campaign changes."
       ],
       "forge": {

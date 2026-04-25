@@ -150,3 +150,49 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap2: slack-aware recovery fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap2` repairs the `or1200` regression seen in `stmap1` and improves `i10`, but it loses the strong `ode` and `syn2` gains and increases area on all four designs. For `stmap3`, keep recovery timing awareness but add a benchmark-shape discriminator, such as applying the guard only to nodes with both high fanout and shallow slack margin, or recording per-node guard-hit instrumentation to distinguish `ode`/`syn2` from `i10`/`or1200`.
+
+## version3 / stmap3
+
+- hypothesis: Applying the high-fanout wide-cut guard only to area-recovery nodes with a shallow positive mapper slack window can protect near-critical fanout/load decisions while letting very noncritical nodes continue to use area-recovery freedom.
+- motivation: `stmap2` showed that guarding only clearly slack nodes improved `i10` and `or1200` but hurt `ode` and `syn2` and increased area on every benchmark. `stmap3` narrows the intervention to high-fanout nodes with positive slack no greater than two inverter delays to test whether the timing benefit comes from near-critical rather than broadly noncritical recovery choices.
+- command name: `stmap3`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_3.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap3/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap3` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 4` into the mapper. `mapperMatch.c` interprets mode `4` as a shallow-slack recovery guard: it is inactive during delay matching and switching recovery, applies only during mapper modes `1..3`, requires an existing best match and positive slack no greater than `2 * tDelayInv.Worst`, then uses the same high-fanout cut-width thresholds as `stmap1` and `stmap2`. Existing `map`, `map -f`, `stmap0`, `stmap1`, and `stmap2` behavior are preserved because modes `0`, `1`, `2`, and `3` retain their old meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap3/build.log`.
+  - help: `./abc -c "stmap3 -h"` printed usage text with default `-G 250.00` and the shallow-slack fanout guard enabled. Log: `.autoeda/runtime/results/stmap3/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap3; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `208.38 ps` and area `1288.17`. Log: `.autoeda/runtime/results/stmap3/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap3/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, and prompt artifacts.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `208.38 ps`, area `1288.17`; delay delta `+1.14 ps` (`+0.55%`), area delta `+24.73` (`+1.96%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `561.99 ps`, area `12562.13`; delay delta `+30.67 ps` (`+5.77%`), area delta `+70.92` (`+0.57%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `592.26 ps`, area `4806.03`; delay delta `+5.18 ps` (`+0.88%`), area delta `+7.69` (`+0.16%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `499.16 ps`, area `22150.17`; delay delta `-9.66 ps` (`-1.90%`), area delta `+853.57` (`+4.01%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_3.c`.
+  - numbered command exists and is registered as `stmap3`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap3/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap3/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap3/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap3` in the canonical version log; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap3: shallow-slack recovery fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap3` reduces the area penalty versus `stmap2` on `i10`, `ode`, and `or1200`, but it loses the `i10`/`or1200` delay gains and only improves `syn2` delay while increasing `syn2` area substantially. For `stmap4`, add instrumentation for guard hit counts and slack buckets, or shift to a two-pass/SCL-observed criticality signal, because the current mapper-slack-only discriminator is not reliable enough across benchmarks.

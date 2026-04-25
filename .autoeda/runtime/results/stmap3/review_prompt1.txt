@@ -1,0 +1,16 @@
+Review the uncommitted stmap3 AutoEDA iteration in this ABC repository.
+
+Binding project context:
+- New command should be stmap3 and preserve map, stmap0, stmap1, and stmap2 behavior.
+- Hypothesis: during mapper area recovery, reject high-fanout wide cuts only when the current mapper match has a shallow positive slack window, so near-critical fanout/load choices are protected while very noncritical nodes remain available for area recovery.
+- Required correctness gates already run locally: make ABC_USE_NO_READLINE=1, stmap3 -h, i10 smoke, four benchmark baseline/candidate flows, and CEC for i10/ode/or1200/syn2.
+- Artifacts are under .autoeda/runtime/results/stmap3/.
+
+Please review for:
+- command registration/build integration mistakes
+- logic bugs in the new fSkipFanout == 4 path in src/map/mapper/mapperMatch.c
+- unintended changes to existing map/stmap0/stmap1/stmap2 behavior
+- missing validation or logging required by the project pack
+- any issue that should block counting stmap3 as a completed iteration
+
+Return prioritized findings with file/line references. If there are no blocking findings, say so explicitly.
