@@ -1,0 +1,19 @@
+Second review for the stmap27 AutoEDA iteration after addressing review pass 1.
+
+Pass 1 accepted finding:
+- P2: stmap27 was included in the area-sensitive guard path, but Map_MatchStmap13CountRisk() still rejected fSkipFanout > 27, so stmap27 risk/profile counters did not populate.
+
+Fix applied:
+- src/map/mapper/mapperMatch.c now lets Map_MatchStmap13CountRisk() count modes through fSkipFanout=28.
+
+Revalidation after the fix:
+- make ABC_USE_NO_READLINE=1 passed.
+- stmap27 -h passed.
+- smoke on benchmarks/i10.aig passed.
+- full baseline and candidate evaluation passed on all four required benchmarks.
+- parsed metrics and diagnostics were regenerated.
+- guard counters now populate for ode/or1200/syn2; syn2 records one signature-safe seed at node 24798 and two signature-block events at node 37979.
+- CEC passed for all four required benchmarks.
+- artifact_check.log passed after the fix.
+
+Please review the current uncommitted diff and runtime artifacts for remaining correctness issues, especially mode-number gating, preservation of stmap0..stmap26 behavior, diagnostic consistency, and whether the accepted pass-1 finding was fully addressed. The final versions.md and campaign_state completion update will be written after this review so it can include your pass-2 findings.

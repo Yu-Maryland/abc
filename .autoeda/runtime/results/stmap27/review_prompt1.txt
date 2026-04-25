@@ -1,0 +1,25 @@
+Review the uncommitted stmap27 AutoEDA iteration in this ABC repository.
+
+Project constraints:
+- The project pack in .autoeda/project_pack/agent.md is binding.
+- stmap27 must preserve map and all prior stmap0..stmap26 behavior.
+- The new command must be registered, buildable, and provide -h usage.
+- The evaluation flow is read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap27; topo; buffer; upsize -v; dnsize -v; stime.
+- Required benchmarks are benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, and benchmarks/syn2.abc.blif.
+
+What changed:
+- Added src/base/abci/abcStmap_27.c and registered stmap27.
+- Added mapper mode fSkipFanout=28.
+- stmap27 keeps stmap24/stmap21 strong deep behavior and reopens the moderate deep slack band only when a candidate avoids the high-reference, low-slack, stronger-moderate signature isolated by stmap26.
+- It records signature seed/block diagnostics and stats.
+
+Validation already run before this review:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap27 -h"
+- smoke on benchmarks/i10.aig with the full downstream stime flow
+- baseline and candidate flows on all four required benchmarks
+- parsed final stime metrics and signature diagnostics
+- CEC on all four required benchmarks using original and post-flow strashed AIGs
+- artifact completeness check
+
+Please review for correctness risks, missed version integration, broken older stmap behavior, command/help issues, mapper-mode gating errors, diagnostic/logging inconsistencies, evaluation artifact problems, and any required follow-up before this iteration can be counted. Lead with findings and cite concrete files/lines where possible.

@@ -1,0 +1,3675 @@
+OpenAI Codex v0.124.0 (research preview)
+--------
+workdir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019dc690-8536-72d0-858c-ee51580122ed
+--------
+user
+current changes
+exec
+/bin/zsh -lc "git status --short && printf '\\n--- STAGED ---\\n' && git diff --staged --stat && printf '\\n--- UNSTAGED ---\\n' && git diff --stat && printf '\\n--- UNTRACKED ---\\n' && git ls-files --others --exclude-standard" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 109ms:
+.autoeda/runtime/results/stmap27/artifact_check.exit
+.autoeda/runtime/results/stmap27/artifact_check.log
+.autoeda/runtime/results/stmap27/baseline_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap27/baseline_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap27/baseline_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap27/baseline_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap27/baseline_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap27/baseline_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap27/baseline_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap27/baseline_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap27/build.exit
+.autoeda/runtime/results/stmap27/build.log
+.autoeda/runtime/results/stmap27/candidate_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap27/candidate_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap27/candidate_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap27/candidate_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap27/candidate_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap27/candidate_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap27/candidate_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap27/candidate_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_candidate_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_candidate_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_orig.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_orig_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_orig_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_stmap27.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_candidate_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_candidate_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_orig.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_stmap27.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_candidate_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_candidate_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_orig.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_stmap27.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_candidate_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_candidate_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_orig.aig
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_stmap27.aig
+.autoeda/runtime/results/stmap27/cec_summary.json
+.autoeda/runtime/results/stmap27/comparison.csv
+.autoeda/runtime/results/stmap27/early_seed_stats.csv
+.autoeda/runtime/results/stmap27/guard_stats.csv
+.autoeda/runtime/results/stmap27/help.exit
+.autoeda/runtime/results/stmap27/help.log
+.autoeda/runtime/results/stmap27/metrics.csv
+.autoeda/runtime/results/stmap27/near_miss_diag.csv
+.autoeda/runtime/results/stmap27/near_miss_stats.csv
+.autoeda/runtime/results/stmap27/relief_diag.csv
+.autoeda/runtime/results/stmap27/review_pass1.exit
+.autoeda/runtime/results/stmap27/review_pass1.log
+.autoeda/runtime/results/stmap27/review_pass1_supported.log
+.autoeda/runtime/results/stmap27/review_prompt1.txt
+.autoeda/runtime/results/stmap27/signature_block_diag.csv
+.autoeda/runtime/results/stmap27/signature_seed_diag.csv
+.autoeda/runtime/results/stmap27/signature_stats.csv
+.autoeda/runtime/results/stmap27/smoke_i10.exit
+.autoeda/runtime/results/stmap27/smoke_i10.log
+.autoeda/runtime/results/stmap27/summary.json
+src/base/abci/abcStmap_27.c
+
+exec
+/bin/zsh -lc 'git diff -- src/map/mapper/mapperMatch.c src/map/mapper/mapperInt.h src/map/mapper/mapperCore.c src/base/abci/abc.c src/base/abci/module.make abclib.dsp src/base/abci/abcStmap_27.c' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+diff --git a/abclib.dsp b/abclib.dsp
+index fe4cbd3d0..e4fa8125b 100644
+--- a/abclib.dsp
++++ b/abclib.dsp
+@@ -587,6 +587,10 @@ SOURCE=.\src\base\abci\abcStmap_26.c
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\src\base\abci\abcStmap_27.c
++# End Source File
++# Begin Source File
++
+ SOURCE=.\src\base\abci\abcStrash.c
+ # End Source File
+ # Begin Source File
+diff --git a/src/base/abci/abc.c b/src/base/abci/abc.c
+index 31e54f397..fb41aea0f 100644
+--- a/src/base/abci/abc.c
++++ b/src/base/abci/abc.c
+@@ -324,6 +324,7 @@ extern int Abc_CommandStmap23                ( Abc_Frame_t * pAbc, int argc, cha
+ extern int Abc_CommandStmap24                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ extern int Abc_CommandStmap25                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ extern int Abc_CommandStmap26                ( Abc_Frame_t * pAbc, int argc, char ** argv );
++extern int Abc_CommandStmap27                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+@@ -1197,6 +1198,7 @@ void Abc_Init( Abc_Frame_t * pAbc )
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap24",       Abc_CommandStmap24,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap25",       Abc_CommandStmap25,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap26",       Abc_CommandStmap26,          1 );
++    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap27",       Abc_CommandStmap27,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );
+diff --git a/src/base/abci/module.make b/src/base/abci/module.make
+index ccb4b05d4..5e3549ad0 100644
+--- a/src/base/abci/module.make
++++ b/src/base/abci/module.make
+@@ -93,6 +93,7 @@ SRC +=    src/base/abci/abc.c \
+     src/base/abci/abcStmap_24.c \
+     src/base/abci/abcStmap_25.c \
+     src/base/abci/abcStmap_26.c \
++    src/base/abci/abcStmap_27.c \
+     src/base/abci/abcStrash.c \
+     src/base/abci/abcSweep.c \
+     src/base/abci/abcSymm.c \
+diff --git a/src/map/mapper/mapperCore.c b/src/map/mapper/mapperCore.c
+index 081ecf76f..977a64690 100644
+--- a/src/map/mapper/mapperCore.c
++++ b/src/map/mapper/mapperCore.c
+@@ -222,21 +222,23 @@ ABC_PRT( "Time", Abc_Clock() - clk );
+     p->timeArea += Abc_Clock() - clk;
+     //////////////////////////////////////////////////////////////////////
+ 
+-    if ( p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 || p->fSkipFanout == 26 || p->fSkipFanout == 27 )
++    if ( p->fSkipFanout >= 14 && p->fSkipFanout <= 28 )
+         printf( "stmap%d guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
+             p->fSkipFanout - 1,
+             p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
+             p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
+             p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
+             p->nStmap13RejectArea );
+-    if ( p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 || p->fSkipFanout == 26 || p->fSkipFanout == 27 )
++    if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 28 )
+         printf( "stmap%d near-miss stats: near-miss = %d\n", p->fSkipFanout - 1, p->nStmap18NearMiss );
+-    if ( p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 || p->fSkipFanout == 26 || p->fSkipFanout == 27 )
++    if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 28 )
+         printf( "stmap%d early-seed stats: early-seed = %d\n", p->fSkipFanout - 1, p->nStmap19EarlySeed );
+     if ( p->fSkipFanout == 26 )
+         printf( "stmap25 ablation stats: moderate-ablation-seed = %d\n", p->nStmap25ModerateAblationSeed );
+     if ( p->fSkipFanout == 27 )
+         printf( "stmap26 ablation stats: moderate-ablation-seen = %d  moderate-ablation-seed = %d\n", p->nStmap26ModerateAblationSeen, p->nStmap26ModerateAblationSeed );
++    if ( p->fSkipFanout == 28 )
++        printf( "stmap27 signature stats: moderate-signature-seed = %d  moderate-signature-blocked = %d\n", p->nStmap27ModerateSignatureSeed, p->nStmap27ModerateSignatureBlocked );
+ 
+     // print the arrival times of the latest outputs
+     if ( p->fVerbose )
+diff --git a/src/map/mapper/mapperInt.h b/src/map/mapper/mapperInt.h
+index 2e5ae91f5..0037ac630 100644
+--- a/src/map/mapper/mapperInt.h
++++ b/src/map/mapper/mapperInt.h
+@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
+     float               DelayTarget;   // the required times set by the user
+     int                 nTravIds;      // the traversal counter
+     int                 fSwitching;    // use switching activity
+-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26
++    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27
+     int                 fUseProfile;   // use standard-cell profile
+     int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
+     int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
+@@ -140,6 +140,8 @@ struct Map_ManStruct_t_
+     int                 nStmap25ModerateAblationSeed; // stmap25 single moderate deep ablation choices
+     int                 nStmap26ModerateAblationSeen; // stmap26 moderate deep ablation candidates seen
+     int                 nStmap26ModerateAblationSeed; // stmap26 rank-2 moderate deep ablation choices
++    int                 nStmap27ModerateSignatureSeed; // stmap27 moderate deep signature-safe choices
++    int                 nStmap27ModerateSignatureBlocked; // stmap27 moderate deep signature-blocked choices
+ 
+     // the supergate library
+     Map_SuperLib_t *    pSuperLib;     // the current supergate library
+diff --git a/src/map/mapper/mapperMatch.c b/src/map/mapper/mapperMatch.c
+index 3d80d3096..1f500ee18 100644
+--- a/src/map/mapper/mapperMatch.c
++++ b/src/map/mapper/mapperMatch.c
+@@ -202,7 +202,7 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode
+         return Map_MatchNodeHasStmapReliefDepth( pNode );
+     if ( Mode == 12 )
+         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
+-    if ( Mode >= 13 && Mode <= 27 )
++    if ( Mode >= 13 && Mode <= 28 )
+         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
+     return 0;
+ }
+@@ -400,6 +400,64 @@ static int Map_MatchHasStmap26RankTwoModerateDeepSeed( Map_Man_t * p, float Arri
+         Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+ }
+ 
++/**Function*************************************************************
++
++  Synopsis    [Returns 1 if this candidate matches the stmap27 block shape.]
++
++  Description []
++
++  SideEffects []
++
++  SeeAlso     []
++
++***********************************************************************/
++static int Map_MatchIsStmap27BlockedModerateSignature( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
++{
++    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
++        return 0;
++    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
++        pNode->nRefs >= 5 &&
++        Slack <= 1.15 * SlackMargin + Epsilon &&
++        ArrivalDelta <= -2.25 * ArrivalGainMargin - Epsilon;
++}
++
++/**Function*************************************************************
++
++  Synopsis    [Returns 1 if stmap27 should admit a signature-safe seed.]
++
++  Description []
++
++  SideEffects []
++
++  SeeAlso     []
++
++***********************************************************************/
++static int Map_MatchIsStmap27SignatureSafeModerateSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
++{
++    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
++        return 0;
++    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
++        Slack <= 1.25 * SlackMargin + Epsilon &&
++        !Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
++}
++
++/**Function*************************************************************
++
++  Synopsis    [Returns 1 if stmap27 allows a deep pre-profile seed.]
++
++  Description []
++
++  SideEffects []
++
++  SeeAlso     []
++
++***********************************************************************/
++static int Map_MatchHasStmap27SignatureSafeModerateDeepSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
++{
++    return Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) ||
++        Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
++}
++
+ /**Function*************************************************************
+ 
+   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
+@@ -455,7 +513,9 @@ static int Map_MatchHasStmap26RankTwoModerateDeepSeed( Map_Man_t * p, float Arri
+   slack gate to the lower edge of that critical window. Mode 26 is stmap25,
+   which keeps stmap24 and admits at most one moderate deep seed from the next
+   slack band as an ablation diagnostic. Mode 27 is stmap26, which skips the
+-  first such moderate seed and admits only the second qualifying seed.]
++  first such moderate seed and admits only the second qualifying seed. Mode 28
++  is stmap27, which reopens the next slack band except for the high-reference,
++  low-slack, stronger-moderate signature isolated by stmap26.]
+ 
+   SideEffects []
+ 
+@@ -583,7 +643,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
+         }
+         return 0;
+     }
+-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 27 )
++    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+     {
+         if ( p->fMappingMode == 0 )
+         {
+@@ -660,7 +720,9 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
+   to the lower edge of the critical slack window. In stmap25, the stmap24 rule
+   is kept, and one moderate deep seed from the next slack band is admitted for
+   ablation. In stmap26, the first such moderate seed is skipped and only the
+-  second qualifying seed is admitted.]
++  second qualifying seed is admitted. In stmap27, moderate deep candidates in
++  the next slack band are admitted unless they match the high-reference,
++  low-slack, stronger-moderate signature isolated by stmap26.]
+ 
+   SideEffects []
+ 
+@@ -673,8 +735,9 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+     const char * pReason;
+     int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
+     int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
++    int fStmap27ModerateSignatureSeed, fStmap27ModerateSignatureBlocked;
+ 
+-    if ( p->fSkipFanout < 7 || p->fSkipFanout > 27 )
++    if ( p->fSkipFanout < 7 || p->fSkipFanout > 28 )
+         return 0;
+     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
+         return 0;
+@@ -682,7 +745,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+         return 0;
+     if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
+         return 0;
+-    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 27);
++    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 28);
+     Map_MatchStmap13CountRisk( p, pNode, pCut );
+     if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
+         return 0;
+@@ -691,11 +754,11 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+     ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
+     ArrivalGainMargin = 0.25 * SlackMargin;
+     fArrivalQuality = ArrivalDelta <= -ArrivalGainMargin - p->fEpsilon;
+-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 27 )
++    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+     {
+         SlackGate = 2.0 * SlackMargin;
+         fMiddleReliefWindow =
+-             (p->fSkipFanout >= 10 && p->fSkipFanout <= 27) &&
++             (p->fSkipFanout >= 10 && p->fSkipFanout <= 28) &&
+              Slack > SlackMargin + p->fEpsilon &&
+              Slack <= SlackGate + p->fEpsilon &&
+              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
+@@ -720,6 +783,16 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+             fStmap26ModerateAblation =
+                 fStmap26ModerateAblationCandidate &&
+                 Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
++            fStmap27ModerateSignatureSeed =
++                p->fSkipFanout == 28 &&
++                !fProfileOpen &&
++                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
++                Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
++            fStmap27ModerateSignatureBlocked =
++                p->fSkipFanout == 28 &&
++                !fProfileOpen &&
++                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
++                Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+             fStrictFallback =
+                 p->fSkipFanout == 15 ||
+                 ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
+@@ -731,7 +804,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+                 (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                 (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                 (p->fSkipFanout == 26 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap25SingleModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+-                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
++                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
++                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+             AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
+             AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
+             OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
+@@ -744,7 +818,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+                         p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+                         pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
+-                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 27 )
++                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 28 )
+                     printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
+                         p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+@@ -764,11 +838,18 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+                         p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                 }
+-                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 27 && !fProfileOpen && !fStrictFallback )
++                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureSeed )
++                {
++                    p->nStmap27ModerateSignatureSeed++;
++                    printf( "stmap27 signature seed diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
++                        p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
++                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
++                }
++                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 28 && !fProfileOpen && !fStrictFallback )
+                     p->nStmap19EarlySeed++;
+                 return 0;
+             }
+-            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 27 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
++            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 28 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+             {
+                 if ( p->fSkipFanout == 19 )
+                     pReason = fProfileOpen ? "timing-gate" : "profile-closed";
+@@ -786,6 +867,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+                     pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "single-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+                 else if ( p->fSkipFanout == 27 )
+                     pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "rank2-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
++                else if ( p->fSkipFanout == 28 )
++                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap27ModerateSignatureBlocked ? "signature-block-gate" : "signature-band-gate") : "moderate-gain-gate") : "arrival-gate";
+                 else
+                     pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
+                 if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+@@ -795,6 +878,13 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+                         p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                 }
++                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureBlocked )
++                {
++                    p->nStmap27ModerateSignatureBlocked++;
++                    printf( "stmap27 signature block diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
++                        p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
++                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
++                }
+                 p->nStmap18NearMiss++;
+                 if ( p->nStmap18NearMiss <= 128 )
+                     printf( "stmap%d near-miss diag: index = %d  reason = %s  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f\n",
+@@ -821,7 +911,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode,
+     }
+     if ( Slack <= SlackMargin + p->fEpsilon )
+         return 0;
+-    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 27 )
++    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 28 )
+     {
+         ArrivalMargin = 0.25 * SlackMargin;
+         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
+
+exec
+/bin/zsh -lc "sed -n '1,240p' src/base/abci/abcStmap_27.c && printf '\\n--- EOF? lines ---\\n' && wc -l src/base/abci/abcStmap_27.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [abcStmap_27.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap27 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "map/mio/mio.h"
+#include "misc/extra/extra.h"
+
+ABC_NAMESPACE_IMPL_START
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap27 mapper probe.]
+
+  Description [stmap27 reopens the moderate deep early-profile seed band
+  only when the candidate avoids the high-reference, low-slack signature that
+  stmap26 isolated as sufficient to reproduce the downstream syn2 regression.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap27( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 250; // keep classic map gain to isolate the signature blocker
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    DelayTarget = -1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 28; // moderate deep signature blocker; -f disables it
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Slew = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Slew <= 0.0 )
+                goto usage;
+            break;
+        case 'G':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-G\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Gain = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Gain <= 0.0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by a positive integer.\n" );
+                goto usage;
+            }
+            nGatesMin = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nGatesMin < 0 )
+                goto usage;
+            break;
+        case 'a':
+            fAreaOnly ^= 1;
+            break;
+        case 'r':
+            fRecovery ^= 1;
+            break;
+        case 's':
+            fSweep ^= 1;
+            break;
+        case 'p':
+            fSwitching ^= 1;
+            break;
+        case 'f':
+            fSkipFanout = fSkipFanout ? 0 : 28;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    if ( !Abc_NtkIsStrash(pNtk) )
+    {
+        pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Strashing before stmap27 has failed.\n" );
+            return 1;
+        }
+        pNtk = Abc_NtkBalance( pNtkRes = pNtk, 0, 0, 1 );
+        Abc_NtkDelete( pNtkRes );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Balancing before stmap27 has failed.\n" );
+            return 1;
+        }
+        Abc_Print( 0, "The network was strashed and balanced before stmap27.\n" );
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_NtkDelete( pNtk );
+            Abc_Print( -1, "stmap27 has failed.\n" );
+            return 1;
+        }
+        Abc_NtkDelete( pNtk );
+    }
+    else
+    {
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_Print( -1, "stmap27 has failed.\n" );
+            return 1;
+        }
+    }
+
+    if ( fSweep )
+    {
+        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+        if ( Abc_NtkHasMapping(pNtkRes) )
+        {
+            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+            Abc_NtkDelete( pNtk );
+        }
+    }
+
+    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+    return 0;
+
+usage:
+    if ( DelayTarget == -1 )
+        sprintf(Buffer, "not used" );
+    else
+        sprintf(Buffer, "%.3f", DelayTarget );
+    Abc_Print( -2, "usage: stmap27 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap27 standard-cell mapping with moderate deep seed signature blocking\n" );
+
+--- EOF? lines ---
+     260 src/base/abci/abcStmap_27.c
+
+exec
+/bin/zsh -lc "sed -n '240,320p' src/base/abci/abcStmap_27.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    Abc_Print( -2, "\t              performs stmap27 standard-cell mapping with moderate deep seed signature blocking\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = %.2f]\n", LogFan );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = %.2f]\n", Slew );
+    Abc_Print( -2, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = %d]\n", nGatesMin );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = %s]\n", fAreaOnly? "yes": "no" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+    Abc_Print( -2, "\t-f       : disables the moderate deep seed signature blocker [default = %s]\n", fSkipFanout? "yes": "no" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h       : print the command usage\n");
+    return 1;
+}
+
+ABC_NAMESPACE_IMPL_END
+
+exec
+/bin/zsh -lc "ls src/base/abci/abcStmap_2*.c | tail -n 12 && sed -n '1,260p' src/base/abci/abcStmap_26.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/base/abci/abcStmap_2.c
+src/base/abci/abcStmap_20.c
+src/base/abci/abcStmap_21.c
+src/base/abci/abcStmap_22.c
+src/base/abci/abcStmap_23.c
+src/base/abci/abcStmap_24.c
+src/base/abci/abcStmap_25.c
+src/base/abci/abcStmap_26.c
+src/base/abci/abcStmap_27.c
+/**CFile****************************************************************
+
+  FileName    [abcStmap_26.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap26 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "map/mio/mio.h"
+#include "misc/extra/extra.h"
+
+ABC_NAMESPACE_IMPL_START
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap26 mapper probe.]
+
+  Description [stmap26 performs the complementary moderate-seed ablation:
+  before the adaptive profile opens, it keeps the stmap24 policy, skips the
+  first moderate deep seed in the next slack band, and admits only the next
+  qualifying moderate deep seed.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap26( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 250; // keep classic map gain to isolate the rank-2 seed ablation
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    DelayTarget = -1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 27; // rank-2 moderate deep early-profile seed ablation; -f disables it
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Slew = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Slew <= 0.0 )
+                goto usage;
+            break;
+        case 'G':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-G\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Gain = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Gain <= 0.0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by a positive integer.\n" );
+                goto usage;
+            }
+            nGatesMin = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nGatesMin < 0 )
+                goto usage;
+            break;
+        case 'a':
+            fAreaOnly ^= 1;
+            break;
+        case 'r':
+            fRecovery ^= 1;
+            break;
+        case 's':
+            fSweep ^= 1;
+            break;
+        case 'p':
+            fSwitching ^= 1;
+            break;
+        case 'f':
+            fSkipFanout = fSkipFanout ? 0 : 27;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    if ( !Abc_NtkIsStrash(pNtk) )
+    {
+        pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Strashing before stmap26 has failed.\n" );
+            return 1;
+        }
+        pNtk = Abc_NtkBalance( pNtkRes = pNtk, 0, 0, 1 );
+        Abc_NtkDelete( pNtkRes );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Balancing before stmap26 has failed.\n" );
+            return 1;
+        }
+        Abc_Print( 0, "The network was strashed and balanced before stmap26.\n" );
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_NtkDelete( pNtk );
+            Abc_Print( -1, "stmap26 has failed.\n" );
+            return 1;
+        }
+        Abc_NtkDelete( pNtk );
+    }
+    else
+    {
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_Print( -1, "stmap26 has failed.\n" );
+            return 1;
+        }
+    }
+
+    if ( fSweep )
+    {
+        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+        if ( Abc_NtkHasMapping(pNtkRes) )
+        {
+            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+            Abc_NtkDelete( pNtk );
+        }
+    }
+
+    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+    return 0;
+
+usage:
+    if ( DelayTarget == -1 )
+        sprintf(Buffer, "not used" );
+    else
+        sprintf(Buffer, "%.3f", DelayTarget );
+    Abc_Print( -2, "usage: stmap26 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap26 standard-cell mapping with rank-2 moderate deep early-profile seed ablation\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = %.2f]\n", LogFan );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = %.2f]\n", Slew );
+    Abc_Print( -2, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = %d]\n", nGatesMin );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = %s]\n", fAreaOnly? "yes": "no" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+    Abc_Print( -2, "\t-f       : disables the rank-2 moderate deep early-profile ablation guard [default = %s]\n", fSkipFanout? "yes": "no" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h       : print the command usage\n");
+    return 1;
+}
+
+
+exec
+/bin/zsh -lc "sed -n '1,980p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [mapperMatch.c]
+
+  PackageName [MVSIS 1.3: Multi-valued logic synthesis system.]
+
+  Synopsis    [Generic technology mapping engine.]
+
+  Author      [MVSIS Group]
+  
+  Affiliation [UC Berkeley]
+
+  Date        [Ver. 2.0. Started - June 1, 2004.]
+
+  Revision    [$Id: mapperMatch.c,v 1.7 2004/09/30 21:18:10 satrajit Exp $]
+
+***********************************************************************/
+
+#include "mapperInt.h"
+
+#include "misc/util/utilNam.h"
+#include "map/scl/sclCon.h"
+
+ABC_NAMESPACE_IMPL_START
+
+
+/*
+    A potential improvement:
+    When an internal node is not used in the mapping, its required times 
+    are set to be +infinity. So when we recover area, we try to find the 
+    best match for area and completely disregard the delay for the nodes
+    that are not currently used in the mapping because any match whose 
+    arrival times are less than the required times (+infinity) can be used.
+    It may be possible to develop a better approach to recover area for
+    the nodes that are not currently used in the mapping...
+*/
+
+////////////////////////////////////////////////////////////////////////
+///                        DECLARATIONS                              ///
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
+///                     FUNCTION DEFINITIONS                         ///
+////////////////////////////////////////////////////////////////////////
+
+/**Function*************************************************************
+
+  Synopsis    [Cleans the match.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Map_MatchClean( Map_Match_t * pMatch )
+{
+    memset( pMatch, 0, sizeof(Map_Match_t) );
+    pMatch->AreaFlow          = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Rise   = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Fall   = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Worst  = MAP_FLOAT_LARGE; // unassigned
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the highest stmap fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 6 && pCut->nLeaves > 2;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the lower moderate fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapLowerModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 3 && pNode->nRefs <= 5 && pCut->nLeaves > 3;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the upper moderate fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs == 6 && pCut->nLeaves > 3;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Records stmap13+ exact-area guard statistics.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static void Map_MatchStmap13CountRisk( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    if ( p->fSkipFanout < 14 || p->fSkipFanout > 27 )
+        return;
+    p->nStmap13ExactRisk++;
+    if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
+        p->nStmap13HighestRisk++;
+    else if ( Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut ) )
+        p->nStmap13LowerModRisk++;
+    else if ( Map_MatchCutHasStmapUpperModerateFanoutRisk( pNode, pCut ) )
+        p->nStmap13UpperModRisk++;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the node is in the stmap10 relief depth window.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchNodeHasStmapReliefDepth( Map_Node_t * pNode )
+{
+    return pNode->Level <= 96;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the node is in the stmap11 relief depth window.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchNodeHasStmapTightReliefDepth( Map_Node_t * pNode )
+{
+    return pNode->Level <= 64;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the stmap mode allows middle-slack relief here.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode )
+{
+    if ( Mode == 10 )
+        return 1;
+    if ( Mode == 11 )
+        return Map_MatchNodeHasStmapReliefDepth( pNode );
+    if ( Mode == 12 )
+        return Map_MatchNodeHasStmapTightReliefDepth( pNode );
+    if ( Mode >= 13 && Mode <= 28 )
+        return Map_MatchNodeHasStmapTightReliefDepth( pNode );
+    return 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the run profile is large enough for stmap15.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap15ReliefProfile( Map_Man_t * p )
+{
+    return p->nStmap13LowerModRisk >= 20000 && p->nStmap13MiddleSlack >= 128;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the node is shallow enough for a stmap20 seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchNodeHasStmap20EarlySeedDepth( Map_Node_t * pNode )
+{
+    return pNode->Level <= 24;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the arrival gain is large enough for stmap21.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap21DeepSeedGain( float ArrivalDelta, float ArrivalGainMargin, float Epsilon )
+{
+    return ArrivalDelta <= -5.0 * ArrivalGainMargin - Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the arrival gain is large enough for stmap22.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap22ModerateDeepSeedGain( float ArrivalDelta, float ArrivalGainMargin, float Epsilon )
+{
+    return ArrivalDelta <= -2.0 * ArrivalGainMargin - Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if a moderate deep seed is critical enough for stmap23.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap23CriticalModerateDeepSeed( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+        return 1;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.2 * SlackMargin + Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if a moderate deep seed is tight-critical for stmap24.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap24TightCriticalModerateDeepSeed( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+        return 1;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.1 * SlackMargin + Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap25 should admit its single moderate ablation.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap25ModerateAblationSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.25 * SlackMargin + Epsilon &&
+        p->nStmap25ModerateAblationSeed == 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap25 allows a deep pre-profile seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap25SingleModerateDeepSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    return Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) ||
+        Map_MatchIsStmap25ModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if this is an stmap26 moderate ablation candidate.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap26ModerateAblationCandidate( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.25 * SlackMargin + Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap26 should admit its rank-2 ablation.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap26RankTwoModerateAblationSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    return Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) &&
+        p->nStmap26ModerateAblationSeen == 1 &&
+        p->nStmap26ModerateAblationSeed == 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap26 allows a deep pre-profile seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap26RankTwoModerateDeepSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    return Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) ||
+        Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if this candidate matches the stmap27 block shape.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap27BlockedModerateSignature( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        pNode->nRefs >= 5 &&
+        Slack <= 1.15 * SlackMargin + Epsilon &&
+        ArrivalDelta <= -2.25 * ArrivalGainMargin - Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap27 should admit a signature-safe seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap27SignatureSafeModerateSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.25 * SlackMargin + Epsilon &&
+        !Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap27 allows a deep pre-profile seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap27SignatureSafeModerateDeepSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    return Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) ||
+        Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
+
+  Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
+  selective guard, which only rejects wider cuts when the node has higher
+  estimated fanout. Mode 3 is the stmap2 guard, which uses the same fanout
+  thresholds only during area recovery and only when the current phase has
+  slack over the mapper required time. Mode 4 is the stmap3 guard, which
+  narrows the intervention to high-fanout nodes with only shallow positive
+  slack. Mode 5 is the stmap4 split-phase guard: stmap1-style guarding in
+  delay matching and stmap2-style slack-aware guarding in area recovery.
+  Mode 6 is the stmap5 shape-gated split-phase guard: the delay pass only
+  uses stmap1-style guarding in very large mapper graphs, while area recovery
+  keeps the stmap2 slack-aware guard. Mode 7 is the stmap6 area-sensitive
+  shape-gated guard: the delay pass keeps the stmap5 graph-size gate, small
+  mapper graphs keep the stmap2 slack-aware recovery guard, and exact-area
+  recovery on larger graphs checks the cut after matching so materially cheaper
+  cuts can override the fanout/load proxy. Mode 8 is the stmap7 criticality-
+  sensitive version of mode 7: exact-area recovery on larger graphs allows the
+  override only with deeper mapper slack and outside the highest fanout bucket.
+  Mode 9 is the stmap8 arrival-bounded version of mode 8: the area-saving
+  override also requires the candidate match to stay within one quarter of an
+  inverter delay of the existing mapper arrival. Mode 10 is the stmap9
+  middle-slack area-relief version of mode 9: it keeps the highest fanout
+  bucket protected, but in the one-to-two inverter slack bucket it allows a
+  wide cut only when it is arrival-neutral and saves at least one inverter
+  area. Mode 11 is the stmap10 depth-qualified version of mode 10: the
+  middle-slack relief is allowed only for shallow and medium-depth nodes.
+  Mode 12 is the stmap11 tight-depth version of mode 11: the middle-slack
+  relief is allowed only for shallower nodes. Mode 13 is the stmap12
+  fanout-bucket split version of mode 12: the tight-depth middle-slack relief
+  is allowed only in the lower moderate fanout bucket. Mode 14 is stmap13,
+  which keeps mode 13 behavior while recording guard-hit counters. Mode 15 is
+  stmap14, which keeps the same bucket and counters but requires a stronger
+  middle-slack area-flow saving. Mode 16 is stmap15, which restores the
+  one-inverter relief threshold only after the current run has observed a high
+  lower-moderate/middle-slack exact-area profile. Mode 17 is stmap16, which
+  keeps mode 16 behavior and prints per-relief diagnostics. Mode 18 is stmap17,
+  which uses the one-inverter post-profile threshold only for candidates with
+  materially better mapper arrival. Mode 19 is stmap18, which keeps mode 18
+  decisions and adds near-miss diagnostics for candidates rejected by the
+  timing-quality/profile fallback. Mode 20 is stmap19, which allows the
+  one-inverter threshold before profile-open only for candidates with the same
+  material mapper-arrival improvement. Mode 21 is stmap20, which keeps the
+  mode 20 pre-profile seed but restricts it to shallow nodes. Mode 22 is
+  stmap21, which keeps the shallow seed and admits deeper pre-profile seeds
+  only when the arrival gain is unusually large. Mode 23 is stmap22, which
+  relaxes the deep pre-profile seed boundary to a moderate arrival gain. Mode
+  24 is stmap23, which keeps the strong deep seeds but allows moderate deep
+  seeds only when the existing mapper slack is near the critical side of the
+  middle-slack window. Mode 25 is stmap24, which tightens the moderate deep
+  slack gate to the lower edge of that critical window. Mode 26 is stmap25,
+  which keeps stmap24 and admits at most one moderate deep seed from the next
+  slack band as an ablation diagnostic. Mode 27 is stmap26, which skips the
+  first such moderate seed and admits only the second qualifying seed. Mode 28
+  is stmap27, which reopens the next slack band except for the high-reference,
+  low-slack, stronger-moderate signature isolated by stmap26.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase )
+{
+    Map_Cut_t * pCutBest;
+    Map_Match_t * pMatchBest;
+    float Slack, SlackMargin, SlackLimit;
+
+    if ( !p->fSkipFanout )
+        return 0;
+    if ( p->fSkipFanout == 2 )
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    if ( p->fSkipFanout == 3 )
+    {
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+        if ( Slack <= SlackMargin + p->fEpsilon )
+            return 0;
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    }
+    if ( p->fSkipFanout == 4 )
+    {
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL || p->pSuperLib == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib->tDelayInv.Worst;
+        SlackLimit = 2.0 * SlackMargin;
+        if ( Slack <= p->fEpsilon || Slack > SlackLimit + p->fEpsilon )
+            return 0;
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    }
+    if ( p->fSkipFanout == 5 )
+    {
+        if ( p->fMappingMode == 0 )
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+        if ( Slack <= SlackMargin + p->fEpsilon )
+            return 0;
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    }
+    if ( p->fSkipFanout == 6 )
+    {
+        if ( p->fMappingMode == 0 )
+        {
+            if ( p->vMapObjs->nSize <= 20000 )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+        if ( Slack <= SlackMargin + p->fEpsilon )
+            return 0;
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    }
+    if ( p->fSkipFanout == 7 )
+    {
+        if ( p->fMappingMode == 0 )
+        {
+            if ( p->vMapObjs->nSize <= 20000 )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode >= 1 && p->fMappingMode <= 3 && p->vMapObjs->nSize <= 8000 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode == 1 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        return 0;
+    }
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+    {
+        if ( p->fMappingMode == 0 )
+        {
+            if ( p->vMapObjs->nSize <= 20000 )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode >= 1 && p->fMappingMode <= 3 && p->vMapObjs->nSize <= 8000 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode == 1 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        return 0;
+    }
+    return (pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if an stmap area-sensitive mode should reject a cut.]
+
+  Description [The area-sensitive guards are evaluated after matching the
+  candidate cut because their hypotheses need the candidate's actual mapper
+  area. In stmap6 exact-area recovery, a wide high-fanout cut is rejected only
+  when the existing match has slack and the candidate does not save at least
+  half an inverter area. In stmap7, the area-saving override additionally
+  requires more than two inverter delays of slack and excludes the highest
+  fanout-risk bucket. In stmap8, the override is further rejected when the
+  candidate match worsens mapper arrival by more than one quarter of an
+  inverter delay. In stmap9, middle-slack candidates can recover area only
+  when they are outside the highest fanout bucket, do not worsen mapper
+  arrival, and save at least one inverter area. In stmap10, that middle-slack
+  relief also requires the mapper node to be no deeper than level 96. In
+  stmap11, that depth window is tightened to level 64. In stmap12, the same
+  tight-depth relief is allowed only in the lower moderate fanout bucket. In
+  stmap13, the same decision path also records exact-area guard statistics. In
+  stmap14, the lower-moderate middle-slack relief must save two inverter areas
+  instead of one. In stmap15, one-inverter relief is restored only after the
+  mapper observes a high lower-moderate/middle-slack profile. In stmap16, the
+  same behavior also reports each admitted relief choice. In stmap17, the
+  adaptive one-inverter relief threshold also requires a material mapper-arrival
+  improvement; arrival-neutral choices keep the stricter two-inverter fallback.
+  In stmap18, the same decisions are preserved while near-miss rejected
+  middle-slack candidates are logged. In stmap19, pre-profile one-inverter
+  relief is seeded only by candidates with the same material arrival gain. In
+  stmap20, the pre-profile seed is further limited to shallow nodes. In
+  stmap21, deeper pre-profile seeds are allowed only with a much larger mapper
+  arrival gain. In stmap22, the same deep-seed path is relaxed to a moderate
+  mapper-arrival gain. In stmap23, moderate deep seeds also need near-critical
+  existing mapper slack. In stmap24, the moderate deep slack gate is tightened
+  to the lower edge of the critical slack window. In stmap25, the stmap24 rule
+  is kept, and one moderate deep seed from the next slack band is admitted for
+  ablation. In stmap26, the first such moderate seed is skipped and only the
+  second qualifying seed is admitted. In stmap27, moderate deep candidates in
+  the next slack band are admitted unless they match the high-reference,
+  low-slack, stronger-moderate signature isolated by stmap26.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, Map_Match_t * pMatchBest, Map_Match_t * pMatch )
+{
+    float Slack, SlackMargin, SlackGate, ArrivalMargin, ArrivalDelta, ArrivalGainMargin, AreaMargin, AreaSave, OneInvArea;
+    const char * pReason;
+    int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
+    int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
+    int fStmap27ModerateSignatureSeed, fStmap27ModerateSignatureBlocked;
+
+    if ( p->fSkipFanout < 7 || p->fSkipFanout > 28 )
+        return 0;
+    if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
+        return 0;
+    if ( p->vMapObjs->nSize <= 8000 )
+        return 0;
+    if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
+        return 0;
+    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 28);
+    Map_MatchStmap13CountRisk( p, pNode, pCut );
+    if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
+        return 0;
+    Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+    SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+    ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
+    ArrivalGainMargin = 0.25 * SlackMargin;
+    fArrivalQuality = ArrivalDelta <= -ArrivalGainMargin - p->fEpsilon;
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+    {
+        SlackGate = 2.0 * SlackMargin;
+        fMiddleReliefWindow =
+             (p->fSkipFanout >= 10 && p->fSkipFanout <= 28) &&
+             Slack > SlackMargin + p->fEpsilon &&
+             Slack <= SlackGate + p->fEpsilon &&
+             !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
+             Map_MatchNodeHasStmapMiddleSlackRelief( p->fSkipFanout, pNode ) &&
+             (p->fSkipFanout < 13 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
+             pMatch->tArrive.Worst <= pMatchBest->tArrive.Worst + p->fEpsilon;
+        if ( fMiddleReliefWindow )
+        {
+            if ( fStmap13 )
+                p->nStmap13MiddleSlack++;
+            fProfileOpen = Map_MatchHasStmap15ReliefProfile( p );
+            fStmap25ModerateAblation =
+                p->fSkipFanout == 26 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap25ModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap26ModerateAblationCandidate =
+                p->fSkipFanout == 27 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap26ModerateAblation =
+                fStmap26ModerateAblationCandidate &&
+                Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap27ModerateSignatureSeed =
+                p->fSkipFanout == 28 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap27ModerateSignatureBlocked =
+                p->fSkipFanout == 28 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStrictFallback =
+                p->fSkipFanout == 15 ||
+                ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
+                ((p->fSkipFanout == 18 || p->fSkipFanout == 19) && (!fProfileOpen || !fArrivalQuality)) ||
+                (p->fSkipFanout == 20 && !fArrivalQuality) ||
+                (p->fSkipFanout == 21 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode )))) ||
+                (p->fSkipFanout == 22 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 23 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 26 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap25SingleModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+            AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
+            AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
+            OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
+            if ( AreaSave > AreaMargin + p->fEpsilon )
+            {
+                if ( fStmap13 )
+                    p->nStmap13MiddleRelief++;
+                if ( p->fSkipFanout == 17 )
+                    printf( "stmap16 relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  area-margin = %.6f\n",
+                        p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+                        pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
+                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 28 )
+                    printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
+                        p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+                        ArrivalDelta, ArrivalGainMargin, AreaMargin );
+                if ( p->fSkipFanout == 26 && fStmap25ModerateAblation )
+                {
+                    p->nStmap25ModerateAblationSeed++;
+                    printf( "stmap25 ablation diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap25ModerateAblationSeed, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout == 27 && fStmap26ModerateAblation )
+                {
+                    p->nStmap26ModerateAblationSeen++;
+                    p->nStmap26ModerateAblationSeed++;
+                    printf( "stmap26 ablation diag: index = %d  rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureSeed )
+                {
+                    p->nStmap27ModerateSignatureSeed++;
+                    printf( "stmap27 signature seed diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 28 && !fProfileOpen && !fStrictFallback )
+                    p->nStmap19EarlySeed++;
+                return 0;
+            }
+            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 28 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+            {
+                if ( p->fSkipFanout == 19 )
+                    pReason = fProfileOpen ? "timing-gate" : "profile-closed";
+                else if ( p->fSkipFanout == 20 )
+                    pReason = "arrival-gate";
+                else if ( p->fSkipFanout == 22 )
+                    pReason = fArrivalQuality ? "deep-gain-gate" : "arrival-gate";
+                else if ( p->fSkipFanout == 23 )
+                    pReason = fArrivalQuality ? "moderate-gain-gate" : "arrival-gate";
+                else if ( p->fSkipFanout == 24 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 25 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "tight-moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 26 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "single-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 27 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "rank2-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 28 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap27ModerateSignatureBlocked ? "signature-block-gate" : "signature-band-gate") : "moderate-gain-gate") : "arrival-gate";
+                else
+                    pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
+                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+                {
+                    p->nStmap26ModerateAblationSeen++;
+                    printf( "stmap26 ablation skip diag: rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureBlocked )
+                {
+                    p->nStmap27ModerateSignatureBlocked++;
+                    printf( "stmap27 signature block diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                p->nStmap18NearMiss++;
+                if ( p->nStmap18NearMiss <= 128 )
+                    printf( "stmap%d near-miss diag: index = %d  reason = %s  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f\n",
+                        p->fSkipFanout - 1, p->nStmap18NearMiss, pReason,
+                        fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs, pCut->nLeaves,
+                        fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, OneInvArea );
+            }
+            if ( fStmap13 )
+                p->nStmap13RejectArea++;
+            return 1;
+        }
+        if ( Slack <= SlackGate + p->fEpsilon )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectSlack++;
+            return 1;
+        }
+        if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectHighest++;
+            return 1;
+        }
+    }
+    if ( Slack <= SlackMargin + p->fEpsilon )
+        return 0;
+    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 28 )
+    {
+        ArrivalMargin = 0.25 * SlackMargin;
+        if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectArrival++;
+            return 1;
+        }
+    }
+    AreaMargin = p->pSuperLib ? 0.5 * p->pSuperLib->AreaInv : 0.0;
+    if ( pMatch->AreaFlow < pMatchBest->AreaFlow - AreaMargin - p->fEpsilon )
+        return 0;
+    if ( fStmap13 )
+        p->nStmap13RejectArea++;
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Compares two matches.]
+
+  Description [Returns 1 if the second match is better. Otherwise returns 0.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Map_MatchCompare( Map_Man_t * pMan, Map_Match_t * pM1, Map_Match_t * pM2, int fDoingArea )
+{
+//    if ( pM1->pSuperBest == pM2->pSuperBest )
+//        return 0;
+    if ( !fDoingArea )
+    {
+        // compare the arrival times
+        if ( pM1->tArrive.Worst < pM2->tArrive.Worst - pMan->fEpsilon )
+            return 0;
+        if ( pM1->tArrive.Worst > pM2->tArrive.Worst + pMan->fEpsilon )
+            return 1;
+        // compare the areas or area flows
+        if ( pM1->AreaFlow < pM2->AreaFlow - pMan->fEpsilon )
+            return 0;
+        if ( pM1->AreaFlow > pM2->AreaFlow + pMan->fEpsilon )
+            return 1;
+        // compare the fanout limits
+        if ( pM1->pSuperBest->nFanLimit > pM2->pSuperBest->nFanLimit )
+            return 0;
+        if ( pM1->pSuperBest->nFanLimit < pM2->pSuperBest->nFanLimit )
+            return 1;
+        // compare the number of leaves
+        if ( pM1->pSuperBest->nFanins < pM2->pSuperBest->nFanins )
+            return 0;
+        if ( pM1->pSuperBest->nFanins > pM2->pSuperBest->nFanins )
+            return 1;
+        // otherwise prefer the old cut
+        return 0;
+    }
+    else
+    {
+        // compare the areas or area flows
+        if ( pM1->AreaFlow < pM2->AreaFlow - pMan->fEpsilon )
+            return 0;
+        if ( pM1->AreaFlow > pM2->AreaFlow + pMan->fEpsilon )
+            return 1;
+
+        // make decision based on cell profile
+
+exec
+/bin/zsh -lc "sed -n '980,1500p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+        // make decision based on cell profile
+        if ( pMan->fUseProfile && pM1->pSuperBest && pM1->pSuperBest )
+        {
+            int M1req = Mio_GateReadProfile(pM1->pSuperBest->pRoot);
+            int M2req = Mio_GateReadProfile(pM2->pSuperBest->pRoot);
+            int M1act = Mio_GateReadProfile2(pM1->pSuperBest->pRoot);
+            int M2act = Mio_GateReadProfile2(pM2->pSuperBest->pRoot);
+            //printf( "%d %d  ", M1req, M2req );
+            if ( M1act < M1req && M2act > M2req )
+                return 0;
+            if ( M2act < M2req && M1act > M1req )
+                return 1;
+        }
+
+        // compare the arrival times
+        if ( pM1->tArrive.Worst < pM2->tArrive.Worst - pMan->fEpsilon )
+            return 0;
+        if ( pM1->tArrive.Worst > pM2->tArrive.Worst + pMan->fEpsilon )
+            return 1;
+        // compare the fanout limits
+        if ( pM1->pSuperBest->nFanLimit > pM2->pSuperBest->nFanLimit )
+            return 0;
+        if ( pM1->pSuperBest->nFanLimit < pM2->pSuperBest->nFanLimit )
+            return 1;
+        // compare the number of leaves
+        if ( pM1->pSuperBest->nFanins < pM2->pSuperBest->nFanins )
+            return 0;
+        if ( pM1->pSuperBest->nFanins > pM2->pSuperBest->nFanins )
+            return 1;
+        // otherwise prefer the old cut
+        return 0;
+    }
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Find the best matching of the cut.]
+
+  Description [The parameters: the node (pNode), the cut (pCut), the phase to be matched 
+  (fPhase), and the upper bound on the arrival times of the cut (fWorstLimit). This 
+  procedure goes through the matching supergates up to the phase assignment, and selects the
+  best supergate, which will be used to map the cut. As a result of calling this procedure
+  the matching information is written into pMatch.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Map_MatchNodeCut( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, float fWorstLimit )
+{
+    Map_Match_t MatchBest, * pMatch = pCut->M + fPhase;
+    Map_Super_t * pSuper;
+    int i, Counter;
+
+    // save the current match of the cut
+    MatchBest = *pMatch;
+    // go through the supergates
+    for ( pSuper = pMatch->pSupers, Counter = 0; pSuper; pSuper = pSuper->pNext, Counter++ )
+    {
+        p->nMatches++;
+        // this is an attempt to reduce the runtime of matching and area 
+        // at the cost of rare and very minor increase in delay
+        // (the supergates are sorted by increasing area)
+        if ( Counter == 30 )
+           break;
+
+        // go through different phases of the given match and supergate
+        pMatch->pSuperBest = pSuper;
+        for ( i = 0; i < (int)pSuper->nPhases; i++ )
+        {
+            p->nPhases++;
+            // find the overall phase of this match
+            pMatch->uPhaseBest = pMatch->uPhase ^ pSuper->uPhases[i];
+            if ( p->fMappingMode == 0 )
+            {
+                // get the arrival time
+                Map_TimeCutComputeArrival( pNode, pCut, fPhase, fWorstLimit );
+                // skip the cut if the arrival times exceed the required times
+                if ( pMatch->tArrive.Worst > fWorstLimit + p->fEpsilon )
+                    continue;
+                // get the area (area flow)
+                pMatch->AreaFlow = Map_CutGetAreaFlow( pCut, fPhase );
+            }
+            else
+            {
+                // get the area (area flow)
+                if ( p->fMappingMode == 2 || p->fMappingMode == 3 )
+                    pMatch->AreaFlow = Map_CutGetAreaDerefed( pCut, fPhase );
+                else if ( p->fMappingMode == 4 )
+                    pMatch->AreaFlow = Map_SwitchCutGetDerefed( pNode, pCut, fPhase );
+                else 
+                    pMatch->AreaFlow = Map_CutGetAreaFlow( pCut, fPhase );
+                // skip if the cut is too large
+                if ( pMatch->AreaFlow > MatchBest.AreaFlow + p->fEpsilon )
+                    continue;
+                // get the arrival time
+                Map_TimeCutComputeArrival( pNode, pCut, fPhase, fWorstLimit );
+                // skip the cut if the arrival times exceed the required times
+                if ( pMatch->tArrive.Worst > fWorstLimit + p->fEpsilon )
+                    continue;
+            }
+
+            // if the cut is non-trivial, compare it
+            if ( Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode ) )
+            {
+                MatchBest = *pMatch;
+                // if we are mapping for delay, the worst-case limit should be reduced
+                if ( p->fMappingMode == 0 )
+                    fWorstLimit = MatchBest.tArrive.Worst;
+            }
+        }
+    }
+    // set the best match
+    *pMatch = MatchBest;
+
+    // recompute the arrival time and area (area flow) of this cut
+    if ( pMatch->pSuperBest )
+    {
+        Map_TimeCutComputeArrival( pNode, pCut, fPhase, MAP_FLOAT_LARGE );
+        if ( p->fMappingMode == 2 || p->fMappingMode == 3 )
+            pMatch->AreaFlow = Map_CutGetAreaDerefed( pCut, fPhase );
+        else if ( p->fMappingMode == 4 )
+            pMatch->AreaFlow = Map_SwitchCutGetDerefed( pNode, pCut, fPhase );
+        else 
+            pMatch->AreaFlow = Map_CutGetAreaFlow( pCut, fPhase );
+    }
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Find the matching of one polarity of the node.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
+{
+    Map_Match_t MatchBest, * pMatch;
+    Map_Cut_t * pCut, * pCutBest;
+    float Area1 = 0.0; // Suppress "might be used uninitialized
+    float Area2, fWorstLimit;
+
+    // skip the cuts that have been unassigned during area recovery
+    pCutBest = pNode->pCutBest[fPhase];
+    if ( p->fMappingMode != 0 && pCutBest == NULL )
+        return 1;
+
+    // recompute the arrival times of the current best match 
+    // because the arrival times of the fanins may have changed 
+    // as a result of remapping fanins in the topological order
+    if ( p->fMappingMode != 0 )
+    {
+        Map_TimeCutComputeArrival( pNode, pCutBest, fPhase, MAP_FLOAT_LARGE );
+        // make sure that the required times are met
+//        assert( pCutBest->M[fPhase].tArrive.Rise < pNode->tRequired[fPhase].Rise + p->fEpsilon );
+//        assert( pCutBest->M[fPhase].tArrive.Fall < pNode->tRequired[fPhase].Fall + p->fEpsilon );
+    }
+
+    // recompute the exact area of the current best match
+    // because the exact area of the fanins may have changed
+    // as a result of remapping fanins in the topological order
+    if ( p->fMappingMode == 2 || p->fMappingMode == 3 )
+    {
+        pMatch = pCutBest->M + fPhase;
+        if ( pNode->nRefAct[fPhase] > 0 || 
+            (pNode->pCutBest[!fPhase] == NULL && pNode->nRefAct[!fPhase] > 0) )
+            pMatch->AreaFlow = Area1 = Map_CutDeref( pCutBest, fPhase, p->fUseProfile );
+        else
+            pMatch->AreaFlow = Area1 = Map_CutGetAreaDerefed( pCutBest, fPhase );
+    }
+    else if ( p->fMappingMode == 4 )
+    {
+        pMatch = pCutBest->M + fPhase;
+        if ( pNode->nRefAct[fPhase] > 0 || 
+            (pNode->pCutBest[!fPhase] == NULL && pNode->nRefAct[!fPhase] > 0) )
+            pMatch->AreaFlow = Area1 = Map_SwitchCutDeref( pNode, pCutBest, fPhase );
+        else
+            pMatch->AreaFlow = Area1 = Map_SwitchCutGetDerefed( pNode, pCutBest, fPhase );
+    }
+
+    // save the old mapping
+    if ( pCutBest )
+        MatchBest = pCutBest->M[fPhase];
+    else
+        Map_MatchClean( &MatchBest );
+ 
+    // select the new best cut
+    fWorstLimit = pNode->tRequired[fPhase].Worst;
+    for ( pCut = pNode->pCuts->pNext; pCut; pCut = pCut->pNext )
+    {
+        // limit gate sizes based on fanout count
+        if ( Map_MatchSkipCutForFanout( p, pNode, pCut, fPhase ) )
+            continue;
+        pMatch = pCut->M + fPhase;
+        if ( pMatch->pSupers == NULL )
+            continue;
+
+        // find the matches for the cut
+        Map_MatchNodeCut( p, pNode, pCut, fPhase, fWorstLimit );
+        if ( pMatch->pSuperBest == NULL || pMatch->tArrive.Worst > fWorstLimit + p->fEpsilon )
+            continue;
+        if ( Map_MatchSkipAreaSensitiveFanout( p, pNode, pCut, fPhase, &MatchBest, pMatch ) )
+            continue;
+
+        // if the cut can be matched compare the matchings
+        if ( Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode ) )
+        {
+            pCutBest  =  pCut;
+            MatchBest = *pMatch;
+            // if we are mapping for delay, the worst-case limit should be tightened
+            if ( p->fMappingMode == 0 )
+                fWorstLimit = MatchBest.tArrive.Worst;
+        }
+    }
+
+    if ( pCutBest == NULL )
+        return 1;
+
+    // set the new mapping
+    pNode->pCutBest[fPhase] = pCutBest;
+    pCutBest->M[fPhase]     = MatchBest;
+
+    // reference the new cut if it used
+    if ( p->fMappingMode >= 2 && 
+         (pNode->nRefAct[fPhase] > 0 || 
+         (pNode->pCutBest[!fPhase] == NULL && pNode->nRefAct[!fPhase] > 0)) )
+    {
+        if ( p->fMappingMode == 2 || p->fMappingMode == 3 )
+            Area2 = Map_CutRef( pNode->pCutBest[fPhase], fPhase, p->fUseProfile );
+        else if ( p->fMappingMode == 4 )
+            Area2 = Map_SwitchCutRef( pNode, pNode->pCutBest[fPhase], fPhase );
+        else 
+            assert( 0 );
+//        assert( Area2 < Area1 + p->fEpsilon );
+    }
+
+    // make sure that the requited times are met
+//    assert( MatchBest.tArrive.Rise < pNode->tRequired[fPhase].Rise + p->fEpsilon );
+//    assert( MatchBest.tArrive.Fall < pNode->tRequired[fPhase].Fall + p->fEpsilon );
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Sets the PI arrival times.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Map_MappingSetPiArrivalTimes( Map_Man_t * p )
+{
+    Map_Node_t * pNode;
+    int i;
+    for ( i = 0; i < p->nInputs; i++ )
+    {
+        pNode = p->pInputs[i];
+        // set the arrival time of the positive phase
+        if ( Scl_ConIsRunning() )
+        {
+            float Time = Scl_ConGetInArrFloat( i );
+            pNode->tArrival[1].Fall  = Time;
+            pNode->tArrival[1].Rise  = Time;
+            pNode->tArrival[1].Worst = Time;
+        }
+        else
+            pNode->tArrival[1] = p->pInputArrivals[i];
+        pNode->tArrival[1].Rise  += p->pNodeDelays ? p->pNodeDelays[pNode->Num] : 0;
+        pNode->tArrival[1].Fall  += p->pNodeDelays ? p->pNodeDelays[pNode->Num] : 0;
+        pNode->tArrival[1].Worst += p->pNodeDelays ? p->pNodeDelays[pNode->Num] : 0;
+        // set the arrival time of the negative phase
+        pNode->tArrival[0].Rise  = pNode->tArrival[1].Fall + p->pSuperLib->tDelayInv.Rise;
+        pNode->tArrival[0].Fall  = pNode->tArrival[1].Rise + p->pSuperLib->tDelayInv.Fall;
+        pNode->tArrival[0].Worst = MAP_MAX(pNode->tArrival[0].Rise, pNode->tArrival[0].Fall);
+    }
+}
+
+/**function*************************************************************
+
+  synopsis    [Computes the exact area associated with the cut.]
+
+  description []
+               
+  sideeffects []
+
+  seealso     []
+
+***********************************************************************/
+float Map_TimeMatchWithInverter( Map_Man_t * p, Map_Match_t * pMatch )
+{
+    Map_Time_t tArrInv;
+    tArrInv.Fall  = pMatch->tArrive.Rise + p->pSuperLib->tDelayInv.Fall;
+    tArrInv.Rise  = pMatch->tArrive.Fall + p->pSuperLib->tDelayInv.Rise;
+    tArrInv.Worst = MAP_MAX( tArrInv.Rise, tArrInv.Fall ); 
+    return tArrInv.Worst;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Attempts dropping one phase of the node.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Map_NodeTryDroppingOnePhase( Map_Man_t * p, Map_Node_t * pNode )
+{
+    Map_Match_t * pMatchBest0, * pMatchBest1;
+    float tWorst0Using1, tWorst1Using0; 
+    int fUsePhase1, fUsePhase0;
+
+    // nothing to do if one of the phases is already dropped
+    if ( pNode->pCutBest[0] == NULL || pNode->pCutBest[1] == NULL )
+        return;
+
+    // do not drop while recovering area flow
+    if ( p->fMappingMode == 1 )//|| p->fMappingMode == 2 )
+        return;
+
+    // get the pointers to the matches of the best cuts
+    pMatchBest0 = pNode->pCutBest[0]->M + 0;
+    pMatchBest1 = pNode->pCutBest[1]->M + 1;
+
+    // get the worst arrival times of each phase
+    // implemented using the other phase with inverter added
+    tWorst0Using1 = Map_TimeMatchWithInverter( p, pMatchBest1 );
+    tWorst1Using0 = Map_TimeMatchWithInverter( p, pMatchBest0 );
+
+    // consider the case of mapping for delay
+    if ( p->fMappingMode == 0 && p->DelayTarget < ABC_INFINITY )
+    { 
+        // if the arrival time of a phase is larger than the arrival time 
+        // of the opposite phase plus the inverter, drop this phase
+        if ( pMatchBest0->tArrive.Worst > tWorst0Using1 + p->fEpsilon ) 
+            pNode->pCutBest[0] = NULL;
+        else if ( pMatchBest1->tArrive.Worst > tWorst1Using0 + p->fEpsilon ) 
+            pNode->pCutBest[1] = NULL;
+        return;
+    }
+
+    // do not perform replacement if one of the phases is unused
+    if ( pNode->nRefAct[0] == 0 || pNode->nRefAct[1] == 0 )
+        return;
+ 
+    // check if replacement of each phase is possible using required times
+    fUsePhase0 = fUsePhase1 = 0;
+    if ( p->fMappingMode == 2 )
+    {
+        fUsePhase0 = (pNode->tRequired[1].Worst > tWorst1Using0 + 3*p->pSuperLib->tDelayInv.Worst + p->fEpsilon);
+        fUsePhase1 = (pNode->tRequired[0].Worst > tWorst0Using1 + 3*p->pSuperLib->tDelayInv.Worst + p->fEpsilon);
+    }
+    else if ( p->fMappingMode == 3 || p->fMappingMode == 4 )
+    {
+        fUsePhase0 = (pNode->tRequired[1].Worst > tWorst1Using0 + p->fEpsilon);
+        fUsePhase1 = (pNode->tRequired[0].Worst > tWorst0Using1 + p->fEpsilon);
+    }
+    if ( !fUsePhase0 && !fUsePhase1 )
+        return;
+
+    // if replacement is possible both ways, use the one that works better
+    if ( fUsePhase0 && fUsePhase1 )
+    {
+        if ( pMatchBest0->AreaFlow < pMatchBest1->AreaFlow )
+            fUsePhase1 = 0;
+        else
+            fUsePhase0 = 0;
+    }
+    // only one phase should be used
+    assert( fUsePhase0 ^ fUsePhase1 );
+
+    // set the corresponding cut to NULL
+    if ( fUsePhase0 )
+    {
+        // deref phase 1 cut if necessary
+        if ( p->fMappingMode >= 2 && pNode->nRefAct[1] > 0 )
+            Map_CutDeref( pNode->pCutBest[1], 1, p->fUseProfile );
+        // get rid of the cut
+        pNode->pCutBest[1] = NULL;
+        // ref phase 0 cut if necessary
+        if ( p->fMappingMode >= 2 && pNode->nRefAct[0] == 0 )
+            Map_CutRef( pNode->pCutBest[0], 0, p->fUseProfile );
+    }
+    else
+    {
+        // deref phase 0 cut if necessary
+        if ( p->fMappingMode >= 2 && pNode->nRefAct[0] > 0 )
+            Map_CutDeref( pNode->pCutBest[0], 0, p->fUseProfile );
+        // get rid of the cut
+        pNode->pCutBest[0] = NULL;
+        // ref phase 1 cut if necessary
+        if ( p->fMappingMode >= 2 && pNode->nRefAct[1] == 0 )
+            Map_CutRef( pNode->pCutBest[1], 1, p->fUseProfile );
+    }
+}
+
+
+/**Function*************************************************************
+
+  Synopsis    [Transfers the arrival times from the best cuts to the node.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Map_NodeTransferArrivalTimes( Map_Man_t * p, Map_Node_t * pNode )
+{
+    // if both phases are available, set their arrival times
+    if ( pNode->pCutBest[0] && pNode->pCutBest[1] )
+    {
+        pNode->tArrival[0] = pNode->pCutBest[0]->M[0].tArrive;
+        pNode->tArrival[1] = pNode->pCutBest[1]->M[1].tArrive;
+    }
+    // if only one phase is available, compute the arrival time of other phase
+    else if ( pNode->pCutBest[0] )
+    {
+        pNode->tArrival[0] = pNode->pCutBest[0]->M[0].tArrive;
+        pNode->tArrival[1].Rise  = pNode->tArrival[0].Fall + p->pSuperLib->tDelayInv.Rise;
+        pNode->tArrival[1].Fall  = pNode->tArrival[0].Rise + p->pSuperLib->tDelayInv.Fall;
+        pNode->tArrival[1].Worst = MAP_MAX(pNode->tArrival[1].Rise, pNode->tArrival[1].Fall);
+    }
+    else if ( pNode->pCutBest[1] )
+    {
+        pNode->tArrival[1] = pNode->pCutBest[1]->M[1].tArrive;
+        pNode->tArrival[0].Rise  = pNode->tArrival[1].Fall + p->pSuperLib->tDelayInv.Rise;
+        pNode->tArrival[0].Fall  = pNode->tArrival[1].Rise + p->pSuperLib->tDelayInv.Fall;
+        pNode->tArrival[0].Worst = MAP_MAX(pNode->tArrival[0].Rise, pNode->tArrival[0].Fall);
+    }
+    else 
+    {
+        assert( 0 );
+    }
+
+//    assert( pNode->tArrival[0].Rise < pNode->tRequired[0].Rise + p->fEpsilon );
+//    assert( pNode->tArrival[0].Fall < pNode->tRequired[0].Fall + p->fEpsilon );
+
+//    assert( pNode->tArrival[1].Rise < pNode->tRequired[1].Rise + p->fEpsilon );
+//    assert( pNode->tArrival[1].Fall < pNode->tRequired[1].Fall + p->fEpsilon );
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Computes the best matches of the nodes.]
+
+  Description [Uses parameter p->fMappingMode to decide how to assign
+  the matches for both polarities of the node. While the matches are 
+  being assigned, one of them may turn out to be better than the other 
+  (in terms of delay, for example). In this case, the worse match can 
+  be permanently dropped, and the corresponding pointer set to NULL.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Map_MappingMatches( Map_Man_t * p )
+{
+    ProgressBar * pProgress;
+    Map_Node_t * pNode;
+    int i;
+
+    assert( p->fMappingMode >= 0 && p->fMappingMode <= 4 );
+
+    // use the externally given PI arrival times
+    if ( p->fMappingMode == 0 )
+        Map_MappingSetPiArrivalTimes( p );
+
+    // estimate the fanouts
+    if ( p->fMappingMode == 0 )
+        Map_MappingEstimateRefsInit( p );
+    else if ( p->fMappingMode == 1 )
+        Map_MappingEstimateRefs( p );
+
+    // the PI cuts are matched in the cut computation package
+    // in the loop below we match the internal nodes
+    pProgress = Extra_ProgressBarStart( stdout, p->vMapObjs->nSize );
+    for ( i = 0; i < p->vMapObjs->nSize; i++ )
+    {
+        pNode = p->vMapObjs->pArray[i];
+        if ( Map_NodeIsBuf(pNode) )
+        {
+            assert( pNode->p2 == NULL );
+            pNode->tArrival[0] = Map_Regular(pNode->p1)->tArrival[ Map_IsComplement(pNode->p1)];
+            pNode->tArrival[1] = Map_Regular(pNode->p1)->tArrival[!Map_IsComplement(pNode->p1)];
+            continue;
+        }
+
+        // skip primary inputs and secondary nodes if mapping with choices
+        if ( !Map_NodeIsAnd( pNode ) || pNode->pRepr )
+            continue;
+
+        // make sure that at least one non-trival cut is present
+        if ( pNode->pCuts->pNext == NULL )
+        {
+            Extra_ProgressBarStop( pProgress );
+            printf( "\nError: A node in the mapping graph does not have feasible cuts.\n" );
+            return 0;
+        }
+
+        // match negative phase
+        if ( !Map_MatchNodePhase( p, pNode, 0 ) )
+        {
+            Extra_ProgressBarStop( pProgress );
+            return 0;
+        }
+        // match positive phase
+        if ( !Map_MatchNodePhase( p, pNode, 1 ) )
+
+exec
+/bin/zsh -lc "git show HEAD:src/map/mapper/mapperMatch.c | sed -n '60,130p' && git show HEAD:src/map/mapper/mapperMatch.c | sed -n '700,900p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    pMatch->AreaFlow          = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Rise   = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Fall   = MAP_FLOAT_LARGE; // unassigned
+    pMatch->tArrive.Worst  = MAP_FLOAT_LARGE; // unassigned
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the highest stmap fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 6 && pCut->nLeaves > 2;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the lower moderate fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapLowerModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 3 && pNode->nRefs <= 5 && pCut->nLeaves > 3;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if the cut is in the upper moderate fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs == 6 && pCut->nLeaves > 3;
+}
+
+/**Function*************************************************************
+             Slack <= SlackGate + p->fEpsilon &&
+             !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
+             Map_MatchNodeHasStmapMiddleSlackRelief( p->fSkipFanout, pNode ) &&
+             (p->fSkipFanout < 13 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
+             pMatch->tArrive.Worst <= pMatchBest->tArrive.Worst + p->fEpsilon;
+        if ( fMiddleReliefWindow )
+        {
+            if ( fStmap13 )
+                p->nStmap13MiddleSlack++;
+            fProfileOpen = Map_MatchHasStmap15ReliefProfile( p );
+            fStmap25ModerateAblation =
+                p->fSkipFanout == 26 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap25ModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap26ModerateAblationCandidate =
+                p->fSkipFanout == 27 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap26ModerateAblation =
+                fStmap26ModerateAblationCandidate &&
+                Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStrictFallback =
+                p->fSkipFanout == 15 ||
+                ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
+                ((p->fSkipFanout == 18 || p->fSkipFanout == 19) && (!fProfileOpen || !fArrivalQuality)) ||
+                (p->fSkipFanout == 20 && !fArrivalQuality) ||
+                (p->fSkipFanout == 21 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode )))) ||
+                (p->fSkipFanout == 22 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 23 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 26 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap25SingleModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+            AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
+            AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
+            OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
+            if ( AreaSave > AreaMargin + p->fEpsilon )
+            {
+                if ( fStmap13 )
+                    p->nStmap13MiddleRelief++;
+                if ( p->fSkipFanout == 17 )
+                    printf( "stmap16 relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  area-margin = %.6f\n",
+                        p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+                        pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
+                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 27 )
+                    printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
+                        p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
+                        ArrivalDelta, ArrivalGainMargin, AreaMargin );
+                if ( p->fSkipFanout == 26 && fStmap25ModerateAblation )
+                {
+                    p->nStmap25ModerateAblationSeed++;
+                    printf( "stmap25 ablation diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap25ModerateAblationSeed, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout == 27 && fStmap26ModerateAblation )
+                {
+                    p->nStmap26ModerateAblationSeen++;
+                    p->nStmap26ModerateAblationSeed++;
+                    printf( "stmap26 ablation diag: index = %d  rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 27 && !fProfileOpen && !fStrictFallback )
+                    p->nStmap19EarlySeed++;
+                return 0;
+            }
+            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 27 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+            {
+                if ( p->fSkipFanout == 19 )
+                    pReason = fProfileOpen ? "timing-gate" : "profile-closed";
+                else if ( p->fSkipFanout == 20 )
+                    pReason = "arrival-gate";
+                else if ( p->fSkipFanout == 22 )
+                    pReason = fArrivalQuality ? "deep-gain-gate" : "arrival-gate";
+                else if ( p->fSkipFanout == 23 )
+                    pReason = fArrivalQuality ? "moderate-gain-gate" : "arrival-gate";
+                else if ( p->fSkipFanout == 24 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 25 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "tight-moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 26 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "single-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 27 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "rank2-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+                else
+                    pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
+                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+                {
+                    p->nStmap26ModerateAblationSeen++;
+                    printf( "stmap26 ablation skip diag: rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+                        p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                p->nStmap18NearMiss++;
+                if ( p->nStmap18NearMiss <= 128 )
+                    printf( "stmap%d near-miss diag: index = %d  reason = %s  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f\n",
+                        p->fSkipFanout - 1, p->nStmap18NearMiss, pReason,
+                        fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs, pCut->nLeaves,
+                        fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, OneInvArea );
+            }
+            if ( fStmap13 )
+                p->nStmap13RejectArea++;
+            return 1;
+        }
+        if ( Slack <= SlackGate + p->fEpsilon )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectSlack++;
+            return 1;
+        }
+        if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectHighest++;
+            return 1;
+        }
+    }
+    if ( Slack <= SlackMargin + p->fEpsilon )
+        return 0;
+    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 27 )
+    {
+        ArrivalMargin = 0.25 * SlackMargin;
+        if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
+        {
+            if ( fStmap13 )
+                p->nStmap13RejectArrival++;
+            return 1;
+        }
+    }
+    AreaMargin = p->pSuperLib ? 0.5 * p->pSuperLib->AreaInv : 0.0;
+    if ( pMatch->AreaFlow < pMatchBest->AreaFlow - AreaMargin - p->fEpsilon )
+        return 0;
+    if ( fStmap13 )
+        p->nStmap13RejectArea++;
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Compares two matches.]
+
+  Description [Returns 1 if the second match is better. Otherwise returns 0.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Map_MatchCompare( Map_Man_t * pMan, Map_Match_t * pM1, Map_Match_t * pM2, int fDoingArea )
+{
+//    if ( pM1->pSuperBest == pM2->pSuperBest )
+//        return 0;
+    if ( !fDoingArea )
+    {
+        // compare the arrival times
+        if ( pM1->tArrive.Worst < pM2->tArrive.Worst - pMan->fEpsilon )
+            return 0;
+        if ( pM1->tArrive.Worst > pM2->tArrive.Worst + pMan->fEpsilon )
+            return 1;
+        // compare the areas or area flows
+        if ( pM1->AreaFlow < pM2->AreaFlow - pMan->fEpsilon )
+            return 0;
+        if ( pM1->AreaFlow > pM2->AreaFlow + pMan->fEpsilon )
+            return 1;
+        // compare the fanout limits
+        if ( pM1->pSuperBest->nFanLimit > pM2->pSuperBest->nFanLimit )
+            return 0;
+        if ( pM1->pSuperBest->nFanLimit < pM2->pSuperBest->nFanLimit )
+            return 1;
+        // compare the number of leaves
+        if ( pM1->pSuperBest->nFanins < pM2->pSuperBest->nFanins )
+            return 0;
+        if ( pM1->pSuperBest->nFanins > pM2->pSuperBest->nFanins )
+            return 1;
+        // otherwise prefer the old cut
+        return 0;
+    }
+    else
+    {
+        // compare the areas or area flows
+        if ( pM1->AreaFlow < pM2->AreaFlow - pMan->fEpsilon )
+            return 0;
+        if ( pM1->AreaFlow > pM2->AreaFlow + pMan->fEpsilon )
+            return 1;
+
+        // make decision based on cell profile
+        if ( pMan->fUseProfile && pM1->pSuperBest && pM1->pSuperBest )
+        {
+            int M1req = Mio_GateReadProfile(pM1->pSuperBest->pRoot);
+            int M2req = Mio_GateReadProfile(pM2->pSuperBest->pRoot);
+            int M1act = Mio_GateReadProfile2(pM1->pSuperBest->pRoot);
+            int M2act = Mio_GateReadProfile2(pM2->pSuperBest->pRoot);
+            //printf( "%d %d  ", M1req, M2req );
+            if ( M1act < M1req && M2act > M2req )
+                return 0;
+            if ( M2act < M2req && M1act > M1req )
+
+exec
+/bin/zsh -lc "nl -ba src/map/mapper/mapperMatch.c | sed -n '100,130p;735,755p;775,810p;830,885p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+   100	  Synopsis    [Returns 1 if the cut is in the lower moderate fanout bucket.]
+   101	
+   102	  Description []
+   103	
+   104	  SideEffects []
+   105	
+   106	  SeeAlso     []
+   107	
+   108	***********************************************************************/
+   109	static int Map_MatchCutHasStmapLowerModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+   110	{
+   111	    return pNode->nRefs > 3 && pNode->nRefs <= 5 && pCut->nLeaves > 3;
+   112	}
+   113	
+   114	/**Function*************************************************************
+   115	
+   116	  Synopsis    [Returns 1 if the cut is in the upper moderate fanout bucket.]
+   117	
+   118	  Description []
+   119	
+   120	  SideEffects []
+   121	
+   122	  SeeAlso     []
+   123	
+   124	***********************************************************************/
+   125	static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+   126	{
+   127	    return pNode->nRefs == 6 && pCut->nLeaves > 3;
+   128	}
+   129	
+   130	/**Function*************************************************************
+   735	    const char * pReason;
+   736	    int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
+   737	    int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
+   738	    int fStmap27ModerateSignatureSeed, fStmap27ModerateSignatureBlocked;
+   739	
+   740	    if ( p->fSkipFanout < 7 || p->fSkipFanout > 28 )
+   741	        return 0;
+   742	    if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
+   743	        return 0;
+   744	    if ( p->vMapObjs->nSize <= 8000 )
+   745	        return 0;
+   746	    if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
+   747	        return 0;
+   748	    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 28);
+   749	    Map_MatchStmap13CountRisk( p, pNode, pCut );
+   750	    if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
+   751	        return 0;
+   752	    Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+   753	    SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+   754	    ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
+   755	    ArrivalGainMargin = 0.25 * SlackMargin;
+   775	                !fProfileOpen &&
+   776	                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+   777	                Map_MatchIsStmap25ModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+   778	            fStmap26ModerateAblationCandidate =
+   779	                p->fSkipFanout == 27 &&
+   780	                !fProfileOpen &&
+   781	                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+   782	                Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+   783	            fStmap26ModerateAblation =
+   784	                fStmap26ModerateAblationCandidate &&
+   785	                Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+   786	            fStmap27ModerateSignatureSeed =
+   787	                p->fSkipFanout == 28 &&
+   788	                !fProfileOpen &&
+   789	                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+   790	                Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+   791	            fStmap27ModerateSignatureBlocked =
+   792	                p->fSkipFanout == 28 &&
+   793	                !fProfileOpen &&
+   794	                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+   795	                Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+   796	            fStrictFallback =
+   797	                p->fSkipFanout == 15 ||
+   798	                ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
+   799	                ((p->fSkipFanout == 18 || p->fSkipFanout == 19) && (!fProfileOpen || !fArrivalQuality)) ||
+   800	                (p->fSkipFanout == 20 && !fArrivalQuality) ||
+   801	                (p->fSkipFanout == 21 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode )))) ||
+   802	                (p->fSkipFanout == 22 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+   803	                (p->fSkipFanout == 23 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
+   804	                (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+   805	                (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+   806	                (p->fSkipFanout == 26 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap25SingleModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+   807	                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+   808	                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+   809	            AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
+   810	            AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
+   830	                        p->nStmap25ModerateAblationSeed, pNode->Num, pNode->Level, pNode->nRefs,
+   831	                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+   832	                }
+   833	                if ( p->fSkipFanout == 27 && fStmap26ModerateAblation )
+   834	                {
+   835	                    p->nStmap26ModerateAblationSeen++;
+   836	                    p->nStmap26ModerateAblationSeed++;
+   837	                    printf( "stmap26 ablation diag: index = %d  rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+   838	                        p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+   839	                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+   840	                }
+   841	                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureSeed )
+   842	                {
+   843	                    p->nStmap27ModerateSignatureSeed++;
+   844	                    printf( "stmap27 signature seed diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+   845	                        p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
+   846	                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+   847	                }
+   848	                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 28 && !fProfileOpen && !fStrictFallback )
+   849	                    p->nStmap19EarlySeed++;
+   850	                return 0;
+   851	            }
+   852	            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 28 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+   853	            {
+   854	                if ( p->fSkipFanout == 19 )
+   855	                    pReason = fProfileOpen ? "timing-gate" : "profile-closed";
+   856	                else if ( p->fSkipFanout == 20 )
+   857	                    pReason = "arrival-gate";
+   858	                else if ( p->fSkipFanout == 22 )
+   859	                    pReason = fArrivalQuality ? "deep-gain-gate" : "arrival-gate";
+   860	                else if ( p->fSkipFanout == 23 )
+   861	                    pReason = fArrivalQuality ? "moderate-gain-gate" : "arrival-gate";
+   862	                else if ( p->fSkipFanout == 24 )
+   863	                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+   864	                else if ( p->fSkipFanout == 25 )
+   865	                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "tight-moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+   866	                else if ( p->fSkipFanout == 26 )
+   867	                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "single-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+   868	                else if ( p->fSkipFanout == 27 )
+   869	                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "rank2-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
+   870	                else if ( p->fSkipFanout == 28 )
+   871	                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap27ModerateSignatureBlocked ? "signature-block-gate" : "signature-band-gate") : "moderate-gain-gate") : "arrival-gate";
+   872	                else
+   873	                    pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
+   874	                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+   875	                {
+   876	                    p->nStmap26ModerateAblationSeen++;
+   877	                    printf( "stmap26 ablation skip diag: rank = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+   878	                        p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+   879	                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+   880	                }
+   881	                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureBlocked )
+   882	                {
+   883	                    p->nStmap27ModerateSignatureBlocked++;
+   884	                    printf( "stmap27 signature block diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
+   885	                        p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
+
+exec
+/bin/zsh -lc 'cat .autoeda/runtime/results/stmap27/build.exit 2>/dev/null; tail -n 80 .autoeda/runtime/results/stmap27/build.log 2>/dev/null; cat .autoeda/runtime/results/stmap27/artifact_check.exit 2>/dev/null; cat .autoeda/runtime/results/stmap27/artifact_check.log 2>/dev/null' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+0
+make: Nothing to be done for `all'.
+0
+artifact check passed for stmap27
+metrics rows: 8
+cec equivalent rows: 4
+
+exec
+/bin/zsh -lc "grep -R \"abcStmap_26\\|abcStmap_27\\|Stmap26\\|Stmap27\" -n --exclude-dir=.git --exclude-dir=.autoeda . | head -n 200" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 8466ms:
+Binary file ./abc matches
+./src/map/mapper/mapperMatch.c:360:static int Map_MatchIsStmap26ModerateAblationCandidate( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:379:static int Map_MatchIsStmap26RankTwoModerateAblationSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:381:    return Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) &&
+./src/map/mapper/mapperMatch.c:382:        p->nStmap26ModerateAblationSeen == 1 &&
+./src/map/mapper/mapperMatch.c:383:        p->nStmap26ModerateAblationSeed == 0;
+./src/map/mapper/mapperMatch.c:397:static int Map_MatchHasStmap26RankTwoModerateDeepSeed( Map_Man_t * p, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:400:        Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+./src/map/mapper/mapperMatch.c:414:static int Map_MatchIsStmap27BlockedModerateSignature( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:435:static int Map_MatchIsStmap27SignatureSafeModerateSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:441:        !Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+./src/map/mapper/mapperMatch.c:455:static int Map_MatchHasStmap27SignatureSafeModerateDeepSeed( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+./src/map/mapper/mapperMatch.c:458:        Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+./src/map/mapper/mapperMatch.c:737:    int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
+./src/map/mapper/mapperMatch.c:738:    int fStmap27ModerateSignatureSeed, fStmap27ModerateSignatureBlocked;
+./src/map/mapper/mapperMatch.c:778:            fStmap26ModerateAblationCandidate =
+./src/map/mapper/mapperMatch.c:782:                Map_MatchIsStmap26ModerateAblationCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+./src/map/mapper/mapperMatch.c:783:            fStmap26ModerateAblation =
+./src/map/mapper/mapperMatch.c:784:                fStmap26ModerateAblationCandidate &&
+./src/map/mapper/mapperMatch.c:785:                Map_MatchIsStmap26RankTwoModerateAblationSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+./src/map/mapper/mapperMatch.c:786:            fStmap27ModerateSignatureSeed =
+./src/map/mapper/mapperMatch.c:790:                Map_MatchIsStmap27SignatureSafeModerateSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+./src/map/mapper/mapperMatch.c:791:            fStmap27ModerateSignatureBlocked =
+./src/map/mapper/mapperMatch.c:795:                Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+./src/map/mapper/mapperMatch.c:807:                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+./src/map/mapper/mapperMatch.c:808:                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+./src/map/mapper/mapperMatch.c:833:                if ( p->fSkipFanout == 27 && fStmap26ModerateAblation )
+./src/map/mapper/mapperMatch.c:835:                    p->nStmap26ModerateAblationSeen++;
+./src/map/mapper/mapperMatch.c:836:                    p->nStmap26ModerateAblationSeed++;
+./src/map/mapper/mapperMatch.c:838:                        p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+./src/map/mapper/mapperMatch.c:841:                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureSeed )
+./src/map/mapper/mapperMatch.c:843:                    p->nStmap27ModerateSignatureSeed++;
+./src/map/mapper/mapperMatch.c:845:                        p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
+./src/map/mapper/mapperMatch.c:871:                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap27ModerateSignatureBlocked ? "signature-block-gate" : "signature-band-gate") : "moderate-gain-gate") : "arrival-gate";
+./src/map/mapper/mapperMatch.c:874:                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+./src/map/mapper/mapperMatch.c:876:                    p->nStmap26ModerateAblationSeen++;
+./src/map/mapper/mapperMatch.c:878:                        p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+./src/map/mapper/mapperMatch.c:881:                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureBlocked )
+./src/map/mapper/mapperMatch.c:883:                    p->nStmap27ModerateSignatureBlocked++;
+./src/map/mapper/mapperMatch.c:885:                        p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
+Binary file ./src/map/mapper/mapperUtils.o matches
+Binary file ./src/map/mapper/mapperVec.o matches
+./src/map/mapper/mapperCore.c:239:        printf( "stmap26 ablation stats: moderate-ablation-seen = %d  moderate-ablation-seed = %d\n", p->nStmap26ModerateAblationSeen, p->nStmap26ModerateAblationSeed );
+./src/map/mapper/mapperCore.c:241:        printf( "stmap27 signature stats: moderate-signature-seed = %d  moderate-signature-blocked = %d\n", p->nStmap27ModerateSignatureSeed, p->nStmap27ModerateSignatureBlocked );
+Binary file ./src/map/mapper/mapperCutUtils.o matches
+Binary file ./src/map/mapper/mapperRefs.o matches
+Binary file ./src/map/mapper/mapperSwitch.o matches
+Binary file ./src/map/mapper/mapperCut.o matches
+./src/map/mapper/mapperInt.h:141:    int                 nStmap26ModerateAblationSeen; // stmap26 moderate deep ablation candidates seen
+./src/map/mapper/mapperInt.h:142:    int                 nStmap26ModerateAblationSeed; // stmap26 rank-2 moderate deep ablation choices
+./src/map/mapper/mapperInt.h:143:    int                 nStmap27ModerateSignatureSeed; // stmap27 moderate deep signature-safe choices
+./src/map/mapper/mapperInt.h:144:    int                 nStmap27ModerateSignatureBlocked; // stmap27 moderate deep signature-blocked choices
+Binary file ./src/map/mapper/mapperCreate.o matches
+Binary file ./src/map/mapper/mapperCanon.o matches
+Binary file ./src/map/mapper/mapperMatch.o matches
+Binary file ./src/map/mapper/mapperTime.o matches
+Binary file ./src/map/mapper/mapperTruth.o matches
+Binary file ./src/map/mapper/mapperCore.o matches
+Binary file ./src/base/abci/abcStmap_27.o matches
+./src/base/abci/abc.c:326:extern int Abc_CommandStmap26                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+./src/base/abci/abc.c:327:extern int Abc_CommandStmap27                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+./src/base/abci/abc.c:1200:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap26",       Abc_CommandStmap26,          1 );
+./src/base/abci/abc.c:1201:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap27",       Abc_CommandStmap27,          1 );
+./src/base/abci/abcStmap_26.c:3:  FileName    [abcStmap_26.c]
+./src/base/abci/abcStmap_26.c:34:int Abc_CommandStmap26( Abc_Frame_t * pAbc, int argc, char ** argv )
+./src/base/abci/abcStmap_26.d:1:src/base/abci/abcStmap_26.d src/base/abci/abcStmap_26.o: src/base/abci/abcStmap_26.c src/base/abc/abc.h \
+./src/base/abci/module.make:95:    src/base/abci/abcStmap_26.c \
+./src/base/abci/module.make:96:    src/base/abci/abcStmap_27.c \
+./src/base/abci/abcStmap_27.d:1:src/base/abci/abcStmap_27.d src/base/abci/abcStmap_27.o: src/base/abci/abcStmap_27.c src/base/abc/abc.h \
+./src/base/abci/abcStmap_27.c:3:  FileName    [abcStmap_27.c]
+./src/base/abci/abcStmap_27.c:33:int Abc_CommandStmap27( Abc_Frame_t * pAbc, int argc, char ** argv )
+Binary file ./src/base/abci/abcStmap_26.o matches
+Binary file ./src/base/abci/abc.o matches
+./abclib.dsp:586:SOURCE=.\src\base\abci\abcStmap_26.c
+./abclib.dsp:590:SOURCE=.\src\base\abci\abcStmap_27.c
+
+2026-04-25T21:35:10.851329Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+exec
+/bin/zsh -lc "grep -R \"nStmap13\\|nStmap18\\|nStmap25\\|nStmap26\\|nStmap27\" -n src/map/mapper | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/mapper/mapperMatch.c:145:    p->nStmap13ExactRisk++;
+src/map/mapper/mapperMatch.c:147:        p->nStmap13HighestRisk++;
+src/map/mapper/mapperMatch.c:149:        p->nStmap13LowerModRisk++;
+src/map/mapper/mapperMatch.c:151:        p->nStmap13UpperModRisk++;
+src/map/mapper/mapperMatch.c:223:    return p->nStmap13LowerModRisk >= 20000 && p->nStmap13MiddleSlack >= 128;
+src/map/mapper/mapperMatch.c:329:        p->nStmap25ModerateAblationSeed == 0;
+src/map/mapper/mapperMatch.c:382:        p->nStmap26ModerateAblationSeen == 1 &&
+src/map/mapper/mapperMatch.c:383:        p->nStmap26ModerateAblationSeed == 0;
+src/map/mapper/mapperMatch.c:771:                p->nStmap13MiddleSlack++;
+src/map/mapper/mapperMatch.c:815:                    p->nStmap13MiddleRelief++;
+src/map/mapper/mapperMatch.c:818:                        p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:823:                        p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:828:                    p->nStmap25ModerateAblationSeed++;
+src/map/mapper/mapperMatch.c:830:                        p->nStmap25ModerateAblationSeed, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:835:                    p->nStmap26ModerateAblationSeen++;
+src/map/mapper/mapperMatch.c:836:                    p->nStmap26ModerateAblationSeed++;
+src/map/mapper/mapperMatch.c:838:                        p->nStmap26ModerateAblationSeed, p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:843:                    p->nStmap27ModerateSignatureSeed++;
+src/map/mapper/mapperMatch.c:845:                        p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:874:                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+src/map/mapper/mapperMatch.c:876:                    p->nStmap26ModerateAblationSeen++;
+src/map/mapper/mapperMatch.c:878:                        p->nStmap26ModerateAblationSeen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:883:                    p->nStmap27ModerateSignatureBlocked++;
+src/map/mapper/mapperMatch.c:885:                        p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:888:                p->nStmap18NearMiss++;
+src/map/mapper/mapperMatch.c:889:                if ( p->nStmap18NearMiss <= 128 )
+src/map/mapper/mapperMatch.c:891:                        p->fSkipFanout - 1, p->nStmap18NearMiss, pReason,
+src/map/mapper/mapperMatch.c:896:                p->nStmap13RejectArea++;
+src/map/mapper/mapperMatch.c:902:                p->nStmap13RejectSlack++;
+src/map/mapper/mapperMatch.c:908:                p->nStmap13RejectHighest++;
+src/map/mapper/mapperMatch.c:920:                p->nStmap13RejectArrival++;
+src/map/mapper/mapperMatch.c:928:        p->nStmap13RejectArea++;
+Binary file src/map/mapper/mapperUtils.o matches
+Binary file src/map/mapper/mapperVec.o matches
+src/map/mapper/mapperCore.c:228:            p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
+src/map/mapper/mapperCore.c:229:            p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
+src/map/mapper/mapperCore.c:230:            p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
+src/map/mapper/mapperCore.c:231:            p->nStmap13RejectArea );
+src/map/mapper/mapperCore.c:233:        printf( "stmap%d near-miss stats: near-miss = %d\n", p->fSkipFanout - 1, p->nStmap18NearMiss );
+src/map/mapper/mapperCore.c:237:        printf( "stmap25 ablation stats: moderate-ablation-seed = %d\n", p->nStmap25ModerateAblationSeed );
+src/map/mapper/mapperCore.c:239:        printf( "stmap26 ablation stats: moderate-ablation-seen = %d  moderate-ablation-seed = %d\n", p->nStmap26ModerateAblationSeen, p->nStmap26ModerateAblationSeed );
+src/map/mapper/mapperCore.c:241:        printf( "stmap27 signature stats: moderate-signature-seed = %d  moderate-signature-blocked = %d\n", p->nStmap27ModerateSignatureSeed, p->nStmap27ModerateSignatureBlocked );
+Binary file src/map/mapper/mapperCutUtils.o matches
+Binary file src/map/mapper/mapperRefs.o matches
+Binary file src/map/mapper/mapperSwitch.o matches
+Binary file src/map/mapper/mapperCut.o matches
+src/map/mapper/mapperInt.h:128:    int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
+src/map/mapper/mapperInt.h:129:    int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
+src/map/mapper/mapperInt.h:130:    int                 nStmap13LowerModRisk;   // stmap13+ lower-moderate fanout bucket hits
+src/map/mapper/mapperInt.h:131:    int                 nStmap13UpperModRisk;   // stmap13+ upper-moderate fanout bucket hits
+src/map/mapper/mapperInt.h:132:    int                 nStmap13MiddleSlack;    // stmap13+ middle-slack candidates
+src/map/mapper/mapperInt.h:133:    int                 nStmap13MiddleRelief;   // stmap13+ middle-slack candidates admitted
+src/map/mapper/mapperInt.h:134:    int                 nStmap13RejectSlack;    // stmap13+ rejects due to slack gate
+src/map/mapper/mapperInt.h:135:    int                 nStmap13RejectHighest;  // stmap13+ rejects due to highest bucket
+src/map/mapper/mapperInt.h:136:    int                 nStmap13RejectArrival;  // stmap13+ rejects due to arrival regression
+src/map/mapper/mapperInt.h:137:    int                 nStmap13RejectArea;     // stmap13+ rejects due to profile or area saving
+src/map/mapper/mapperInt.h:138:    int                 nStmap18NearMiss;       // stmap18+ near-miss middle-slack rejects
+src/map/mapper/mapperInt.h:140:    int                 nStmap25ModerateAblationSeed; // stmap25 single moderate deep ablation choices
+src/map/mapper/mapperInt.h:141:    int                 nStmap26ModerateAblationSeen; // stmap26 moderate deep ablation candidates seen
+src/map/mapper/mapperInt.h:142:    int                 nStmap26ModerateAblationSeed; // stmap26 rank-2 moderate deep ablation choices
+src/map/mapper/mapperInt.h:143:    int                 nStmap27ModerateSignatureSeed; // stmap27 moderate deep signature-safe choices
+src/map/mapper/mapperInt.h:144:    int                 nStmap27ModerateSignatureBlocked; // stmap27 moderate deep signature-blocked choices
+Binary file src/map/mapper/mapperCreate.o matches
+Binary file src/map/mapper/mapperCanon.o matches
+Binary file src/map/mapper/mapperMatch.o matches
+Binary file src/map/mapper/mapperTime.o matches
+Binary file src/map/mapper/mapperTruth.o matches
+Binary file src/map/mapper/mapperCore.o matches
+
+exec
+/bin/zsh -lc 'cat .autoeda/runtime/results/stmap27/guard_stats.csv 2>/dev/null; echo; cat .autoeda/runtime/results/stmap27/signature_stats.csv 2>/dev/null; echo; head -50 .autoeda/runtime/results/stmap27/candidate_benchmarks_syn2_abc_blif.log 2>/dev/null; grep -R "stmap27 guard stats" -n .autoeda/runtime/results/stmap27/*.log 2>/dev/null | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+benchmark,exact_risk,highest,lower_mod,upper_mod,middle_slack,middle_relief,reject_slack,reject_highest,reject_arrival,reject_area
+benchmarks/i10.aig,0,0,0,0,0,0,0,0,0,0
+benchmarks/ode.abc.blif,0,0,0,0,765,0,12974,14866,10527,11095
+benchmarks/or1200.abc.blif,0,0,0,0,35,2,959,8476,5835,7062
+benchmarks/syn2.abc.blif,0,0,0,0,1992,5,35970,28279,16695,17179
+
+benchmark,moderate_signature_seed,moderate_signature_blocked
+benchmarks/i10.aig,0,0
+benchmarks/ode.abc.blif,0,0
+benchmarks/or1200.abc.blif,0,0
+benchmarks/syn2.abc.blif,1,2
+
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap27; topo; buffer; upsize -v; dnsize -v; stime"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.26 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Hierarchy reader converted 4 instances of blackboxes.
+Starting:  syn2            : pi =   450  po =   321  lat =  1512  and =   25570  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   25403  lev =  67
+Refactor:  syn2            : pi =   450  po =   321  lat =  1512  and =   25150  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   25132  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   25006  lev =  67
+Starting:  syn2            : pi =   450  po =   321  lat =  1512  and =   25006  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   24948  lev =  67
+Refactor:  syn2            : pi =   450  po =   321  lat =  1512  and =   24842  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24835  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   24782  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   24739  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24735  lev =  67
+RefactorZ: syn2            : pi =   450  po =   321  lat =  1512  and =   24578  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   24476  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24470  lev =  67
+Parameters: Sim words = 8. Conf limit = 1000. SAT var max = 5000.
+AIG nodes : Total =  68304. Dangling =  45536. Main =  22768. ( 33.33 %)
+SAT solver: Vars = 1905. Max cone = 5246. Recycles = 8.
+SAT calls : All =  12993. Unsat =   4111. Sat =   8882. Fail =      0.
+Choices   : Lits =  21248. Reprs =     0. Equivs =     0. Choices =     0.
+Choicing runtime statistics:
+Sim init    =     0.01 sec (  0.67 %)
+Sim SAT     =     0.61 sec ( 28.56 %)
+SAT solving =     1.47 sec ( 69.13 %)
+  sat       =     1.34 sec ( 62.78 %)
+  unsat     =     0.14 sec (  6.57 %)
+  undecided =     0.00 sec (  0.00 %)
+Choice      =     0.00 sec (  0.00 %)
+Other       =     0.03 sec (  1.64 %)
+TOTAL       =     2.13 sec (100.00 %)
+Synthesis   =     0.95 sec
+Old choice computation time =     2.13 sec
+STATS:  Ands:   68304  ->   47143.  Reprs:  19635  ->   3665.  Choices =   3066.
+stmap27 relief diag: index = 1  profile-open = 0  node = 2318  level = 29  refs = 5  leaves = 4  phase = 0  slack = 7.430023  area-save = 0.930000  arrival-delta = -10.130005  arrival-gain-margin = 1.585000  area-margin = 0.700000
+stmap27 near-miss diag: index = 1  reason = arrival-gate  profile-open = 0  node = 5785  level = 44  refs = 4  leaves = 4  phase = 0  slack = 10.839981  area-save = 0.930000  arrival-delta = -0.800003  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 near-miss diag: index = 2  reason = moderate-gain-gate  profile-open = 0  node = 5785  level = 44  refs = 4  leaves = 4  phase = 1  slack = 7.619980  area-save = 0.930000  arrival-delta = -2.760010  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 near-miss diag: index = 3  reason = arrival-gate  profile-open = 0  node = 5785  level = 44  refs = 4  leaves = 5  phase = 1  slack = 7.619980  area-save = 0.930000  arrival-delta = -1.260010  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 relief diag: index = 2  profile-open = 0  node = 21363  level = 49  refs = 4  leaves = 4  phase = 0  slack = 11.790039  area-save = 0.930000  arrival-delta = -8.349991  arrival-gain-margin = 1.585000  area-margin = 0.700000
+stmap27 near-miss diag: index = 4  reason = moderate-gain-gate  profile-open = 0  node = 23628  level = 38  refs = 4  leaves = 4  phase = 0  slack = 6.520020  area-save = 0.930000  arrival-delta = -1.750000  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 near-miss diag: index = 5  reason = arrival-gate  profile-open = 0  node = 23628  level = 38  refs = 4  leaves = 4  phase = 1  slack = 7.550034  area-save = 1.170000  arrival-delta = -1.049988  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 near-miss diag: index = 6  reason = arrival-gate  profile-open = 0  node = 23628  level = 38  refs = 4  leaves = 5  phase = 1  slack = 7.550034  area-save = 1.170000  arrival-delta = -0.029999  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 relief diag: index = 3  profile-open = 0  node = 23673  level = 37  refs = 4  leaves = 5  phase = 1  slack = 7.850021  area-save = 0.930000  arrival-delta = -11.840012  arrival-gain-margin = 1.585000  area-margin = 0.700000
+stmap27 relief diag: index = 4  profile-open = 0  node = 24798  level = 46  refs = 4  leaves = 4  phase = 1  slack = 7.919983  area-save = 0.940000  arrival-delta = -3.179993  arrival-gain-margin = 1.585000  area-margin = 0.700000
+stmap27 signature seed diag: index = 1  node = 24798  level = 46  refs = 4  leaves = 4  phase = 1  slack = 7.919983  area-save = 0.940000  arrival-delta = -3.179993  arrival-gain-margin = 1.585000
+stmap27 near-miss diag: index = 7  reason = arrival-gate  profile-open = 0  node = 27904  level = 57  refs = 4  leaves = 5  phase = 1  slack = 9.659973  area-save = 0.930000  arrival-delta = -1.459991  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap27 near-miss diag: index = 8  reason = moderate-gain-gate  profile-open = 0  node = 35068  level = 45  refs = 4  leaves = 4  phase = 0  slack = 11.949997  area-save = 0.930000  arrival-delta = -2.119980  arrival-gain-margin = 1.585000  area-margin = 1.400000  one-inv-area = 0.700000
+.autoeda/runtime/results/stmap27/candidate_benchmarks_i10_aig.log:37:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+.autoeda/runtime/results/stmap27/candidate_benchmarks_ode_abc_blif.log:38:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 765  middle-relief = 0  reject-slack = 12974  reject-highest = 14866  reject-arrival = 10527  reject-area = 11095
+.autoeda/runtime/results/stmap27/candidate_benchmarks_or1200_abc_blif.log:40:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 35  middle-relief = 2  reject-slack = 959  reject-highest = 8476  reject-arrival = 5835  reject-area = 7062
+.autoeda/runtime/results/stmap27/candidate_benchmarks_syn2_abc_blif.log:58:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 1992  middle-relief = 5  reject-slack = 35970  reject-highest = 28279  reject-arrival = 16695  reject-area = 17179
+.autoeda/runtime/results/stmap27/cec_benchmarks_i10_aig_candidate_write.log:37:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+.autoeda/runtime/results/stmap27/cec_benchmarks_ode_abc_blif_candidate_write.log:38:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 765  middle-relief = 0  reject-slack = 12974  reject-highest = 14866  reject-arrival = 10527  reject-area = 11095
+.autoeda/runtime/results/stmap27/cec_benchmarks_or1200_abc_blif_candidate_write.log:40:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 35  middle-relief = 2  reject-slack = 959  reject-highest = 8476  reject-arrival = 5835  reject-area = 7062
+.autoeda/runtime/results/stmap27/cec_benchmarks_syn2_abc_blif_candidate_write.log:58:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 1992  middle-relief = 5  reject-slack = 35970  reject-highest = 28279  reject-arrival = 16695  reject-area = 17179
+.autoeda/runtime/results/stmap27/smoke_i10.log:37:stmap27 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+
+exec
+/bin/zsh -lc "find . -maxdepth 3 \\( -name 'CMakeLists.txt' -o -name '*.make' -o -name 'Makefile' -o -name '*.dsp' \\) | sed -n '1,200p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+./CMakeLists.txt
+./test/CMakeLists.txt
+./test/gia/CMakeLists.txt
+./Makefile
+./abcexe.dsp
+./abclib.dsp
+
+exec
+/bin/zsh -lc "grep -n \"abcStmap_26\\|abcStmap_25\\|src/base/abci\" CMakeLists.txt | head -n 80" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "sed -n '1,240p' CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+cmake_minimum_required(VERSION 3.5.0)
+
+include(CMakeParseArguments)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+# Generate compilation database compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Default c++ standard used unless otherwise specified in target_compile_features.
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "the C++ standard to use for this project")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+function(addprefix var prefix)
+    foreach( s ${ARGN} )
+        list(APPEND tmp "-I${s}")
+    endforeach()
+    set(${var} ${tmp} PARENT_SCOPE)
+endfunction()
+
+# filter out flags that are not appropriate for the compiler being used
+function(target_compile_options_filtered target visibility)
+    foreach( flag ${ARGN} )
+        if( flag MATCHES "^-D.*" )
+            target_compile_options( ${target} ${visibility} ${flag} )
+        else()
+            check_c_compiler_flag( ${flag} C_COMPILER_SUPPORTS__${flag} )
+            if( C_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:C>:${flag}> )
+            endif()
+
+            check_cxx_compiler_flag( ${flag} CXX_COMPILER_SUPPORTS__${flag} )
+            if( CXX_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:CXX>:${flag}>  )
+            endif()
+        endif()
+    endforeach()
+endfunction()
+
+project(abc)
+
+if(READLINE_FOUND MATCHES TRUE)
+    addprefix(ABC_READLINE_INCLUDES_FLAGS "-I" ${READLINE_INCLUDE})
+    string(REPLACE ";" " " ABC_READLINE_INCLUDES_FLAGS "${ABC_READLINE_INCLUDES_FLAGS}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_INCLUDES=${ABC_READLINE_INCLUDES_FLAGS}")
+
+    string(REPLACE ";" " " ABC_READLINE_LIBRARIES_FLAGS "${READLINE_LIBRARIES}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_LIBRARIES=${ABC_READLINE_LIBRARIES_FLAGS}")
+elseif(READLINE_FOUND MATCHES FALSE)
+    list(APPEND ABC_READLINE_FLAGS "ABC_USE_NO_READLINE=1")
+endif()
+
+if(ABC_USE_NAMESPACE)
+    set(ABC_USE_NAMESPACE_FLAGS "ABC_USE_NAMESPACE=${ABC_USE_NAMESPACE}")
+endif()
+
+if( APPLE )
+    set(make_env ${CMAKE_COMMAND} -E env SDKROOT=${CMAKE_OSX_SYSROOT})
+endif()
+
+# run make to extract compiler options, linker options and list of source files
+execute_process(
+  COMMAND
+    ${make_env}
+    make
+        ${ABC_READLINE_FLAGS}
+        ${ABC_USE_NAMESPACE_FLAGS}
+        ARCHFLAGS_EXE=${CMAKE_CURRENT_BINARY_DIR}/abc_arch_flags_program.exe
+        ABC_MAKE_NO_DEPS=1
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        LD=${CMAKE_CXX_COMPILER}
+        cmake_info
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  OUTPUT_VARIABLE MAKE_OUTPUT
+)
+
+# extract options from make output
+function(extract_var SEPARATOR DEST_VARIABLE MAKE_OUTPUT)
+  string(REGEX MATCH "${SEPARATOR} .* ${SEPARATOR}" TMP "${MAKE_OUTPUT}")
+  string(REGEX REPLACE "${SEPARATOR} (.*) ${SEPARATOR}" "\\1" TMP "${TMP}")
+
+  separate_arguments(TMP)
+
+  set(${DEST_VARIABLE} ${TMP} PARENT_SCOPE)
+endfunction()
+
+extract_var(SEPARATOR_SRC ABC_SRC ${MAKE_OUTPUT})
+extract_var(SEPARATOR_LIBS ABC_LIBS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CFLAGS ABC_CFLAGS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CXXFLAGS ABC_CXXFLAGS ${MAKE_OUTPUT})
+
+if(ABC_USE_NAMESPACE)
+    set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
+endif()
+
+function(abc_properties target visibility)
+    target_include_directories(${target} ${visibility} ${CMAKE_CURRENT_SOURCE_DIR}/src )
+    target_compile_options_filtered(${target} ${visibility} ${ABC_CFLAGS} ${ABC_CXXFLAGS} -Wno-unused-but-set-variable )
+    target_link_libraries(${target} ${visibility} ${ABC_LIBS})
+endfunction()
+
+set(ABC_MAIN_SRC src/base/main/main.c)
+list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
+
+add_library(libabc EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc PUBLIC)
+set_property(TARGET libabc PROPERTY OUTPUT_NAME abc)
+
+add_executable(abc ${ABC_MAIN_SRC})
+target_link_libraries(abc PRIVATE libabc)
+abc_properties(abc PRIVATE)
+
+add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc-pic PUBLIC)
+set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
+
+if(NOT DEFINED ABC_SKIP_TESTS)
+    enable_testing()
+    include(FetchContent)
+    FetchContent_Declare(
+    googletest
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    # Specify the commit you depend on and update it regularly.
+    URL "https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip"
+    )
+    FetchContent_MakeAvailable(googletest)
+    include(GoogleTest)
+    add_subdirectory(test)
+endif()
+exec
+/bin/zsh -lc "grep -R \"fSkipFanout.*27\\|> 27\\|<= 27\\|== 27\" -n src/map/mapper src/base/abci | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 480ms:
+src/map/mapper/mapperMatch.c:143:    if ( p->fSkipFanout < 14 || p->fSkipFanout > 27 )
+src/map/mapper/mapperMatch.c:779:                p->fSkipFanout == 27 &&
+src/map/mapper/mapperMatch.c:807:                (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+src/map/mapper/mapperMatch.c:808:                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+src/map/mapper/mapperMatch.c:833:                if ( p->fSkipFanout == 27 && fStmap26ModerateAblation )
+src/map/mapper/mapperMatch.c:841:                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureSeed )
+src/map/mapper/mapperMatch.c:868:                else if ( p->fSkipFanout == 27 )
+src/map/mapper/mapperMatch.c:874:                if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
+src/map/mapper/mapperMatch.c:881:                if ( p->fSkipFanout == 28 && fStmap27ModerateSignatureBlocked )
+Binary file src/map/mapper/mapperUtils.o matches
+Binary file src/map/mapper/mapperVec.o matches
+src/map/mapper/mapperCore.c:238:    if ( p->fSkipFanout == 27 )
+Binary file src/map/mapper/mapperCutUtils.o matches
+Binary file src/map/mapper/mapperRefs.o matches
+Binary file src/map/mapper/mapperSwitch.o matches
+Binary file src/map/mapper/mapperCut.o matches
+src/map/mapper/mapperInt.h:126:    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27
+Binary file src/map/mapper/mapperCreate.o matches
+Binary file src/map/mapper/mapperCanon.o matches
+Binary file src/map/mapper/mapperMatch.o matches
+Binary file src/map/mapper/mapperTime.o matches
+Binary file src/map/mapper/mapperTruth.o matches
+Binary file src/map/mapper/mapperCore.o matches
+src/base/abci/abcStmap_26.c:65:    fSkipFanout = 27; // rank-2 moderate deep early-profile seed ablation; -f disables it
+src/base/abci/abcStmap_26.c:160:            fSkipFanout = fSkipFanout ? 0 : 27;
+
+exec
+/bin/zsh -lc "grep -n \"abcStmap_26\\|abcStmap_25\" abcexe.dsp abclib.dsp | tail -20" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+abclib.dsp:582:SOURCE=.\src\base\abci\abcStmap_25.c
+abclib.dsp:586:SOURCE=.\src\base\abci\abcStmap_26.c
+
+exec
+/bin/zsh -lc "grep -R \"Map_Man_t \\*.*Alloc\\|Map_ManCreate\\|Map_ManStart\\|nStmap13\" -n src/map/mapper | sed -n '1,200p' && sed -n '1,220p' src/map/mapper/mapperCreate.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/mapper/mapperMatch.c:145:    p->nStmap13ExactRisk++;
+src/map/mapper/mapperMatch.c:147:        p->nStmap13HighestRisk++;
+src/map/mapper/mapperMatch.c:149:        p->nStmap13LowerModRisk++;
+src/map/mapper/mapperMatch.c:151:        p->nStmap13UpperModRisk++;
+src/map/mapper/mapperMatch.c:223:    return p->nStmap13LowerModRisk >= 20000 && p->nStmap13MiddleSlack >= 128;
+src/map/mapper/mapperMatch.c:771:                p->nStmap13MiddleSlack++;
+src/map/mapper/mapperMatch.c:815:                    p->nStmap13MiddleRelief++;
+src/map/mapper/mapperMatch.c:818:                        p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:823:                        p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
+src/map/mapper/mapperMatch.c:896:                p->nStmap13RejectArea++;
+src/map/mapper/mapperMatch.c:902:                p->nStmap13RejectSlack++;
+src/map/mapper/mapperMatch.c:908:                p->nStmap13RejectHighest++;
+src/map/mapper/mapperMatch.c:920:                p->nStmap13RejectArrival++;
+src/map/mapper/mapperMatch.c:928:        p->nStmap13RejectArea++;
+Binary file src/map/mapper/mapperUtils.o matches
+Binary file src/map/mapper/mapperVec.o matches
+src/map/mapper/mapperCore.c:228:            p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
+src/map/mapper/mapperCore.c:229:            p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
+src/map/mapper/mapperCore.c:230:            p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
+src/map/mapper/mapperCore.c:231:            p->nStmap13RejectArea );
+Binary file src/map/mapper/mapperCutUtils.o matches
+Binary file src/map/mapper/mapperRefs.o matches
+Binary file src/map/mapper/mapperSwitch.o matches
+Binary file src/map/mapper/mapperCut.o matches
+src/map/mapper/mapper.h:77:extern Map_Man_t *     Map_ManCreate( int nInputs, int nOutputs, int fVerbose );
+src/map/mapper/mapper.h:79:extern void            Map_ManCreateNodeDelays( Map_Man_t * p, int LogFan );
+src/map/mapper/mapper.h:113:extern void            Map_ManCreateAigIds( Map_Man_t * p, int nObjs );   
+src/map/mapper/mapperInt.h:128:    int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
+src/map/mapper/mapperInt.h:129:    int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
+src/map/mapper/mapperInt.h:130:    int                 nStmap13LowerModRisk;   // stmap13+ lower-moderate fanout bucket hits
+src/map/mapper/mapperInt.h:131:    int                 nStmap13UpperModRisk;   // stmap13+ upper-moderate fanout bucket hits
+src/map/mapper/mapperInt.h:132:    int                 nStmap13MiddleSlack;    // stmap13+ middle-slack candidates
+src/map/mapper/mapperInt.h:133:    int                 nStmap13MiddleRelief;   // stmap13+ middle-slack candidates admitted
+src/map/mapper/mapperInt.h:134:    int                 nStmap13RejectSlack;    // stmap13+ rejects due to slack gate
+src/map/mapper/mapperInt.h:135:    int                 nStmap13RejectHighest;  // stmap13+ rejects due to highest bucket
+src/map/mapper/mapperInt.h:136:    int                 nStmap13RejectArrival;  // stmap13+ rejects due to arrival regression
+src/map/mapper/mapperInt.h:137:    int                 nStmap13RejectArea;     // stmap13+ rejects due to profile or area saving
+Binary file src/map/mapper/mapperCreate.o matches
+Binary file src/map/mapper/mapperCanon.o matches
+Binary file src/map/mapper/mapperMatch.o matches
+Binary file src/map/mapper/mapperTime.o matches
+Binary file src/map/mapper/mapperTruth.o matches
+Binary file src/map/mapper/mapperCore.o matches
+src/map/mapper/mapperCreate.c:78:void            Map_ManCreateAigIds( Map_Man_t * p, int nObjs )            { p->pAigNodeIDs = ABC_CALLOC( int, nObjs ); }   
+src/map/mapper/mapperCreate.c:192:Map_Man_t * Map_ManCreate( int nInputs, int nOutputs, int fVerbose )
+src/map/mapper/mapperCreate.c:293:void Map_ManCreateNodeDelays( Map_Man_t * p, int LogFan )
+/**CFile****************************************************************
+
+  FileName    [mapperCreate.c]
+
+  PackageName [MVSIS 1.3: Multi-valued logic synthesis system.]
+
+  Synopsis    [Generic technology mapping engine.]
+
+  Author      [MVSIS Group]
+  
+  Affiliation [UC Berkeley]
+
+  Date        [Ver. 2.0. Started - June 1, 2004.]
+
+  Revision    [$Id: mapperCreate.c,v 1.15 2005/02/28 05:34:26 alanmi Exp $]
+
+***********************************************************************/
+
+#include "mapperInt.h"
+
+ABC_NAMESPACE_IMPL_START
+
+
+////////////////////////////////////////////////////////////////////////
+///                        DECLARATIONS                              ///
+////////////////////////////////////////////////////////////////////////
+
+static void            Map_TableCreate( Map_Man_t * p );
+static void            Map_TableResize( Map_Man_t * p );
+
+// hash key for the structural hash table
+static inline unsigned Map_HashKey2( Map_Node_t * p0, Map_Node_t * p1, int TableSize ) { return (unsigned)(((ABC_PTRUINT_T)(p0) + (ABC_PTRUINT_T)(p1) * 12582917) % TableSize); }
+
+////////////////////////////////////////////////////////////////////////
+///                     FUNCTION DEFINITIONS                         ///
+////////////////////////////////////////////////////////////////////////
+
+/**Function*************************************************************
+
+  Synopsis    [Reads parameters from the mapping manager.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int             Map_ManReadInputNum( Map_Man_t * p )                    { return p->nInputs;    }
+int             Map_ManReadOutputNum( Map_Man_t * p )                   { return p->nOutputs;   }
+int             Map_ManReadBufNum( Map_Man_t * p )                      { return Map_NodeVecReadSize(p->vMapBufs);   }
+Map_Node_t **   Map_ManReadInputs ( Map_Man_t * p )                     { return p->pInputs;    }
+Map_Node_t **   Map_ManReadOutputs( Map_Man_t * p )                     { return p->pOutputs;   }
+Map_Node_t **   Map_ManReadBufs( Map_Man_t * p )                        { return Map_NodeVecReadArray(p->vMapBufs);  }
+Map_Node_t *    Map_ManReadBufDriver( Map_Man_t * p, int i )            { return Map_ManReadBufs(p)[i]->p1;           }
+Map_Node_t *    Map_ManReadConst1 ( Map_Man_t * p )                     { return p->pConst1;    }
+Map_Time_t *    Map_ManReadInputArrivals( Map_Man_t * p )               { return p->pInputArrivals; }
+Map_Time_t *    Map_ManReadOutputRequireds( Map_Man_t * p )             { return p->pOutputRequireds; }
+Mio_Library_t * Map_ManReadGenLib ( Map_Man_t * p )                     { return p->pSuperLib->pGenlib; }
+int             Map_ManReadVerbose( Map_Man_t * p )                     { return p->fVerbose;   }
+float           Map_ManReadAreaFinal( Map_Man_t * p )                   { return p->AreaFinal;  }
+float           Map_ManReadRequiredGlo( Map_Man_t * p )                 { return p->fRequiredGlo; }
+void            Map_ManSetOutputNames( Map_Man_t * p, char ** ppNames ) { p->ppOutputNames = ppNames;}
+void            Map_ManSetAreaRecovery( Map_Man_t * p, int fAreaRecovery ) { p->fAreaRecovery = fAreaRecovery;}
+void            Map_ManSetDelayTarget( Map_Man_t * p, float DelayTarget ) { p->DelayTarget = DelayTarget;}
+void            Map_ManSetInputArrivals( Map_Man_t * p, Map_Time_t * pArrivals )     { p->pInputArrivals = pArrivals;    }
+void            Map_ManSetOutputRequireds( Map_Man_t * p, Map_Time_t * pRequireds )  { p->pOutputRequireds = pRequireds; }
+void            Map_ManSetObeyFanoutLimits( Map_Man_t * p, int  fObeyFanoutLimits )  { p->fObeyFanoutLimits = fObeyFanoutLimits;     }
+void            Map_ManSetNumIterations( Map_Man_t * p, int nIterations )            { p->nIterations = nIterations;     }
+int             Map_ManReadFanoutViolations( Map_Man_t * p )            { return p->nFanoutViolations;   }  
+void            Map_ManSetFanoutViolations( Map_Man_t * p, int nVio )   { p->nFanoutViolations = nVio;   }  
+void            Map_ManSetChoiceNodeNum( Map_Man_t * p, int nChoiceNodes ) { p->nChoiceNodes = nChoiceNodes; }  
+void            Map_ManSetChoiceNum( Map_Man_t * p, int nChoices )         { p->nChoices = nChoices;     }   
+void            Map_ManSetVerbose( Map_Man_t * p, int fVerbose )           { p->fVerbose = fVerbose;     }   
+void            Map_ManSetSwitching( Map_Man_t * p, int fSwitching )       { p->fSwitching = fSwitching; }   
+void            Map_ManSetSkipFanout( Map_Man_t * p, int fSkipFanout )     { p->fSkipFanout = fSkipFanout; }   
+void            Map_ManSetUseProfile( Map_Man_t * p )                      { p->fUseProfile = 1;         }   
+void            Map_ManCreateAigIds( Map_Man_t * p, int nObjs )            { p->pAigNodeIDs = ABC_CALLOC( int, nObjs ); }   
+
+/**Function*************************************************************
+
+  Synopsis    [Reads parameters from the mapping node.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Man_t *     Map_NodeReadMan( Map_Node_t * p )                     { return p->p;                  }
+char *          Map_NodeReadData( Map_Node_t * p, int fPhase )        { return fPhase? p->pData1 : p->pData0;  }
+int             Map_NodeReadNum( Map_Node_t * p )                     { return p->Num;                }
+int             Map_NodeReadLevel( Map_Node_t * p )                   { return Map_Regular(p)->Level; }
+int             Map_NodeReadAigId( Map_Node_t * p )                   { return p->p->pAigNodeIDs[p->Num]; }
+Map_Cut_t *     Map_NodeReadCuts( Map_Node_t * p )                    { return p->pCuts;              }
+Map_Cut_t *     Map_NodeReadCutBest( Map_Node_t * p, int fPhase )     { return p->pCutBest[fPhase];   }
+Map_Node_t *    Map_NodeReadOne( Map_Node_t * p )                     { return p->p1;                 }
+Map_Node_t *    Map_NodeReadTwo( Map_Node_t * p )                     { return p->p2;                 }
+void            Map_NodeSetData( Map_Node_t * p, int fPhase, char * pData ) { if (fPhase) p->pData1 = pData; else p->pData0 = pData; }
+void            Map_NodeSetNextE( Map_Node_t * p, Map_Node_t * pNextE )     { p->pNextE = pNextE;       }
+void            Map_NodeSetRepr( Map_Node_t * p, Map_Node_t * pRepr )       { p->pRepr = pRepr;         }
+void            Map_NodeSetSwitching( Map_Node_t * p, float Switching )     { p->Switching = Switching; }
+void            Map_NodeSetAigId( Map_Node_t * p, int Id )            { p->p->pAigNodeIDs[p->Num] = Id; }
+
+;
+
+
+/**Function*************************************************************
+
+  Synopsis    [Checks the type of the node.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int             Map_NodeIsConst( Map_Node_t * p )    {  return (Map_Regular(p))->Num == -1;    }
+int             Map_NodeIsVar( Map_Node_t * p )      {  return (Map_Regular(p))->p1 == NULL && (Map_Regular(p))->Num >= 0; }
+int             Map_NodeIsBuf( Map_Node_t * p )      {  return (Map_Regular(p))->p1 != NULL && (Map_Regular(p))->p2 == NULL;  }
+int             Map_NodeIsAnd( Map_Node_t * p )      {  return (Map_Regular(p))->p1 != NULL && (Map_Regular(p))->p2 != NULL;  }
+int             Map_NodeComparePhase( Map_Node_t * p1, Map_Node_t * p2 ) { assert( !Map_IsComplement(p1) ); assert( !Map_IsComplement(p2) ); return p1->fInv ^ p2->fInv; }
+
+/**Function*************************************************************
+
+  Synopsis    [Reads parameters from the cut.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Super_t *   Map_CutReadSuperBest( Map_Cut_t * p, int fPhase ) { return p->M[fPhase].pSuperBest;}
+Map_Super_t *   Map_CutReadSuper0( Map_Cut_t * p )                { return p->M[0].pSuperBest;}
+Map_Super_t *   Map_CutReadSuper1( Map_Cut_t * p )                { return p->M[1].pSuperBest;}
+int             Map_CutReadLeavesNum( Map_Cut_t * p )             { return p->nLeaves;  }
+Map_Node_t **   Map_CutReadLeaves( Map_Cut_t * p )                { return p->ppLeaves; }
+unsigned        Map_CutReadPhaseBest( Map_Cut_t * p, int fPhase ) { return p->M[fPhase].uPhaseBest;}
+unsigned        Map_CutReadPhase0( Map_Cut_t * p )                { return p->M[0].uPhaseBest;}
+unsigned        Map_CutReadPhase1( Map_Cut_t * p )                { return p->M[1].uPhaseBest;}
+Map_Cut_t *     Map_CutReadNext( Map_Cut_t * p )                  { return p->pNext;          }
+
+/**Function*************************************************************
+
+  Synopsis    [Reads parameters from the supergate.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+char *          Map_SuperReadFormula( Map_Super_t * p )          {  return p->pFormula; }
+Mio_Gate_t *    Map_SuperReadRoot( Map_Super_t * p )             {  return p->pRoot;    }
+int             Map_SuperReadNum( Map_Super_t * p )              {  return p->Num;      }
+Map_Super_t **  Map_SuperReadFanins( Map_Super_t * p )           {  return p->pFanins;  }
+int             Map_SuperReadFaninNum( Map_Super_t * p )         {  return p->nFanins;  }
+Map_Super_t *   Map_SuperReadNext( Map_Super_t * p )             {  return p->pNext;    }
+int             Map_SuperReadNumPhases( Map_Super_t * p )        {  return p->nPhases;  }
+unsigned char * Map_SuperReadPhases( Map_Super_t * p )           {  return p->uPhases;  }
+int             Map_SuperReadFanoutLimit( Map_Super_t * p )      {  return p->nFanLimit;}
+
+Mio_Library_t * Map_SuperLibReadGenLib( Map_SuperLib_t * p )     {  return p->pGenlib;  }
+float           Map_SuperLibReadAreaInv( Map_SuperLib_t * p )    {  return p->AreaInv;  }
+Map_Time_t      Map_SuperLibReadDelayInv( Map_SuperLib_t * p )   {  return p->tDelayInv;}
+int             Map_SuperLibReadVarsMax( Map_SuperLib_t * p )    {  return p->nVarsMax; }
+
+
+/**Function*************************************************************
+
+  Synopsis    [Create the mapping manager.]
+
+  Description [The number of inputs and outputs is assumed to be
+  known is advance. It is much simpler to have them fixed upfront.
+  When it comes to representing the object graph in the form of
+  AIG, the resulting manager is similar to the regular AIG manager, 
+  except that it does not use reference counting (and therefore
+  does not have garbage collections). It does have table resizing.
+  The data structure is more flexible to represent additional 
+  information needed for mapping.]
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Man_t * Map_ManCreate( int nInputs, int nOutputs, int fVerbose )
+{
+    Map_Man_t * p;
+    int i;
+
+    // derive the supergate library
+    if ( Abc_FrameReadLibSuper() == NULL )
+    {
+        printf( "The supergate library is not specified. Use \"read_super\".\n" );
+        return NULL;
+    }
+
+    // start the manager
+    p = ABC_ALLOC( Map_Man_t, 1 );
+    memset( p, 0, sizeof(Map_Man_t) );
+    p->pSuperLib = (Map_SuperLib_t *)Abc_FrameReadLibSuper();
+    p->nVarsMax  = p->pSuperLib->nVarsMax;
+    p->fVerbose  = fVerbose;
+    p->fEpsilon  = (float)0.001;
+    assert( p->nVarsMax > 0 );
+
+    if ( p->nVarsMax == 5 )
+        Extra_Truth4VarN( &p->uCanons, &p->uPhases, &p->pCounters, 8 );
+
+    // start various data structures
+    Map_TableCreate( p );
+    Map_MappingSetupTruthTables( p->uTruths );
+    Map_MappingSetupTruthTablesLarge( p->uTruthsLarge );
+//    printf( "Node = %d bytes. Cut = %d bytes. Super = %d bytes.\n", sizeof(Map_Node_t), sizeof(Map_Cut_t), sizeof(Map_Super_t) ); 
+
+exec
+/bin/zsh -lc "git diff -- .autoeda/runtime/campaign_state.json .autoeda/runtime/last_prompt.txt | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+diff --git a/.autoeda/runtime/campaign_state.json b/.autoeda/runtime/campaign_state.json
+index f3e52948f..ddca75d13 100644
+--- a/.autoeda/runtime/campaign_state.json
++++ b/.autoeda/runtime/campaign_state.json
+@@ -6,16 +6,16 @@
+   "target_iterations": 100,
+   "completed_iterations": 27,
+   "next_iteration": 27,
+-  "status": "iteration-complete",
+-  "active_iteration": null,
+-  "active_version": null,
++  "status": "evaluation-complete",
++  "active_iteration": 27,
++  "active_version": "stmap27",
+   "last_completed_iteration": 26,
+   "last_completed_version": "stmap26",
+   "last_successful_commit": "local commit created: stmap26: ablate rank two moderate seed; see git history for hash",
+-  "last_launch_time": "2026-04-25T21:08:34+00:00",
++  "last_launch_time": "2026-04-25T21:26:41+00:00",
+   "last_heartbeat_time": "2026-04-25T21:25:40Z",
+-  "launcher_pid": 23853,
+-  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T210834Z.log",
++  "launcher_pid": 40020,
++  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T212641Z.log",
+   "selected_backend": "codex",
+   "report_required": true,
+   "report_generated": false,
+@@ -174,7 +174,10 @@
+     "stmap26 review pass 1 accepted runtime-log findings; versions.md entry and review summary were added and revalidated.",
+     "stmap26 review pass 2 accepted a canonical near-miss count correction; versions.md was updated and revalidated.",
+     "stmap26 validation passed: build, help, smoke, full benchmark metrics, rank-2 ablation diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+-    "stmap26 local commit is planned with push enabled by full-campaign git.yaml."
++    "stmap26 local commit is planned with push enabled by full-campaign git.yaml.",
++    "Warning: launch uses dangerously-bypass-approvals-and-sandbox",
++    "stmap27 active iteration prepared: moderate deep seed signature blocker hypothesis.",
++    "stmap27 validation before review passed: build, help, smoke, full benchmark metrics, signature diagnostic parsing, artifact check, and CEC."
+   ],
+-  "updated_at": "2026-04-25T21:25:40Z"
++  "updated_at": "2026-04-25T21:33:40Z"
+ }
+diff --git a/.autoeda/runtime/last_prompt.txt b/.autoeda/runtime/last_prompt.txt
+index 53fcfef73..633478073 100644
+--- a/.autoeda/runtime/last_prompt.txt
++++ b/.autoeda/runtime/last_prompt.txt
+@@ -23,8 +23,8 @@ Target repo:
+ 
+ Current campaign state:
+ - status: preflight-complete
+-- completed_iterations: 26
+-- next_iteration: 26
++- completed_iterations: 27
++- next_iteration: 27
+ - target_iterations: 100
+ 
+ Execution contract:
+
+exec
+/bin/zsh -lc 'git diff --check' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+
+exec
+/bin/zsh -lc 'make -j2' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 762ms:
+make: Nothing to be done for `all'.
+
+codex
+The new stmap27 mode does not update the risk counters needed by the existing adaptive profile gate, causing incorrect mapping behavior for that mode on large designs.
+
+Review comment:
+
+- [P2] Include stmap27 in profile counters — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/src/map/mapper/mapperMatch.c:748-748
+  When `p->fSkipFanout == 28`, this path now treats stmap27 as an stmap13+ mode, but the immediately called `Map_MatchStmap13CountRisk()` still returns early for modes greater than 27. On large stmap27 runs the lower/upper/exact-risk counters therefore stay at zero, so `Map_MatchHasStmap15ReliefProfile()` never opens the adaptive profile and the new mode keeps applying the pre-profile fallback after it should have relaxed.
+The new stmap27 mode does not update the risk counters needed by the existing adaptive profile gate, causing incorrect mapping behavior for that mode on large designs.
+
+Review comment:
+
+- [P2] Include stmap27 in profile counters — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/src/map/mapper/mapperMatch.c:748-748
+  When `p->fSkipFanout == 28`, this path now treats stmap27 as an stmap13+ mode, but the immediately called `Map_MatchStmap13CountRisk()` still returns early for modes greater than 27. On large stmap27 runs the lower/upper/exact-risk counters therefore stay at zero, so `Map_MatchHasStmap15ReliefProfile()` never opens the adaptive profile and the new mode keeps applying the pre-profile fallback after it should have relaxed.
