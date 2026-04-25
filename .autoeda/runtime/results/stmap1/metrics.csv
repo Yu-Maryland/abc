@@ -1,0 +1,9 @@
+benchmark,short_name,flow,command,stime_delay_ps,stime_area,stdout,stderr
+benchmarks/i10.aig,i10,baseline,map,207.24,1263.44,.autoeda/runtime/results/stmap1/baseline_i10.stdout,.autoeda/runtime/results/stmap1/baseline_i10.stderr
+benchmarks/i10.aig,i10,candidate,stmap1,199.69,1333.20,.autoeda/runtime/results/stmap1/candidate_i10.stdout,.autoeda/runtime/results/stmap1/candidate_i10.stderr
+benchmarks/ode.abc.blif,ode,baseline,map,531.32,12491.21,.autoeda/runtime/results/stmap1/baseline_ode.stdout,.autoeda/runtime/results/stmap1/baseline_ode.stderr
+benchmarks/ode.abc.blif,ode,candidate,stmap1,502.82,11613.14,.autoeda/runtime/results/stmap1/candidate_ode.stdout,.autoeda/runtime/results/stmap1/candidate_ode.stderr
+benchmarks/or1200.abc.blif,or1200,baseline,map,587.08,4798.34,.autoeda/runtime/results/stmap1/baseline_or1200.stdout,.autoeda/runtime/results/stmap1/baseline_or1200.stderr
+benchmarks/or1200.abc.blif,or1200,candidate,stmap1,594.07,4990.56,.autoeda/runtime/results/stmap1/candidate_or1200.stdout,.autoeda/runtime/results/stmap1/candidate_or1200.stderr
+benchmarks/syn2.abc.blif,syn2,baseline,map,508.82,21296.60,.autoeda/runtime/results/stmap1/baseline_syn2.stdout,.autoeda/runtime/results/stmap1/baseline_syn2.stderr
+benchmarks/syn2.abc.blif,syn2,candidate,stmap1,478.52,22004.14,.autoeda/runtime/results/stmap1/candidate_syn2.stdout,.autoeda/runtime/results/stmap1/candidate_syn2.stderr

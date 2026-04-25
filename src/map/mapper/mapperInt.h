@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // skip large gates when mapping high-fanout nodes
+    int                 fSkipFanout;   // skip large gates when mapping high-fanout nodes; 2 is stmap1 selective mode
     int                 fUseProfile;   // use standard-cell profile
 
     // the supergate library

@@ -55,3 +55,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap0: gain-aligned SCL genlib probe`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: disabled by `git.yaml`; no push performed.
 - next-step recommendation: `Gain=300` gives useful evidence but is not uniformly better: it improved `or1200` delay and reduced area on three larger designs, while delaying `i10`, `ode`, and `syn2`. For `stmap1`, move beyond a single gain probe toward a mapper-internal or SCL-aware load/fanout hypothesis, such as adding a critical fanout/load proxy or required-time bias only where downstream `stime` shows sensitivity.
+
+## version1 / stmap1
+
+- hypothesis: A selective high-fanout wide-cut guard during mapper match selection can reduce downstream load/slew pressure and final `stime` delay while preserving more delay-oriented mapping freedom than the classic aggressive `map -f` guard.
+- motivation: `stmap0` showed that SCL genlib gain tuning alone was not uniformly better. This version moves into mapper match selection by adding a gated fanout/load proxy that rejects wider cuts only for nodes with higher estimated fanout.
+- command name: `stmap1`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_1.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/project_pack/git.yaml`
+  - `.autoeda/runtime/results/stmap1/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap1` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 2` into the mapper. `mapperMatch.c` interprets mode `2` as a version-gated selective guard: skip cuts with more than two leaves only when `nRefs > 6`, and skip cuts with more than three leaves when `nRefs > 3`. Existing `map`, `map -f`, and `stmap0` behavior are preserved because modes `0` and `1` retain their old meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced.
+  - help: `./abc -c "stmap1 -h"` printed usage text with default `-G 250.00` and the selective fanout guard enabled.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap1; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `199.69 ps` and area `1333.20`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap1/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, and prompt artifacts.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `199.69 ps`, area `1333.20`; delay delta `-7.55 ps` (`-3.64%`), area delta `+69.76` (`+5.52%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `502.82 ps`, area `11613.14`; delay delta `-28.50 ps` (`-5.36%`), area delta `-878.07` (`-7.03%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `594.07 ps`, area `4990.56`; delay delta `+6.99 ps` (`+1.19%`), area delta `+192.22` (`+4.01%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `478.52 ps`, area `22004.14`; delay delta `-30.30 ps` (`-5.95%`), area delta `+707.54` (`+3.32%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_1.c`.
+  - numbered command exists and is registered as `stmap1`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap1/`.
+- review pass 1:
+  - configured prompt form failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap1/review_pass1.log`.
+  - supported configured-tool invocation completed: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap1/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap1` in the canonical version log; addressed by this entry and revalidated with build/help/diff checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after pass 1.
+- commit: local commit created with message `stmap1: selective fanout cut guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: current project-pack `git.yaml` has `push_mode: normal`; the validated local commit is eligible for push under the full-campaign policy.
+- next-step recommendation: `stmap1` improves final delay on three of four benchmarks and reduces `ode` area, but it hurts both delay and area on `or1200` and increases area on `i10` and `syn2`. For `stmap2`, keep the fanout/load direction but make it more timing-aware, for example by applying the guard only during area-recovery modes or only when mapper slack is noncritical.

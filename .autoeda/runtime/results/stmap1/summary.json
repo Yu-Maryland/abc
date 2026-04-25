@@ -1,0 +1,176 @@
+{
+  "version": "stmap1",
+  "iteration": 1,
+  "command": "stmap1",
+  "hypothesis": "A selective high-fanout wide-cut guard during mapper match selection reduces downstream load/slew pressure while preserving most delay-oriented mapping freedom.",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "metrics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "short_name": "i10",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": "207.24",
+      "stime_area": "1263.44",
+      "stdout": ".autoeda/runtime/results/stmap1/baseline_i10.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/baseline_i10.stderr"
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "short_name": "i10",
+      "flow": "candidate",
+      "command": "stmap1",
+      "stime_delay_ps": "199.69",
+      "stime_area": "1333.20",
+      "stdout": ".autoeda/runtime/results/stmap1/candidate_i10.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/candidate_i10.stderr"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "short_name": "ode",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": "531.32",
+      "stime_area": "12491.21",
+      "stdout": ".autoeda/runtime/results/stmap1/baseline_ode.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/baseline_ode.stderr"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "short_name": "ode",
+      "flow": "candidate",
+      "command": "stmap1",
+      "stime_delay_ps": "502.82",
+      "stime_area": "11613.14",
+      "stdout": ".autoeda/runtime/results/stmap1/candidate_ode.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/candidate_ode.stderr"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "short_name": "or1200",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": "587.08",
+      "stime_area": "4798.34",
+      "stdout": ".autoeda/runtime/results/stmap1/baseline_or1200.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/baseline_or1200.stderr"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "short_name": "or1200",
+      "flow": "candidate",
+      "command": "stmap1",
+      "stime_delay_ps": "594.07",
+      "stime_area": "4990.56",
+      "stdout": ".autoeda/runtime/results/stmap1/candidate_or1200.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/candidate_or1200.stderr"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "short_name": "syn2",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": "508.82",
+      "stime_area": "21296.60",
+      "stdout": ".autoeda/runtime/results/stmap1/baseline_syn2.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/baseline_syn2.stderr"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "short_name": "syn2",
+      "flow": "candidate",
+      "command": "stmap1",
+      "stime_delay_ps": "478.52",
+      "stime_area": "22004.14",
+      "stdout": ".autoeda/runtime/results/stmap1/candidate_syn2.stdout",
+      "stderr": ".autoeda/runtime/results/stmap1/candidate_syn2.stderr"
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "short_name": "i10",
+      "baseline_delay_ps": "207.24",
+      "candidate_delay_ps": "199.69",
+      "delay_delta_ps": "-7.55",
+      "delay_delta_pct": "-3.64",
+      "baseline_area": "1263.44",
+      "candidate_area": "1333.20",
+      "area_delta": "69.76",
+      "area_delta_pct": "5.52"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "short_name": "ode",
+      "baseline_delay_ps": "531.32",
+      "candidate_delay_ps": "502.82",
+      "delay_delta_ps": "-28.50",
+      "delay_delta_pct": "-5.36",
+      "baseline_area": "12491.21",
+      "candidate_area": "11613.14",
+      "area_delta": "-878.07",
+      "area_delta_pct": "-7.03"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "short_name": "or1200",
+      "baseline_delay_ps": "587.08",
+      "candidate_delay_ps": "594.07",
+      "delay_delta_ps": "6.99",
+      "delay_delta_pct": "1.19",
+      "baseline_area": "4798.34",
+      "candidate_area": "4990.56",
+      "area_delta": "192.22",
+      "area_delta_pct": "4.01"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "short_name": "syn2",
+      "baseline_delay_ps": "508.82",
+      "candidate_delay_ps": "478.52",
+      "delay_delta_ps": "-30.30",
+      "delay_delta_pct": "-5.95",
+      "baseline_area": "21296.60",
+      "candidate_area": "22004.14",
+      "area_delta": "707.54",
+      "area_delta_pct": "3.32"
+    }
+  ],
+  "correctness": {
+    "build": "passed",
+    "numbered_implementation_exists": "passed",
+    "command_exists": "passed",
+    "command_help": "passed",
+    "smoke_flow": "passed",
+    "benchmark_metrics": "passed",
+    "cec": {
+      "benchmarks/i10.aig": "equivalent",
+      "benchmarks/ode.abc.blif": "equivalent",
+      "benchmarks/or1200.abc.blif": "equivalent",
+      "benchmarks/syn2.abc.blif": "equivalent"
+    },
+    "version_log_updated": "passed",
+    "review_loop": "passed"
+  },
+  "review": {
+    "configured_prompt_form": "failed: local Codex CLI rejects --uncommitted with positional prompt",
+    "supported_configured_tool": "completed",
+    "accepted_findings": [
+      "P2: Record stmap1 in canonical version log"
+    ],
+    "rejected_findings": [],
+    "open_findings": [],
+    "second_review": "skipped: accepted change was logging-only and final build/help/diff checks passed"
+  },
+  "final_validation": {
+    "build": ".autoeda/runtime/results/stmap1/final_build.log",
+    "help": ".autoeda/runtime/results/stmap1/final_help.log",
+    "diff_check": ".autoeda/runtime/results/stmap1/final_diff_check.log",
+    "source_list_check": ".autoeda/runtime/results/stmap1/final_source_list_check.log"
+  }
+}

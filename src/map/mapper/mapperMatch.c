@@ -65,6 +65,28 @@ void Map_MatchClean( Map_Match_t * pMatch )
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
+
+  Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
+  selective guard, which only rejects wider cuts when the node has higher
+  estimated fanout.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    if ( !p->fSkipFanout )
+        return 0;
+    if ( p->fSkipFanout == 2 )
+        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+    return (pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
   Synopsis    [Compares two matches.]
 
   Description [Returns 1 if the second match is better. Otherwise returns 0.]
@@ -308,7 +330,7 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
     for ( pCut = pNode->pCuts->pNext; pCut; pCut = pCut->pNext )
     {
         // limit gate sizes based on fanout count
-        if ( p->fSkipFanout && ((pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3)) )
+        if ( Map_MatchSkipCutForFanout( p, pNode, pCut ) )
             continue;
         pMatch = pCut->M + fPhase;
         if ( pMatch->pSupers == NULL )
@@ -661,4 +683,3 @@ int Map_MappingMatches( Map_Man_t * p )
 ///                       END OF FILE                                ///
 ////////////////////////////////////////////////////////////////////////
 ABC_NAMESPACE_IMPL_END
-
