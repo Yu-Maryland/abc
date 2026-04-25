@@ -1,0 +1,240 @@
+{
+  "ablation_diag": [
+    {
+      "area_save": 0.94,
+      "arrival_delta": -3.179993,
+      "arrival_gain_margin": 1.585,
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 1,
+      "leaves": 4,
+      "level": 46,
+      "node": 24798,
+      "phase": 1,
+      "refs": 4,
+      "slack": 7.919983
+    }
+  ],
+  "ablation_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "moderate_ablation_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "moderate_ablation_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "moderate_ablation_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "moderate_ablation_seed": 1
+    }
+  ],
+  "command": "stmap25",
+  "comparison": [
+    {
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441,
+      "baseline_area": 1263.44,
+      "baseline_delay_ps": 207.24,
+      "benchmark": "benchmarks/i10.aig",
+      "candidate_area": 1303.1,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_pct": -4.149778035128365,
+      "delay_delta_ps": -8.600000000000023
+    },
+    {
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494,
+      "baseline_area": 12491.21,
+      "baseline_delay_ps": 531.32,
+      "benchmark": "benchmarks/ode.abc.blif",
+      "candidate_area": 11334.38,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_pct": -1.7447112851012752,
+      "delay_delta_ps": -9.270000000000095
+    },
+    {
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257,
+      "baseline_area": 4798.34,
+      "baseline_delay_ps": 587.08,
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "candidate_area": 4895.15,
+      "candidate_delay_ps": 561.55,
+      "delay_delta_pct": -4.348640730394509,
+      "delay_delta_ps": -25.530000000000086
+    },
+    {
+      "area_delta": 245.1800000000003,
+      "area_delta_pct": 1.1512635819802237,
+      "baseline_area": 21296.6,
+      "baseline_delay_ps": 508.82,
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "candidate_area": 21541.78,
+      "candidate_delay_ps": 490.96,
+      "delay_delta_pct": -3.5100821508588527,
+      "delay_delta_ps": -17.860000000000014
+    }
+  ],
+  "diagnostics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "exact_risk": 0,
+      "highest": 0,
+      "lower_mod": 0,
+      "middle_relief": 0,
+      "middle_slack": 0,
+      "reject_area": 0,
+      "reject_arrival": 0,
+      "reject_highest": 0,
+      "reject_slack": 0,
+      "upper_mod": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "exact_risk": 49626,
+      "highest": 22601,
+      "lower_mod": 19542,
+      "middle_relief": 0,
+      "middle_slack": 765,
+      "reject_area": 11095,
+      "reject_arrival": 10527,
+      "reject_highest": 14866,
+      "reject_slack": 12974,
+      "upper_mod": 7483
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "exact_risk": 22679,
+      "highest": 8550,
+      "lower_mod": 10834,
+      "middle_relief": 2,
+      "middle_slack": 35,
+      "reject_area": 7062,
+      "reject_arrival": 5835,
+      "reject_highest": 8476,
+      "reject_slack": 959,
+      "upper_mod": 3295
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "exact_risk": 98465,
+      "highest": 48767,
+      "lower_mod": 38540,
+      "middle_relief": 5,
+      "middle_slack": 1992,
+      "reject_area": 17179,
+      "reject_arrival": 16695,
+      "reject_highest": 28279,
+      "reject_slack": 35970,
+      "upper_mod": 11158
+    }
+  ],
+  "early_seed_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "early_seed": 2
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "early_seed": 4
+    }
+  ],
+  "hypothesis": "single moderate deep early-profile seed ablation",
+  "metrics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "command": "map",
+      "flow": "baseline",
+      "log": ".autoeda/runtime/results/stmap25/baseline_benchmarks_i10_aig.log",
+      "stime_area": 1263.44,
+      "stime_delay_ps": 207.24
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "command": "stmap25",
+      "flow": "candidate",
+      "log": ".autoeda/runtime/results/stmap25/candidate_benchmarks_i10_aig.log",
+      "stime_area": 1303.1,
+      "stime_delay_ps": 198.64
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "command": "map",
+      "flow": "baseline",
+      "log": ".autoeda/runtime/results/stmap25/baseline_benchmarks_ode_abc_blif.log",
+      "stime_area": 12491.21,
+      "stime_delay_ps": 531.32
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "command": "stmap25",
+      "flow": "candidate",
+      "log": ".autoeda/runtime/results/stmap25/candidate_benchmarks_ode_abc_blif.log",
+      "stime_area": 11334.38,
+      "stime_delay_ps": 522.05
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "command": "map",
+      "flow": "baseline",
+      "log": ".autoeda/runtime/results/stmap25/baseline_benchmarks_or1200_abc_blif.log",
+      "stime_area": 4798.34,
+      "stime_delay_ps": 587.08
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "command": "stmap25",
+      "flow": "candidate",
+      "log": ".autoeda/runtime/results/stmap25/candidate_benchmarks_or1200_abc_blif.log",
+      "stime_area": 4895.15,
+      "stime_delay_ps": 561.55
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "command": "map",
+      "flow": "baseline",
+      "log": ".autoeda/runtime/results/stmap25/baseline_benchmarks_syn2_abc_blif.log",
+      "stime_area": 21296.6,
+      "stime_delay_ps": 508.82
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "command": "stmap25",
+      "flow": "candidate",
+      "log": ".autoeda/runtime/results/stmap25/candidate_benchmarks_syn2_abc_blif.log",
+      "stime_area": 21541.78,
+      "stime_delay_ps": 490.96
+    }
+  ],
+  "near_miss_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "near_miss": 12
+    }
+  ],
+  "version": "stmap25"
+}

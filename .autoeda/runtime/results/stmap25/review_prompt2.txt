@@ -1,0 +1,9 @@
+Review the current uncommitted stmap25 iteration after addressing review pass 1 by adding the canonical version log entry.
+
+Focus areas:
+- remaining source correctness issues in mode 26 and the stmap25 command wrapper.
+- whether older stmap modes remain gated to their existing behavior.
+- whether evaluation, CEC, diagnostic, artifact-check, and version-log artifacts are complete enough to count the iteration.
+- ignore the self-referential fact that this second review's final outcome is being recorded by the automation around this pass unless it creates a real reproducibility issue.
+
+Report only concrete blocking or nonblocking findings with severity and file/line references.

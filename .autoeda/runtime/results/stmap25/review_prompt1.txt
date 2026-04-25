@@ -1,0 +1,9 @@
+Review the uncommitted stmap25 AutoEDA iteration for correctness and campaign-policy issues.
+
+Focus areas:
+- stmap25 command registration, help text, build integration, and version numbering.
+- mapper mode 26 behavior in mapperMatch.c and mapperCore.c, especially whether it preserves stmap24 and older stmap modes while admitting only one moderate deep ablation seed.
+- correctness or reproducibility risks in generated runtime artifacts under .autoeda/runtime/results/stmap25.
+- whether campaign_state.json and versions.md requirements are not yet satisfied.
+
+Report concrete findings with severity and file/line references. If the only issue is that the canonical version log is not yet appended, say so explicitly.

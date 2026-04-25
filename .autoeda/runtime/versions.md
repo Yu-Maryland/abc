@@ -1282,3 +1282,59 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap24: tighten moderate deep seed relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap24` restores the `stmap21` `syn2` delay and confirms that the admitted moderate deep seed at node `37979` was enough to keep the `stmap22`/`stmap23` regression. For `stmap25`, keep the tight or high-gain-only decision as the mainline and add a seed-ablation diagnostic mode that can isolate downstream `stime` effects of individual moderate deep candidates before reopening that cluster.
+
+## version25 / stmap25
+
+- hypothesis: A bounded single-seed ablation can admit only the first traversal-order moderate deep pre-profile seed just outside the `stmap24` tight slack gate, isolating whether that seed alone changes downstream `stime` before reopening the full moderate deep cluster.
+- motivation: `stmap24` restored the `stmap21` `syn2` result by blocking both moderate deep seeds that `stmap22`/`stmap23` implicated. The next diagnostic question is whether the earlier moderate candidate at node `24798` is harmless by itself, while the remaining moderate candidate at node `37979` is the delay-sensitive one.
+- command name: `stmap25`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_25.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap25/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap25` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 26` into the mapper. Mode `26` preserves the `stmap24` lower-moderate bucket, tight-depth middle-slack window, strong deep-seed rule, tight moderate slack gate, guard counters, near-miss diagnostics, and early-seed counter. The only mapping-decision change is a one-shot ablation: before the adaptive profile opens, a deeper moderate seed that passes the `stmap22` arrival-gain gate but fails the `stmap24` `1.1 * tDelayInv.Worst` slack gate may be admitted only if it is still within `1.25 * tDelayInv.Worst` slack and no prior moderate-ablation seed has been admitted in the mapper run. Existing `map` and `stmap0` through `stmap24` remain on their previous mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap25/build.log`.
+  - help: `./abc -c "stmap25 -h"` printed usage text with default `-G 250.00` and the single moderate deep early-profile ablation guard enabled. Log: `.autoeda/runtime/results/stmap25/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap25; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap25/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap25/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `ablation_stats.csv`, `relief_diag.csv`, `near_miss_diag.csv`, `ablation_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-slack `0`, middle-relief `0`, early-seed `0`, moderate-ablation `0`, near-miss `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`, early-seed `0`, moderate-ablation `0`, near-miss `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, middle-slack `35`, middle-relief `2`, early-seed `2`, moderate-ablation `0`, near-miss `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); guard stats: exact-risk `98465`, middle-slack `1992`, middle-relief `5`, early-seed `4`, moderate-ablation `1`, near-miss `12`.
+- ablation diagnostics:
+  - `benchmarks/syn2.abc.blif`: `stmap25` admits one moderate-ablation seed at node `24798`, level `46`, refs `4`, leaves `4`, phase `1`, slack `7.919983`, area saving `0.94`, arrival delta `-3.179993`, and arrival-gain margin `1.585`.
+  - `benchmarks/syn2.abc.blif`: the later moderate candidate at node `37979` is rejected twice by `single-ablation-gate`; final `syn2` delay and area remain identical to `stmap24`, showing that node `24798` alone is not enough to reproduce the `stmap22`/`stmap23` regression.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_25.c`.
+  - numbered command exists and is registered as `stmap25`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, ablation-stat, admitted-relief, near-miss diagnostic, and ablation diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap25/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap25/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap25/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap25/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap25/review_pass1_supported.log`.
+  - accepted finding: record `stmap25` in the canonical version log before finalizing the iteration; addressed by this entry.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap25/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap25/review_pass2_supported.log`.
+  - accepted findings: none; the second review reported no blocking correctness issue in the source integration, mapper-mode gating, runtime artifacts, campaign state, or version log completeness.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none after review pass 1; the accepted finding was a runtime-log completeness issue addressed by this canonical version-log entry.
+- commit: local commit created with message `stmap25: ablate moderate deep seed`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap25` shows that admitting node `24798` alone leaves final `syn2` QoR equal to `stmap24`, while node `37979` remains blocked by the single-ablation gate. For `stmap26`, test the complementary ablation by skipping the first moderate candidate and admitting only the next qualifying moderate deep seed, or add a more explicit rank selector for moderate deep seed diagnostics before changing the mainline policy.
