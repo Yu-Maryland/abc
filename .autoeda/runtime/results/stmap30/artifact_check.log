@@ -1,0 +1,7 @@
+artifact check for stmap30
+PASS
+required files present
+metrics rows: 8 with parseable delay/area
+CEC: 4/4 equivalent
+campaign_state finalized for stmap30
+versions.md stmap30 entry contains required fields

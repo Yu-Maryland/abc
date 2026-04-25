@@ -1,0 +1,29 @@
+Review the uncommitted AutoEDA stmap30 iteration in this ABC repository.
+
+Binding context:
+- Project family: stmap
+- New command: stmap30
+- Required policy: preserve stmap0 through stmap29, keep map behavior unchanged, expose new behavior only through stmap30.
+- Evaluation contract: build, stmap30 -h, smoke, all four benchmark flows, parseable final stime metrics, CEC for all four benchmarks, and runtime logs under .autoeda/runtime/results/stmap30.
+
+Implementation summary:
+- Added src/base/abci/abcStmap_30.c, registered stmap30 in src/base/abci/abc.c, added it to src/base/abci/module.make and abclib.dsp.
+- stmap30 passes fSkipFanout=31 to Abc_NtkMap.
+- mapperMatch.c extends the existing stmap29 continuous moderate-seed penalty with a smaller continuous penalty for high-reference strong deep seeds in the same middle-slack band.
+- mapperInt.h and mapperCore.c add stmap30 counters and diagnostics for moderate and strong penalty seeds/blocks.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1 passed; log .autoeda/runtime/results/stmap30/build.log
+- ./abc -c "stmap30 -h" passed; log .autoeda/runtime/results/stmap30/help.log
+- Smoke flow on benchmarks/i10.aig passed; log .autoeda/runtime/results/stmap30/smoke_i10.log
+- Full baseline/candidate evaluation passed for benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif; artifacts include metrics.csv, comparison.csv, summary.json, guard_stats.csv, penalty_stats.csv, relief_diag.csv, near_miss_diag.csv, moderate_penalty_block_diag.csv, strong_penalty_block_diag.csv.
+- CEC passed for all four benchmarks; see cec_summary.json.
+
+Please review for correctness issues, especially:
+- command registration/build integration errors,
+- mode-number or range mistakes that alter stmap0-stmap29 behavior,
+- uninitialized counters or diagnostics,
+- incorrect stmap30 gating that changes non-stmap30 paths,
+- evaluation/logging completeness problems that should block counting this iteration.
+
+Return prioritized findings with file/line references. If there are no blocking findings, say so explicitly.
