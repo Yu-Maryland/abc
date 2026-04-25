@@ -1,0 +1,16 @@
+Review the uncommitted stmap7 implementation for correctness and campaign compliance.
+
+Context:
+- Project pack requires a numbered stmapN command, help text, build integration, benchmark evaluation, CEC, logging, and preservation of older stmap behavior.
+- stmap7 adds src/base/abci/abcStmap_7.c, registers command stmap7, and adds mapper fSkipFanout mode 8.
+- Hypothesis: keep the stmap6 small-graph floor and shape-gated delay-pass guard, but make exact-area recovery more criticality-sensitive by allowing area-saving wide high-fanout cuts only with more than two inverter delays of mapper slack and outside the highest fanout-risk bucket.
+- Existing modes 0 through 7 should preserve map and stmap0 through stmap6 behavior.
+
+Please prioritize concrete bugs or missing required gates. Check for:
+- build or registration errors,
+- help text or CLI option mistakes,
+- unintended behavior changes to map or older stmap commands,
+- correctness risks in mapperMatch.c mode 8 and the shared post-match guard,
+- campaign artifact/logging gaps that would prevent counting stmap7.
+
+Return findings with severity and file/line references. If no blocking issues are found, say so and note residual risks.

@@ -1,0 +1,209 @@
+{
+  "all_cec_equivalent": true,
+  "all_metrics_parseable": true,
+  "baseline_command": "map",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "candidate_command": "stmap7",
+  "cec_results": [
+    {
+      "candidate_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_i10_aig_stmap7.aig",
+      "candidate_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_i10_aig_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_i10_aig.log",
+      "cec_returncode": 0,
+      "design": "benchmarks/i10.aig",
+      "equivalent": true,
+      "original_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_i10_aig_orig.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_i10_aig_orig_write.log",
+      "original_write_returncode": 0
+    },
+    {
+      "candidate_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_ode_abc_blif_stmap7.aig",
+      "candidate_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_ode_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_ode_abc_blif.log",
+      "cec_returncode": 0,
+      "design": "benchmarks/ode.abc.blif",
+      "equivalent": true,
+      "original_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_ode_abc_blif_orig.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_ode_abc_blif_orig_write.log",
+      "original_write_returncode": 0
+    },
+    {
+      "candidate_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_or1200_abc_blif_stmap7.aig",
+      "candidate_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_or1200_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_or1200_abc_blif.log",
+      "cec_returncode": 0,
+      "design": "benchmarks/or1200.abc.blif",
+      "equivalent": true,
+      "original_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_or1200_abc_blif_orig_write.log",
+      "original_write_returncode": 0
+    },
+    {
+      "candidate_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_syn2_abc_blif_stmap7.aig",
+      "candidate_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_syn2_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_syn2_abc_blif.log",
+      "cec_returncode": 0,
+      "design": "benchmarks/syn2.abc.blif",
+      "equivalent": true,
+      "original_temp": ".autoeda/runtime/results/stmap7/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap7/cec_benchmarks_syn2_abc_blif_orig_write.log",
+      "original_write_returncode": 0
+    }
+  ],
+  "comparison": [
+    {
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441,
+      "baseline_area": 1263.44,
+      "baseline_delay_ps": 207.24,
+      "candidate_area": 1303.1,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_pct": -4.149778035128365,
+      "delay_delta_ps": -8.600000000000023,
+      "design": "benchmarks/i10.aig"
+    },
+    {
+      "area_delta": -1089.1799999999985,
+      "area_delta_pct": -8.719571602751044,
+      "baseline_area": 12491.21,
+      "baseline_delay_ps": 531.32,
+      "candidate_area": 11402.03,
+      "candidate_delay_ps": 532.04,
+      "delay_delta_pct": 0.13551155612435323,
+      "delay_delta_ps": 0.7199999999999136,
+      "design": "benchmarks/ode.abc.blif"
+    },
+    {
+      "area_delta": 38.720000000000255,
+      "area_delta_pct": 0.8069457354001645,
+      "baseline_area": 4798.34,
+      "baseline_delay_ps": 587.08,
+      "candidate_area": 4837.06,
+      "candidate_delay_ps": 574.45,
+      "delay_delta_pct": -2.1513252026980982,
+      "delay_delta_ps": -12.629999999999995,
+      "design": "benchmarks/or1200.abc.blif"
+    },
+    {
+      "area_delta": 238.40999999999985,
+      "area_delta_pct": 1.1194744701032084,
+      "baseline_area": 21296.6,
+      "baseline_delay_ps": 508.82,
+      "candidate_area": 21535.01,
+      "candidate_delay_ps": 485.83,
+      "delay_delta_pct": -4.51829723674384,
+      "delay_delta_ps": -22.99000000000001,
+      "design": "benchmarks/syn2.abc.blif"
+    }
+  ],
+  "failures": [],
+  "flow_results": [
+    {
+      "command": "map",
+      "design": "benchmarks/i10.aig",
+      "elapsed_seconds": 0.783713,
+      "failure": null,
+      "label": "baseline",
+      "log": ".autoeda/runtime/results/stmap7/baseline_benchmarks_i10_aig.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 1263.44,
+      "stime_delay_ps": 207.24
+    },
+    {
+      "command": "stmap7",
+      "design": "benchmarks/i10.aig",
+      "elapsed_seconds": 0.810267,
+      "failure": null,
+      "label": "candidate",
+      "log": ".autoeda/runtime/results/stmap7/candidate_benchmarks_i10_aig.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap7; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 1303.1,
+      "stime_delay_ps": 198.64
+    },
+    {
+      "command": "map",
+      "design": "benchmarks/ode.abc.blif",
+      "elapsed_seconds": 6.817248,
+      "failure": null,
+      "label": "baseline",
+      "log": ".autoeda/runtime/results/stmap7/baseline_benchmarks_ode_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 12491.21,
+      "stime_delay_ps": 531.32
+    },
+    {
+      "command": "stmap7",
+      "design": "benchmarks/ode.abc.blif",
+      "elapsed_seconds": 6.750538,
+      "failure": null,
+      "label": "candidate",
+      "log": ".autoeda/runtime/results/stmap7/candidate_benchmarks_ode_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; stmap7; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 11402.03,
+      "stime_delay_ps": 532.04
+    },
+    {
+      "command": "map",
+      "design": "benchmarks/or1200.abc.blif",
+      "elapsed_seconds": 3.263677,
+      "failure": null,
+      "label": "baseline",
+      "log": ".autoeda/runtime/results/stmap7/baseline_benchmarks_or1200_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 4798.34,
+      "stime_delay_ps": 587.08
+    },
+    {
+      "command": "stmap7",
+      "design": "benchmarks/or1200.abc.blif",
+      "elapsed_seconds": 3.310494,
+      "failure": null,
+      "label": "candidate",
+      "log": ".autoeda/runtime/results/stmap7/candidate_benchmarks_or1200_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; stmap7; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 4837.06,
+      "stime_delay_ps": 574.45
+    },
+    {
+      "command": "map",
+      "design": "benchmarks/syn2.abc.blif",
+      "elapsed_seconds": 12.266514,
+      "failure": null,
+      "label": "baseline",
+      "log": ".autoeda/runtime/results/stmap7/baseline_benchmarks_syn2_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 21296.6,
+      "stime_delay_ps": 508.82
+    },
+    {
+      "command": "stmap7",
+      "design": "benchmarks/syn2.abc.blif",
+      "elapsed_seconds": 12.339347,
+      "failure": null,
+      "label": "candidate",
+      "log": ".autoeda/runtime/results/stmap7/candidate_benchmarks_syn2_abc_blif.log",
+      "returncode": 0,
+      "shell_command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap7; topo; buffer; upsize -v; dnsize -v; stime\"",
+      "stime_area": 21535.01,
+      "stime_delay_ps": 485.83
+    }
+  ],
+  "library": "7nm_lvt_ff.lib",
+  "version": "stmap7"
+}

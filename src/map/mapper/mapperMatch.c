@@ -81,6 +81,22 @@ static int Map_MatchCutHasStmapFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut 
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if the cut is in the highest stmap fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 6 && pCut->nLeaves > 2;
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
@@ -97,7 +113,9 @@ static int Map_MatchCutHasStmapFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut 
   shape-gated guard: the delay pass keeps the stmap5 graph-size gate, small
   mapper graphs keep the stmap2 slack-aware recovery guard, and exact-area
   recovery on larger graphs checks the cut after matching so materially cheaper
-  cuts can override the fanout/load proxy.]
+  cuts can override the fanout/load proxy. Mode 8 is the stmap7 criticality-
+  sensitive version of mode 7: exact-area recovery on larger graphs allows the
+  override only with deeper mapper slack and outside the highest fanout bucket.]
 
   SideEffects []
 
@@ -225,18 +243,58 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
+    if ( p->fSkipFanout == 8 )
+    {
+        if ( p->fMappingMode == 0 )
+        {
+            if ( p->vMapObjs->nSize <= 20000 )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode >= 1 && p->fMappingMode <= 3 && p->vMapObjs->nSize <= 8000 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode == 1 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        return 0;
+    }
     return (pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3);
 }
 
 /**Function*************************************************************
 
-  Synopsis    [Returns 1 if stmap6 should reject a matched recovery cut.]
+  Synopsis    [Returns 1 if an stmap area-sensitive mode should reject a cut.]
 
-  Description [The area-sensitive guard is evaluated after matching the
-  candidate cut because its hypothesis needs the candidate's actual mapper
-  area. In exact-area recovery on mapper graphs above the small-design floor,
-  a wide high-fanout cut is rejected only when the existing match has slack and
-  the candidate does not save at least half an inverter area.]
+  Description [The area-sensitive guards are evaluated after matching the
+  candidate cut because their hypotheses need the candidate's actual mapper
+  area. In stmap6 exact-area recovery, a wide high-fanout cut is rejected only
+  when the existing match has slack and the candidate does not save at least
+  half an inverter area. In stmap7, the area-saving override additionally
+  requires more than two inverter delays of slack and excludes the highest
+  fanout-risk bucket.]
 
   SideEffects []
 
@@ -245,9 +303,9 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
 ***********************************************************************/
 static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, Map_Match_t * pMatchBest, Map_Match_t * pMatch )
 {
-    float Slack, SlackMargin, AreaMargin;
+    float Slack, SlackMargin, SlackGate, AreaMargin;
 
-    if ( p->fSkipFanout != 7 )
+    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -259,6 +317,14 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
     SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+    if ( p->fSkipFanout == 8 )
+    {
+        SlackGate = 2.0 * SlackMargin;
+        if ( Slack <= SlackGate + p->fEpsilon )
+            return 1;
+        if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
+            return 1;
+    }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
     AreaMargin = p->pSuperLib ? 0.5 * p->pSuperLib->AreaInv : 0.0;
