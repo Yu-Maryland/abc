@@ -73,7 +73,8 @@ void Map_MatchClean( Map_Match_t * pMatch )
   thresholds only during area recovery and only when the current phase has
   slack over the mapper required time. Mode 4 is the stmap3 guard, which
   narrows the intervention to high-fanout nodes with only shallow positive
-  slack.]
+  slack. Mode 5 is the stmap4 split-phase guard: stmap1-style guarding in
+  delay matching and stmap2-style slack-aware guarding in area recovery.]
 
   SideEffects []
 
@@ -120,6 +121,24 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         SlackMargin = p->pSuperLib->tDelayInv.Worst;
         SlackLimit = 2.0 * SlackMargin;
         if ( Slack <= p->fEpsilon || Slack > SlackLimit + p->fEpsilon )
+            return 0;
+        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+    }
+    if ( p->fSkipFanout == 5 )
+    {
+        if ( p->fMappingMode == 0 )
+            return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+        if ( Slack <= SlackMargin + p->fEpsilon )
             return 0;
         return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
     }

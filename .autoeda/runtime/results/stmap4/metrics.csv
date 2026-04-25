@@ -1,0 +1,9 @@
+label,design,command,returncode,stime_delay_ps,stime_area,log
+baseline,benchmarks/i10.aig,map,0,207.24,1263.44,.autoeda/runtime/results/stmap4/baseline_benchmarks_i10_aig.log
+candidate,benchmarks/i10.aig,stmap4,0,208.38,1318.73,.autoeda/runtime/results/stmap4/candidate_benchmarks_i10_aig.log
+baseline,benchmarks/ode.abc.blif,map,0,531.32,12491.21,.autoeda/runtime/results/stmap4/baseline_benchmarks_ode_abc_blif.log
+candidate,benchmarks/ode.abc.blif,stmap4,0,524.16,11179.71,.autoeda/runtime/results/stmap4/candidate_benchmarks_ode_abc_blif.log
+baseline,benchmarks/or1200.abc.blif,map,0,587.08,4798.34,.autoeda/runtime/results/stmap4/baseline_benchmarks_or1200_abc_blif.log
+candidate,benchmarks/or1200.abc.blif,stmap4,0,600.03,4978.66,.autoeda/runtime/results/stmap4/candidate_benchmarks_or1200_abc_blif.log
+baseline,benchmarks/syn2.abc.blif,map,0,508.82,21296.6,.autoeda/runtime/results/stmap4/baseline_benchmarks_syn2_abc_blif.log
+candidate,benchmarks/syn2.abc.blif,stmap4,0,502.09,20788.05,.autoeda/runtime/results/stmap4/candidate_benchmarks_syn2_abc_blif.log

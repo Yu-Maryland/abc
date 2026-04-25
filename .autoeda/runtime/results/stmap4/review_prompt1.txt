@@ -1,0 +1,15 @@
+Review the uncommitted stmap4 AutoEDA iteration in this ABC repository.
+
+Context:
+- Project pack is binding. The new command should be stmap4 and preserve map, stmap0, stmap1, stmap2, and stmap3 behavior.
+- Hypothesis: use stmap1-style high-fanout cut guarding during delay matching, then relax recovery to the stmap2 slack-aware guard.
+- Required gates already run locally: make ABC_USE_NO_READLINE=1, stmap4 -h, i10 smoke, four benchmark baseline/candidate flows, and CEC for i10/ode/or1200/syn2.
+- Artifacts are under .autoeda/runtime/results/stmap4/.
+
+Review focus:
+- missing command registration or build integration, including abclib.dsp
+- unintended changes to existing map/stmap0/stmap1/stmap2/stmap3 behavior
+- mapper-mode logic errors in fSkipFanout mode 5, especially delay/recovery/switching mode boundaries
+- evaluation, CEC, logging, or campaign-policy issues that should block counting stmap4
+
+Please return prioritized findings only. Include file paths and line references.

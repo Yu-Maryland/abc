@@ -1,0 +1,7 @@
+50:  - P2: Append the completed `stmap0` record to the canonical version log; addressed.
+98:  - P2: Record `stmap1` in the canonical version log; addressed by this entry and revalidated with build/help/diff checks.
+192:  - P2: Record `stmap3` in the canonical version log; addressed by this entry and revalidated with version-log/artifact checks.
+200:## version4 / stmap4
+218:  - help: `./abc -c "stmap4 -h"` printed usage text with default `-G 250.00` and the split-phase fanout guard enabled. Log: `.autoeda/runtime/results/stmap4/help.log`.
+238:  - P2: Record `stmap4` in the canonical version log; addressed by this entry and revalidated with version-log/artifact checks.
+242:- commit: local commit created with message `stmap4: split-phase fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
