@@ -65,6 +65,22 @@ void Map_MatchClean( Map_Match_t * pMatch )
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
@@ -77,7 +93,11 @@ void Map_MatchClean( Map_Match_t * pMatch )
   delay matching and stmap2-style slack-aware guarding in area recovery.
   Mode 6 is the stmap5 shape-gated split-phase guard: the delay pass only
   uses stmap1-style guarding in very large mapper graphs, while area recovery
-  keeps the stmap2 slack-aware guard.]
+  keeps the stmap2 slack-aware guard. Mode 7 is the stmap6 area-sensitive
+  shape-gated guard: the delay pass keeps the stmap5 graph-size gate, small
+  mapper graphs keep the stmap2 slack-aware recovery guard, and exact-area
+  recovery on larger graphs checks the cut after matching so materially cheaper
+  cuts can override the fanout/load proxy.]
 
   SideEffects []
 
@@ -93,7 +113,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
     if ( !p->fSkipFanout )
         return 0;
     if ( p->fSkipFanout == 2 )
-        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
     if ( p->fSkipFanout == 3 )
     {
         if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
@@ -108,7 +128,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
         if ( Slack <= SlackMargin + p->fEpsilon )
             return 0;
-        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
     }
     if ( p->fSkipFanout == 4 )
     {
@@ -125,12 +145,12 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         SlackLimit = 2.0 * SlackMargin;
         if ( Slack <= p->fEpsilon || Slack > SlackLimit + p->fEpsilon )
             return 0;
-        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
     }
     if ( p->fSkipFanout == 5 )
     {
         if ( p->fMappingMode == 0 )
-            return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
         if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
             return 0;
         pCutBest = pNode->pCutBest[fPhase];
@@ -143,7 +163,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
         if ( Slack <= SlackMargin + p->fEpsilon )
             return 0;
-        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
     }
     if ( p->fSkipFanout == 6 )
     {
@@ -151,7 +171,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         {
             if ( p->vMapObjs->nSize <= 20000 )
                 return 0;
-            return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
         }
         if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
             return 0;
@@ -165,9 +185,86 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
         if ( Slack <= SlackMargin + p->fEpsilon )
             return 0;
-        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+        return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+    }
+    if ( p->fSkipFanout == 7 )
+    {
+        if ( p->fMappingMode == 0 )
+        {
+            if ( p->vMapObjs->nSize <= 20000 )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode >= 1 && p->fMappingMode <= 3 && p->vMapObjs->nSize <= 8000 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        if ( p->fMappingMode == 1 )
+        {
+            pCutBest = pNode->pCutBest[fPhase];
+            if ( pCutBest == NULL )
+                return 0;
+            pMatchBest = pCutBest->M + fPhase;
+            if ( pMatchBest->pSuperBest == NULL )
+                return 0;
+            Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+            SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+            if ( Slack <= SlackMargin + p->fEpsilon )
+                return 0;
+            return Map_MatchCutHasStmapFanoutRisk( pNode, pCut );
+        }
+        return 0;
     }
     return (pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3);
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap6 should reject a matched recovery cut.]
+
+  Description [The area-sensitive guard is evaluated after matching the
+  candidate cut because its hypothesis needs the candidate's actual mapper
+  area. In exact-area recovery on mapper graphs above the small-design floor,
+  a wide high-fanout cut is rejected only when the existing match has slack and
+  the candidate does not save at least half an inverter area.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, Map_Match_t * pMatchBest, Map_Match_t * pMatch )
+{
+    float Slack, SlackMargin, AreaMargin;
+
+    if ( p->fSkipFanout != 7 )
+        return 0;
+    if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
+        return 0;
+    if ( p->vMapObjs->nSize <= 8000 )
+        return 0;
+    if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
+        return 0;
+    if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
+        return 0;
+    Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+    SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+    if ( Slack <= SlackMargin + p->fEpsilon )
+        return 0;
+    AreaMargin = p->pSuperLib ? 0.5 * p->pSuperLib->AreaInv : 0.0;
+    if ( pMatch->AreaFlow < pMatchBest->AreaFlow - AreaMargin - p->fEpsilon )
+        return 0;
+    return 1;
 }
 
 /**Function*************************************************************
@@ -424,6 +521,8 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         // find the matches for the cut
         Map_MatchNodeCut( p, pNode, pCut, fPhase, fWorstLimit );
         if ( pMatch->pSuperBest == NULL || pMatch->tArrive.Worst > fWorstLimit + p->fEpsilon )
+            continue;
+        if ( Map_MatchSkipAreaSensitiveFanout( p, pNode, pCut, fPhase, &MatchBest, pMatch ) )
             continue;
 
         // if the cut can be matched compare the matchings

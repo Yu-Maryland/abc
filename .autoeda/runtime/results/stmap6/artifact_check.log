@@ -1,0 +1,22 @@
+build.log: PASS
+help.log: PASS
+smoke_i10.log: PASS
+summary.json: PASS
+metrics.csv: PASS
+comparison.csv: PASS
+review_prompt1.txt: PASS
+review_pass1.log: PASS
+review_pass1_supported.log: PASS
+review_summary.md: PASS
+summary.all_metrics_parseable: PASS
+summary.all_cec_equivalent: PASS
+cec.benchmarks/i10.aig: PASS
+cec.benchmarks/ode.abc.blif: PASS
+cec.benchmarks/or1200.abc.blif: PASS
+cec.benchmarks/syn2.abc.blif: PASS
+versions.md contains ## version6 / stmap6: PASS
+versions.md contains hypothesis:: PASS
+versions.md contains benchmark results:: PASS
+versions.md contains correctness results:: PASS
+versions.md contains accepted findings:: PASS
+versions.md contains next-step recommendation:: PASS

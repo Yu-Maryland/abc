@@ -1,0 +1,6 @@
+versions.md contains ## version6 / stmap6: PASS
+versions.md contains hypothesis:: PASS
+versions.md contains benchmark results:: PASS
+versions.md contains correctness results:: PASS
+versions.md contains accepted findings:: PASS
+versions.md contains next-step recommendation:: PASS

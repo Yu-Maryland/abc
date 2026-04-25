@@ -289,3 +289,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap5: shape-gated fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap5` improves final delay on all four required benchmarks and reduces area on `ode` and `syn2`, but it still increases area on `i10` and `or1200`. For `stmap6`, keep the graph-size discriminator and add a secondary area guard for smaller/deeper designs, such as relaxing the recovery guard when the candidate cut would increase exact area beyond a small tolerance or adding instrumentation to measure guard hits per graph-size bucket.
+
+## version6 / stmap6
+
+- hypothesis: A mapper-graph-size floor plus an area-sensitive exact-area recovery override can reduce the area penalties left by `stmap5` while preserving the delay gains on small designs that were sensitive to relaxing the fanout/load guard.
+- motivation: `stmap5` improved final delay on all four benchmarks but still increased area on `i10` and `or1200`. A preliminary `stmap6` smoke/probe showed that allowing area-saving wide cuts too broadly recovered area but harmed `i10` delay, so the final hypothesis keeps strict slack-aware recovery on small mapper graphs and applies the area override only to mid-sized and large graphs.
+- command name: `stmap6`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_6.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap6/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap6` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 7` into the mapper. `mapperMatch.c` interprets mode `7` as an area-sensitive shape-gated guard: during delay matching it uses the `stmap5` graph-size gate and applies the high-fanout wide-cut guard only when `p->vMapObjs->nSize > 20000`; during recovery on small mapper graphs (`<= 8000`) it keeps the strict `stmap2` slack-aware guard; during area-flow recovery on larger graphs it also keeps the `stmap2` guard; during exact-area recovery on larger graphs it matches the candidate cut first and rejects a high-fanout wide cut only when the existing match has more than one inverter-delay of slack and the candidate does not save at least half an inverter area. Existing `map` and `stmap0` through `stmap5` behavior are preserved because modes `0` through `6` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap6/build.log`.
+  - help: `./abc -c "stmap6 -h"` printed usage text with default `-G 250.00` and the area-sensitive fanout guard enabled. Log: `.autoeda/runtime/results/stmap6/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap6; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap6/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap6/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, and prompt artifacts.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `531.21 ps`, area `11171.31`; delay delta `-0.11 ps` (`-0.02%`), area delta `-1319.90` (`-10.57%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `579.40 ps`, area `4777.11`; delay delta `-7.68 ps` (`-1.31%`), area delta `-21.23` (`-0.44%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `503.89 ps`, area `20443.49`; delay delta `-4.93 ps` (`-0.97%`), area delta `-853.11` (`-4.01%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_6.c`.
+  - numbered command exists and is registered as `stmap6`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap6/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap6/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap6/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap6` in the canonical version log before counting the iteration; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap6: area-sensitive recovery guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap6` improves final delay and area versus baseline on three benchmarks and keeps the `i10` delay win, but compared with `stmap5` it trades away some `ode`, `or1200`, and `syn2` delay to recover area. For `stmap7`, keep the small-graph floor and add a measured criticality constraint to the exact-area override, such as allowing the area-saving wide cut only when the mapper slack exceeds a larger multiple of inverter delay or when the node is outside the highest fanout bucket.

@@ -1,0 +1,16 @@
+Review the uncommitted stmap6 AutoEDA iteration for correctness and campaign-policy risks.
+
+Project constraints:
+- The binding project pack is .autoeda/project_pack/agent.md.
+- New command stmap6 must preserve stmap0 through stmap5 and classic map behavior.
+- The implementation should add one clear hypothesis: a small-graph-preserving, area-sensitive exact-area recovery relaxation of the stmap5 fanout/load cut guard.
+- Required gates already run locally: make ABC_USE_NO_READLINE=1, stmap6 -h, smoke on benchmarks/i10.aig, full four-benchmark map-vs-stmap6 flow, and CEC on strashed original versus post-flow candidate temporaries.
+
+Please focus on:
+- command registration/build integration omissions
+- mapper correctness risks in src/map/mapper/mapperMatch.c
+- unintended behavior changes to map or earlier stmapN modes
+- option/help inconsistencies in src/base/abci/abcStmap_6.c
+- validation or logging gaps that would prevent counting the iteration
+
+Do not propose broad refactors. Report concrete bugs or audit blockers with file/line references.
