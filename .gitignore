@@ -63,3 +63,10 @@ tags
 /cmake
 /cscope
 abc.history
+
+# AutoEDA live supervisor state is machine-local and not reproducible.
+/.autoeda/runtime/launch.pid
+/.autoeda/runtime/supervisor.lock
+/.autoeda/runtime/heartbeat.json
+/.autoeda/runtime/supervisor_state.json
+/.autoeda/runtime/logs/launch_*.log

@@ -1,0 +1,40 @@
+You are preparing the AutoEDA setup for an existing EDA repository.
+
+Target repo:
+- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+
+AutoEDA workspace:
+- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack
+- runtime: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime
+
+Binding user-provided agent policy:
+- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md
+- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md
+
+Task:
+1. Treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding. Do not dilute or replace it with generic policy.
+2. Inspect the target repo enough to infer the AutoEDA initialization/setup needed to run that policy:
+   - build command
+   - benchmark or design inputs
+   - correctness gates
+   - metric extraction expectations
+   - important implementation areas
+   - repo-specific skills the future campaign agent needs
+   - requested campaign length / target successful iterations
+3. Fill in the remaining AutoEDA project-pack files around the provided agent policy:
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml
+   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref
+   - skill files under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills
+4. Prefer concrete existing repo paths and commands over placeholders.
+5. Keep secrets out of project-pack text. Refer to existing git/auth/tool configuration only by name or environment.
+6. Keep canary push disabled unless /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md explicitly asks for pushing during canary.
+7. Set `evaluation.yaml` `target_iterations` to the full successful-iteration campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md; do not leave the scaffold default in place when the policy gives a target.
+8. Do not modify target-repo source code during this harness setup pass.
+9. When finished, run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` and fix structural validation errors you can resolve from local context.
+
+The project name is: abc-harness-stmap-advanced

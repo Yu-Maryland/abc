@@ -1,0 +1,28 @@
+version: 1
+poll_seconds: 60
+progress_timeout_seconds: 7200
+restart_backoff_seconds: 120
+max_fast_failures: 3
+fast_failure_window_seconds: 300
+iteration_timeout_seconds: 14400
+review_timeout_seconds: 600
+canary_iterations: 1
+target_iterations: 100
+restartable_states:
+- preflight-failed
+- preflight-complete
+- iteration-prepared
+- agent-failed
+- evaluation-failed
+- evaluation-complete
+- iteration-complete
+- report-pending
+- report-failed
+stop_states:
+- complete
+- blocked
+stop_on:
+- target_iterations_complete
+- irrecoverable_blocker
+- required_asset_unavailable
+- repeated_deterministic_failure

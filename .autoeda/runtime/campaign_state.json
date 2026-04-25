@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "workspace_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+  "family": "stmap",
+  "target_iterations": 100,
+  "completed_iterations": 1,
+  "next_iteration": 1,
+  "status": "iteration-complete",
+  "active_iteration": null,
+  "active_version": null,
+  "last_completed_iteration": 0,
+  "last_completed_version": "stmap0",
+  "last_successful_commit": "local commit created: stmap0: gain-aligned SCL genlib probe; see git history for hash",
+  "last_launch_time": "2026-04-25T14:27:06+00:00",
+  "last_heartbeat_time": "2026-04-25T14:44:12Z",
+  "launcher_pid": 10382,
+  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T142706Z.log",
+  "selected_backend": "codex",
+  "report_required": true,
+  "report_generated": false,
+  "report_status": "pending",
+  "final_report_path": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+  "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+  "last_report_time": null,
+  "notes": [
+    "Warning: launch uses dangerously-bypass-approvals-and-sandbox",
+    "stmap0 validation passed: build, help, smoke, full benchmark metrics, and CEC.",
+    "Configured review prompt form was rejected by local Codex CLI when combined with --uncommitted; supported configured-tool review without positional prompt completed and findings were addressed.",
+    "Git push disabled by project-pack git.yaml."
+  ],
+  "updated_at": "2026-04-25T14:48:22Z"
+}

@@ -1,0 +1,21 @@
+Review and revise the AutoEDA setup generated for this repo.
+
+Target repo:
+- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+
+AutoEDA workspace:
+- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack
+
+Binding user-provided agent policy:
+- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md
+- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md
+
+Review focus:
+1. Check whether the generated AutoEDA setup faithfully supports /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.
+2. Find placeholders, generic text, missing benchmark paths, unrealistic build/evaluation commands, unsafe git policy, and weak skills.
+3. Verify `evaluation.yaml` `target_iterations` matches the full campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.
+4. Apply fixes directly to the project-pack files.
+5. Do not modify target-repo source code.
+6. Run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` after edits and fix structural validation errors.
+7. Leave a concise review summary in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review.md.

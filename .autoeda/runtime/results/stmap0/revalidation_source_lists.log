@@ -1,0 +1,2 @@
+src/base/abci/module.make:69:    src/base/abci/abcStmap_0.c \
+abclib.dsp:482:SOURCE=.\src\base\abci\abcStmap_0.c

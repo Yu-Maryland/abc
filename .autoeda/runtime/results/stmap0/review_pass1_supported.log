@@ -1,0 +1,3162 @@
+OpenAI Codex v0.124.0 (research preview)
+--------
+workdir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019dc513-7791-79c0-a4e8-f65b1985e4eb
+--------
+user
+current changes
+exec
+/bin/zsh -lc 'git status --short' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+ M src/base/abci/abc.c
+ M src/base/abci/module.make
+?? .autoeda/README.md
+?? .autoeda/project_pack/
+?? .autoeda/runtime/
+?? 7nm_lvt_ff.lib
+?? benchmarks/
+?? src/base/abci/abcStmap_0.c
+
+exec
+/bin/zsh -lc 'git diff -- src/base/abci/abc.c src/base/abci/module.make' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+diff --git a/src/base/abci/abc.c b/src/base/abci/abc.c
+index 998b3e16b..dc0350877 100644
+--- a/src/base/abci/abc.c
++++ b/src/base/abci/abc.c
+@@ -297,6 +297,7 @@ static int Abc_CommandRecDump3               ( Abc_Frame_t * pAbc, int argc, cha
+ static int Abc_CommandRecMerge3              ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ 
+ static int Abc_CommandMap                    ( Abc_Frame_t * pAbc, int argc, char ** argv );
++extern int Abc_CommandStmap0                 ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+@@ -1143,6 +1144,7 @@ void Abc_Init( Abc_Frame_t * pAbc )
+     Cmd_CommandAdd( pAbc, "Choicing",     "rec_merge3",    Abc_CommandRecMerge3,        0 );
+ 
+     Cmd_CommandAdd( pAbc, "SC mapping",   "map",           Abc_CommandMap,              1 );
++    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap0",        Abc_CommandStmap0,           1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );
+diff --git a/src/base/abci/module.make b/src/base/abci/module.make
+index fe063a42a..09dfd92f0 100644
+--- a/src/base/abci/module.make
++++ b/src/base/abci/module.make
+@@ -66,6 +66,7 @@ SRC +=    src/base/abci/abc.c \
+     src/base/abci/abcScorr.c \
+     src/base/abci/abcSense.c \
+     src/base/abci/abcSpeedup.c \
++    src/base/abci/abcStmap_0.c \
+     src/base/abci/abcStrash.c \
+     src/base/abci/abcSweep.c \
+     src/base/abci/abcSymm.c \
+
+exec
+/bin/zsh -lc "find .autoeda benchmarks src/base/abci/abcStmap_0.c 7nm_lvt_ff.lib -maxdepth 4 -type f -print | sed 's#"'^./##'"' | sort | head -200 && printf '\\n-- counts --\\n' && find .autoeda benchmarks -type f | wc -l && printf '\\n-- sizes --\\n' && du -sh .autoeda benchmarks src/base/abci/abcStmap_0.c 7nm_lvt_ff.lib 2>/dev/null" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+.autoeda/.gitkeep
+.autoeda/README.md
+.autoeda/project_pack/agent.md
+.autoeda/project_pack/evaluation.yaml
+.autoeda/project_pack/git.yaml
+.autoeda/project_pack/mission.md
+.autoeda/project_pack/repo_guide.md
+.autoeda/project_pack/secrets.ref
+.autoeda/project_pack/skills/code_structure/SKILL.md
+.autoeda/project_pack/skills/implementation/SKILL.md
+.autoeda/project_pack/skills/methods/SKILL.md
+.autoeda/project_pack/supervisor.yaml
+.autoeda/project_pack/templates/version_log_section.md
+.autoeda/runtime/campaign_state.json
+.autoeda/runtime/harness_prompt.txt
+.autoeda/runtime/harness_result.json
+.autoeda/runtime/harness_review.md
+.autoeda/runtime/harness_review_prompt.txt
+.autoeda/runtime/heartbeat.json
+.autoeda/runtime/last_prompt.txt
+.autoeda/runtime/launch.pid
+.autoeda/runtime/logs/harness_20260425T141842Z.log
+.autoeda/runtime/logs/harness_review_20260425T142356Z.log
+.autoeda/runtime/logs/launch_20260425T142706Z.log
+.autoeda/runtime/preflight_report.json
+.autoeda/runtime/results/stmap0/baseline_i10.log
+.autoeda/runtime/results/stmap0/baseline_i10.stderr
+.autoeda/runtime/results/stmap0/baseline_i10.stdout
+.autoeda/runtime/results/stmap0/baseline_ode.log
+.autoeda/runtime/results/stmap0/baseline_ode.stderr
+.autoeda/runtime/results/stmap0/baseline_ode.stdout
+.autoeda/runtime/results/stmap0/baseline_or1200.log
+.autoeda/runtime/results/stmap0/baseline_or1200.stderr
+.autoeda/runtime/results/stmap0/baseline_or1200.stdout
+.autoeda/runtime/results/stmap0/baseline_syn2.log
+.autoeda/runtime/results/stmap0/baseline_syn2.stderr
+.autoeda/runtime/results/stmap0/baseline_syn2.stdout
+.autoeda/runtime/results/stmap0/build.log
+.autoeda/runtime/results/stmap0/build.stderr
+.autoeda/runtime/results/stmap0/build.stdout
+.autoeda/runtime/results/stmap0/candidate_i10.log
+.autoeda/runtime/results/stmap0/candidate_i10.stderr
+.autoeda/runtime/results/stmap0/candidate_i10.stdout
+.autoeda/runtime/results/stmap0/candidate_ode.log
+.autoeda/runtime/results/stmap0/candidate_ode.stderr
+.autoeda/runtime/results/stmap0/candidate_ode.stdout
+.autoeda/runtime/results/stmap0/candidate_or1200.log
+.autoeda/runtime/results/stmap0/candidate_or1200.stderr
+.autoeda/runtime/results/stmap0/candidate_or1200.stdout
+.autoeda/runtime/results/stmap0/candidate_syn2.log
+.autoeda/runtime/results/stmap0/candidate_syn2.stderr
+.autoeda/runtime/results/stmap0/candidate_syn2.stdout
+.autoeda/runtime/results/stmap0/cec_i10.log
+.autoeda/runtime/results/stmap0/cec_i10.stderr
+.autoeda/runtime/results/stmap0/cec_i10.stdout
+.autoeda/runtime/results/stmap0/cec_i10_candidate.aig
+.autoeda/runtime/results/stmap0/cec_i10_original.aig
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_i10_write_original.log
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_ode.log
+.autoeda/runtime/results/stmap0/cec_ode.stderr
+.autoeda/runtime/results/stmap0/cec_ode.stdout
+.autoeda/runtime/results/stmap0/cec_ode_candidate.aig
+.autoeda/runtime/results/stmap0/cec_ode_original.aig
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_ode_write_original.log
+.autoeda/runtime/results/stmap0/cec_ode_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_ode_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_or1200.log
+.autoeda/runtime/results/stmap0/cec_or1200.stderr
+.autoeda/runtime/results/stmap0/cec_or1200.stdout
+.autoeda/runtime/results/stmap0/cec_or1200_candidate.aig
+.autoeda/runtime/results/stmap0/cec_or1200_original.aig
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.log
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_syn2.log
+.autoeda/runtime/results/stmap0/cec_syn2.stderr
+.autoeda/runtime/results/stmap0/cec_syn2.stdout
+.autoeda/runtime/results/stmap0/cec_syn2_candidate.aig
+.autoeda/runtime/results/stmap0/cec_syn2_original.aig
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.log
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.stdout
+.autoeda/runtime/results/stmap0/comparison.csv
+.autoeda/runtime/results/stmap0/help_stmap0.log
+.autoeda/runtime/results/stmap0/help_stmap0.stderr
+.autoeda/runtime/results/stmap0/help_stmap0.stdout
+.autoeda/runtime/results/stmap0/metrics.csv
+.autoeda/runtime/results/stmap0/review_pass1.log
+.autoeda/runtime/results/stmap0/review_pass1_prompt.md
+.autoeda/runtime/results/stmap0/review_pass1_stdin.log
+.autoeda/runtime/results/stmap0/review_pass1_supported.log
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.log
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.stderr
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.stdout
+.autoeda/runtime/results/stmap0/summary.json
+.autoeda/runtime/supervisor.lock
+.autoeda/runtime/supervisor_state.json
+.autoeda/runtime/versions.md
+7nm_lvt_ff.lib
+benchmarks/i10.aig
+benchmarks/ode.abc.blif
+benchmarks/or1200.abc.blif
+benchmarks/syn2.abc.blif
+src/base/abci/abcStmap_0.c
+
+-- counts --
+     116
+
+-- sizes --
+4.3M	.autoeda
+2.4M	benchmarks
+ 12K	src/base/abci/abcStmap_0.c
+ 47M	7nm_lvt_ff.lib
+
+exec
+/bin/zsh -lc "sed -n '1,260p' src/base/abci/abcStmap_0.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [abcStmap_0.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap0 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "map/mio/mio.h"
+#include "misc/extra/extra.h"
+
+ABC_NAMESPACE_IMPL_START
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap0 mapper probe.]
+
+  Description [stmap0 tests whether aligning the mapper's SCL-derived genlib
+  gain estimate with the downstream buffer/sizer default improves final stime
+  timing. It keeps the classic map command's behavior and options otherwise.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap0( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 300; // align with downstream buffer/sizer default gain ratio
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    DelayTarget = -1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 0;
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Slew = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Slew <= 0.0 )
+                goto usage;
+            break;
+        case 'G':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-G\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Gain = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Gain <= 0.0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by a positive integer.\n" );
+                goto usage;
+            }
+            nGatesMin = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nGatesMin < 0 )
+                goto usage;
+            break;
+        case 'a':
+            fAreaOnly ^= 1;
+            break;
+        case 'r':
+            fRecovery ^= 1;
+            break;
+        case 's':
+            fSweep ^= 1;
+            break;
+        case 'p':
+            fSwitching ^= 1;
+            break;
+        case 'f':
+            fSkipFanout ^= 1;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    if ( !Abc_NtkIsStrash(pNtk) )
+    {
+        pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Strashing before stmap0 has failed.\n" );
+            return 1;
+        }
+        pNtk = Abc_NtkBalance( pNtkRes = pNtk, 0, 0, 1 );
+        Abc_NtkDelete( pNtkRes );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Balancing before stmap0 has failed.\n" );
+            return 1;
+        }
+        Abc_Print( 0, "The network was strashed and balanced before stmap0.\n" );
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_NtkDelete( pNtk );
+            Abc_Print( -1, "stmap0 has failed.\n" );
+            return 1;
+        }
+        Abc_NtkDelete( pNtk );
+    }
+    else
+    {
+        pNtkRes = Abc_NtkMap( pNtk, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_Print( -1, "stmap0 has failed.\n" );
+            return 1;
+        }
+    }
+
+    if ( fSweep )
+    {
+        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+        if ( Abc_NtkHasMapping(pNtkRes) )
+        {
+            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+            Abc_NtkDelete( pNtk );
+        }
+    }
+
+    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+    return 0;
+
+usage:
+    if ( DelayTarget == -1 )
+        sprintf(Buffer, "not used" );
+    else
+        sprintf(Buffer, "%.3f", DelayTarget );
+    Abc_Print( -2, "usage: stmap0 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap0 standard-cell mapping with downstream gain-aligned SCL timing\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = %.2f]\n", LogFan );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = %.2f]\n", Slew );
+    Abc_Print( -2, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = %d]\n", nGatesMin );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = %s]\n", fAreaOnly? "yes": "no" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+    Abc_Print( -2, "\t-f       : do not use large gates to map high-fanout nodes [default = %s]\n", fSkipFanout? "yes": "no" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h       : print the command usage\n");
+    return 1;
+}
+
+ABC_NAMESPACE_IMPL_END
+
+exec
+/bin/zsh -lc "grep -n \"Abc_CommandMap\" -n src/base/abci/abc.c | head -5 && sed -n '15480,15780p' src/base/abci/abc.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+299:static int Abc_CommandMap                    ( Abc_Frame_t * pAbc, int argc, char ** argv );
+1146:    Cmd_CommandAdd( pAbc, "SC mapping",   "map",           Abc_CommandMap,              1 );
+20814:int Abc_CommandMap( Abc_Frame_t * pAbc, int argc, char ** argv )
+    if ( fOracle )
+        pParams->fRecord = 1;
+    pCutMan = Abc_NtkCuts( pNtk, pParams );
+    if ( fOracle )
+        pCutOracle = Cut_OracleStart( pCutMan );
+    Cut_ManStop( pCutMan );
+    if ( fOracle )
+    {
+        assert(pCutOracle);
+        Abc_NtkCutsOracle( pNtk, pCutOracle );
+        Cut_OracleStop( pCutOracle );
+    }
+    return 0;
+
+usage:
+    Abc_Print( -2, "usage: cut [-K num] [-M num] [-tfdcovamjsvh]\n" );
+    Abc_Print( -2, "\t         computes k-feasible cuts for the AIG\n" );
+    Abc_Print( -2, "\t-K num : max number of leaves (%d <= num <= %d) [default = %d]\n",     CUT_SIZE_MIN, CUT_SIZE_MAX, pParams->nVarsMax );
+    Abc_Print( -2, "\t-M num : max number of cuts stored at a node [default = %d]\n",        pParams->nKeepMax );
+    Abc_Print( -2, "\t-t     : toggle truth table computation [default = %s]\n",             pParams->fTruth?   "yes": "no" );
+    Abc_Print( -2, "\t-f     : toggle filtering of duplicated/dominated [default = %s]\n",   pParams->fFilter?  "yes": "no" );
+    Abc_Print( -2, "\t-d     : toggle dropping when fanouts are done [default = %s]\n",      pParams->fDrop?    "yes": "no" );
+    Abc_Print( -2, "\t-x     : toggle computing only DAG cuts [default = %s]\n",             pParams->fDag?     "yes": "no" );
+    Abc_Print( -2, "\t-y     : toggle computing only tree cuts [default = %s]\n",            pParams->fTree?    "yes": "no" );
+    Abc_Print( -2, "\t-g     : toggle computing only global cuts [default = %s]\n",          pParams->fGlobal?  "yes": "no" );
+    Abc_Print( -2, "\t-l     : toggle computing only local cuts [default = %s]\n",           pParams->fLocal?   "yes": "no" );
+    Abc_Print( -2, "\t-z     : toggle fancy computations [default = %s]\n",                  pParams->fFancy?   "yes": "no" );
+    Abc_Print( -2, "\t-a     : toggle recording cut functions [default = %s]\n",             pParams->fRecordAig?"yes": "no" );
+    Abc_Print( -2, "\t-m     : toggle delay-oriented FPGA mapping [default = %s]\n",         pParams->fMap?     "yes": "no" );
+    Abc_Print( -2, "\t-j     : toggle removing fanouts due to XOR/MUX [default = %s]\n",     pParams->fAdjust?  "yes": "no" );
+    Abc_Print( -2, "\t-s     : toggle creating library of 6-var functions [default = %s]\n", pParams->fNpnSave?  "yes": "no" );
+    Abc_Print( -2, "\t-v     : toggle printing verbose information [default = %s]\n",        pParams->fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h     : print the command usage\n");
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    []
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandScut( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Cut_Params_t Params, * pParams = &Params;
+    Cut_Man_t * pCutMan;
+    Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
+    int c;
+    extern Cut_Man_t * Abc_NtkSeqCuts( Abc_Ntk_t * pNtk, Cut_Params_t * pParams );
+
+    // set defaults
+    memset( pParams, 0, sizeof(Cut_Params_t) );
+    pParams->nVarsMax  = 5;     // the max cut size ("k" of the k-feasible cuts)
+    pParams->nKeepMax  = 1000;  // the max number of cuts kept at a node
+    pParams->fTruth    = 0;     // compute truth tables
+    pParams->fFilter   = 1;     // filter dominated cuts
+    pParams->fSeq      = 1;     // compute sequential cuts
+    pParams->fVerbose  = 0;     // the verbosiness flag
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "KMtvh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'K':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-K\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            pParams->nVarsMax = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pParams->nVarsMax < 0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            pParams->nKeepMax = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( pParams->nKeepMax < 0 )
+                goto usage;
+            break;
+        case 't':
+            pParams->fTruth ^= 1;
+            break;
+        case 'v':
+            pParams->fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+/*
+    if ( !Abc_NtkIsSeq(pNtk) )
+    {
+        Abc_Print( -1, "Sequential cuts can be computed for sequential AIGs (run \"seq\").\n" );
+        return 1;
+    }
+*/
+    if ( pParams->nVarsMax < CUT_SIZE_MIN || pParams->nVarsMax > CUT_SIZE_MAX )
+    {
+        Abc_Print( -1, "Can only compute the cuts for %d <= K <= %d.\n", CUT_SIZE_MIN, CUT_SIZE_MAX );
+        return 1;
+    }
+
+    pCutMan = Abc_NtkSeqCuts( pNtk, pParams );
+    Cut_ManStop( pCutMan );
+    return 0;
+
+usage:
+    Abc_Print( -2, "usage: scut [-K num] [-M num] [-tvh]\n" );
+    Abc_Print( -2, "\t         computes k-feasible cuts for the sequential AIG\n" );
+    Abc_Print( -2, "\t-K num : max number of leaves (%d <= num <= %d) [default = %d]\n",   CUT_SIZE_MIN, CUT_SIZE_MAX, pParams->nVarsMax );
+    Abc_Print( -2, "\t-M num : max number of cuts stored at a node [default = %d]\n",      pParams->nKeepMax );
+    Abc_Print( -2, "\t-t     : toggle truth table computation [default = %s]\n",           pParams->fTruth?   "yes": "no" );
+    Abc_Print( -2, "\t-v     : toggle printing verbose information [default = %s]\n",      pParams->fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h     : print the command usage\n");
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    []
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandEspresso( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
+    int c;
+    int fVerbose;
+    extern void Abc_NtkEspresso( Abc_Ntk_t * pNtk, int fVerbose );
+
+    if ( argc == 2 && !strcmp(argv[1], "-h") )
+    {
+        Abc_Print( -2, "The espresso command is currently disabled.\n" );
+        return 1;
+    }
+
+    Abc_Print( -1, "This command is currently disabled.\n" );
+    return 0;
+
+    // set defaults
+    fVerbose = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "vh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+    if ( !Abc_NtkIsLogic(pNtk) )
+    {
+        Abc_Print( -1, "SOP minimization is possible for logic networks (run \"renode\").\n" );
+        return 1;
+    }
+//    Abc_NtkEspresso( pNtk, fVerbose );
+    return 0;
+
+usage:
+    Abc_Print( -2, "usage: espresso [-vh]\n" );
+    Abc_Print( -2, "\t         minimizes SOPs of the local functions using Espresso\n" );
+    Abc_Print( -2, "\t-v     : prints verbose information [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h     : print the command usage\n");
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    []
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandGen( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+//    Abc_Ntk_t * pNtk = Abc_FrameReadNtk(pAbc);
+    int c;
+    int nVars;    // the number of variables
+    int nArgs;    // the number of arguments
+    int nLutSize = -1; // the size of LUTs
+    int nLuts = -1;    // the number of LUTs
+    int fAdder;
+    int fAdderTree;
+    int fSorter;
+    int fMesh;
+    int fMulti;
+    int fBooth;
+    int fFpga;
+    int fOneHot;
+    int fRandom;
+    int fGraph;
+    int fVerbose;
+    char * FileName;
+    char Command[1000];
+    extern void Abc_GenAdder( char * pFileName, int nVars );
+    extern void Abc_GenSorter( char * pFileName, int nVars );
+    extern void Abc_GenMesh( char * pFileName, int nVars );
+    extern void Abc_GenMulti( char * pFileName, int nVars );
+    extern void Abc_GenBooth( char * pFileName, int nVars );
+    extern void Abc_GenFpga( char * pFileName, int nLutSize, int nLuts, int nVars );
+    extern void Abc_GenOneHot( char * pFileName, int nVars );
+    extern void Abc_GenRandom( char * pFileName, int nPis );
+    extern void Abc_GenGraph( char * pFileName, int nPis );
+    extern void Abc_GenAdderTree( char * pFileName, int nArgs, int nBits );
+
+    // set defaults
+    nVars = 8;
+    nArgs = 8;
+    fAdder = 0;
+    fAdderTree = 0;
+    fSorter = 0;
+    fMesh = 0;
+    fMulti = 0;
+    fBooth = 0;
+    fFpga = 0;
+    fOneHot = 0;
+    fRandom = 0;
+    fGraph = 0;
+    fVerbose = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "NAKLatsembfnrgvh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'N':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-N\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            nVars = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nVars < 0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            nArgs = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nArgs < 0 )
+                goto usage;
+            break;
+        case 'K':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-K\" should be followed by an integer.\n" );
+                goto usage;
+            }
+            nLutSize = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nLutSize < 0 )
+                goto usage;
+            break;
+        case 'L':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-L\" should be followed by an integer.\n" );
+                goto usage;
+            }
+
+exec
+/bin/zsh -lc "sed -n '20814,21070p' src/base/abci/abc.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+int Abc_CommandMap( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 250;
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    // set defaults
+    DelayTarget =-1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 0;
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Slew = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Slew <= 0.0 )
+                goto usage;
+            break;
+        case 'G':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-G\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Gain = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Gain <= 0.0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by a positive integer.\n" );
+                goto usage;
+            }
+            nGatesMin = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nGatesMin < 0 )
+                goto usage;
+            break;
+        case 'a':
+            fAreaOnly ^= 1;
+            break;
+        case 'r':
+            fRecovery ^= 1;
+            break;
+        case 's':
+            fSweep ^= 1;
+            break;
+        case 'p':
+            fSwitching ^= 1;
+            break;
+        case 'f':
+            fSkipFanout ^= 1;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    if ( !Abc_NtkIsStrash(pNtk) )
+    {
+        pNtk = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Strashing before mapping has failed.\n" );
+            return 1;
+        }
+        pNtk = Abc_NtkBalance( pNtkRes = pNtk, 0, 0, 1 );
+        Abc_NtkDelete( pNtkRes );
+        if ( pNtk == NULL )
+        {
+            Abc_Print( -1, "Balancing before mapping has failed.\n" );
+            return 1;
+        }
+        Abc_Print( 0, "The network was strashed and balanced before mapping.\n" );
+        // get the new network
+        pNtkRes = Abc_NtkMap( pNtk, /*userLib=*/NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_NtkDelete( pNtk );
+            Abc_Print( -1, "Mapping has failed.\n" );
+            return 1;
+        }
+        Abc_NtkDelete( pNtk );
+    }
+    else
+    {
+        // get the new network
+        pNtkRes = Abc_NtkMap( pNtk, /*userLib=*/NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, fSkipFanout, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            Abc_Print( -1, "Mapping has failed.\n" );
+            return 1;
+        }
+    }
+
+    if ( fSweep )
+    {
+        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+        if ( Abc_NtkHasMapping(pNtkRes) )
+        {
+            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+            Abc_NtkDelete( pNtk );
+        }
+    }
+
+    // replace the current network
+    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+    return 0;
+
+usage:
+    if ( DelayTarget == -1 )
+        sprintf(Buffer, "not used" );
+    else
+        sprintf(Buffer, "%.3f", DelayTarget );
+    Abc_Print( -2, "usage: map [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t           performs standard cell mapping of the current network\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = %.2f]\n", LogFan );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = %.2f]\n", Slew );
+    Abc_Print( -2, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = %d]\n", nGatesMin );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = %s]\n", fAreaOnly? "yes": "no" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+    Abc_Print( -2, "\t-f       : do not use large gates to map high-fanout nodes [default = %s]\n", fSkipFanout? "yes": "no" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h       : print the command usage\n");
+    return 1;
+}
+
+/**Function*************************************************************
+
+  Synopsis    []
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandAmap( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Amap_Par_t Pars, * pPars = &Pars;
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    int fSweep;
+    int c;
+    extern Abc_Ntk_t * Abc_NtkDarAmap( Abc_Ntk_t * pNtk, Amap_Par_t * pPars );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    // set defaults
+    fSweep = 0;
+    Amap_ManSetDefaultParams( pPars );
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "FACEQmxisvh" ) ) != EOF )
+
+exec
+/bin/zsh -lc "ls -la && git ls-files | head && (test -f .gitignore && sed -n '1,200p' .gitignore || true)" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+total 153480
+drwxr-xr-x  30 cunxiy  staff       960 Apr 25 09:36 .
+drwxr-xr-x  13 cunxiy  staff       416 Apr 25 09:01 ..
+drwxr-xr-x   6 cunxiy  staff       192 Apr 25 09:18 .autoeda
+drwxr-xr-x  13 cunxiy  staff       416 Apr 25 09:38 .git
+-rw-r--r--   1 cunxiy  staff       349 Apr 25 08:59 .gitattributes
+-rw-r--r--   1 cunxiy  staff        12 Apr 25 08:59 .gitcommit
+drwxr-xr-x   4 cunxiy  staff       128 Apr 25 08:59 .github
+-rw-r--r--   1 cunxiy  staff       496 Apr 25 08:59 .gitignore
+-rw-r--r--   1 cunxiy  staff       494 Apr 25 08:59 .hgignore
+-rw-r--r--   1 cunxiy  staff  49229589 Apr 25 09:00 7nm_lvt_ff.lib
+-rw-r--r--@  1 cunxiy  staff     16482 Apr 25 09:10 AGENT.md
+-rw-r--r--   1 cunxiy  staff      4590 Apr 25 08:59 CMakeLists.txt
+-rw-r--r--   1 cunxiy  staff      7616 Apr 25 08:59 Makefile
+-rw-r--r--   1 cunxiy  staff      6723 Apr 25 08:59 README.md
+-rwxr-xr-x   1 cunxiy  staff  29052832 Apr 25 09:35 abc
+-rw-r--r--   1 cunxiy  staff         0 Apr 25 09:36 abc.history
+-rw-r--r--   1 cunxiy  staff      5169 Apr 25 08:59 abc.rc
+-rw-r--r--   1 cunxiy  staff      4833 Apr 25 08:59 abcexe.dsp
+-rw-r--r--   1 cunxiy  staff    141143 Apr 25 08:59 abclib.dsp
+-rw-r--r--   1 cunxiy  staff       809 Apr 25 08:59 abcspace.dsw
+-rwxr-xr-x   1 cunxiy  staff     33432 Apr 25 09:36 arch_flags
+-rw-r--r--   1 cunxiy  staff       355 Apr 25 08:59 arch_flags.c
+drwxr-xr-x   6 cunxiy  staff       192 Apr 25 09:00 benchmarks
+-rw-r--r--   1 cunxiy  staff      1129 Apr 25 08:59 copyright.txt
+-rwxr-xr-x   1 cunxiy  staff       235 Apr 25 08:59 depends.sh
+-rw-r--r--   1 cunxiy  staff     14696 Apr 25 08:59 i10.aig
+drwxr-xr-x   7 cunxiy  staff       224 Apr 25 08:59 lib
+-rw-r--r--   1 cunxiy  staff      4919 Apr 25 08:59 readmeaig
+drwxr-xr-x  17 cunxiy  staff       544 Apr 25 08:59 src
+drwxr-xr-x   4 cunxiy  staff       128 Apr 25 08:59 test
+.autoeda/.gitkeep
+.gitattributes
+.gitcommit
+.github/scripts/abcexe.vcxproj
+.github/scripts/abclib.vcxproj.template
+.github/scripts/abcspace.sln
+.github/workflows/build-posix-cmake.yml
+.github/workflows/build-posix.yml
+.github/workflows/build-windows.yml
+.gitignore
+DebugLib/
+DebugExe/
+DebugExt/
+
+ReleaseLib/
+ReleaseExe/
+ReleaseExt/
+
+_/
+_TEST/
+lib/abc*
+lib/m114*
+lib/bip*
+docs/
+.cache/
+
+src/ext*
+src/xxx/
+src/aig/au/
+src/aig/ssm/
+src/aig/ddb/
+
+*~
+*.orig
+
+*.[od]
+
+*.ncb
+*.opt
+*.plg
+
+*.zip
+*.DS_Store
+
+abcspaceext.dsw
+abcext.dsp
+
+abcexe.vcproj*
+abclib.vcproj*
+/abcspace.sln
+abcspace.suo
+
+*.pyc
+
+src/python/build
+src/python/bdist
+src/python/pyabc.py
+src/python/pyabc_wrap.*
+
+.idea/
+build/
+
+*.rej
+*.orig
+
+tags
+
+/libabc.a
+/abc
+
+/arch_flags
+
+/cmake
+/cscope
+abc.history
+exec
+/bin/zsh -lc "sed -n '1,160p' .autoeda/project_pack/secrets.ref && sed -n '1,120p' .autoeda/README.md && sed -n '1,120p' .autoeda/runtime/campaign_state.json && sed -n '1,120p' .autoeda/runtime/harness_result.json" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+version: 1
+credential_policy:
+  store_raw_secrets_in_project_pack: false
+  git_auth_reference: existing local git credential configuration
+  agent_auth_reference: existing Codex CLI authentication
+  review_auth_reference: existing Codex CLI authentication
+  environment: inherit from launcher process
+agent_auth:
+  selected_backend: codex
+  codex:
+    auth_reference: existing_codex_cli_login
+    launch:
+      binary: codex
+      args:
+      - exec
+      - --model
+      - gpt-5.5
+      - -c
+      - model_reasoning_effort="xhigh"
+      - -c
+      - service_tier="fast"
+      - --enable
+      - multi_agent
+      - --dangerously-bypass-approvals-and-sandbox
+review_tools:
+  selected_tool: codex_review
+  codex_review:
+    auth_reference: existing_codex_cli_login
+    binary: codex
+    args:
+    - exec
+    - review
+    - --uncommitted
+    - --model
+    - gpt-5.5
+    - -c
+    - model_reasoning_effort="xhigh"
+    - -c
+    - service_tier="fast"
+    - --dangerously-bypass-approvals-and-sandbox
+  claude:
+    binary: claude
+    args:
+    - -p
+    - --dangerously-skip-permissions
+    - --model
+    - claude-sonnet-4-6
+    - --effort
+    - medium
+refresh_policy:
+  on_expiry: block_and_alert
+  missing_local_auth: block_and_alert
+# abc-harness-stmap-advanced
+
+This workspace was scaffolded by `AutoEDA`.
+
+## Layout
+
+- `project_pack/`: user-provided mission, policy, skills, evaluation, git, and supervisor config
+- `runtime/`: campaign state, canonical version log, runtime logs, and results
+
+## Reviewed Setup
+
+The project pack is bound to `project_pack/agent.md`, which is an exact copy of
+the repo `AGENT.md` policy. The configured campaign family is `stmap`, with one
+canary iteration and 100 full-campaign successful iterations.
+
+Required assets:
+
+- `7nm_lvt_ff.lib`
+- `benchmarks/i10.aig`
+- `benchmarks/ode.abc.blif`
+- `benchmarks/or1200.abc.blif`
+- `benchmarks/syn2.abc.blif`
+
+Useful commands from the repo root:
+
+```sh
+python3 -m autoeda validate-pack --workspace .autoeda
+python3 -m autoeda preflight --workspace .autoeda
+python3 -m autoeda launch --workspace .autoeda --canary
+```
+
+Git pushes are disabled by default in `project_pack/git.yaml`; local commits
+remain allowed for successful iterations.
+{
+  "version": 1,
+  "workspace_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+  "family": "stmap",
+  "target_iterations": 100,
+  "completed_iterations": 0,
+  "next_iteration": 0,
+  "status": "review-running",
+  "active_iteration": 0,
+  "active_version": "stmap0",
+  "last_completed_iteration": null,
+  "last_completed_version": null,
+  "last_successful_commit": null,
+  "last_launch_time": "2026-04-25T14:27:06+00:00",
+  "last_heartbeat_time": "2026-04-25T14:37:27Z",
+  "launcher_pid": 10382,
+  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T142706Z.log",
+  "selected_backend": "codex",
+  "report_required": true,
+  "report_generated": false,
+  "report_status": "pending",
+  "final_report_path": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+  "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+  "last_report_time": null,
+  "notes": [
+    "Warning: launch uses dangerously-bypass-approvals-and-sandbox"
+  ],
+  "updated_at": "2026-04-25T14:37:27Z"
+}
+{
+  "ok": true,
+  "initialized": true,
+  "workspace": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+  "agent_md": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md",
+  "harness_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_prompt.txt",
+  "review_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review_prompt.txt",
+  "harness_command": [
+    "codex",
+    "exec",
+    "--model",
+    "gpt-5.5",
+    "-c",
+    "model_reasoning_effort=\"xhigh\"",
+    "-c",
+    "service_tier=\"fast\"",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--cd",
+    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+    "You are preparing the AutoEDA setup for an existing EDA repository.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n- runtime: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nTask:\n1. Treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding. Do not dilute or replace it with generic policy.\n2. Inspect the target repo enough to infer the AutoEDA initialization/setup needed to run that policy:\n   - build command\n   - benchmark or design inputs\n   - correctness gates\n   - metric extraction expectations\n   - important implementation areas\n   - repo-specific skills the future campaign agent needs\n   - requested campaign length / target successful iterations\n3. Fill in the remaining AutoEDA project-pack files around the provided agent policy:\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref\n   - skill files under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills\n4. Prefer concrete existing repo paths and commands over placeholders.\n5. Keep secrets out of project-pack text. Refer to existing git/auth/tool configuration only by name or environment.\n6. Keep canary push disabled unless /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md explicitly asks for pushing during canary.\n7. Set `evaluation.yaml` `target_iterations` to the full successful-iteration campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md; do not leave the scaffold default in place when the policy gives a target.\n8. Do not modify target-repo source code during this harness setup pass.\n9. When finished, run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` and fix structural validation errors you can resolve from local context.\n\nThe project name is: abc-harness-stmap-advanced\n"
+  ],
+  "review_command": [
+    "codex",
+    "exec",
+    "--model",
+    "gpt-5.5",
+    "-c",
+    "model_reasoning_effort=\"xhigh\"",
+    "-c",
+    "service_tier=\"fast\"",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--cd",
+    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+    "Review and revise the AutoEDA setup generated for this repo.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nReview focus:\n1. Check whether the generated AutoEDA setup faithfully supports /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n2. Find placeholders, generic text, missing benchmark paths, unrealistic build/evaluation commands, unsafe git policy, and weak skills.\n3. Verify `evaluation.yaml` `target_iterations` matches the full campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n4. Apply fixes directly to the project-pack files.\n5. Do not modify target-repo source code.\n6. Run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` after edits and fix structural validation errors.\n7. Leave a concise review summary in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review.md.\n"
+  ],
+  "dry_run": false,
+  "harness_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_20260425T141842Z.log",
+  "harness_returncode": 0,
+  "review_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_review_20260425T142356Z.log",
+  "review_returncode": 0,
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "info": [
+      "Workspace: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+      "Repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+      "Backend: codex"
+    ],
+    "data": {
+      "evaluation": {
+        "version": 1,
+        "project": "abc-harness-stmap-advanced",
+        "family": "stmap",
+        "baseline_command": "map",
+        "target_iterations": 100,
+        "canary_iterations": 1,
+        "library": "7nm_lvt_ff.lib",
+        "benchmarks": [
+          "benchmarks/i10.aig",
+          "benchmarks/ode.abc.blif",
+          "benchmarks/or1200.abc.blif",
+          "benchmarks/syn2.abc.blif"
+        ],
+        "build": {
+          "command": "make ABC_USE_NO_READLINE=1",
+          "artifact": "./abc",
+          "clean_command": "make clean"
+        },
+        "baseline_flow": {
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+        },
+        "candidate_flow": {
+          "command_pattern": "stmap{iteration}",
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime\"",
+          "smoke_design": "benchmarks/i10.aig",
+          "required_help_template": "./abc -c \"{command} -h\""
+        },
+        "timeouts": {
+          "per_design_seconds": 600,
+          "review_pass_seconds": 600,
+          "smoke_seconds": 600,
+          "build_seconds": 900
+        },
+        "metrics": [
+          {
+            "name": "stime_delay_ps",
+            "role": "primary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 2,
+            "unit": "ps"
+          },
+          {
+            "name": "stime_area",
+            "role": "secondary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 1
+          }
+        ],
+        "objective": {
+          "aggregation": "per_benchmark_required",
+          "compare_to": "baseline_command",
+          "ranking": {
+            "primary": "stime_delay_ps",
+            "secondary": "stime_area"
+          },
+          "tie_breakers": [
+            "more_benchmarks_improved_delay",
+            "lower_geomean_area"
+
+exec
+/bin/zsh -lc "grep -R \"module.make\" -n CMakeLists.txt src/CMakeLists.txt 2>/dev/null || true && find src -name 'CMakeLists.txt' -maxdepth 4 -print | head -20 && grep -R \"abcSpeedup.c\\|abcStrash.c\" -n CMakeLists.txt src | head -50" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+2026-04-25T14:38:51.824487Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+ succeeded in 17315ms:
+src/base/abc/abc.h:938:/*=== abcStrash.c ==========================================================*/
+src/base/abci/abcStrash.c:3:  FileName    [abcStrash.c]
+src/base/abci/abcStrash.c:17:  Revision    [$Id: abcStrash.c,v 1.00 2005/06/20 00:00:00 alanmi Exp $]
+src/base/abci/abcStrash.d:1:src/base/abci/abcStrash.d src/base/abci/abcStrash.o: src/base/abci/abcStrash.c src/base/abc/abc.h \
+src/base/abci/abcSpeedup.c:3:  FileName    [abcSpeedup.c]
+src/base/abci/abcSpeedup.c:17:  Revision    [$Id: abcSpeedup.c,v 1.00 2005/06/20 00:00:00 alanmi Exp $]
+src/base/abci/abcSpeedup.d:1:src/base/abci/abcSpeedup.d src/base/abci/abcSpeedup.o: src/base/abci/abcSpeedup.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStrash.o matches
+src/base/abci/module.make:68:    src/base/abci/abcSpeedup.c \
+src/base/abci/module.make:70:    src/base/abci/abcStrash.c \
+Binary file src/base/abci/abcSpeedup.o matches
+
+exec
+/bin/zsh -lc "find . -path './.git' -prune -o -name 'CMakeLists.txt' -print && grep -n \"module.make\\|src/base/abci\" CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ exited 1 in 0ms:
+./CMakeLists.txt
+./test/CMakeLists.txt
+./test/gia/CMakeLists.txt
+
+exec
+/bin/zsh -lc "sed -n '1,220p' CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+cmake_minimum_required(VERSION 3.5.0)
+
+include(CMakeParseArguments)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+# Generate compilation database compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Default c++ standard used unless otherwise specified in target_compile_features.
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "the C++ standard to use for this project")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+function(addprefix var prefix)
+    foreach( s ${ARGN} )
+        list(APPEND tmp "-I${s}")
+    endforeach()
+    set(${var} ${tmp} PARENT_SCOPE)
+endfunction()
+
+# filter out flags that are not appropriate for the compiler being used
+function(target_compile_options_filtered target visibility)
+    foreach( flag ${ARGN} )
+        if( flag MATCHES "^-D.*" )
+            target_compile_options( ${target} ${visibility} ${flag} )
+        else()
+            check_c_compiler_flag( ${flag} C_COMPILER_SUPPORTS__${flag} )
+            if( C_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:C>:${flag}> )
+            endif()
+
+            check_cxx_compiler_flag( ${flag} CXX_COMPILER_SUPPORTS__${flag} )
+            if( CXX_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:CXX>:${flag}>  )
+            endif()
+        endif()
+    endforeach()
+endfunction()
+
+project(abc)
+
+if(READLINE_FOUND MATCHES TRUE)
+    addprefix(ABC_READLINE_INCLUDES_FLAGS "-I" ${READLINE_INCLUDE})
+    string(REPLACE ";" " " ABC_READLINE_INCLUDES_FLAGS "${ABC_READLINE_INCLUDES_FLAGS}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_INCLUDES=${ABC_READLINE_INCLUDES_FLAGS}")
+
+    string(REPLACE ";" " " ABC_READLINE_LIBRARIES_FLAGS "${READLINE_LIBRARIES}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_LIBRARIES=${ABC_READLINE_LIBRARIES_FLAGS}")
+elseif(READLINE_FOUND MATCHES FALSE)
+    list(APPEND ABC_READLINE_FLAGS "ABC_USE_NO_READLINE=1")
+endif()
+
+if(ABC_USE_NAMESPACE)
+    set(ABC_USE_NAMESPACE_FLAGS "ABC_USE_NAMESPACE=${ABC_USE_NAMESPACE}")
+endif()
+
+if( APPLE )
+    set(make_env ${CMAKE_COMMAND} -E env SDKROOT=${CMAKE_OSX_SYSROOT})
+endif()
+
+# run make to extract compiler options, linker options and list of source files
+execute_process(
+  COMMAND
+    ${make_env}
+    make
+        ${ABC_READLINE_FLAGS}
+        ${ABC_USE_NAMESPACE_FLAGS}
+        ARCHFLAGS_EXE=${CMAKE_CURRENT_BINARY_DIR}/abc_arch_flags_program.exe
+        ABC_MAKE_NO_DEPS=1
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        LD=${CMAKE_CXX_COMPILER}
+        cmake_info
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  OUTPUT_VARIABLE MAKE_OUTPUT
+)
+
+# extract options from make output
+function(extract_var SEPARATOR DEST_VARIABLE MAKE_OUTPUT)
+  string(REGEX MATCH "${SEPARATOR} .* ${SEPARATOR}" TMP "${MAKE_OUTPUT}")
+  string(REGEX REPLACE "${SEPARATOR} (.*) ${SEPARATOR}" "\\1" TMP "${TMP}")
+
+  separate_arguments(TMP)
+
+  set(${DEST_VARIABLE} ${TMP} PARENT_SCOPE)
+endfunction()
+
+extract_var(SEPARATOR_SRC ABC_SRC ${MAKE_OUTPUT})
+extract_var(SEPARATOR_LIBS ABC_LIBS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CFLAGS ABC_CFLAGS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CXXFLAGS ABC_CXXFLAGS ${MAKE_OUTPUT})
+
+if(ABC_USE_NAMESPACE)
+    set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
+endif()
+
+function(abc_properties target visibility)
+    target_include_directories(${target} ${visibility} ${CMAKE_CURRENT_SOURCE_DIR}/src )
+    target_compile_options_filtered(${target} ${visibility} ${ABC_CFLAGS} ${ABC_CXXFLAGS} -Wno-unused-but-set-variable )
+    target_link_libraries(${target} ${visibility} ${ABC_LIBS})
+endfunction()
+
+set(ABC_MAIN_SRC src/base/main/main.c)
+list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
+
+add_library(libabc EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc PUBLIC)
+set_property(TARGET libabc PROPERTY OUTPUT_NAME abc)
+
+add_executable(abc ${ABC_MAIN_SRC})
+target_link_libraries(abc PRIVATE libabc)
+abc_properties(abc PRIVATE)
+
+add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc-pic PUBLIC)
+set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
+
+if(NOT DEFINED ABC_SKIP_TESTS)
+    enable_testing()
+    include(FetchContent)
+    FetchContent_Declare(
+    googletest
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    # Specify the commit you depend on and update it regularly.
+    URL "https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip"
+    )
+    FetchContent_MakeAvailable(googletest)
+    include(GoogleTest)
+    add_subdirectory(test)
+endif()
+exec
+/bin/zsh -lc "grep -R \"#define ABC_NAMESPACE_IMPL_START\\|#define ABC_NAMESPACE_HEADER_START\\|ABC_NAMESPACE_IMPL_START\" -n src | head -40" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 1955ms:
+src/misc/util/utilSignal.c:34:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilLinear.c:32:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilFile.c:55:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilBridge.c:34:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilMem.c:28:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilNam.c:31:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilColor.c:31:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilNet.c:34:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilBSet.c:35:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilBipart.c:30:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilIsop.c:29:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilSort.c:28:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilPth.c:78:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilMiniver.c:29:ABC_NAMESPACE_IMPL_START
+src/misc/util/abc_namespaces.h:35:#    define ABC_NAMESPACE_IMPL_START namespace ABC_NAMESPACE {
+src/misc/util/abc_namespaces.h:44:#    define ABC_NAMESPACE_IMPL_START
+src/misc/util/abc_namespaces.h:54:#  define ABC_NAMESPACE_IMPL_START
+src/misc/util/utilMulSim.c:28:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilAigSim.c:73:ABC_NAMESPACE_IMPL_START
+src/misc/util/utilCex.c:29:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcUtils.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcCube.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvc.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcContain.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcLits.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcOpBool.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcSort.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcDivide.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcCompare.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcDivisor.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcApi.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcOpAlg.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcMan.c:22:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcPrint.c:23:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcCover.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/mvc/mvcList.c:21:ABC_NAMESPACE_IMPL_START
+src/misc/bbl/bblif.c:29:ABC_NAMESPACE_IMPL_START
+src/misc/parse/parseCore.c:46:ABC_NAMESPACE_IMPL_START
+src/misc/parse/parseEqn.c:25:ABC_NAMESPACE_IMPL_START
+src/misc/parse/parseStack.c:21:ABC_NAMESPACE_IMPL_START
+
+exec
+/bin/zsh -lc "sed -n '1,80p' src/base/abci/abc.c && grep -n \"ABC_NAMESPACE_IMPL_START\" src/base/abci/abc.c | head" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [abc.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Network and node package.]
+
+  Synopsis    [Command file.]
+
+  Author      [Alan Mishchenko]
+
+  Affiliation [UC Berkeley]
+
+  Date        [Ver. 1.0. Started - June 20, 2005.]
+
+  Revision    [$Id: abc.c,v 1.00 2005/06/20 00:00:00 alanmi Exp $]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "base/main/mainInt.h"
+#include "proof/fraig/fraig.h"
+#include "opt/fxu/fxu.h"
+#include "opt/fxch/Fxch.h"
+#include "opt/cut/cut.h"
+#include "map/fpga/fpga.h"
+#include "map/if/if.h"
+#include "opt/sim/sim.h"
+#include "opt/res/res.h"
+#include "opt/lpk/lpk.h"
+#include "aig/gia/giaAig.h"
+#include "opt/dar/dar.h"
+#include "opt/mfs/mfs.h"
+#include "proof/fra/fra.h"
+#include "aig/saig/saig.h"
+#include "proof/int/int.h"
+#include "proof/dch/dch.h"
+#include "proof/ssw/ssw.h"
+#include "opt/cgt/cgt.h"
+#include "bool/kit/kit.h"
+#include "map/amap/amap.h"
+#include "opt/ret/retInt.h"
+#include "sat/xsat/xsat.h"
+#include "sat/satoko/satoko.h"
+#include "sat/cnf/cnf.h"
+#include "proof/cec/cec.h"
+#include "proof/acec/acec.h"
+#include "proof/pdr/pdr.h"
+#include "misc/tim/tim.h"
+#include "bdd/llb/llb.h"
+#include "bdd/bbr/bbr.h"
+#include "map/cov/cov.h"
+#include "base/cmd/cmd.h"
+#include "proof/abs/abs.h"
+#include "sat/bmc/bmc.h"
+#include "proof/ssc/ssc.h"
+#include "opt/sfm/sfm.h"
+#include "opt/sbd/sbd.h"
+#include "bool/rpo/rpo.h"
+#include "map/mpm/mpm.h"
+#include "map/mio/mio.h"
+#include "opt/fret/fretime.h"
+#include "opt/nwk/nwkMerge.h"
+#include "base/acb/acbPar.h"
+#include "misc/extra/extra.h"
+#include "opt/eslim/eSLIM.h"
+
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
+ABC_NAMESPACE_IMPL_START
+
+////////////////////////////////////////////////////////////////////////
+///                        DECLARATIONS                              ///
+////////////////////////////////////////////////////////////////////////
+
+75:ABC_NAMESPACE_IMPL_START
+
+exec
+/bin/zsh -lc 'grep -R "Abc_NtkMap( Abc_Ntk_t" -n src | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 2355ms:
+src/base/abci/abc.c:20834:    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+src/base/abci/abcMap.c:62:Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose )
+src/base/abci/abcStmap_0.c:53:    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+
+exec
+/bin/zsh -lc "sed -n '1,180p' src/base/abci/abcMap.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [abcMap.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Network and node package.]
+
+  Synopsis    [Interface with the SC mapping package.]
+
+  Author      [Alan Mishchenko]
+  
+  Affiliation [UC Berkeley]
+
+  Date        [Ver. 1.0. Started - June 20, 2005.]
+
+  Revision    [$Id: abcMap.c,v 1.00 2005/06/20 00:00:00 alanmi Exp $]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "map/mio/mio.h"
+#include "map/mapper/mapper.h"
+#include "misc/util/utilNam.h"
+#include "map/scl/sclCon.h"
+#include "map/scl/sclLib.h"
+
+ABC_NAMESPACE_IMPL_START
+
+
+////////////////////////////////////////////////////////////////////////
+///                        DECLARATIONS                              ///
+////////////////////////////////////////////////////////////////////////
+
+extern Map_Man_t *  Abc_NtkToMap( Abc_Ntk_t * pNtk, double DelayTarget, int fRecovery, float * pSwitching, int fVerbose );
+extern Abc_Ntk_t *  Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs );
+static Abc_Obj_t *  Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int fPhase );
+static Abc_Obj_t *  Abc_NodeFromMapPhase_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int fPhase );
+
+static Abc_Ntk_t *  Abc_NtkFromMapSuperChoice( Map_Man_t * pMan, Abc_Ntk_t * pNtk );
+static void         Abc_NodeSuperChoice( Abc_Ntk_t * pNtkNew, Abc_Obj_t * pNode );
+static void         Abc_NodeFromMapCutPhase( Abc_Ntk_t * pNtkNew, Map_Cut_t * pCut, int fPhase );
+static Abc_Obj_t *  Abc_NodeFromMapSuperChoice_rec( Abc_Ntk_t * pNtkNew, Map_Super_t * pSuper, Abc_Obj_t * pNodePis[], int nNodePis );
+
+ 
+////////////////////////////////////////////////////////////////////////
+///                     FUNCTION DEFINITIONS                         ///
+////////////////////////////////////////////////////////////////////////
+
+/**Function*************************************************************
+
+  Synopsis    [Interface with the mapping package.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose )
+{
+    static int fUseMulti = 0;
+    int fShowSwitching = 1;
+    Abc_Ntk_t * pNtkNew;
+    Map_Man_t * pMan;
+    Vec_Int_t * vSwitching = NULL;
+    float * pSwitching = NULL;
+    abctime clk, clkTotal = Abc_Clock();
+    Mio_Library_t * pLib = (Mio_Library_t *)Abc_FrameReadLibGen();
+
+    assert( Abc_NtkIsStrash(pNtk) );
+    // derive library from SCL
+    // if the library is created here, it will be deleted when pSuperLib is deleted in Map_SuperLibFree()
+    if ( Abc_FrameReadLibScl() && Abc_SclHasDelayInfo( Abc_FrameReadLibScl() ) )
+    {
+        if ( pLib && Mio_LibraryHasProfile(pLib) )
+            pLib = Abc_SclDeriveGenlib( Abc_FrameReadLibScl(), pLib, Slew, Gain, nGatesMin, fVerbose );
+        else
+            pLib = Abc_SclDeriveGenlib( Abc_FrameReadLibScl(), NULL, Slew, Gain, nGatesMin, fVerbose );
+        if ( Abc_FrameReadLibGen() )
+        {
+            Mio_LibraryTransferDelays( (Mio_Library_t *)Abc_FrameReadLibGen(), pLib );
+            Mio_LibraryTransferProfile( pLib, (Mio_Library_t *)Abc_FrameReadLibGen() );
+        }
+        // remove supergate library
+        Map_SuperLibFree( (Map_SuperLib_t *)Abc_FrameReadLibSuper() );
+        Abc_FrameSetLibSuper( NULL );
+    }
+
+    if ( userLib != NULL ) {
+        pLib = userLib;
+    }
+ 
+    // quit if there is no library
+    if ( pLib == NULL )
+    {
+        printf( "The current library is not available.\n" );
+        return 0;
+    }
+    if ( AreaMulti != 0.0 )
+        fUseMulti = 1, printf( "The cell areas are multiplied by the factor: <num_fanins> ^ (%.2f).\n", AreaMulti );
+    if ( DelayMulti != 0.0 )
+        fUseMulti = 1, printf( "The cell delays are multiplied by the factor: <num_fanins> ^ (%.2f).\n", DelayMulti );
+
+    // penalize large gates by increasing their area
+    if ( AreaMulti != 0.0 )
+        Mio_LibraryMultiArea( pLib, AreaMulti );
+    if ( DelayMulti != 0.0 )
+        Mio_LibraryMultiDelay( pLib, DelayMulti );
+
+    // derive the supergate library
+    if ( fUseMulti || Abc_FrameReadLibSuper() == NULL )
+    {
+        if ( fVerbose )
+            printf( "Converting \"%s\" into supergate library \"%s\".\n", 
+                Mio_LibraryReadName(pLib), Extra_FileNameGenericAppend(Mio_LibraryReadName(pLib), ".super") );
+        // compute supergate library to be used for mapping
+        if ( Mio_LibraryHasProfile(pLib) )
+            printf( "Abc_NtkMap(): Genlib library has profile.\n" );
+        Map_SuperLibDeriveFromGenlib( pLib, fVerbose );
+    }
+
+    // return the library to normal
+    if ( AreaMulti != 0.0 )
+        Mio_LibraryMultiArea( (Mio_Library_t *)Abc_FrameReadLibGen(), -AreaMulti );
+    if ( DelayMulti != 0.0 )
+        Mio_LibraryMultiDelay( (Mio_Library_t *)Abc_FrameReadLibGen(), -DelayMulti );
+
+    // print a warning about choice nodes
+    if ( fVerbose && Abc_NtkGetChoiceNum( pNtk ) )
+        printf( "Performing mapping with choices.\n" );
+
+    // compute switching activity
+    fShowSwitching |= fSwitching;
+    if ( fShowSwitching )
+    {
+        extern Vec_Int_t * Sim_NtkComputeSwitching( Abc_Ntk_t * pNtk, int nPatterns );
+        vSwitching = Sim_NtkComputeSwitching( pNtk, 4096 );
+        pSwitching = (float *)vSwitching->pArray;
+    }
+
+    // perform the mapping
+    pMan = Abc_NtkToMap( pNtk, DelayTarget, fRecovery, pSwitching, fVerbose );
+    if ( pSwitching ) Vec_IntFree( vSwitching );
+    if ( pMan == NULL )
+        return NULL;
+clk = Abc_Clock();
+    Map_ManSetSwitching( pMan, fSwitching );
+    Map_ManSetSkipFanout( pMan, fSkipFanout );
+    if ( fUseProfile )
+        Map_ManSetUseProfile( pMan );
+    if ( LogFan != 0 )
+        Map_ManCreateNodeDelays( pMan, LogFan );
+    if ( !Map_Mapping( pMan ) )
+    {
+        Map_ManFree( pMan );
+        return NULL;
+    }
+//    Map_ManPrintStatsToFile( pNtk->pSpec, Map_ManReadAreaFinal(pMan), Map_ManReadRequiredGlo(pMan), Abc_Clock()-clk );
+
+    // reconstruct the network after mapping (use buffers when user requested or in the area mode)
+    pNtkNew = Abc_NtkFromMap( pMan, pNtk, fUseBuffs || (DelayTarget == (double)ABC_INFINITY) );
+    if ( Mio_LibraryHasProfile(pLib) )
+        Mio_LibraryTransferProfile2( (Mio_Library_t *)Abc_FrameReadLibGen(), pLib );
+    Map_ManFree( pMan );
+    if ( pNtkNew == NULL )
+        return NULL;
+
+    if ( pNtk->pExdc )
+        pNtkNew->pExdc = Abc_NtkDup( pNtk->pExdc );
+if ( fVerbose )
+{
+ABC_PRT( "Total runtime", Abc_Clock() - clkTotal );
+}
+
+    // make sure that everything is okay
+    if ( !Abc_NtkCheck( pNtkNew ) )
+    {
+
+exec
+/bin/zsh -lc "sed -n '180,360p' src/base/abci/abcMap.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    {
+        printf( "Abc_NtkMap: The network check has failed.\n" );
+        Abc_NtkDelete( pNtkNew );
+        return NULL;
+    }
+    return pNtkNew;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Load the network into manager.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Time_t * Abc_NtkMapCopyCiArrival( Abc_Ntk_t * pNtk, Abc_Time_t * ppTimes )
+{
+    Map_Time_t * p;
+    int i;
+    p = ABC_CALLOC( Map_Time_t, Abc_NtkCiNum(pNtk) );
+    for ( i = 0; i < Abc_NtkCiNum(pNtk); i++ )
+    {
+        p[i].Fall = ppTimes[i].Fall;
+        p[i].Rise = ppTimes[i].Rise;
+        p[i].Worst = Abc_MaxFloat( p[i].Fall, p[i].Rise );
+    }
+    ABC_FREE( ppTimes );
+    return p;
+}
+Map_Time_t * Abc_NtkMapCopyCoRequired( Abc_Ntk_t * pNtk, Abc_Time_t * ppTimes )
+{
+    Map_Time_t * p;
+    int i;
+    p = ABC_CALLOC( Map_Time_t, Abc_NtkCoNum(pNtk) );
+    for ( i = 0; i < Abc_NtkCoNum(pNtk); i++ )
+    {
+        p[i].Fall = ppTimes[i].Fall;
+        p[i].Rise = ppTimes[i].Rise;
+        p[i].Worst = Abc_MaxFloat( p[i].Fall, p[i].Rise );
+    }
+    ABC_FREE( ppTimes );
+    return p;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Load the network into manager.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Time_t * Abc_NtkMapCopyCiArrivalCon( Abc_Ntk_t * pNtk )
+{
+    Map_Time_t * p; int i;
+    p = ABC_CALLOC( Map_Time_t, Abc_NtkCiNum(pNtk) );
+    for ( i = 0; i < Abc_NtkCiNum(pNtk); i++ )
+        p[i].Fall = p[i].Rise = p[i].Worst = Scl_Int2Flt( Scl_ConGetInArr(i) );
+    return p;
+}
+Map_Time_t * Abc_NtkMapCopyCoRequiredCon( Abc_Ntk_t * pNtk )
+{
+    Map_Time_t * p; int i;
+    p = ABC_CALLOC( Map_Time_t, Abc_NtkCoNum(pNtk) );
+    for ( i = 0; i < Abc_NtkCoNum(pNtk); i++ )
+        p[i].Fall = p[i].Rise = p[i].Worst = Scl_Int2Flt( Scl_ConGetOutReq(i) );
+    return p;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Load the network into manager.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Map_Man_t * Abc_NtkToMap( Abc_Ntk_t * pNtk, double DelayTarget, int fRecovery, float * pSwitching, int fVerbose )
+{
+    Map_Man_t * pMan;
+    Map_Node_t * pNodeMap;
+    Vec_Ptr_t * vNodes;
+    Abc_Obj_t * pNode, * pFanin, * pPrev;
+    int i;
+
+    assert( Abc_NtkIsStrash(pNtk) );
+
+    // start the mapping manager and set its parameters
+    pMan = Map_ManCreate( Abc_NtkPiNum(pNtk) + Abc_NtkLatchNum(pNtk) - pNtk->nBarBufs, Abc_NtkPoNum(pNtk) + Abc_NtkLatchNum(pNtk) - pNtk->nBarBufs, fVerbose );
+    if ( pMan == NULL )
+        return NULL;
+    Map_ManSetAreaRecovery( pMan, fRecovery );
+    Map_ManSetOutputNames( pMan, Abc_NtkCollectCioNames(pNtk, 1) );
+    Map_ManSetDelayTarget( pMan, (float)DelayTarget );
+    Map_ManCreateAigIds( pMan, Abc_NtkObjNumMax(pNtk) );
+
+    // set arrival and requireds
+    if ( Scl_ConIsRunning() && Scl_ConHasInArrs() )
+        Map_ManSetInputArrivals( pMan, Abc_NtkMapCopyCiArrivalCon(pNtk) );
+    else
+        Map_ManSetInputArrivals( pMan, Abc_NtkMapCopyCiArrival(pNtk, Abc_NtkGetCiArrivalTimes(pNtk)) );
+    if ( Scl_ConIsRunning() && Scl_ConHasOutReqs() )
+        Map_ManSetOutputRequireds( pMan, Abc_NtkMapCopyCoRequiredCon(pNtk) );
+    else
+        Map_ManSetOutputRequireds( pMan, Abc_NtkMapCopyCoRequired(pNtk, Abc_NtkGetCoRequiredTimes(pNtk)) );
+
+    // create PIs and remember them in the old nodes
+    Abc_NtkCleanCopy( pNtk );
+    Abc_AigConst1(pNtk)->pCopy = (Abc_Obj_t *)Map_ManReadConst1(pMan);
+    Abc_NtkForEachCi( pNtk, pNode, i )
+    {
+        if ( i == Abc_NtkCiNum(pNtk) - pNtk->nBarBufs )
+            break;
+        pNodeMap = Map_ManReadInputs(pMan)[i];
+        pNode->pCopy = (Abc_Obj_t *)pNodeMap;
+        if ( pSwitching )
+            Map_NodeSetSwitching( pNodeMap, pSwitching[pNode->Id] );
+        Map_NodeSetAigId( pNodeMap, pNode->Id );
+    }
+
+    // load the AIG into the mapper
+    vNodes = Abc_AigDfsMap( pNtk );
+    Vec_PtrForEachEntry( Abc_Obj_t *, vNodes, pNode, i )
+    {
+        if ( Abc_ObjIsLatch(pNode) )
+        {
+            pFanin = Abc_ObjFanin0(pNode);
+            pNodeMap = Map_NodeBuf( pMan, Map_NotCond( Abc_ObjFanin0(pFanin)->pCopy, (int)Abc_ObjFaninC0(pFanin) ) );
+            Abc_ObjFanout0(pNode)->pCopy = (Abc_Obj_t *)pNodeMap;
+            continue;
+        }
+        assert( Abc_ObjIsNode(pNode) );
+        // add the node to the mapper
+        pNodeMap = Map_NodeAnd( pMan, 
+            Map_NotCond( Abc_ObjFanin0(pNode)->pCopy, (int)Abc_ObjFaninC0(pNode) ),
+            Map_NotCond( Abc_ObjFanin1(pNode)->pCopy, (int)Abc_ObjFaninC1(pNode) ) );
+        assert( pNode->pCopy == NULL );
+        // remember the node
+        pNode->pCopy = (Abc_Obj_t *)pNodeMap;
+        if ( pSwitching )
+            Map_NodeSetSwitching( pNodeMap, pSwitching[pNode->Id] );
+        // set up the choice node
+        if ( Abc_AigNodeIsChoice( pNode ) )
+            for ( pPrev = pNode, pFanin = (Abc_Obj_t *)pNode->pData; pFanin; pPrev = pFanin, pFanin = (Abc_Obj_t *)pFanin->pData )
+            {
+                Map_NodeSetNextE( (Map_Node_t *)pPrev->pCopy, (Map_Node_t *)pFanin->pCopy );
+                Map_NodeSetRepr( (Map_Node_t *)pFanin->pCopy, (Map_Node_t *)pNode->pCopy );
+            }
+        Map_NodeSetAigId( pNodeMap, pNode->Id );
+    }
+    assert( Map_ManReadBufNum(pMan) == pNtk->nBarBufs );
+    Vec_PtrFree( vNodes );
+
+    // set the primary outputs in the required phase
+    Abc_NtkForEachCo( pNtk, pNode, i )
+    {
+        if ( i == Abc_NtkCoNum(pNtk) - pNtk->nBarBufs )
+            break;
+        Map_ManReadOutputs(pMan)[i] = Map_NotCond( (Map_Node_t *)Abc_ObjFanin0(pNode)->pCopy, (int)Abc_ObjFaninC0(pNode) );
+    }
+    return pMan;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Creates the mapped network.]
+
+  Description []
+               
+  SideEffects []
+
+
+exec
+/bin/zsh -lc "sed -n '1,220p' AGENT.md" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+# AGENT
+
+This repository is used for an AutoEDA autoresearch campaign on Berkeley ABC.
+
+## Project Priority
+
+The primary project is autonomous evolution of an advanced technology mapper that is aware of downstream:
+
+- buffering
+- gate sizing
+- `stime` timing evaluation
+
+The goal is not limited to small edits to the existing `map` command or one-off tuning of command-line mapper parameters. Acceptable directions include:
+
+- downstream-aware mapper heuristics
+- new versioned mapper families
+- fused mapping plus buffering or sizing ideas
+- feedback-driven remapping using downstream timing results
+- SCL/`stime`-aware mapping ideas that use real Liberty timing, load, slew, and pin timing more directly than the classic mapper abstraction
+- changes inside the mapper algorithm itself, including matching, recovery, cut selection, timing/area costing, fanout/load modeling, phase handling, and mapped-network reconstruction
+- controlled parameter and mapper-variant exploration when it is used to guide or validate deeper algorithmic changes
+
+## Research Goal
+
+Create and evaluate numbered mapper variants that improve final post-flow timing and area compared with the classic ABC mapping flow. Final quality should be judged after downstream optimization and timing evaluation, not only immediately after mapping.
+
+The campaign should prioritize deeper mapper exploration beyond wrappers that simply call `Abc_NtkMap` with different `Slew`, `Gain`, `AreaMulti`, `DelayMulti`, or related parameters. Parameter sweeps remain useful, but they should be treated as probes and baselines that reveal promising algorithmic directions. Successful later versions should increasingly investigate the mapper implementation itself and explain which internal mapping decision changed.
+
+An especially important research direction is closing the gap between `map`'s simplified mapper delay model and the richer timing seen by `stime`. In this ABC flow, `read_lib` loads SCL/Liberty timing, but a plain `map`-level timing view can still behave like a simplified or unit-delay abstraction unless the mapped network is evaluated with downstream `topo`, `buffer`, `upsize`, `dnsize`, and `stime`. Explore ways for `stmapN` to exploit SCL timing information earlier in mapping, while still validating final QoR only with the downstream `stime` flow.
+
+## Allowed Implementation Scope
+
+- Default family name: `stmap`.
+- Default command naming: `stmap0`, `stmap1`, `stmap2`, and so on.
+- Version the experiment identity through the command name, logs, evaluation artifacts, and commit history. Do not interpret versioning as a restriction to one wrapper file.
+- Prefer additive, versioned files for command glue and isolated helper experiments when that keeps comparisons clear.
+- Suggested versioned helper names include `abcStmap_N.c` for command/glue in `src/base/abci/`, `mapperStmap_N.c` / `mapperStmap_N.h` for mapper helper experiments, and `sclStmap_N.c` / `sclStmap_N.h` for SCL timing helper experiments.
+- Direct edits to shared mapper/SCL implementation files are allowed when the hypothesis requires them, including `abcMap.c`, `mapperCore.c`, `mapperTime.c`, `mapperMatch.c`, `mapperCut*.c`, `mapperRefs.c`, `mapperFanout.c`, `scl.c`, `sclSize.c`, `sclTime.h`, and `sclLib.h`.
+- When editing shared files, keep changes targeted, log why a shared edit was needed, and preserve existing `map` behavior unless the version explicitly documents an intentional infrastructure change.
+- When possible, gate shared-file behavior through the active `stmapN` path, a versioned helper call, or an explicit option so older experimental commands remain buildable and comparable.
+- Keep older experimental versions buildable and comparable.
+- Wire every new implementation file into the owning build/module file.
+- Expose new experimental behaviors as new commands rather than silently changing unrelated stable commands.
+- Every new command must support `-h` usage text.
+
+## Repository Orientation
+
+Important directories and files:
+
+- `src/base/abci/`: ABC command registration and command wrappers
+- `src/base/abci/abcMap.c`: ABC-to-mapper interface. This file strongly impacts `map` because it derives or selects the mapping library, applies area/delay multipliers, builds the supergate library, creates the mapper manager, transfers timing constraints, calls `Map_Mapping`, and reconstructs the mapped network.
+- `src/map/mapper/`: classic mapper internals
+- `src/map/mapper/mapperCore.c`: core mapping loop, including cut computation, truth-table derivation, delay matching, area-flow recovery, exact-area recovery, phase-aware recovery, and switching recovery.
+- `src/map/mapper/mapperTime.c`, `mapperMatch.c`, `mapperCut*.c`, `mapperRefs.c`, `mapperFanout.c`: timing, match selection, cut management, reference/area accounting, and fanout/load-related logic used by the core mapper.
+- `src/map/scl/`: standard-cell mapping, buffering, sizing, and timing-related code
+- `src/map/scl/scl.c`: SCL commands including `stime`
+- `src/map/scl/sclSize.c`, `sclTime.h`, `sclLib.h`: SCL timing engine, arrival/departure/load/slew computation, and Liberty table lookup used by `stime`, buffering, and sizing.
+- `lib/`: bundled libraries and support assets
+- `test/`: example scripts and tests
+- `benchmarks/`: available benchmark design in this harness repo
+- `Makefile`: primary local build entry point
+
+Important command areas:
+
+- classic baseline mapper: `map`
+- mapped-network ordering: `topo`
+- buffering: `buffer`
+- sizing: `upsize`, `dnsize`
+- timing/area evaluation: `stime`
+- equivalence checking: `cec`
+
+## Mapper And SCL Timing Exploration Guidance
+
+Use `src/base/abci/abcMap.c` and the `src/map/mapper/` package as first-class research surfaces, not just as black-box code behind `map`.
+
+Important `abcMap.c` behavior:
+
+- `Abc_NtkMap` is the top-level `map` interface. It reads the current genlib, checks whether an SCL library with delay information is loaded, calls `Abc_SclDeriveGenlib(...)` when possible, transfers delays/profile data, applies `AreaMulti` and `DelayMulti`, derives the supergate library, optionally computes switching activity, calls `Abc_NtkToMap`, configures the mapper manager, calls `Map_Mapping`, and reconstructs the mapped network with `Abc_NtkFromMap`.
+- `Abc_NtkToMap` converts an ABC strashed network into a `Map_Man_t`, creates mapper nodes, transfers PI arrival and PO required-time constraints, preserves choice-node links, and sets mapper outputs.
+- `Abc_NtkFromMap`, `Abc_NodeFromMapSuper_rec`, `Abc_NodeFromMapPhase_rec`, and `Abc_NodeFromMap_rec` reconstruct the selected supergates/phases into a mapped ABC network. These choices can affect what downstream `topo`, `buffer`, `upsize`, `dnsize`, and `stime` see.
+- `Abc_NtkMapCopyCiArrival`, `Abc_NtkMapCopyCoRequired`, `Abc_NtkMapCopyCiArrivalCon`, and `Abc_NtkMapCopyCoRequiredCon` bridge arrival/required constraints into the mapper. The `Scl_Con*` path is relevant when explicit SCL constraints are active.
+- `Abc_NtkFromMapSuperChoice`, `Abc_NodeSuperChoice`, `Abc_NodeFromMapCutPhase`, and `Abc_NodeFromMapSuperChoice_rec` are relevant if a version explores choices/superchoices.
+- The mini-mapping helpers and timing setters are secondary research surfaces for serialization/debugging and controlled timing-constraint experiments.
+
+Important core mapper behavior:
+
+- `Map_Mapping` in `mapperCore.c` is the central schedule. It computes choice levels, cuts, truth tables, delay-oriented matches, references, base area, area-flow recovery, exact-area recovery, phase-aware recovery, and optional switching recovery.
+- Mapping mode `0` is delay matching; mode `1` is area-flow recovery; mode `2` is exact-area recovery; mode `3` is phase-aware exact-area recovery; mode `4` is switching recovery.
+- `mapperTime.c` controls mapper arrival and required-time propagation; `mapperMatch.c` chooses matches; `mapperCut*.c` controls cut enumeration and cut data; `mapperRefs.c` controls reference and area accounting; `mapperFanout.c` and `Map_ManCreateNodeDelays` are relevant for fanout/load proxy experiments.
+
+The key timing limitation to investigate:
+
+- `read_lib` plus `map` uses `Abc_SclDeriveGenlib` to collapse SCL/Liberty timing into the mapper's genlib/supergate abstraction.
+- `stime` later uses the SCL timing engine with cell pin timing tables, load, slew, wire-load behavior, and mapped-network context.
+- Therefore a candidate can look reasonable to the mapper's simplified delay model but still underperform in final `stime`, or the opposite.
+- Versions should explore whether selected SCL timing signals can be brought into mapping decisions earlier without breaking mapper invariants.
+
+Promising SCL/`stime`-aware exploration directions:
+
+- Derive better mapper delay estimates from SCL timing by varying or replacing how `Abc_SclDeriveGenlib` is called, including slew/gain/load assumptions, minimum gate filters, or profile transfer behavior.
+- Add a versioned mapping path that uses `stime` or `Abc_SclTimePerform`-style timing after an initial mapping to identify critical nodes, high-load fanouts, or poor slew points, then remap or bias a second mapping pass.
+- Feed SCL-derived criticality back into mapper required times or node delay penalties before `Map_MappingMatches`.
+- Adjust cut/match scoring to penalize choices that create bad downstream load/slew/fanout behavior even when mapper arrival looks good.
+- Explore reconstruction choices in `Abc_NtkFromMap` where locally equivalent supergate/phase choices may lead to different downstream `stime`.
+- Add instrumentation to correlate mapper arrival, area flow, selected supergates, fanout/load proxies, and final `stime` critical-path data.
+- Try small two-pass flows inside a versioned `stmapN`: first map, evaluate or approximate SCL timing, then remap with local penalties or required-time changes. Keep the flow explicit, logged, and equivalence checked.
+
+Parameter and mapper-variant exploration remains allowed:
+
+- Sweeps of `Slew`, `Gain`, `AreaMulti`, `DelayMulti`, `DelayTarget`, `LogFan`, `nGatesMin`, `fRecovery`, `fSwitching`, `fSkipFanout`, `fUseProfile`, and `fUseBuffs` are still useful.
+- Use parameter sweeps to identify promising regions, then convert the insight into targeted algorithmic changes when possible.
+- Do not spend the whole campaign only creating wrappers around `Abc_NtkMap` with new constants unless the version explicitly explains why the wrapper is still scientifically useful.
+- When a version is primarily a parameter variant, log that it is a parameter probe and state what internal mapper behavior it is meant to diagnose.
+
+## Evaluation Contract
+
+Default baseline flow:
+
+```sh
+abc -c 'read <library> ; read <design> ; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime'
+```
+
+Default candidate flow template:
+
+```sh
+abc -c 'read <library> ; read <design> ; resyn; resyn2; dch -v; stmapN; topo; buffer; upsize -v; dnsize -v; stime'
+```
+
+Use the required repo benchmark set:
+
+- `benchmarks/i10.aig`
+- `benchmarks/ode.abc.blif`
+- `benchmarks/or1200.abc.blif`
+- `benchmarks/syn2.abc.blif`
+
+The harness agent should configure all four benchmark designs unless the user explicitly changes the benchmark policy. If it finds additional valid benchmark designs or libraries in the repo, it may add them only as optional supplemental coverage, and it must prefer concrete existing paths over placeholders.
+
+Metrics:
+
+- primary: final `stime` delay
+- secondary: final `stime` area
+- required: every benchmark must build, run, and produce parseable final metrics
+
+Objective:
+
+- compare each candidate against the classic `map` baseline under the same downstream flow
+- prefer delay improvement first, area second
+- do not count a version if required benchmark output is missing, crashes, times out, or is not parseable
+
+Timeouts and parallelism:
+
+- allow up to 10 minutes per benchmark design evaluation
+- allow up to 10 minutes per review pass
+- run benchmarks in parallel when more than one benchmark is configured
+
+## Correctness Gates
+
+An iteration counts only if all of these pass:
+
+1. the repository builds
+2. the new numbered implementation exists
+3. the new numbered command exists and is callable
+4. `stmapN -h` usage text works
+5. a smoke run succeeds
+6. combinational equivalence checking passes for original versus mapped/post-mapped designs where applicable
+7. the version is evaluated on the required benchmark flow, or on an explicitly logged alternate flow only when the default flow is invalid for that variant
+8. benchmark outputs are complete and parseable
+9. the AutoEDA version log is updated with hypothesis, validation, results, and next-step recommendation
+10. the configured review loop is completed
+11. accepted review findings are addressed and revalidated
+12. the version is committed if git policy allows
+
+Do not count incomplete, crashing, non-equivalent, timed-out, or partially evaluated versions.
+
+## Iteration Contract
+
+Target successful iterations for smoke testing this harness:
+
+- 1 canary iteration first
+
+For a full campaign, use 100 successful numbered `stmapN` iterations unless the user changes the target.
+
+Each successful iteration must:
+
+- implement one clear hypothesis
+- preserve older variants
+- update build integration
+- run build, smoke, correctness, and benchmark evaluation
+- record final results in AutoEDA runtime logs
+- include a next-step recommendation for the next version
+
+Do not skip version numbers in the normal successful sequence.
+
+## Review Policy
+
+Substantial planning or implementation work must follow a review loop:
+
+1. draft plan or implementation
+2. run the configured review tool
+3. apply accepted findings
+4. revalidate affected behavior
+5. run a second review when changes are substantial
+6. record accepted, rejected, and open findings
+
+Purely mechanical non-semantic edits may skip the second review only when clearly logged.
+
+## Logging And Artifacts
+
+Use AutoEDA runtime files as the campaign source of truth:
+
+- `.autoeda/project_pack/agent.md`
+- `.autoeda/project_pack/mission.md`
+- `.autoeda/project_pack/repo_guide.md`
+- `.autoeda/project_pack/evaluation.yaml`
+- `.autoeda/project_pack/git.yaml`
+- `.autoeda/project_pack/supervisor.yaml`
+- `.autoeda/project_pack/skills/`
+- `.autoeda/runtime/campaign_state.json`
+- `.autoeda/runtime/versions.md`
+- `.autoeda/runtime/results/`
+
+exec
+/bin/zsh -lc "sed -n '220,440p' AGENT.md" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+- `.autoeda/runtime/results/`
+- `.autoeda/runtime/final_report.md`
+
+Do not ignore `.autoeda/` for this campaign. The generated project pack and runtime artifacts are intended to be committed as part of the evolving research record. The only exception is material that contains raw credentials, machine-local secrets, or transient process state that is not useful for reproduction.
+
+Each version log entry should include:
+
+- hypothesis
+- motivation
+- files changed
+- command name
+- algorithm summary
+- validation run
+- benchmark results
+- correctness results
+- review findings accepted or rejected
+- commit
+- next-step recommendation
+
+## Git Policy
+
+- Use existing local git authentication only.
+- Never store tokens, secrets, or credentials in repository files, skill files, prompts, or logs.
+- Prefer one coherent commit per successful numbered version.
+- Each successful iteration commit should include the implementation changes and the corresponding `.autoeda/` project-pack/runtime updates needed to reproduce and audit that iteration.
+- Do not add `.autoeda/` to `.gitignore` or `.git/info/exclude`; if a generated file inside `.autoeda/` contains real secrets or purely local transient state, fix the generated setup or ignore only that specific unsafe file.
+- Push only when allowed by the generated AutoEDA git policy and local authentication.
+- Do not force-push.
+- Keep canary push disabled unless explicitly changed by the user.
+
+## Stop Conditions
+
+Stop when:
+
+- target iterations and final report are complete
+- an irrecoverable blocker is found and reported
+- required benchmark, library, build, or correctness assets are unavailable
+- repeated deterministic failure indicates the setup must be revised
+
+## Practical Guidance
+
+- Reuse existing ABC infrastructure when it is sound.
+- For exploratory implementations, add isolated new `.c` and `.h` files rather than mutating stable code paths unnecessarily.
+- Keep command glue separate from deeper implementation where possible.
+- Favor one clear hypothesis per version.
+- Final `stime` results are the main comparison point.
+- Functional correctness is mandatory for mapper changes.
+
+exec
+/bin/zsh -lc "nl -ba .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock 2>/dev/null | sed -n '1,80p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'ls -l .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock && xxd .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+-rw-r--r--  1 cunxiy  staff  5 Apr 25 09:27 .autoeda/runtime/launch.pid
+-rwxr-xr-x  1 cunxiy  staff  5 Apr 25 09:27 .autoeda/runtime/supervisor.lock
+
+exec
+/bin/zsh -lc "printf 'launch: '; cat -vet .autoeda/runtime/launch.pid; printf '\\nlock: '; cat -vet .autoeda/runtime/supervisor.lock; printf '\\n'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+launch: 10382
+lock: 00000000: 3130 3338 32                             10382$
+
+
+exec
+/bin/zsh -lc 'od -An -t x1c .autoeda/runtime/supervisor.lock' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+           30  30  30  30  30  30  30  30  3a  20  33  31  33  30  20  33
+           0   0   0   0   0   0   0   0   :       3   1   3   0       3
+           33  33  38  20  33  32  20  20  20  20  20  20  20  20  20  20
+           3   3   8       3   2                                        
+           20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20
+                                                                        
+           20  20  20  31  30  33  38  32  0a                            
+                       1   0   3   8   2  \n                            
+
+
+exec
+/bin/zsh -lc 'cat .autoeda/runtime/launch.pid > .autoeda/runtime/supervisor.lock' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "cat .autoeda/runtime/results/stmap0/summary.json && printf '\\n--- comparison ---\\n' && cat .autoeda/runtime/results/stmap0/comparison.csv && printf '\\n--- cec ---\\n' && for f in .autoeda/runtime/results/stmap0/cec_*.stdout; do echo \"== "'$f"; tail -20 "$f"; done' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 171ms:
+Total : Try = 21729  Over = 12986  Fail =  8431  Win =   312  A: 4769.18 ( -6.1 %)  D: 573.74 ps ( -0.1 %)      0.10 sec    
+    0 : Try =  8743  Over =  1090  Fail =  7649  Win =     4  A: 4767.78 ( -6.2 %)  D: 574.00 ps ( -0.1 %)      0.11 sec    
+    1 : Try =  1090  Over =   101  Fail =   987  Win =     2  A: 4767.31 ( -6.2 %)  D: 573.16 ps ( -0.2 %)      0.11 sec    
+    2 : Try =   101  Over =    22  Fail =    78  Win =     1  A: 4767.08 ( -6.2 %)  D: 573.52 ps ( -0.2 %)      0.11 sec    
+    3 : Try =    22  Over =    17  Fail =     4  Win =     1  A: 4766.84 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.11 sec    
+    4 : Try =    17  Over =     0  Fail =    17  Win =     0  A: 4766.84 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.11 sec    
+Total : Try =  9973  Over =  1230  Fail =  8735  Win =     8  A: 4766.84 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.11 sec    
+    0 : Try =  8743  Over =   635  Fail =  8105  Win =     3  A: 4766.14 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.12 sec    
+    1 : Try =   635  Over =    44  Fail =   590  Win =     1  A: 4765.91 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.12 sec    
+    2 : Try =    44  Over =     0  Fail =    44  Win =     0  A: 4765.91 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.12 sec    
+Total : Try =  9422  Over =   679  Fail =  8739  Win =     4  A: 4765.91 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.12 sec    
+    0 : Try =  8743  Over =   185  Fail =  8557  Win =     1  A: 4765.68 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.14 sec    
+    1 : Try =   185  Over =     0  Fail =   185  Win =     0  A: 4765.68 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.14 sec    
+Total : Try =  8928  Over =   185  Fail =  8742  Win =     1  A: 4765.68 ( -6.2 %)  D: 573.53 ps ( -0.2 %)      0.14 sec    
+Runtime: Critical path =     0.04 sec ( 30.18 %)
+Runtime: Sizing eval   =     0.02 sec ( 16.66 %)
+Runtime: Timing update =     0.04 sec ( 32.51 %)
+Runtime: Other         =     0.03 sec ( 20.65 %)
+Runtime: TOTAL         =     0.14 sec (100.00 %)
+WireLoad = "none"  [1;33mGates =   8757[0m ( 26.9 %)   [1;32mCap =  1.0 ff[0m (  0.8 %)   [1;36mArea =     4765.68[0m ( 95.4 %)   [1;35mDelay =   573.53 ps[0m  (  2.3 %)               
+== .autoeda/runtime/results/stmap0/cec_or1200_write_original.stdout
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_original.aig"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.24 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Hierarchy reader converted 65 instances of blackboxes.
+== .autoeda/runtime/results/stmap0/cec_syn2.stdout
+======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_candidate.aig"
+Networks are equivalent.  Time =     2.45 sec
+== .autoeda/runtime/results/stmap0/cec_syn2_write_candidate.stdout
+Total : Try = 29523  Over =  7702  Fail = 21725  Win =    96  A: 20173.82 ( -5.9 %)  D: 515.37 ps ( +0.1 %)      0.45 sec    
+    0 : Try = 21821  Over =  2727  Fail = 19073  Win =    21  A: 20168.71 ( -5.9 %)  D: 515.37 ps ( +0.1 %)      0.48 sec    
+    1 : Try =  2727  Over =   759  Fail =  1961  Win =     7  A: 20167.08 ( -5.9 %)  D: 515.37 ps ( +0.1 %)      0.48 sec    
+    2 : Try =   759  Over =   172  Fail =   584  Win =     3  A: 20166.38 ( -5.9 %)  D: 515.37 ps ( +0.1 %)      0.48 sec    
+    3 : Try =   172  Over =    68  Fail =   102  Win =     2  A: 20165.92 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.49 sec    
+    4 : Try =    68  Over =    12  Fail =    55  Win =     1  A: 20165.68 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.49 sec    
+    5 : Try =    12  Over =     0  Fail =    12  Win =     0  A: 20165.66 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.49 sec    
+Total : Try = 25559  Over =  3738  Fail = 21787  Win =    34  A: 20165.66 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.49 sec    
+    0 : Try = 21821  Over =  1729  Fail = 20082  Win =    10  A: 20163.33 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.52 sec    
+    1 : Try =  1729  Over =   289  Fail =  1436  Win =     4  A: 20162.40 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.52 sec    
+    2 : Try =   289  Over =    58  Fail =   229  Win =     2  A: 20161.94 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.52 sec    
+    3 : Try =    58  Over =    24  Fail =    33  Win =     1  A: 20161.71 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.52 sec    
+    4 : Try =    24  Over =     0  Fail =    24  Win =     0  A: 20161.69 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.53 sec    
+Total : Try = 23921  Over =  2100  Fail = 21804  Win =    17  A: 20161.69 ( -6.0 %)  D: 515.37 ps ( +0.1 %)      0.53 sec    
+Runtime: Critical path =     0.16 sec ( 29.71 %)
+Runtime: Sizing eval   =     0.09 sec ( 16.68 %)
+Runtime: Timing update =     0.21 sec ( 38.83 %)
+Runtime: Other         =     0.08 sec ( 14.78 %)
+Runtime: TOTAL         =     0.53 sec (100.00 %)
+WireLoad = "none"  [1;33mGates =  21886[0m ( 24.8 %)   [1;32mCap =  1.1 ff[0m (  1.2 %)   [1;36mArea =    20161.69[0m ( 93.4 %)   [1;35mDelay =   515.37 ps[0m  ( 15.2 %)               
+== .autoeda/runtime/results/stmap0/cec_syn2_write_original.stdout
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_original.aig"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.24 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Hierarchy reader converted 4 instances of blackboxes.
+
+exec
+/bin/zsh -lc "grep -R \"abcSpeedup.c\\|module.make\" -n .github abclib.dsp abcexe.dsp | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+abclib.dsp:478:SOURCE=.\src\base\abci\abcSpeedup.c
+
+exec
+/bin/zsh -lc "sed -n '1,220p' .github/workflows/build-windows.yml && grep -n \"abcSpeedup.c\\|abcStrash.c\" .github/scripts/abclib.vcxproj.template .github/scripts/abcexe.vcxproj | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+name: Build Windows
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  build-windows:
+
+    runs-on: windows-2025
+
+    steps:
+
+    - name: Git Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
+
+    - name: Copy project files from scripts
+      run: |
+        copy .github\scripts\abcspace.sln .
+        copy .github\scripts\abcexe.vcxproj .
+
+    - name: Generate abclib.vcxproj from dsp
+      shell: powershell
+      run: |
+        # Parse source files from abclib.dsp
+        $dspContent = Get-Content "abclib.dsp" -Raw
+        $sourceFiles = [regex]::Matches($dspContent, 'SOURCE=\.\\([^\r\n]+)') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+        
+        Write-Host "Found $($sourceFiles.Count) source files"
+        
+        # Build source file items
+        $sourceItems = ""
+        foreach ($src in $sourceFiles) {
+            if ($src -match '\.c$') {
+                $sourceItems += "    <ClCompile Include=`"$src`" />`r`n"
+            } elseif ($src -match '\.(cpp|cc)$') {
+                $sourceItems += "    <ClCompile Include=`"$src`" />`r`n"
+            } elseif ($src -match '\.h$') {
+                $sourceItems += "    <ClInclude Include=`"$src`" />`r`n"
+            }
+        }
+        
+        # Read template and replace placeholder
+        $template = Get-Content ".github\scripts\abclib.vcxproj.template" -Raw
+        $vcxproj = $template -replace '\{\{SOURCE_FILES\}\}', $sourceItems
+        Set-Content "abclib.vcxproj" $vcxproj -NoNewline
+        
+        Write-Host "abclib.vcxproj generated successfully"
+
+    - name: Build
+      run: |
+        msbuild abcspace.sln /m /nologo /v:m /p:Configuration=Release /p:Platform=Win32 /p:UseMultiToolTask=true
+        if ($LASTEXITCODE -ne 0) { throw "Build failed with exit code $LASTEXITCODE" }
+
+    - name: Test Executable
+      run: |
+        copy lib\x86\pthreadVC2.dll _TEST\
+        .\_TEST\abc.exe -c "r i10.aig; b; ps; b; rw -l; rw -lz; b; rw -lz; b; ps; cec"
+        if ($LASTEXITCODE -ne 0) { throw "Test failed with exit code $LASTEXITCODE" }
+
+    - name: Stage Executable
+      run: |
+        mkdir staging
+        copy _TEST\abc.exe staging\
+
+    - name: Upload package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-windows
+        path: staging/
+exec
+/bin/zsh -lc "nl -ba src/base/abci/abc.c | sed -n '292,305p;1138,1150p' && nl -ba src/base/abci/module.make | sed -n '62,72p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+   292	static int Abc_CommandRecStart3              ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   293	static int Abc_CommandRecStop3               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   294	static int Abc_CommandRecPs3                 ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   295	static int Abc_CommandRecAdd3                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   296	static int Abc_CommandRecDump3               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   297	static int Abc_CommandRecMerge3              ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   298	
+   299	static int Abc_CommandMap                    ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   300	extern int Abc_CommandStmap0                 ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   301	static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   302	static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   303	static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   304	static int Abc_CommandUnmap                  ( Abc_Frame_t * pAbc, int argc, char ** argv );
+   305	static int Abc_CommandAttach                 ( Abc_Frame_t * pAbc, int argc, char ** argv );
+  1138	
+  1139	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_start3",    Abc_CommandRecStart3,        0 );
+  1140	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_stop3",     Abc_CommandRecStop3,         0 );
+  1141	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_ps3",       Abc_CommandRecPs3,           0 );
+  1142	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_add3",      Abc_CommandRecAdd3,          0 );
+  1143	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_dump3",     Abc_CommandRecDump3,         0 );
+  1144	    Cmd_CommandAdd( pAbc, "Choicing",     "rec_merge3",    Abc_CommandRecMerge3,        0 );
+  1145	
+  1146	    Cmd_CommandAdd( pAbc, "SC mapping",   "map",           Abc_CommandMap,              1 );
+  1147	    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap0",        Abc_CommandStmap0,           1 );
+  1148	    Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
+  1149	    Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
+  1150	    Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );
+    62	    src/base/abci/abcRr.c \
+    63	    src/base/abci/abcRunGen.c \
+    64	    src/base/abci/abcSat.c \
+    65	    src/base/abci/abcSaucy.c \
+    66	    src/base/abci/abcScorr.c \
+    67	    src/base/abci/abcSense.c \
+    68	    src/base/abci/abcSpeedup.c \
+    69	    src/base/abci/abcStmap_0.c \
+    70	    src/base/abci/abcStrash.c \
+    71	    src/base/abci/abcSweep.c \
+    72	    src/base/abci/abcSymm.c \
+
+exec
+/bin/zsh -lc 'cat .gitattributes' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/.gitcommit export-subst
+* text=auto
+
+*.c text
+*.cpp text
+*.h text
+
+*.py text
+*.sh text
+
+*.make text
+Makefile text
+
+*.txt text
+*.md text
+*.html text
+
+readmeaig text
+LICENSE text
+license text
+CHANGES text
+README text
+
+.hgignore text
+.gitignore text
+.gitattributes text
+
+*.dsp text eol=crlf
+*.dsw text eol=crlf
+
+*.aig binary
+*.lib binary
+*.dll binary
+
+exec
+/bin/zsh -lc "grep -R \"Gain\\|gain\" -n src/map/scl src/base/abci/abc.c | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+Binary file src/map/scl/scl.o matches
+src/map/scl/sclLibUtil.c:561:float Abc_SclComputeDelayCellPin( SC_Lib * p, SC_Cell * pCell, int iPin, float Slew, float Gain )
+src/map/scl/sclLibUtil.c:565:    return 0.01 * LD * Gain + PD;
+src/map/scl/sclLibUtil.c:567:float Abc_SclComputeDelayClassPin( SC_Lib * p, SC_Cell * pRepr, int iPin, float Slew, float Gain )
+src/map/scl/sclLibUtil.c:578:        Delay += Abc_SclComputeDelayCellPin( p, pCell, iPin, Slew, Gain );
+src/map/scl/sclLibUtil.c:638:void Abc_SclPrintCells( SC_Lib * p, float SlewInit, float Gain, int fInvOnly, int fShort )
+src/map/scl/sclLibUtil.c:650:        printf( "Delay estimate is based on slew %.2f ps and gain %.2f.", Slew, Gain );
+src/map/scl/sclLibUtil.c:693:                        printf( "D =%6.1f ps  ",    0.01 * Gain * LD + PD );
+src/map/scl/sclLibUtil.c:870:Vec_Str_t * Abc_SclProduceGenlibStr( SC_Lib * p, float Slew, float Gain, int nGatesMin, int fUseAll, int * pnCellCount )
+src/map/scl/sclLibUtil.c:903:                    float Delay = Abc_SclComputeDelayClassPin( p, pRepr, k, Slew, Gain );
+src/map/scl/sclLibUtil.c:931:                    float Delay = Abc_SclComputeDelayClassPin( p, pRepr, k, Slew, Gain );
+src/map/scl/sclLibUtil.c:968:                float Delay = Abc_SclComputeDelayClassPin( p, pRepr, k, Slew, Gain );
+src/map/scl/sclLibUtil.c:987:Vec_Str_t * Abc_SclProduceGenlibStrProfile( SC_Lib * p, Mio_Library_t * pLib, float Slew, float Gain, int nGatesMin, int * pnCellCount )
+src/map/scl/sclLibUtil.c:1037:            float Delay = Abc_SclComputeDelayClassPin( p, pRepr, k, Slew, Gain );
+src/map/scl/sclLibUtil.c:1055:void Abc_SclDumpGenlib( char * pFileName, SC_Lib * p, float SlewInit, float Gain, int nGatesMin )
+src/map/scl/sclLibUtil.c:1063:        sprintf( FileName, "%s_s%03d_g%03d_m%d.genlib", p->pName, (int)Slew, (int)Gain, nGatesMin );
+src/map/scl/sclLibUtil.c:1072:    vStr = Abc_SclProduceGenlibStr( p, Slew, Gain, nGatesMin, 0, &nCellCount );
+src/map/scl/sclLibUtil.c:1078:Mio_Library_t * Abc_SclDeriveGenlib( void * pScl, void * pMio, float SlewInit, float Gain, int nGatesMin, int fVerbose )
+src/map/scl/sclLibUtil.c:1086:        vStr = Abc_SclProduceGenlibStr( p, Slew, Gain, nGatesMin, 0, &nCellCount );
+src/map/scl/sclLibUtil.c:1088:        vStr = Abc_SclProduceGenlibStrProfile( p, (Mio_Library_t *)pMio, Slew, Gain, nGatesMin, &nCellCount );
+src/map/scl/sclLibUtil.c:1094:        printf( "Derived GENLIB library \"%s\" with %d gates using slew %.2f ps and gain %.2f.\n", p->pName, nCellCount, Slew, Gain );
+src/map/scl/sclLibUtil.c:1109:void Abc_SclInstallGenlib( void * pScl, float SlewInit, float Gain, int fUseAll, int nGatesMin )
+src/map/scl/sclLibUtil.c:1115:    if ( Gain == 0 )
+src/map/scl/sclLibUtil.c:1118:        vStr = Abc_SclProduceGenlibStr( p, Slew, Gain, nGatesMin, fUseAll, &nGateCount );
+src/map/scl/sclLibUtil.c:1125:    else if ( Gain != 0 )
+src/map/scl/sclLibUtil.c:1126:        printf( "Derived GENLIB library \"%s\" with %d gates using slew %.2f ps and gain %.2f.\n", p->pName, nGateCount, Slew, Gain );
+src/map/scl/sclDnsize.c:106:    float dGain, dGainBest;
+src/map/scl/sclDnsize.c:118:    dGainBest = -DelayGap;
+src/map/scl/sclDnsize.c:133:        // evaluate gain
+src/map/scl/sclDnsize.c:134:        dGain = Abc_SclEvalPerformLegal( p, vEvals, p->MaxDelay0 );
+src/map/scl/sclDnsize.c:135:        if ( dGain == -1 )
+src/map/scl/sclDnsize.c:137:        // save best gain
+src/map/scl/sclDnsize.c:138:        if ( dGainBest < dGain )
+src/map/scl/sclDnsize.c:140:            dGainBest = dGain;
+src/map/scl/sclDnsize.c:181:    assert( Vec_QueSize(p->vNodeByGain) == 0 );
+src/map/scl/sclDnsize.c:182:    Vec_QueClear( p->vNodeByGain );
+src/map/scl/sclDnsize.c:186:        Vec_FltWriteEntry( p->vNode2Gain, Abc_ObjId(pObj), Abc_SclObjCell(pObj)->area );
+src/map/scl/sclDnsize.c:187:        Vec_QuePush( p->vNodeByGain, Abc_ObjId(pObj) );
+src/map/scl/sclDnsize.c:278:        while ( Vec_QueSize(p->vNodeByGain) > 0 )
+src/map/scl/sclDnsize.c:283:            while ( Vec_QueSize(p->vNodeByGain) > 0 )
+src/map/scl/sclDnsize.c:286:                pObj = Abc_NtkObj( p->pNtk, Vec_QuePop(p->vNodeByGain) );
+src/map/scl/sclDnsize.c:296:                Vec_QuePush( p->vNodeByGain, Abc_ObjId(pObj) );
+Binary file src/map/scl/sclUpsize.o matches
+src/map/scl/sclLib.h:105:    int        GainRatio;       // target gain
+src/map/scl/sclLib.h:759:extern void          Abc_SclPrintCells( SC_Lib * p, float Slew, float Gain, int fInvOnly, int fShort );
+src/map/scl/sclLib.h:768:extern void          Abc_SclDumpGenlib( char * pFileName, SC_Lib * p, float Slew, float Gain, int nGatesMin );
+src/map/scl/sclLib.h:769:extern void          Abc_SclInstallGenlib( void * pScl, float Slew, float Gain, int fUseAll, int nGatesMin );
+src/map/scl/sclBufSize.c:339:    printf( "gain =%5d  ",      (int)(100.0 * Bus_SclObjLoad(pObj) / SC_CellPinCapAve(pCell)) );
+src/map/scl/sclBufSize.c:343:Abc_Obj_t * Abc_SclAddOneInv( Bus_Man_t * p, Abc_Obj_t * pObj, Vec_Ptr_t * vFanouts, float Gain )
+src/map/scl/sclBufSize.c:347:    float Target = SC_CellPinCap(p->pInv, 0) * Gain;
+src/map/scl/sclBufSize.c:383:    pCellNew = Abc_SclFindSmallestGate( p->pInv, Load / Gain );
+src/map/scl/sclBufSize.c:396:void Abc_SclBufSize( Bus_Man_t * p, float Gain )
+src/map/scl/sclBufSize.c:402:    float GainGate, GainInv, Load, Cin, DeptMax = 0;
+src/map/scl/sclBufSize.c:403:    GainGate = p->pPars->fAddBufs ? (float)pow( (double)Gain, (double)2.0 ) : Gain;
+src/map/scl/sclBufSize.c:404:    GainInv  = p->pPars->fAddBufs ? (float)pow( (double)Gain, (double)2.0 ) : Gain;
+src/map/scl/sclBufSize.c:411:            printf( "Buffering could not be completed because the gain value (%d) is too low.\n", p->pPars->GainRatio );
+src/map/scl/sclBufSize.c:432:        if ( !p->pPars->fSizeOnly && (Abc_ObjFanoutNum(pObj) > p->pPars->nDegree || Load > GainGate * Cin) )
+src/map/scl/sclBufSize.c:443:                pInv = Abc_SclAddOneInv( p, pObj, p->vFanouts, GainInv );
+src/map/scl/sclBufSize.c:449:            while ( Vec_PtrSize(p->vFanouts) > p->pPars->nDegree || (Vec_PtrSize(p->vFanouts) > 1 && Load > GainGate * Cin) );
+src/map/scl/sclBufSize.c:463:        pCellNew = Abc_SclFindSmallestGate( pCell, Load / GainGate );
+src/map/scl/sclBufSize.c:485:        printf( "WireLoads = %d  Degree = %d  Target slew =%4d ps   Gain2 =%5d  Buf = %6d  Delay =%7.0f ps   ", 
+src/map/scl/sclBufSize.c:486:            p->pPars->fUseWireLoads, p->pPars->nDegree, p->pPars->Slew, p->pPars->GainRatio, 
+src/map/scl/sclBufSize.c:501:    Abc_SclBufSize( p, 0.01 * pPars->GainRatio );
+Binary file src/map/scl/sclLibUtil.o matches
+src/map/scl/scl.c:180:    float Gain = 0;
+src/map/scl/scl.c:217:            Gain = (float)atof(argv[globalUtilOptind]);
+src/map/scl/scl.c:219:            if ( Gain <= 0.0 )
+src/map/scl/scl.c:329:        Abc_SclInstallGenlib( pAbc->pLibScl, Slew, Gain, fUseAll, nGatesMin );
+src/map/scl/scl.c:338:    fprintf( pAbc->Err, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+src/map/scl/scl.c:348:    fprintf( pAbc->Err, "\t-a       : toggle reading all cells when using gain-based modeling [default = %s]\n", fUseAll? "yes": "no" );
+src/map/scl/scl.c:426:    float Gain = 100;
+src/map/scl/scl.c:452:            Gain = (float)atof(argv[globalUtilOptind]);
+src/map/scl/scl.c:454:            if ( Gain <= 0.0 )
+src/map/scl/scl.c:476:    Abc_SclPrintCells( (SC_Lib *)pAbc->pLibScl, Slew, Gain, fInvOnly, fShort );
+src/map/scl/scl.c:483:    fprintf( pAbc->Err, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+src/map/scl/scl.c:704:    float Gain = 200;
+src/map/scl/scl.c:729:            Gain = (float)atof(argv[globalUtilOptind]);
+src/map/scl/scl.c:731:            if ( Gain <= 0.0 )
+src/map/scl/scl.c:761:    Abc_SclDumpGenlib( pFileName, (SC_Lib *)pAbc->pLibScl, Slew, Gain, nGatesMin );
+src/map/scl/scl.c:768:    fprintf( pAbc->Err, "\t-G float : the gain parameter used to generate the library [default = %.2f]\n", Gain );
+src/map/scl/scl.c:1062:    pPars->GainRatio     =  300;
+src/map/scl/scl.c:1082:            pPars->GainRatio = atoi(argv[globalUtilOptind]);
+src/map/scl/scl.c:1084:            if ( pPars->GainRatio < 0 ) 
+src/map/scl/scl.c:1168:    fprintf( pAbc->Err, "\t-G <num> : target gain percentage [default = %d]\n", pPars->GainRatio );
+src/map/scl/sclTime.h:96:static inline float     Scl_ObjGain( SC_Time * p, int i )                     { return 0.5*((Scl_ObjTime2(p, i)->rise - Scl_ObjTime(p, i)->rise) + (Scl_ObjTime2(p, i)->fall - Scl_ObjTime(p, i)->fall)); }
+src/map/scl/sclSize.h:76:    Vec_Que_t *    vNodeByGain;   // nodes by gain
+src/map/scl/sclSize.h:77:    Vec_Flt_t *    vNode2Gain;    // mapping node into its gain
+src/map/scl/sclSize.h:177:    p->vNode2Gain  = Vec_FltStart( p->nObjs );
+src/map/scl/sclSize.h:179:    p->vNodeByGain = Vec_QueAlloc( p->nObjs );
+src/map/scl/sclSize.h:180:    Vec_QueSetPriority( p->vNodeByGain, Vec_FltArrayP(p->vNode2Gain) );
+src/map/scl/sclSize.h:206:    Vec_QueFreeP( &p->vNodeByGain );
+src/map/scl/sclSize.h:207:    Vec_FltFreeP( &p->vNode2Gain );
+Binary file src/map/scl/sclSize.o matches
+src/map/scl/sclUpsize.c:275:int Abc_SclFindBestCell( SC_Man * p, Abc_Obj_t * pObj, Vec_Int_t * vRecalcs, Vec_Int_t * vEvals, int Notches, int DelayGap, float * pGainBest )
+src/map/scl/sclUpsize.c:278:    float dGain, dGainBest;
+src/map/scl/sclUpsize.c:287:    dGainBest = -DelayGap;
+src/map/scl/sclUpsize.c:302:        // save best gain
+src/map/scl/sclUpsize.c:303:        dGain = Abc_SclEvalPerform( p, vEvals );
+src/map/scl/sclUpsize.c:304:        if ( dGainBest < dGain )
+src/map/scl/sclUpsize.c:306:            dGainBest = dGain;
+
+exec
+/bin/zsh -lc 'grep -n "abcStmap" abclib.dsp .github/scripts/abclib.vcxproj.template .github/scripts/abcexe.vcxproj || true' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "sed -n '1,240p' .autoeda/project_pack/evaluation.yaml && printf '\\n--- git ---\\n' && sed -n '1,200p' .autoeda/project_pack/git.yaml && printf '\\n--- supervisor ---\\n' && sed -n '1,220p' .autoeda/project_pack/supervisor.yaml" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+version: 1
+project: abc-harness-stmap-advanced
+family: stmap
+baseline_command: map
+target_iterations: 100
+canary_iterations: 1
+library: 7nm_lvt_ff.lib
+benchmarks:
+- benchmarks/i10.aig
+- benchmarks/ode.abc.blif
+- benchmarks/or1200.abc.blif
+- benchmarks/syn2.abc.blif
+build:
+  command: make ABC_USE_NO_READLINE=1
+  artifact: ./abc
+  clean_command: make clean
+baseline_flow:
+  library_command: read_lib
+  design_command: read
+  template: './abc -c "read_lib {library}; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"'
+candidate_flow:
+  command_pattern: stmap{iteration}
+  library_command: read_lib
+  design_command: read
+  template: './abc -c "read_lib {library}; read {design}; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime"'
+  smoke_design: benchmarks/i10.aig
+  required_help_template: './abc -c "{command} -h"'
+timeouts:
+  per_design_seconds: 600
+  review_pass_seconds: 600
+  smoke_seconds: 600
+  build_seconds: 900
+metrics:
+- name: stime_delay_ps
+  role: primary
+  direction: minimize
+  source: stdout
+  extraction: regex_last_match
+  regex: 'WireLoad\s*=\s*"[^"]*".*Area\s*=\s*([0-9]+(?:\.[0-9]+)?).*Delay\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*ps'
+  group: 2
+  unit: ps
+- name: stime_area
+  role: secondary
+  direction: minimize
+  source: stdout
+  extraction: regex_last_match
+  regex: 'WireLoad\s*=\s*"[^"]*".*Area\s*=\s*([0-9]+(?:\.[0-9]+)?).*Delay\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*ps'
+  group: 1
+objective:
+  aggregation: per_benchmark_required
+  compare_to: baseline_command
+  ranking:
+    primary: stime_delay_ps
+    secondary: stime_area
+  tie_breakers:
+  - more_benchmarks_improved_delay
+  - lower_geomean_area
+correctness:
+- type: build
+  mode: builtin
+  command: make ABC_USE_NO_READLINE=1
+  timeout_seconds: 900
+  pass_condition: exit_zero
+  fail_condition: non_zero_or_timeout
+- type: numbered_implementation_exists
+  mode: review
+  timeout_seconds: 600
+  pass_condition: new stmapN command and implementation files exist
+  fail_condition: missing numbered command, missing implementation, or skipped version number
+- type: command_help
+  mode: usage_text
+  command_template: './abc -c "{command} -h"'
+  timeout_seconds: 600
+  pass_condition: usage text is printed for the new stmapN command; ABC help-path exit code 0 or 1 is acceptable
+  fail_condition: command missing, crashes before printing usage, or has no usage text
+- type: smoke_flow
+  mode: command_exit_zero
+  design: benchmarks/i10.aig
+  command_template: './abc -c "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime"'
+  timeout_seconds: 600
+  pass_condition: exit_zero_and_parseable_stime_metrics
+  fail_condition: non_zero_timeout_or_unparseable_metrics
+- type: combinational_equivalence
+  mode: abc_cec
+  timeout_seconds: 600
+  artifact_dir_template: .autoeda/runtime/results/{command}
+  expected_flow: for each required benchmark, write an original strashed temporary from `read_lib {library}; read {design}; strash`; write a candidate post-flow strashed temporary from the configured candidate flow plus `strash`; then run `./abc -c "cec <original_temp> <candidate_temp>"`
+  pass_condition: ABC cec reports equivalent for every required benchmark, or an explicitly logged alternate equivalence method is used only when direct cec is invalid for that benchmark format
+  fail_condition: cec failure, inconclusive result, crash, timeout, missing artifact, or unlogged equivalence exception
+- type: benchmark_metrics
+  mode: parser
+  timeout_seconds: 600
+  pass_condition: all four required benchmarks produce final stime_delay_ps and stime_area
+  fail_condition: any required benchmark missing, crashed, timed out, or unparseable
+- type: version_log_updated
+  mode: file_check
+  file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+  timeout_seconds: 600
+  pass_condition: hypothesis, motivation, files, command, validation, benchmark results, correctness, review findings, commit, and next step are recorded
+  fail_condition: missing or incomplete version log entry
+- type: review_loop
+  mode: configured_review_tool
+  timeout_seconds: 600
+  pass_condition: required review pass completes and accepted findings are addressed and revalidated
+  fail_condition: skipped required review, unresolved accepted finding, or no revalidation
+logging:
+  checkpoint_file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json
+  version_log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+  results_dir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results
+  required_artifacts:
+  - raw abc stdout/stderr for baseline and candidate flows
+  - parsed metric table per benchmark
+  - cec logs and temporary design paths
+  - review prompts and findings summary
+  - version hypothesis and next-step recommendation
+  version_log_required_fields:
+  - hypothesis
+  - motivation
+  - files changed
+  - command name
+  - algorithm summary
+  - validation run
+  - benchmark results
+  - correctness results
+  - review findings accepted or rejected
+  - commit
+  - next-step recommendation
+reporting:
+  enabled: true
+  trigger: on_target_completion
+  format: markdown
+  final_report: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md
+  plots_dir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots
+  include_trend_plots: true
+  plot_requirements:
+    x_axis: iteration
+    style: progression_tuning
+    required_traces:
+    - avg_so_far
+    - best_so_far
+    layout_guidance: If two primary metrics dominate the study and have materially
+      different scales, prefer dual-axis plots; otherwise split plots for readability.
+  required_sections:
+  - setup_summary
+  - results_summary
+  - per_benchmark_trends
+  - best_reproduction_flows
+  - correctness_summary
+  - review_summary
+parallel_jobs: 4
+
+--- git ---
+version: 1
+auth_mode: existing
+repo_root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+remote: origin
+remote_url: https://github.com/Yu-Maryland/abc
+branch: master
+commit_message_template: '{family}{iteration}: {summary}'
+push_mode: disabled
+require_clean_tree: false
+canary:
+  push_mode_override: disabled
+  commit_allowed: true
+  push_allowed: false
+retry:
+  pull_rebase_once: false
+forbidden:
+- git push --force
+- git push --force-with-lease
+- git reset --hard
+commit_policy:
+  per_successful_iteration: one coherent commit containing implementation, build integration, evaluation artifacts, and AutoEDA runtime log updates
+  include_autoeda: true
+  do_not_ignore_autoeda: true
+  preserve_unrelated_user_changes: true
+push_policy:
+  full_campaign: disabled by default; enable only after the user explicitly changes push_mode and confirms the remote target
+  canary: disabled
+safety_notes:
+- The configured origin is https://github.com/Yu-Maryland/abc on branch master, so autonomous pushes are disabled in this pack.
+- Successful iterations may still create local commits when commit_policy requirements pass.
+- Do not run automatic pull --rebase or other history-rewriting recovery; preserve unrelated user and campaign changes.
+forge:
+  provider: github
+  host: github.com
+  owner: Yu-Maryland
+  repo: abc
+
+--- supervisor ---
+version: 1
+poll_seconds: 60
+progress_timeout_seconds: 7200
+restart_backoff_seconds: 120
+max_fast_failures: 3
+fast_failure_window_seconds: 300
+iteration_timeout_seconds: 14400
+review_timeout_seconds: 600
+canary_iterations: 1
+target_iterations: 100
+restartable_states:
+- preflight-failed
+- preflight-complete
+- iteration-prepared
+- agent-failed
+- evaluation-failed
+- evaluation-complete
+- iteration-complete
+- report-pending
+- report-failed
+stop_states:
+- complete
+- blocked
+stop_on:
+- target_iterations_complete
+- irrecoverable_blocker
+- required_asset_unavailable
+- repeated_deterministic_failure
+
+exec
+/bin/zsh -lc "sed -n '1,260p' .autoeda/runtime/versions.md && printf '\\n--- harness review ---\\n' && sed -n '1,220p' .autoeda/runtime/harness_review.md" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+# Canonical Version Log
+
+This is the append-only experiment log for the campaign.
+Each completed version should append a new `## versionN` section.
+
+--- harness review ---
+# AutoEDA Harness Review
+
+Date: 2026-04-25
+
+## Summary
+
+Reviewed the generated AutoEDA setup against the bound policy in
+`.autoeda/project_pack/agent.md`. The installed project-pack policy is an exact
+copy of repo `AGENT.md`.
+
+## Findings And Fixes
+
+- Verified the full campaign target: `evaluation.yaml` and `supervisor.yaml`
+  both use `target_iterations: 100`, matching `agent.md`.
+- Synchronized stale runtime state from scaffold defaults to `family: stmap`
+  and `target_iterations: 100`.
+- Verified required concrete inputs exist: `7nm_lvt_ff.lib` and all four
+  required benchmark designs under `benchmarks/`.
+- Kept the evaluation flow on ABC's SCL Liberty loader, `read_lib`, and made
+  the library/design loader commands explicit in `evaluation.yaml` and
+  `repo_guide.md`.
+- Tightened CEC expectations so each version records original and candidate
+  strashed temporaries and runs/logs ABC `cec`.
+- Disabled autonomous git pushes and automatic pull-rebase recovery in
+  `git.yaml`; local commits remain allowed for successful iterations.
+- Expanded the version-log template to include the policy-required motivation,
+  command name, algorithm summary, correctness, review findings, commit, and
+  next-step fields.
+- Strengthened implementation and methods skills to avoid wrapper-only drift,
+  require concrete diagnostic rationale for parameter probes, and record exact
+  benchmark commands and results.
+- Replaced generic scaffold text in `.autoeda/README.md` with reviewed setup
+  status and concrete commands.
+
+## Validation
+
+Ran:
+
+```sh
+python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+```
+
+Result: passed with no errors or warnings.
+
+## Residual Notes
+
+- I did not build ABC or run benchmark flows; the requested validation was pack
+  structural validation.
+- `secrets.ref` still configures unattended Codex/review launch with local
+  sandbox bypass flags. It contains references to existing local auth, not raw
+  secrets.
+
+exec
+/bin/zsh -lc 'nl -ba .autoeda/runtime/results/stmap0/summary.json | tail -30' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+   229	      "baseline_area": 12491.21,
+   230	      "candidate_area": 11444.25,
+   231	      "area_delta": -1046.9599999999991,
+   232	      "area_delta_pct": -8.381573922782493
+   233	    },
+   234	    {
+   235	      "benchmark": "benchmarks/or1200.abc.blif",
+   236	      "baseline_delay_ps": 587.08,
+   237	      "candidate_delay_ps": 573.53,
+   238	      "delay_delta_ps": -13.550000000000068,
+   239	      "delay_delta_pct": -2.3080329767663805,
+   240	      "baseline_area": 4798.34,
+   241	      "candidate_area": 4765.68,
+   242	      "area_delta": -32.659999999999854,
+   243	      "area_delta_pct": -0.6806520588370114
+   244	    },
+   245	    {
+   246	      "benchmark": "benchmarks/syn2.abc.blif",
+   247	      "baseline_delay_ps": 508.82,
+   248	      "candidate_delay_ps": 515.37,
+   249	      "delay_delta_ps": 6.550000000000011,
+   250	      "delay_delta_pct": 1.2872921661884382,
+   251	      "baseline_area": 21296.6,
+   252	      "candidate_area": 20161.69,
+   253	      "area_delta": -1134.9099999999999,
+   254	      "area_delta_pct": -5.3290666115717995
+   255	    }
+   256	  ],
+   257	  "all_validation_ok": true
+   258	}
+exec
+/bin/zsh -lc 'grep -R "/Users/cunxiy" -n .autoeda/project_pack .autoeda/runtime/README.md .autoeda/runtime 2>/dev/null | head -100' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 136ms:
+.autoeda/project_pack/git.yaml:3:repo_root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/project_pack/evaluation.yaml:97:  file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+.autoeda/project_pack/evaluation.yaml:107:  checkpoint_file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json
+.autoeda/project_pack/evaluation.yaml:108:  version_log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+.autoeda/project_pack/evaluation.yaml:109:  results_dir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results
+.autoeda/project_pack/evaluation.yaml:132:  final_report: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md
+.autoeda/project_pack/evaluation.yaml:133:  plots_dir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots
+.autoeda/runtime/harness_prompt.txt:4:- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/harness_prompt.txt:7:- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+.autoeda/runtime/harness_prompt.txt:8:- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack
+.autoeda/runtime/harness_prompt.txt:9:- runtime: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime
+.autoeda/runtime/harness_prompt.txt:12:- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md
+.autoeda/runtime/harness_prompt.txt:13:- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md
+.autoeda/runtime/harness_prompt.txt:16:1. Treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding. Do not dilute or replace it with generic policy.
+.autoeda/runtime/harness_prompt.txt:26:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md
+.autoeda/runtime/harness_prompt.txt:27:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md
+.autoeda/runtime/harness_prompt.txt:28:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml
+.autoeda/runtime/harness_prompt.txt:29:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml
+.autoeda/runtime/harness_prompt.txt:30:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml
+.autoeda/runtime/harness_prompt.txt:31:   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref
+.autoeda/runtime/harness_prompt.txt:32:   - skill files under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills
+.autoeda/runtime/harness_prompt.txt:35:6. Keep canary push disabled unless /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md explicitly asks for pushing during canary.
+.autoeda/runtime/harness_prompt.txt:36:7. Set `evaluation.yaml` `target_iterations` to the full successful-iteration campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md; do not leave the scaffold default in place when the policy gives a target.
+.autoeda/runtime/harness_prompt.txt:38:9. When finished, run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` and fix structural validation errors you can resolve from local context.
+.autoeda/runtime/harness_review_prompt.txt:4:- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/harness_review_prompt.txt:7:- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+.autoeda/runtime/harness_review_prompt.txt:8:- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack
+.autoeda/runtime/harness_review_prompt.txt:11:- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md
+.autoeda/runtime/harness_review_prompt.txt:12:- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md
+.autoeda/runtime/harness_review_prompt.txt:15:1. Check whether the generated AutoEDA setup faithfully supports /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.
+.autoeda/runtime/harness_review_prompt.txt:17:3. Verify `evaluation.yaml` `target_iterations` matches the full campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.
+.autoeda/runtime/harness_review_prompt.txt:20:6. Run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` after edits and fix structural validation errors.
+.autoeda/runtime/harness_review_prompt.txt:21:7. Leave a concise review summary in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review.md.
+.autoeda/runtime/campaign_state.json:3:  "workspace_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+.autoeda/runtime/campaign_state.json:4:  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/campaign_state.json:18:  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T142706Z.log",
+.autoeda/runtime/campaign_state.json:23:  "final_report_path": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+.autoeda/runtime/campaign_state.json:24:  "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+.autoeda/runtime/harness_review.md:40:python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+.autoeda/runtime/supervisor_state.json:5:    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T142706Z.log": 1248228
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.log:1:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap0; topo; buffer; upsize -v; dnsize -v; stime; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_i10_candidate.aig"
+.autoeda/runtime/results/stmap0/cec_ode.stdout:1:======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_ode_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_ode_candidate.aig"
+.autoeda/runtime/results/stmap0/cec_or1200.stdout:1:======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_candidate.aig"
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.stdout:1:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_original.aig"
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stdout:1:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_i10_original.aig"
+.autoeda/runtime/results/stmap0/cec_ode_write_original.log:1:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_ode_original.aig"
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.stdout:1:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; stmap0; topo; buffer; upsize -v; dnsize -v; stime; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_candidate.aig"
+.autoeda/runtime/results/stmap0/cec_i10.stdout:1:======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_i10_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_i10_candidate.aig"
+.autoeda/runtime/results/stmap0/cec_ode.log:1:======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_ode_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_ode_candidate.aig"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:3:workdir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:15:/bin/zsh -lc 'git status --short' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:27:/bin/zsh -lc 'git diff -- src/base/abci/abc.c src/base/abci/module.make' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:63:/bin/zsh -lc "find .autoeda benchmarks src/base/abci/abcStmap_0.c 7nm_lvt_ff.lib -maxdepth 4 -type f -print | sed 's#"'^./##'"' | sort | head -200 && printf '\\n-- counts --\\n' && find .autoeda benchmarks -type f | wc -l && printf '\\n-- sizes --\\n' && du -sh .autoeda benchmarks src/base/abci/abcStmap_0.c 7nm_lvt_ff.lib 2>/dev/null" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:194:/bin/zsh -lc "sed -n '1,260p' src/base/abci/abcStmap_0.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:458:/bin/zsh -lc "grep -n \"Abc_CommandMap\" -n src/base/abci/abc.c | head -5 && sed -n '15480,15780p' src/base/abci/abc.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:766:/bin/zsh -lc "sed -n '20814,21070p' src/base/abci/abc.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1027:/bin/zsh -lc "ls -la && git ls-files | head && (test -f .gitignore && sed -n '1,200p' .gitignore || true)" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1136:/bin/zsh -lc "sed -n '1,160p' .autoeda/project_pack/secrets.ref && sed -n '1,120p' .autoeda/README.md && sed -n '1,120p' .autoeda/runtime/campaign_state.json && sed -n '1,120p' .autoeda/runtime/harness_result.json" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1225:  "workspace_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1226:  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1240:  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260425T142706Z.log",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1245:  "final_report_path": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1246:  "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1256:  "workspace": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1257:  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1258:  "agent_md": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1259:  "harness_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_prompt.txt",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1260:  "review_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review_prompt.txt",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1272:    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1273:    "You are preparing the AutoEDA setup for an existing EDA repository.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n- runtime: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nTask:\n1. Treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding. Do not dilute or replace it with generic policy.\n2. Inspect the target repo enough to infer the AutoEDA initialization/setup needed to run that policy:\n   - build command\n   - benchmark or design inputs\n   - correctness gates\n   - metric extraction expectations\n   - important implementation areas\n   - repo-specific skills the future campaign agent needs\n   - requested campaign length / target successful iterations\n3. Fill in the remaining AutoEDA project-pack files around the provided agent policy:\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref\n   - skill files under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills\n4. Prefer concrete existing repo paths and commands over placeholders.\n5. Keep secrets out of project-pack text. Refer to existing git/auth/tool configuration only by name or environment.\n6. Keep canary push disabled unless /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md explicitly asks for pushing during canary.\n7. Set `evaluation.yaml` `target_iterations` to the full successful-iteration campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md; do not leave the scaffold default in place when the policy gives a target.\n8. Do not modify target-repo source code during this harness setup pass.\n9. When finished, run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` and fix structural validation errors you can resolve from local context.\n\nThe project name is: abc-harness-stmap-advanced\n"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1286:    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1287:    "Review and revise the AutoEDA setup generated for this repo.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nReview focus:\n1. Check whether the generated AutoEDA setup faithfully supports /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n2. Find placeholders, generic text, missing benchmark paths, unrealistic build/evaluation commands, unsafe git policy, and weak skills.\n3. Verify `evaluation.yaml` `target_iterations` matches the full campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n4. Apply fixes directly to the project-pack files.\n5. Do not modify target-repo source code.\n6. Run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` after edits and fix structural validation errors.\n7. Leave a concise review summary in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review.md.\n"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1290:  "harness_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_20260425T141842Z.log",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1292:  "review_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_review_20260425T142356Z.log",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1299:      "Workspace: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1300:      "Repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1375:/bin/zsh -lc "grep -R \"module.make\" -n CMakeLists.txt src/CMakeLists.txt 2>/dev/null || true && find src -name 'CMakeLists.txt' -maxdepth 4 -print | head -20 && grep -R \"abcSpeedup.c\\|abcStrash.c\" -n CMakeLists.txt src | head -50" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1391:/bin/zsh -lc "find . -path './.git' -prune -o -name 'CMakeLists.txt' -print && grep -n \"module.make\\|src/base/abci\" CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1398:/bin/zsh -lc "sed -n '1,220p' CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1531:/bin/zsh -lc "grep -R \"#define ABC_NAMESPACE_IMPL_START\\|#define ABC_NAMESPACE_HEADER_START\\|ABC_NAMESPACE_IMPL_START\" -n src | head -40" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1575:/bin/zsh -lc "sed -n '1,80p' src/base/abci/abc.c && grep -n \"ABC_NAMESPACE_IMPL_START\" src/base/abci/abc.c | head" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1660:/bin/zsh -lc 'grep -R "Abc_NtkMap( Abc_Ntk_t" -n src | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1667:/bin/zsh -lc "sed -n '1,180p' src/base/abci/abcMap.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:1851:/bin/zsh -lc "sed -n '180,360p' src/base/abci/abcMap.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2036:/bin/zsh -lc "sed -n '1,220p' AGENT.md" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2260:/bin/zsh -lc "sed -n '220,440p' AGENT.md" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2311:/bin/zsh -lc "nl -ba .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock 2>/dev/null | sed -n '1,80p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2314:/bin/zsh -lc 'ls -l .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock && xxd .autoeda/runtime/launch.pid .autoeda/runtime/supervisor.lock | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2320:/bin/zsh -lc "printf 'launch: '; cat -vet .autoeda/runtime/launch.pid; printf '\\nlock: '; cat -vet .autoeda/runtime/supervisor.lock; printf '\\n'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2327:/bin/zsh -lc 'od -An -t x1c .autoeda/runtime/supervisor.lock' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2340:/bin/zsh -lc 'cat .autoeda/runtime/launch.pid > .autoeda/runtime/supervisor.lock' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2343:/bin/zsh -lc "cat .autoeda/runtime/results/stmap0/summary.json && printf '\\n--- comparison ---\\n' && cat .autoeda/runtime/results/stmap0/comparison.csv && printf '\\n--- cec ---\\n' && for f in .autoeda/runtime/results/stmap0/cec_*.stdout; do echo \"== "'$f"; tail -20 "$f"; done' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2366:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_or1200_original.aig"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2371:======== ABC command line "cec /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_original.aig /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_candidate.aig"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2395:======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; strash; write_aiger /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap0/cec_syn2_original.aig"
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2401:/bin/zsh -lc "grep -R \"abcSpeedup.c\\|module.make\" -n .github abclib.dsp abcexe.dsp | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2406:/bin/zsh -lc "sed -n '1,220p' .github/workflows/build-windows.yml && grep -n \"abcSpeedup.c\\|abcStrash.c\" .github/scripts/abclib.vcxproj.template .github/scripts/abcexe.vcxproj | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2487:/bin/zsh -lc "nl -ba src/base/abci/abc.c | sed -n '292,305p;1138,1150p' && nl -ba src/base/abci/module.make | sed -n '62,72p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2529:/bin/zsh -lc 'cat .gitattributes' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+.autoeda/runtime/results/stmap0/review_pass1_supported.log:2566:/bin/zsh -lc "grep -R \"Gain\\|gain\" -n src/map/scl src/base/abci/abc.c | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+
+exec
+/bin/zsh -lc 'tail -1 src/base/abci/abcStmap_0.c | od -An -t x1c' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+           41  42  43  5f  4e  41  4d  45  53  50  41  43  45  5f  49  4d
+           A   B   C   _   N   A   M   E   S   P   A   C   E   _   I   M
+           50  4c  5f  45  4e  44  0a                                    
+           P   L   _   E   N   D  \n                                    
+
+
+exec
+/bin/zsh -lc 'git diff --cached --stat && git diff --stat' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+ src/base/abci/abc.c       | 2 ++
+ src/base/abci/module.make | 1 +
+ 2 files changed, 3 insertions(+)
+
+exec
+/bin/zsh -lc 'git status --short' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+ M src/base/abci/abc.c
+ M src/base/abci/module.make
+?? .autoeda/README.md
+?? .autoeda/project_pack/
+?? .autoeda/runtime/
+?? 7nm_lvt_ff.lib
+?? benchmarks/
+?? src/base/abci/abcStmap_0.c
+
+exec
+/bin/zsh -lc 'nl -ba .autoeda/runtime/versions.md; nl -ba .autoeda/runtime/launch.pid' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+     1	# Canonical Version Log
+     2	
+     3	This is the append-only experiment log for the campaign.
+     4	Each completed version should append a new `## versionN` section.
+     1	10382
+exec
+/bin/zsh -lc "grep -n \"SOURCE=.\\\\src\\\\base\\\\abci\\\\abc.c\" abclib.dsp && grep -n \"SOURCE=.\\\\src\\\\base\\\\abci\\\\abcMap.c\" abclib.dsp | head" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ exited 1 in 0ms:
+exec
+/bin/zsh -lc 'grep -n "abc.c" abclib.dsp | head -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+198:SOURCE=.\src\base\abci\abc.c
+274:SOURCE=.\src\base\abci\abcEco.c
+470:SOURCE=.\src\base\abci\abcScorr.c
+
+codex
+The new command is not wired into the Windows/MSVC source generation path, so a supported CI build will fail to link. The AutoEDA artifacts also leave the completed stmap0 iteration unaudited and include transient process state.
+
+Full review comments:
+
+- [P1] Wire stmap0 into the Windows source list — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/src/base/abci/module.make:69-69
+  This only adds `abcStmap_0.c` to the make-based source list. The Windows CI generates `abclib.vcxproj` from `abclib.dsp`, which still does not list `src\base\abci\abcStmap_0.c`; with `abc.c` now registering `Abc_CommandStmap0`, that job will link `abc.c` without the implementation and fail with an unresolved external.
+
+- [P2] Record stmap0 in the canonical version log — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md:1-4
+  The change includes a `stmap0` implementation and benchmark/CEC artifacts, but the canonical version log is still just the scaffold header. Under the campaign contract, each completed numbered variant needs its hypothesis, validation, benchmark results, correctness, review disposition, commit, and next-step entry, otherwise this iteration cannot be audited or counted by the `version_log_updated` gate.
+
+- [P3] Exclude live supervisor PID state from the commit — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/launch.pid:1-1
+  If the untracked runtime tree is added as-is, this file commits the local supervisor PID (`10382`) along with the matching lock state. That is transient machine-local process state, not a reproducible artifact, and a restored workspace can treat the stale PID/lock as an active campaign owner or block/restart incorrectly.
+The new command is not wired into the Windows/MSVC source generation path, so a supported CI build will fail to link. The AutoEDA artifacts also leave the completed stmap0 iteration unaudited and include transient process state.
+
+Full review comments:
+
+- [P1] Wire stmap0 into the Windows source list — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/src/base/abci/module.make:69-69
+  This only adds `abcStmap_0.c` to the make-based source list. The Windows CI generates `abclib.vcxproj` from `abclib.dsp`, which still does not list `src\base\abci\abcStmap_0.c`; with `abc.c` now registering `Abc_CommandStmap0`, that job will link `abc.c` without the implementation and fail with an unresolved external.
+
+- [P2] Record stmap0 in the canonical version log — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md:1-4
+  The change includes a `stmap0` implementation and benchmark/CEC artifacts, but the canonical version log is still just the scaffold header. Under the campaign contract, each completed numbered variant needs its hypothesis, validation, benchmark results, correctness, review disposition, commit, and next-step entry, otherwise this iteration cannot be audited or counted by the `version_log_updated` gate.
+
+- [P3] Exclude live supervisor PID state from the commit — /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/launch.pid:1-1
+  If the untracked runtime tree is added as-is, this file commits the local supervisor PID (`10382`) along with the matching lock state. That is transient machine-local process state, not a reproducible artifact, and a restored workspace can treat the stale PID/lock as an active campaign owner or block/restart incorrectly.

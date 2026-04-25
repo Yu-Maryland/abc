@@ -297,6 +297,7 @@ static int Abc_CommandRecDump3               ( Abc_Frame_t * pAbc, int argc, cha
 static int Abc_CommandRecMerge3              ( Abc_Frame_t * pAbc, int argc, char ** argv );
 
 static int Abc_CommandMap                    ( Abc_Frame_t * pAbc, int argc, char ** argv );
+extern int Abc_CommandStmap0                 ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
@@ -1143,6 +1144,7 @@ void Abc_Init( Abc_Frame_t * pAbc )
     Cmd_CommandAdd( pAbc, "Choicing",     "rec_merge3",    Abc_CommandRecMerge3,        0 );
 
     Cmd_CommandAdd( pAbc, "SC mapping",   "map",           Abc_CommandMap,              1 );
+    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap0",        Abc_CommandStmap0,           1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );

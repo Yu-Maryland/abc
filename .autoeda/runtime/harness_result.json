@@ -1,0 +1,801 @@
+{
+  "ok": true,
+  "initialized": true,
+  "workspace": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+  "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+  "agent_md": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md",
+  "harness_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_prompt.txt",
+  "review_prompt": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review_prompt.txt",
+  "harness_command": [
+    "codex",
+    "exec",
+    "--model",
+    "gpt-5.5",
+    "-c",
+    "model_reasoning_effort=\"xhigh\"",
+    "-c",
+    "service_tier=\"fast\"",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--cd",
+    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+    "You are preparing the AutoEDA setup for an existing EDA repository.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n- runtime: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nTask:\n1. Treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding. Do not dilute or replace it with generic policy.\n2. Inspect the target repo enough to infer the AutoEDA initialization/setup needed to run that policy:\n   - build command\n   - benchmark or design inputs\n   - correctness gates\n   - metric extraction expectations\n   - important implementation areas\n   - repo-specific skills the future campaign agent needs\n   - requested campaign length / target successful iterations\n3. Fill in the remaining AutoEDA project-pack files around the provided agent policy:\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml\n   - /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref\n   - skill files under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills\n4. Prefer concrete existing repo paths and commands over placeholders.\n5. Keep secrets out of project-pack text. Refer to existing git/auth/tool configuration only by name or environment.\n6. Keep canary push disabled unless /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md explicitly asks for pushing during canary.\n7. Set `evaluation.yaml` `target_iterations` to the full successful-iteration campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md; do not leave the scaffold default in place when the policy gives a target.\n8. Do not modify target-repo source code during this harness setup pass.\n9. When finished, run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` and fix structural validation errors you can resolve from local context.\n\nThe project name is: abc-harness-stmap-advanced\n"
+  ],
+  "review_command": [
+    "codex",
+    "exec",
+    "--model",
+    "gpt-5.5",
+    "-c",
+    "model_reasoning_effort=\"xhigh\"",
+    "-c",
+    "service_tier=\"fast\"",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--cd",
+    "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+    "Review and revise the AutoEDA setup generated for this repo.\n\nTarget repo:\n- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness\n\nAutoEDA workspace:\n- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda\n- project pack: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack\n\nBinding user-provided agent policy:\n- source file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/AGENT.md\n- installed project-pack file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md\n\nReview focus:\n1. Check whether the generated AutoEDA setup faithfully supports /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n2. Find placeholders, generic text, missing benchmark paths, unrealistic build/evaluation commands, unsafe git policy, and weak skills.\n3. Verify `evaluation.yaml` `target_iterations` matches the full campaign target requested by /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md.\n4. Apply fixes directly to the project-pack files.\n5. Do not modify target-repo source code.\n6. Run `python3 -m autoeda validate-pack --workspace /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda` after edits and fix structural validation errors.\n7. Leave a concise review summary in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/harness_review.md.\n"
+  ],
+  "dry_run": false,
+  "harness_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_20260425T141842Z.log",
+  "harness_returncode": 0,
+  "review_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/harness_review_20260425T142356Z.log",
+  "review_returncode": 0,
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "info": [
+      "Workspace: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+      "Repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+      "Backend: codex"
+    ],
+    "data": {
+      "evaluation": {
+        "version": 1,
+        "project": "abc-harness-stmap-advanced",
+        "family": "stmap",
+        "baseline_command": "map",
+        "target_iterations": 100,
+        "canary_iterations": 1,
+        "library": "7nm_lvt_ff.lib",
+        "benchmarks": [
+          "benchmarks/i10.aig",
+          "benchmarks/ode.abc.blif",
+          "benchmarks/or1200.abc.blif",
+          "benchmarks/syn2.abc.blif"
+        ],
+        "build": {
+          "command": "make ABC_USE_NO_READLINE=1",
+          "artifact": "./abc",
+          "clean_command": "make clean"
+        },
+        "baseline_flow": {
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+        },
+        "candidate_flow": {
+          "command_pattern": "stmap{iteration}",
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime\"",
+          "smoke_design": "benchmarks/i10.aig",
+          "required_help_template": "./abc -c \"{command} -h\""
+        },
+        "timeouts": {
+          "per_design_seconds": 600,
+          "review_pass_seconds": 600,
+          "smoke_seconds": 600,
+          "build_seconds": 900
+        },
+        "metrics": [
+          {
+            "name": "stime_delay_ps",
+            "role": "primary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 2,
+            "unit": "ps"
+          },
+          {
+            "name": "stime_area",
+            "role": "secondary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 1
+          }
+        ],
+        "objective": {
+          "aggregation": "per_benchmark_required",
+          "compare_to": "baseline_command",
+          "ranking": {
+            "primary": "stime_delay_ps",
+            "secondary": "stime_area"
+          },
+          "tie_breakers": [
+            "more_benchmarks_improved_delay",
+            "lower_geomean_area"
+          ]
+        },
+        "correctness": [
+          {
+            "type": "build",
+            "mode": "builtin",
+            "command": "make ABC_USE_NO_READLINE=1",
+            "timeout_seconds": 900,
+            "pass_condition": "exit_zero",
+            "fail_condition": "non_zero_or_timeout"
+          },
+          {
+            "type": "numbered_implementation_exists",
+            "mode": "review",
+            "timeout_seconds": 600,
+            "pass_condition": "new stmapN command and implementation files exist",
+            "fail_condition": "missing numbered command, missing implementation, or skipped version number"
+          },
+          {
+            "type": "command_help",
+            "mode": "usage_text",
+            "command_template": "./abc -c \"{command} -h\"",
+            "timeout_seconds": 600,
+            "pass_condition": "usage text is printed for the new stmapN command; ABC help-path exit code 0 or 1 is acceptable",
+            "fail_condition": "command missing, crashes before printing usage, or has no usage text"
+          },
+          {
+            "type": "smoke_flow",
+            "mode": "command_exit_zero",
+            "design": "benchmarks/i10.aig",
+            "command_template": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime\"",
+            "timeout_seconds": 600,
+            "pass_condition": "exit_zero_and_parseable_stime_metrics",
+            "fail_condition": "non_zero_timeout_or_unparseable_metrics"
+          },
+          {
+            "type": "combinational_equivalence",
+            "mode": "abc_cec",
+            "timeout_seconds": 600,
+            "artifact_dir_template": ".autoeda/runtime/results/{command}",
+            "expected_flow": "for each required benchmark, write an original strashed temporary from `read_lib {library}; read {design}; strash`; write a candidate post-flow strashed temporary from the configured candidate flow plus `strash`; then run `./abc -c \"cec <original_temp> <candidate_temp>\"`",
+            "pass_condition": "ABC cec reports equivalent for every required benchmark, or an explicitly logged alternate equivalence method is used only when direct cec is invalid for that benchmark format",
+            "fail_condition": "cec failure, inconclusive result, crash, timeout, missing artifact, or unlogged equivalence exception"
+          },
+          {
+            "type": "benchmark_metrics",
+            "mode": "parser",
+            "timeout_seconds": 600,
+            "pass_condition": "all four required benchmarks produce final stime_delay_ps and stime_area",
+            "fail_condition": "any required benchmark missing, crashed, timed out, or unparseable"
+          },
+          {
+            "type": "version_log_updated",
+            "mode": "file_check",
+            "file": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md",
+            "timeout_seconds": 600,
+            "pass_condition": "hypothesis, motivation, files, command, validation, benchmark results, correctness, review findings, commit, and next step are recorded",
+            "fail_condition": "missing or incomplete version log entry"
+          },
+          {
+            "type": "review_loop",
+            "mode": "configured_review_tool",
+            "timeout_seconds": 600,
+            "pass_condition": "required review pass completes and accepted findings are addressed and revalidated",
+            "fail_condition": "skipped required review, unresolved accepted finding, or no revalidation"
+          }
+        ],
+        "logging": {
+          "checkpoint_file": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json",
+          "version_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md",
+          "results_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results",
+          "required_artifacts": [
+            "raw abc stdout/stderr for baseline and candidate flows",
+            "parsed metric table per benchmark",
+            "cec logs and temporary design paths",
+            "review prompts and findings summary",
+            "version hypothesis and next-step recommendation"
+          ],
+          "version_log_required_fields": [
+            "hypothesis",
+            "motivation",
+            "files changed",
+            "command name",
+            "algorithm summary",
+            "validation run",
+            "benchmark results",
+            "correctness results",
+            "review findings accepted or rejected",
+            "commit",
+            "next-step recommendation"
+          ]
+        },
+        "reporting": {
+          "enabled": true,
+          "trigger": "on_target_completion",
+          "format": "markdown",
+          "final_report": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+          "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+          "include_trend_plots": true,
+          "plot_requirements": {
+            "x_axis": "iteration",
+            "style": "progression_tuning",
+            "required_traces": [
+              "avg_so_far",
+              "best_so_far"
+            ],
+            "layout_guidance": "If two primary metrics dominate the study and have materially different scales, prefer dual-axis plots; otherwise split plots for readability."
+          },
+          "required_sections": [
+            "setup_summary",
+            "results_summary",
+            "per_benchmark_trends",
+            "best_reproduction_flows",
+            "correctness_summary",
+            "review_summary"
+          ]
+        },
+        "parallel_jobs": 4
+      },
+      "git": {
+        "version": 1,
+        "auth_mode": "existing",
+        "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+        "remote": "origin",
+        "remote_url": "https://github.com/Yu-Maryland/abc",
+        "branch": "master",
+        "commit_message_template": "{family}{iteration}: {summary}",
+        "push_mode": "disabled",
+        "require_clean_tree": false,
+        "canary": {
+          "push_mode_override": "disabled",
+          "commit_allowed": true,
+          "push_allowed": false
+        },
+        "retry": {
+          "pull_rebase_once": false
+        },
+        "forbidden": [
+          "git push --force",
+          "git push --force-with-lease",
+          "git reset --hard"
+        ],
+        "commit_policy": {
+          "per_successful_iteration": "one coherent commit containing implementation, build integration, evaluation artifacts, and AutoEDA runtime log updates",
+          "include_autoeda": true,
+          "do_not_ignore_autoeda": true,
+          "preserve_unrelated_user_changes": true
+        },
+        "push_policy": {
+          "full_campaign": "disabled by default; enable only after the user explicitly changes push_mode and confirms the remote target",
+          "canary": "disabled"
+        },
+        "safety_notes": [
+          "The configured origin is https://github.com/Yu-Maryland/abc on branch master, so autonomous pushes are disabled in this pack.",
+          "Successful iterations may still create local commits when commit_policy requirements pass.",
+          "Do not run automatic pull --rebase or other history-rewriting recovery; preserve unrelated user and campaign changes."
+        ],
+        "forge": {
+          "provider": "github",
+          "host": "github.com",
+          "owner": "Yu-Maryland",
+          "repo": "abc"
+        }
+      },
+      "supervisor": {
+        "version": 1,
+        "poll_seconds": 60,
+        "progress_timeout_seconds": 7200,
+        "restart_backoff_seconds": 120,
+        "max_fast_failures": 3,
+        "fast_failure_window_seconds": 300,
+        "iteration_timeout_seconds": 14400,
+        "review_timeout_seconds": 600,
+        "canary_iterations": 1,
+        "target_iterations": 100,
+        "restartable_states": [
+          "preflight-failed",
+          "preflight-complete",
+          "iteration-prepared",
+          "agent-failed",
+          "evaluation-failed",
+          "evaluation-complete",
+          "iteration-complete",
+          "report-pending",
+          "report-failed"
+        ],
+        "stop_states": [
+          "complete",
+          "blocked"
+        ],
+        "stop_on": [
+          "target_iterations_complete",
+          "irrecoverable_blocker",
+          "required_asset_unavailable",
+          "repeated_deterministic_failure"
+        ]
+      },
+      "secrets": {
+        "version": 1,
+        "credential_policy": {
+          "store_raw_secrets_in_project_pack": false,
+          "git_auth_reference": "existing local git credential configuration",
+          "agent_auth_reference": "existing Codex CLI authentication",
+          "review_auth_reference": "existing Codex CLI authentication",
+          "environment": "inherit from launcher process"
+        },
+        "agent_auth": {
+          "selected_backend": "codex",
+          "codex": {
+            "auth_reference": "existing_codex_cli_login",
+            "launch": {
+              "binary": "codex",
+              "args": [
+                "exec",
+                "--model",
+                "gpt-5.5",
+                "-c",
+                "model_reasoning_effort=\"xhigh\"",
+                "-c",
+                "service_tier=\"fast\"",
+                "--enable",
+                "multi_agent",
+                "--dangerously-bypass-approvals-and-sandbox"
+              ]
+            }
+          }
+        },
+        "review_tools": {
+          "selected_tool": "codex_review",
+          "codex_review": {
+            "auth_reference": "existing_codex_cli_login",
+            "binary": "codex",
+            "args": [
+              "exec",
+              "review",
+              "--uncommitted",
+              "--model",
+              "gpt-5.5",
+              "-c",
+              "model_reasoning_effort=\"xhigh\"",
+              "-c",
+              "service_tier=\"fast\"",
+              "--dangerously-bypass-approvals-and-sandbox"
+            ]
+          },
+          "claude": {
+            "binary": "claude",
+            "args": [
+              "-p",
+              "--dangerously-skip-permissions",
+              "--model",
+              "claude-sonnet-4-6",
+              "--effort",
+              "medium"
+            ]
+          }
+        },
+        "refresh_policy": {
+          "on_expiry": "block_and_alert",
+          "missing_local_auth": "block_and_alert"
+        }
+      }
+    }
+  },
+  "preflight": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "info": [
+      "Workspace: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda",
+      "Repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+      "Backend: codex"
+    ],
+    "data": {
+      "evaluation": {
+        "version": 1,
+        "project": "abc-harness-stmap-advanced",
+        "family": "stmap",
+        "baseline_command": "map",
+        "target_iterations": 100,
+        "canary_iterations": 1,
+        "library": "7nm_lvt_ff.lib",
+        "benchmarks": [
+          "benchmarks/i10.aig",
+          "benchmarks/ode.abc.blif",
+          "benchmarks/or1200.abc.blif",
+          "benchmarks/syn2.abc.blif"
+        ],
+        "build": {
+          "command": "make ABC_USE_NO_READLINE=1",
+          "artifact": "./abc",
+          "clean_command": "make clean"
+        },
+        "baseline_flow": {
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+        },
+        "candidate_flow": {
+          "command_pattern": "stmap{iteration}",
+          "library_command": "read_lib",
+          "design_command": "read",
+          "template": "./abc -c \"read_lib {library}; read {design}; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime\"",
+          "smoke_design": "benchmarks/i10.aig",
+          "required_help_template": "./abc -c \"{command} -h\""
+        },
+        "timeouts": {
+          "per_design_seconds": 600,
+          "review_pass_seconds": 600,
+          "smoke_seconds": 600,
+          "build_seconds": 900
+        },
+        "metrics": [
+          {
+            "name": "stime_delay_ps",
+            "role": "primary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 2,
+            "unit": "ps"
+          },
+          {
+            "name": "stime_area",
+            "role": "secondary",
+            "direction": "minimize",
+            "source": "stdout",
+            "extraction": "regex_last_match",
+            "regex": "WireLoad\\s*=\\s*\"[^\"]*\".*Area\\s*=\\s*([0-9]+(?:\\.[0-9]+)?).*Delay\\s*=\\s*([0-9]+(?:\\.[0-9]+)?)\\s*ps",
+            "group": 1
+          }
+        ],
+        "objective": {
+          "aggregation": "per_benchmark_required",
+          "compare_to": "baseline_command",
+          "ranking": {
+            "primary": "stime_delay_ps",
+            "secondary": "stime_area"
+          },
+          "tie_breakers": [
+            "more_benchmarks_improved_delay",
+            "lower_geomean_area"
+          ]
+        },
+        "correctness": [
+          {
+            "type": "build",
+            "mode": "builtin",
+            "command": "make ABC_USE_NO_READLINE=1",
+            "timeout_seconds": 900,
+            "pass_condition": "exit_zero",
+            "fail_condition": "non_zero_or_timeout"
+          },
+          {
+            "type": "numbered_implementation_exists",
+            "mode": "review",
+            "timeout_seconds": 600,
+            "pass_condition": "new stmapN command and implementation files exist",
+            "fail_condition": "missing numbered command, missing implementation, or skipped version number"
+          },
+          {
+            "type": "command_help",
+            "mode": "usage_text",
+            "command_template": "./abc -c \"{command} -h\"",
+            "timeout_seconds": 600,
+            "pass_condition": "usage text is printed for the new stmapN command; ABC help-path exit code 0 or 1 is acceptable",
+            "fail_condition": "command missing, crashes before printing usage, or has no usage text"
+          },
+          {
+            "type": "smoke_flow",
+            "mode": "command_exit_zero",
+            "design": "benchmarks/i10.aig",
+            "command_template": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; {command}; topo; buffer; upsize -v; dnsize -v; stime\"",
+            "timeout_seconds": 600,
+            "pass_condition": "exit_zero_and_parseable_stime_metrics",
+            "fail_condition": "non_zero_timeout_or_unparseable_metrics"
+          },
+          {
+            "type": "combinational_equivalence",
+            "mode": "abc_cec",
+            "timeout_seconds": 600,
+            "artifact_dir_template": ".autoeda/runtime/results/{command}",
+            "expected_flow": "for each required benchmark, write an original strashed temporary from `read_lib {library}; read {design}; strash`; write a candidate post-flow strashed temporary from the configured candidate flow plus `strash`; then run `./abc -c \"cec <original_temp> <candidate_temp>\"`",
+            "pass_condition": "ABC cec reports equivalent for every required benchmark, or an explicitly logged alternate equivalence method is used only when direct cec is invalid for that benchmark format",
+            "fail_condition": "cec failure, inconclusive result, crash, timeout, missing artifact, or unlogged equivalence exception"
+          },
+          {
+            "type": "benchmark_metrics",
+            "mode": "parser",
+            "timeout_seconds": 600,
+            "pass_condition": "all four required benchmarks produce final stime_delay_ps and stime_area",
+            "fail_condition": "any required benchmark missing, crashed, timed out, or unparseable"
+          },
+          {
+            "type": "version_log_updated",
+            "mode": "file_check",
+            "file": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md",
+            "timeout_seconds": 600,
+            "pass_condition": "hypothesis, motivation, files, command, validation, benchmark results, correctness, review findings, commit, and next step are recorded",
+            "fail_condition": "missing or incomplete version log entry"
+          },
+          {
+            "type": "review_loop",
+            "mode": "configured_review_tool",
+            "timeout_seconds": 600,
+            "pass_condition": "required review pass completes and accepted findings are addressed and revalidated",
+            "fail_condition": "skipped required review, unresolved accepted finding, or no revalidation"
+          }
+        ],
+        "logging": {
+          "checkpoint_file": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json",
+          "version_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md",
+          "results_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results",
+          "required_artifacts": [
+            "raw abc stdout/stderr for baseline and candidate flows",
+            "parsed metric table per benchmark",
+            "cec logs and temporary design paths",
+            "review prompts and findings summary",
+            "version hypothesis and next-step recommendation"
+          ],
+          "version_log_required_fields": [
+            "hypothesis",
+            "motivation",
+            "files changed",
+            "command name",
+            "algorithm summary",
+            "validation run",
+            "benchmark results",
+            "correctness results",
+            "review findings accepted or rejected",
+            "commit",
+            "next-step recommendation"
+          ]
+        },
+        "reporting": {
+          "enabled": true,
+          "trigger": "on_target_completion",
+          "format": "markdown",
+          "final_report": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
+          "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
+          "include_trend_plots": true,
+          "plot_requirements": {
+            "x_axis": "iteration",
+            "style": "progression_tuning",
+            "required_traces": [
+              "avg_so_far",
+              "best_so_far"
+            ],
+            "layout_guidance": "If two primary metrics dominate the study and have materially different scales, prefer dual-axis plots; otherwise split plots for readability."
+          },
+          "required_sections": [
+            "setup_summary",
+            "results_summary",
+            "per_benchmark_trends",
+            "best_reproduction_flows",
+            "correctness_summary",
+            "review_summary"
+          ]
+        },
+        "parallel_jobs": 4
+      },
+      "git": {
+        "version": 1,
+        "auth_mode": "existing",
+        "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
+        "remote": "origin",
+        "remote_url": "https://github.com/Yu-Maryland/abc",
+        "branch": "master",
+        "commit_message_template": "{family}{iteration}: {summary}",
+        "push_mode": "disabled",
+        "require_clean_tree": false,
+        "canary": {
+          "push_mode_override": "disabled",
+          "commit_allowed": true,
+          "push_allowed": false
+        },
+        "retry": {
+          "pull_rebase_once": false
+        },
+        "forbidden": [
+          "git push --force",
+          "git push --force-with-lease",
+          "git reset --hard"
+        ],
+        "commit_policy": {
+          "per_successful_iteration": "one coherent commit containing implementation, build integration, evaluation artifacts, and AutoEDA runtime log updates",
+          "include_autoeda": true,
+          "do_not_ignore_autoeda": true,
+          "preserve_unrelated_user_changes": true
+        },
+        "push_policy": {
+          "full_campaign": "disabled by default; enable only after the user explicitly changes push_mode and confirms the remote target",
+          "canary": "disabled"
+        },
+        "safety_notes": [
+          "The configured origin is https://github.com/Yu-Maryland/abc on branch master, so autonomous pushes are disabled in this pack.",
+          "Successful iterations may still create local commits when commit_policy requirements pass.",
+          "Do not run automatic pull --rebase or other history-rewriting recovery; preserve unrelated user and campaign changes."
+        ],
+        "forge": {
+          "provider": "github",
+          "host": "github.com",
+          "owner": "Yu-Maryland",
+          "repo": "abc"
+        }
+      },
+      "supervisor": {
+        "version": 1,
+        "poll_seconds": 60,
+        "progress_timeout_seconds": 7200,
+        "restart_backoff_seconds": 120,
+        "max_fast_failures": 3,
+        "fast_failure_window_seconds": 300,
+        "iteration_timeout_seconds": 14400,
+        "review_timeout_seconds": 600,
+        "canary_iterations": 1,
+        "target_iterations": 100,
+        "restartable_states": [
+          "preflight-failed",
+          "preflight-complete",
+          "iteration-prepared",
+          "agent-failed",
+          "evaluation-failed",
+          "evaluation-complete",
+          "iteration-complete",
+          "report-pending",
+          "report-failed"
+        ],
+        "stop_states": [
+          "complete",
+          "blocked"
+        ],
+        "stop_on": [
+          "target_iterations_complete",
+          "irrecoverable_blocker",
+          "required_asset_unavailable",
+          "repeated_deterministic_failure"
+        ]
+      },
+      "secrets": {
+        "version": 1,
+        "credential_policy": {
+          "store_raw_secrets_in_project_pack": false,
+          "git_auth_reference": "existing local git credential configuration",
+          "agent_auth_reference": "existing Codex CLI authentication",
+          "review_auth_reference": "existing Codex CLI authentication",
+          "environment": "inherit from launcher process"
+        },
+        "agent_auth": {
+          "selected_backend": "codex",
+          "codex": {
+            "auth_reference": "existing_codex_cli_login",
+            "launch": {
+              "binary": "codex",
+              "args": [
+                "exec",
+                "--model",
+                "gpt-5.5",
+                "-c",
+                "model_reasoning_effort=\"xhigh\"",
+                "-c",
+                "service_tier=\"fast\"",
+                "--enable",
+                "multi_agent",
+                "--dangerously-bypass-approvals-and-sandbox"
+              ]
+            }
+          }
+        },
+        "review_tools": {
+          "selected_tool": "codex_review",
+          "codex_review": {
+            "auth_reference": "existing_codex_cli_login",
+            "binary": "codex",
+            "args": [
+              "exec",
+              "review",
+              "--uncommitted",
+              "--model",
+              "gpt-5.5",
+              "-c",
+              "model_reasoning_effort=\"xhigh\"",
+              "-c",
+              "service_tier=\"fast\"",
+              "--dangerously-bypass-approvals-and-sandbox"
+            ]
+          },
+          "claude": {
+            "binary": "claude",
+            "args": [
+              "-p",
+              "--dangerously-skip-permissions",
+              "--model",
+              "claude-sonnet-4-6",
+              "--effort",
+              "medium"
+            ]
+          }
+        },
+        "refresh_policy": {
+          "on_expiry": "block_and_alert",
+          "missing_local_auth": "block_and_alert"
+        }
+      }
+    },
+    "checks": [
+      {
+        "name": "repo_root_exists",
+        "ok": true,
+        "detail": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness"
+      },
+      {
+        "name": "benchmark_exists",
+        "ok": true,
+        "detail": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/benchmarks/i10.aig"
+      },
+      {
+        "name": "benchmark_exists",
+        "ok": true,
+        "detail": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/benchmarks/ode.abc.blif"
+      },
+      {
+        "name": "benchmark_exists",
+        "ok": true,
+        "detail": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/benchmarks/or1200.abc.blif"
+      },
+      {
+        "name": "benchmark_exists",
+        "ok": true,
+        "detail": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/benchmarks/syn2.abc.blif"
+      },
+      {
+        "name": "build_tool_exists",
+        "ok": true,
+        "detail": "make"
+      },
+      {
+        "name": "inside_git_repo",
+        "ok": true,
+        "detail": "true"
+      },
+      {
+        "name": "branch_matches",
+        "ok": true,
+        "detail": "master"
+      },
+      {
+        "name": "git_remote_exists",
+        "ok": true,
+        "detail": "https://github.com/Yu-Maryland/abc"
+      },
+      {
+        "name": "git_remote_url_matches",
+        "ok": true,
+        "detail": "https://github.com/Yu-Maryland/abc"
+      },
+      {
+        "name": "git_user_name_present",
+        "ok": true,
+        "detail": "Cunxi Yu"
+      },
+      {
+        "name": "git_user_email_present",
+        "ok": true,
+        "detail": "cunxiy@nvidia.com"
+      },
+      {
+        "name": "agent_backend_binary_exists",
+        "ok": true,
+        "detail": "codex"
+      },
+      {
+        "name": "review_tool_binary_exists",
+        "ok": true,
+        "detail": "codex"
+      }
+    ],
+    "ready": true
+  }
+}

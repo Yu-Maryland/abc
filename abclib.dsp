@@ -479,6 +479,10 @@ SOURCE=.\src\base\abci\abcSpeedup.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\base\abci\abcStmap_0.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\base\abci\abcStrash.c
 # End Source File
 # Begin Source File

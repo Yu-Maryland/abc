@@ -1,0 +1,9 @@
+kind,benchmark,command,ok,returncode,timed_out,elapsed_seconds,stime_delay_ps,stime_area,log_path
+baseline,benchmarks/i10.aig,map,True,0,False,0.8056421279907227,207.24,1263.44,.autoeda/runtime/results/stmap0/baseline_i10.log
+candidate,benchmarks/i10.aig,stmap0,True,0,False,0.7866177558898926,207.61,1272.54,.autoeda/runtime/results/stmap0/candidate_i10.log
+baseline,benchmarks/ode.abc.blif,map,True,0,False,6.709651947021484,531.32,12491.21,.autoeda/runtime/results/stmap0/baseline_ode.log
+candidate,benchmarks/ode.abc.blif,stmap0,True,0,False,6.685062885284424,561.22,11444.25,.autoeda/runtime/results/stmap0/candidate_ode.log
+baseline,benchmarks/or1200.abc.blif,map,True,0,False,3.2215068340301514,587.08,4798.34,.autoeda/runtime/results/stmap0/baseline_or1200.log
+candidate,benchmarks/or1200.abc.blif,stmap0,True,0,False,3.227919816970825,573.53,4765.68,.autoeda/runtime/results/stmap0/candidate_or1200.log
+baseline,benchmarks/syn2.abc.blif,map,True,0,False,12.478487968444824,508.82,21296.6,.autoeda/runtime/results/stmap0/baseline_syn2.log
+candidate,benchmarks/syn2.abc.blif,stmap0,True,0,False,12.231577157974243,515.37,20161.69,.autoeda/runtime/results/stmap0/candidate_syn2.log
