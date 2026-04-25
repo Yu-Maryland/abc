@@ -1,0 +1,9 @@
+benchmark,flow,command,stime_delay_ps,stime_area,log,elapsed_seconds
+benchmarks/i10.aig,baseline,map,207.24,1263.44,.autoeda/runtime/results/stmap26/baseline_benchmarks_i10_aig.log,0.7892999649047852
+benchmarks/i10.aig,candidate,stmap26,198.64,1303.1,.autoeda/runtime/results/stmap26/candidate_benchmarks_i10_aig.log,0.8004617691040039
+benchmarks/ode.abc.blif,baseline,map,531.32,12491.21,.autoeda/runtime/results/stmap26/baseline_benchmarks_ode_abc_blif.log,6.802114009857178
+benchmarks/ode.abc.blif,candidate,stmap26,522.05,11334.38,.autoeda/runtime/results/stmap26/candidate_benchmarks_ode_abc_blif.log,6.778021812438965
+benchmarks/or1200.abc.blif,baseline,map,587.08,4798.34,.autoeda/runtime/results/stmap26/baseline_benchmarks_or1200_abc_blif.log,3.304790735244751
+benchmarks/or1200.abc.blif,candidate,stmap26,561.55,4895.15,.autoeda/runtime/results/stmap26/candidate_benchmarks_or1200_abc_blif.log,3.3244268894195557
+benchmarks/syn2.abc.blif,baseline,map,508.82,21296.6,.autoeda/runtime/results/stmap26/baseline_benchmarks_syn2_abc_blif.log,12.28397798538208
+benchmarks/syn2.abc.blif,candidate,stmap26,491.54,21598.23,.autoeda/runtime/results/stmap26/candidate_benchmarks_syn2_abc_blif.log,12.254189014434814

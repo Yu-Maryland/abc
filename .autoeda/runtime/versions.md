@@ -1338,3 +1338,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap25: ablate moderate deep seed`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap25` shows that admitting node `24798` alone leaves final `syn2` QoR equal to `stmap24`, while node `37979` remains blocked by the single-ablation gate. For `stmap26`, test the complementary ablation by skipping the first moderate candidate and admitting only the next qualifying moderate deep seed, or add a more explicit rank selector for moderate deep seed diagnostics before changing the mainline policy.
+
+## version26 / stmap26
+
+- hypothesis: A complementary rank-2 moderate deep early-profile seed ablation can isolate whether the second qualifying moderate seed, rather than the first, is sufficient to reproduce the `stmap22`/`stmap23` downstream `syn2` delay regression.
+- motivation: `stmap25` admitted only the first moderate deep seed at node `24798` and left `syn2` QoR equal to the tighter `stmap24` result. The remaining question is whether node `37979`, which `stmap24` blocked and `stmap22`/`stmap23` admitted, is the harmful seed.
+- command name: `stmap26`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_26.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap26/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap26` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 27` into the mapper. Mode `27` preserves the `stmap24` tight moderate deep seed rule, strong deep-seed rule, lower-moderate bucket, tight-depth middle-slack window, guard counters, near-miss diagnostics, and early-seed counter. The only mapping-decision change is the complementary ablation: before the adaptive profile opens, a deeper moderate seed that passes the `stmap22` arrival-gain gate, fails the `stmap24` tight slack gate, and remains within `1.25 * tDelayInv.Worst` slack is counted; rank 1 is skipped and rank 2 is admitted once. Existing `map` and `stmap0` through `stmap25` remain on their previous mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap26/build.log`.
+  - help: `./abc -c "stmap26 -h"` printed usage text with default `-G 250.00` and the rank-2 moderate deep early-profile ablation guard enabled. Log: `.autoeda/runtime/results/stmap26/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap26; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap26/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap26/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `ablation_stats.csv`, `relief_diag.csv`, `near_miss_diag.csv`, `ablation_diag.csv`, `ablation_skip_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-slack `0`, middle-relief `0`, early-seed `0`, moderate-ablation-seen `0`, moderate-ablation-seed `0`, near-miss `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`, early-seed `0`, moderate-ablation-seen `0`, moderate-ablation-seed `0`, near-miss `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, middle-slack `35`, middle-relief `2`, early-seed `2`, moderate-ablation-seen `0`, moderate-ablation-seed `0`, near-miss `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `491.54 ps`, area `21598.23`; delay delta `-17.28 ps` (`-3.40%`), area delta `+301.63` (`+1.42%`); guard stats: exact-risk `98450`, middle-slack `1992`, middle-relief `5`, early-seed `4`, moderate-ablation-seen `2`, moderate-ablation-seed `1`, near-miss `10`.
+- ablation diagnostics:
+  - `benchmarks/syn2.abc.blif`: rank 1 was skipped at node `24798`, level `46`, refs `4`, leaves `4`, phase `1`, slack `7.919983`, area saving `0.94`, arrival delta `-3.179993`, and arrival-gain margin `1.585`.
+  - `benchmarks/syn2.abc.blif`: rank 2 was admitted at node `37979`, level `42`, refs `5`, leaves `4`, phase `1`, slack `7.170013`, area saving `0.93`, arrival delta `-3.699997`, and arrival-gain margin `1.585`.
+  - The final `syn2` delay and area match the worse `stmap22`/`stmap23` outcome, while `stmap25` admitted only node `24798` and matched `stmap24`. This isolates node `37979` as sufficient to trigger the downstream regression.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_26.c`.
+  - numbered command exists and is registered as `stmap26`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, ablation-stat, admitted-relief, near-miss diagnostic, ablation diagnostic, and ablation-skip diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap26/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap26/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap26/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap26/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap26/review_pass1_supported.log`.
+  - accepted findings: add the canonical `version26 / stmap26` entry and record the successful supported review artifact; addressed by this entry, `.autoeda/runtime/results/stmap26/review_summary.md`, and revalidation logs.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap26/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap26/review_pass2_supported.log`.
+  - accepted finding: correct the `syn2` near-miss count in this canonical version-log entry from `11` to the artifact-backed value `10`; addressed by this update and revalidated with `version_log_check.log` and `artifact_check.log`.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none; the accepted review findings were runtime-log completeness and consistency issues addressed in `.autoeda/runtime/versions.md` and `.autoeda/runtime/results/stmap26/review_summary.md`.
+- commit: pending local commit with message `stmap26: ablate rank two moderate seed`.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap26` shows that node `37979` alone is sufficient to reproduce the `491.54 ps` `syn2` regression, while `stmap25` showed node `24798` alone is harmless. For `stmap27`, keep the `stmap24` tight/high-gain policy as the timing-safe mainline and add a rank or node-class diagnostic that blocks candidates matching the `37979` signature before reopening any moderate deep seed cluster.

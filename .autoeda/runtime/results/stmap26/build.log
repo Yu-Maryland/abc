@@ -1,0 +1,40 @@
+`` Generating dependency: /src/map/mapper/mapperVec.c
+`` Generating dependency: /src/map/mapper/mapperUtils.c
+`` Generating dependency: /src/map/mapper/mapperTruth.c
+`` Generating dependency: /src/map/mapper/mapperTree.c
+`` Generating dependency: /src/map/mapper/mapperTime.c
+`` Generating dependency: /src/map/mapper/mapperTable.c
+`` Generating dependency: /src/map/mapper/mapperSwitch.c
+`` Generating dependency: /src/map/mapper/mapperSuper.c
+`` Generating dependency: /src/map/mapper/mapperRefs.c
+`` Generating dependency: /src/map/mapper/mapperMatch.c
+`` Generating dependency: /src/map/mapper/mapperLib.c
+`` Generating dependency: /src/map/mapper/mapperCutUtils.c
+`` Generating dependency: /src/map/mapper/mapperCut.c
+`` Generating dependency: /src/map/mapper/mapperCreate.c
+`` Generating dependency: /src/map/mapper/mapperCore.c
+`` Generating dependency: /src/map/mapper/mapperCanon.c
+`` Generating dependency: /src/map/mapper/mapper.c
+`` Generating dependency: /src/base/abci/abcStmap_26.c
+`` Generating dependency: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abcStmap_26.c
+`` Compiling: /src/map/mapper/mapper.c
+`` Compiling: /src/map/mapper/mapperCanon.c
+`` Compiling: /src/map/mapper/mapperCore.c
+`` Compiling: /src/map/mapper/mapperCreate.c
+`` Compiling: /src/map/mapper/mapperCut.c
+`` Compiling: /src/map/mapper/mapperCutUtils.c
+`` Compiling: /src/map/mapper/mapperLib.c
+`` Compiling: /src/map/mapper/mapperMatch.c
+`` Compiling: /src/map/mapper/mapperRefs.c
+`` Compiling: /src/map/mapper/mapperSuper.c
+`` Compiling: /src/map/mapper/mapperSwitch.c
+`` Compiling: /src/map/mapper/mapperTable.c
+`` Compiling: /src/map/mapper/mapperTime.c
+`` Compiling: /src/map/mapper/mapperTree.c
+`` Compiling: /src/map/mapper/mapperTruth.c
+`` Compiling: /src/map/mapper/mapperUtils.c
+`` Compiling: /src/map/mapper/mapperVec.c
+`` Building binary: abc
+ld: warning: reducing alignment of section __DATA,__common from 0x8000 to 0x4000 because it exceeds segment maximum alignment

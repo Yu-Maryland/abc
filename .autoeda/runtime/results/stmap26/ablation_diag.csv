@@ -1,0 +1,2 @@
+benchmark,index,rank,node,level,refs,leaves,phase,slack,area_save,arrival_delta,arrival_gain_margin
+benchmarks/syn2.abc.blif,1,2,37979,42,5,4,1,7.170013,0.93,-3.699997,1.585

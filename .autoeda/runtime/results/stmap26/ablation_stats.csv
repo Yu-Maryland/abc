@@ -1,0 +1,5 @@
+benchmark,moderate_ablation_seen,moderate_ablation_seed
+benchmarks/i10.aig,0,0
+benchmarks/or1200.abc.blif,0,0
+benchmarks/ode.abc.blif,0,0
+benchmarks/syn2.abc.blif,2,1

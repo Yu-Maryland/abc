@@ -1,0 +1,14 @@
+[PASS] found ## version26 / stmap26
+[PASS] hypothesis
+[PASS] motivation
+[PASS] files changed
+[PASS] command name
+[PASS] algorithm summary
+[PASS] validation run
+[PASS] benchmark results
+[PASS] correctness results
+[PASS] review pass 1
+[PASS] review pass 2
+[PASS] commit
+[PASS] next-step recommendation
+[PASS] syn2 near-miss count matches artifact value 10

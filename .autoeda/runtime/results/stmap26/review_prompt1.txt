@@ -1,0 +1,19 @@
+Review the uncommitted stmap26 iteration in this ABC AutoEDA campaign.
+
+Project constraints:
+- New command is stmap26 in the stmap family.
+- Preserve map and stmap0 through stmap25 behavior.
+- New command must support -h.
+- Evaluation flow uses read_lib 7nm_lvt_ff.lib, all four required benchmarks, downstream topo/buffer/upsize/dnsize/stime, and CEC artifacts.
+
+Hypothesis under review:
+stmap26 is a rank-2 moderate deep early-profile seed ablation. It keeps the stmap24 tight policy, skips the first qualifying moderate deep seed in the next slack band, and admits only the second qualifying seed through mapper mode fSkipFanout == 27.
+
+Please review the uncommitted source and runtime artifact changes for correctness risks, especially:
+- command registration/build integration for abcStmap_26.c
+- mapper mode gating and range updates from 26 to 27
+- rank-2 ablation counter side effects and whether old commands are preserved
+- diagnostic output consistency and parseability
+- campaign artifacts/logging consistency
+
+Return findings first with file/line references. If there are no blocking findings, say so explicitly and mention residual test risks.
