@@ -242,3 +242,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap4: split-phase fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap4` improves both delay and area on `ode` and `syn2`, but it regresses `i10` and `or1200`, so the global split-phase policy is still not robust. For `stmap5`, instrument guard hit counts and slack buckets per benchmark, or gate the delay-pass portion with a design-shape or SCL-observed criticality signal so `or1200` can avoid the `stmap1`-style delay-pass restriction.
+
+## version5 / stmap5
+
+- hypothesis: Gating the delay-pass high-fanout wide-cut guard by mapper graph size can keep the `stmap4` delay benefit on very large designs while letting smaller or mid-sized/deeper designs use the safer `stmap2` recovery-only behavior.
+- motivation: `stmap4` improved `ode` and `syn2` but regressed `i10` and `or1200`, suggesting the delay-pass guard should not be applied globally. `stmap5` tests a simple design-shape discriminator using the mapper graph size available inside `Map_Man_t`.
+- command name: `stmap5`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_5.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap5/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap5` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 6` into the mapper. `mapperMatch.c` interprets mode `6` as a shape-gated split-phase guard: during delay matching it uses the `stmap1` high-fanout cut-width thresholds only when `p->vMapObjs->nSize > 20000`; during area recovery modes `1..3` it uses the `stmap2` slack-aware guard requiring more than one inverter-delay of mapper slack before rejecting wider high-fanout cuts; switching recovery is left unguarded. Existing `map`, `map -f`, and `stmap0` through `stmap4` behavior are preserved because modes `0` through `5` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap5/build.log`.
+  - help: `./abc -c "stmap5 -h"` printed usage text with default `-G 250.00` and the shape-gated fanout guard enabled. Log: `.autoeda/runtime/results/stmap5/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap5; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap5/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap5/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, and prompt artifacts.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `524.16 ps`, area `11179.71`; delay delta `-7.16 ps` (`-1.35%`), area delta `-1311.50` (`-10.50%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `553.77 ps`, area `5005.96`; delay delta `-33.31 ps` (`-5.67%`), area delta `+207.62` (`+4.33%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `502.09 ps`, area `20788.05`; delay delta `-6.73 ps` (`-1.32%`), area delta `-508.55` (`-2.39%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_5.c`.
+  - numbered command exists and is registered as `stmap5`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap5/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap5/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap5/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap5` in the canonical version log before counting the iteration; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap5: shape-gated fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap5` improves final delay on all four required benchmarks and reduces area on `ode` and `syn2`, but it still increases area on `i10` and `or1200`. For `stmap6`, keep the graph-size discriminator and add a secondary area guard for smaller/deeper designs, such as relaxing the recovery guard when the candidate cut would increase exact area beyond a small tolerance or adding instrumentation to measure guard hits per graph-size bucket.

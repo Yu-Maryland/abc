@@ -1,0 +1,235 @@
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; stmap5; topo; buffer; upsize -v; dnsize -v; strash; write_aiger .autoeda/runtime/results/stmap5/cec_benchmarks_ode_abc_blif_stmap5.aig"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.25 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Hierarchy reader converted 2 instances of blackboxes.
+Starting:  ode             : pi =   275  po =   169  lat =  1316  and =   14048  lev =  71
+Rewrite:   ode             : pi =   275  po =   169  lat =  1316  and =   13980  lev =  71
+Refactor:  ode             : pi =   275  po =   169  lat =  1316  and =   13889  lev =  71
+Balance:   ode             : pi =   275  po =   169  lat =  1316  and =   13880  lev =  71
+RewriteZ:  ode             : pi =   275  po =   169  lat =  1316  and =   13821  lev =  71
+Starting:  ode             : pi =   275  po =   169  lat =  1316  and =   13821  lev =  71
+Rewrite:   ode             : pi =   275  po =   169  lat =  1316  and =   13795  lev =  71
+Refactor:  ode             : pi =   275  po =   169  lat =  1316  and =   13741  lev =  71
+Balance:   ode             : pi =   275  po =   169  lat =  1316  and =   13736  lev =  71
+Rewrite:   ode             : pi =   275  po =   169  lat =  1316  and =   13709  lev =  71
+RewriteZ:  ode             : pi =   275  po =   169  lat =  1316  and =   13687  lev =  71
+Balance:   ode             : pi =   275  po =   169  lat =  1316  and =   13686  lev =  71
+RefactorZ: ode             : pi =   275  po =   169  lat =  1316  and =   13610  lev =  71
+RewriteZ:  ode             : pi =   275  po =   169  lat =  1316  and =   13568  lev =  71
+Balance:   ode             : pi =   275  po =   169  lat =  1316  and =   13565  lev =  71
+Parameters: Sim words = 8. Conf limit = 1000. SAT var max = 5000.
+AIG nodes : Total =  37442. Dangling =  24962. Main =  12480. ( 33.33 %)
+SAT solver: Vars = 4737. Max cone = 3440. Recycles = 5.
+SAT calls : All =   6997. Unsat =   2156. Sat =   4841. Fail =      0.
+Choices   : Lits =  11757. Reprs =     0. Equivs =     0. Choices =     0.
+Choicing runtime statistics:
+Sim init    =     0.01 sec (  0.63 %)
+Sim SAT     =     0.28 sec ( 26.81 %)
+SAT solving =     0.75 sec ( 70.82 %)
+  sat       =     0.70 sec ( 65.95 %)
+  unsat     =     0.05 sec (  5.10 %)
+  undecided =     0.00 sec (  0.00 %)
+Choice      =     0.00 sec (  0.00 %)
+Other       =     0.02 sec (  1.74 %)
+TOTAL       =     1.06 sec (100.00 %)
+Synthesis   =     0.51 sec
+Old choice computation time =     1.06 sec
+STATS:  Ands:   37442  ->   25383.  Reprs:  10970  ->   1957.  Choices =   1645.
+Parameters: Iters = 1000.  Time win =  1 %. Update ratio = 10 %. UseDept = 1. UseWL = 0. Target =    0 ps. DelayGap =  0 ps. Timeout =   0 sec
+   0 Win:  1. PO:    20. Path:    101. Gate:   10. TFO:   3806. A: 11543.63 ( +0.0 %)  D: 672.83 ps ( -1.5 %)  B: 672.83 ps ( -1.5 %)    0.00 sec    
+   1 Win:  1. PO:    20. Path:    110. Gate:   11. TFO:   3450. A: 11552.50 ( +0.1 %)  D: 640.29 ps ( -6.2 %)  B: 640.29 ps ( -6.2 %)    0.00 sec    
+   2 Win:  1. PO:    40. Path:    211. Gate:   21. TFO:   7270. A: 11571.16 ( +0.3 %)  D: 601.33 ps (-11.9 %)  B: 601.33 ps (-11.9 %)    0.01 sec    
+   3 Win:  1. PO:    20. Path:    110. Gate:   11. TFO:   3240. A: 11585.16 ( +0.4 %)  D: 592.47 ps (-13.2 %)  B: 592.47 ps (-13.2 %)    0.01 sec    
+   4 Win:  1. PO:    20. Path:    282. Gate:   28. TFO:   3771. A: 11602.19 ( +0.6 %)  D: 580.40 ps (-15.0 %)  B: 580.40 ps (-15.0 %)    0.01 sec    
+   5 Win:  1. PO:    20. Path:    147. Gate:   14. TFO:   3248. A: 11612.23 ( +0.6 %)  D: 574.24 ps (-15.9 %)  B: 574.24 ps (-15.9 %)    0.01 sec    
+   6 Win:  2. PO:    44. Path:    499. Gate:   49. TFO:   7264. A: 11641.86 ( +0.9 %)  D: 558.33 ps (-18.2 %)  B: 558.33 ps (-18.2 %)    0.01 sec    
+   7 Win:  1. PO:    20. Path:    191. Gate:   19. TFO:   3515. A: 11658.19 ( +1.0 %)  D: 552.30 ps (-19.1 %)  B: 552.30 ps (-19.1 %)    0.01 sec    
+   8 Win:  1. PO:    21. Path:    267. Gate:   26. TFO:   3514. A: 11674.76 ( +1.2 %)  D: 549.61 ps (-19.5 %)  B: 549.61 ps (-19.5 %)    0.02 sec    
+   9 Win:  1. PO:    21. Path:    177. Gate:   17. TFO:   3106. A: 11686.43 ( +1.3 %)  D: 546.94 ps (-19.9 %)  B: 546.94 ps (-19.9 %)    0.02 sec    
+  10 Win:  1. PO:    41. Path:    175. Gate:   17. TFO:   6331. A: 11701.36 ( +1.4 %)  D: 535.97 ps (-21.5 %)  B: 535.97 ps (-21.5 %)    0.02 sec    
+  11 Win:  1. PO:    41. Path:    422. Gate:   42. TFO:   7284. A: 11725.86 ( +1.6 %)  D: 536.07 ps (-21.5 %)  B: 535.97 ps (-21.5 %)    0.02 sec    
+  12 Win:  1. PO:    22. Path:    185. Gate:   18. TFO:   3507. A: 11736.36 ( +1.7 %)  D: 535.01 ps (-21.7 %)  B: 535.01 ps (-21.7 %)    0.02 sec    
+  13 Win:  2. PO:    42. Path:    695. Gate:   69. TFO:   7070. A: 11784.66 ( +2.1 %)  D: 535.01 ps (-21.7 %)  B: 535.01 ps (-21.7 %)    0.03 sec    
+  14 Win:  1. PO:    21. Path:    253. Gate:   25. TFO:   3436. A: 11810.32 ( +2.4 %)  D: 536.32 ps (-21.5 %)  B: 535.01 ps (-21.7 %)    0.03 sec    
+  15 Win:  1. PO:    21. Path:    215. Gate:   18. TFO:   3255. A: 11824.32 ( +2.5 %)  D: 533.55 ps (-21.9 %)  B: 533.55 ps (-21.9 %)    0.03 sec    
+  16 Win:  1. PO:    21. Path:    247. Gate:   22. TFO:   3198. A: 11838.32 ( +2.6 %)  D: 532.24 ps (-22.1 %)  B: 532.24 ps (-22.1 %)    0.03 sec    
+  17 Win:  1. PO:    21. Path:    242. Gate:   15. TFO:   3454. A: 11850.22 ( +2.7 %)  D: 529.96 ps (-22.4 %)  B: 529.96 ps (-22.4 %)    0.03 sec    
+  18 Win:  1. PO:    21. Path:    223. Gate:   10. TFO:   3416. A: 11854.65 ( +2.7 %)  D: 533.03 ps (-21.9 %)  B: 529.96 ps (-22.4 %)    0.03 sec    
+  19 Win:  1. PO:    21. Path:    189. Gate:    2. TFO:   1007. A: 11858.38 ( +2.8 %)  D: 533.28 ps (-21.9 %)  B: 529.96 ps (-22.4 %)    0.03 sec    
+  20 Win:  2. PO:    22. Path:    439. Gate:   34. TFO:   3442. A: 11887.31 ( +3.0 %)  D: 534.37 ps (-21.7 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  21 Win:  1. PO:    21. Path:    208. Gate:    6. TFO:   2033. A: 11897.81 ( +3.1 %)  D: 534.63 ps (-21.7 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  22 Win:  1. PO:    21. Path:    208. Gate:    3. TFO:   3050. A: 11900.61 ( +3.1 %)  D: 534.63 ps (-21.7 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  23 Win:  1. PO:    21. Path:    174. Gate:    5. TFO:   3131. A: 11904.81 ( +3.2 %)  D: 531.71 ps (-22.1 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  24 Win:  1. PO:    21. Path:    177. Gate:    4. TFO:   3113. A: 11905.74 ( +3.2 %)  D: 532.04 ps (-22.1 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  25 Win:  1. PO:    21. Path:    190. Gate:    5. TFO:   2998. A: 11911.57 ( +3.2 %)  D: 530.43 ps (-22.3 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  26 Win:  1. PO:    21. Path:    188. Gate:    1. TFO:   3165. A: 11911.57 ( +3.2 %)  D: 530.12 ps (-22.4 %)  B: 529.96 ps (-22.4 %)    0.04 sec    
+  27 Win:  2. PO:    22. Path:    412. Gate:   23. TFO:   3106. A: 11930.00 ( +3.4 %)  D: 532.26 ps (-22.1 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  28 Win:  1. PO:    21. Path:    211. Gate:    2. TFO:     87. A: 11932.80 ( +3.4 %)  D: 532.26 ps (-22.1 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  29 Win:  1. PO:    21. Path:    211. Gate:    3. TFO:   3101. A: 11933.73 ( +3.4 %)  D: 531.78 ps (-22.1 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  30 Win:  1. PO:    21. Path:    190. Gate:    3. TFO:   3235. A: 11930.47 ( +3.4 %)  D: 534.34 ps (-21.8 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  31 Win:  1. PO:    21. Path:    184. Gate:    1. TFO:   2945. A: 11931.17 ( +3.4 %)  D: 532.98 ps (-22.0 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  32 Win:  1. PO:    21. Path:    192. Gate:    3. TFO:   3028. A: 11934.90 ( +3.4 %)  D: 534.90 ps (-21.7 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  33 Win:  1. PO:    21. Path:    191. Gate:    2. TFO:   2575. A: 11934.43 ( +3.4 %)  D: 534.90 ps (-21.7 %)  B: 529.96 ps (-22.4 %)    0.05 sec    
+  34 Win:  2. PO:    22. Path:    373. Gate:   13. TFO:   2971. A: 11937.70 ( +3.5 %)  D: 539.69 ps (-21.0 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  35 Win:  1. PO:    21. Path:    190. Gate:    7. TFO:   3446. A: 11936.77 ( +3.5 %)  D: 536.05 ps (-21.5 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  36 Win:  1. PO:    21. Path:    197. Gate:    3. TFO:   3441. A: 11937.70 ( +3.5 %)  D: 537.62 ps (-21.3 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  37 Win:  1. PO:    21. Path:    215. Gate:    2. TFO:   2990. A: 11936.53 ( +3.5 %)  D: 535.78 ps (-21.5 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  38 Win:  2. PO:    22. Path:    360. Gate:    6. TFO:   2893. A: 11937.00 ( +3.5 %)  D: 535.15 ps (-21.6 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  39 Win:  1. PO:    21. Path:    222. Gate:    1. TFO:   2885. A: 11938.87 ( +3.5 %)  D: 530.45 ps (-22.3 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  40 Win:  1. PO:    21. Path:    234. Gate:    3. TFO:   2792. A: 11941.20 ( +3.5 %)  D: 530.80 ps (-22.3 %)  B: 529.96 ps (-22.4 %)    0.06 sec    
+  41 Win:  2. PO:    22. Path:    381. Gate:    9. TFO:   3593. A: 11936.77 ( +3.5 %)  D: 528.97 ps (-22.5 %)  B: 528.97 ps (-22.5 %)    0.07 sec    
+  42 Win:  1. PO:    21. Path:    178. Gate:    5. TFO:   3375. A: 11937.00 ( +3.5 %)  D: 528.60 ps (-22.6 %)  B: 528.60 ps (-22.6 %)    0.07 sec    
+  43 Win:  1. PO:    21. Path:    207. Gate:    5. TFO:   2935. A: 11936.77 ( +3.5 %)  D: 527.86 ps (-22.7 %)  B: 527.86 ps (-22.7 %)    0.07 sec    
+  44 Win:  1. PO:    21. Path:    202. Gate:    2. TFO:    342. A: 11936.30 ( +3.5 %)  D: 527.86 ps (-22.7 %)  B: 527.86 ps (-22.7 %)    0.07 sec    
+  45 Win:  1. PO:    21. Path:    198. Gate:    2. TFO:   2760. A: 11936.77 ( +3.5 %)  D: 529.67 ps (-22.4 %)  B: 527.86 ps (-22.7 %)    0.07 sec    
+  46 Win:  1. PO:    21. Path:    179. Gate:    4. TFO:   2091. A: 11940.50 ( +3.5 %)  D: 528.04 ps (-22.7 %)  B: 527.86 ps (-22.7 %)    0.07 sec    
+  47 Win:  1. PO:    21. Path:    225. Gate:    3. TFO:   2355. A: 11942.13 ( +3.5 %)  D: 528.55 ps (-22.6 %)  B: 527.86 ps (-22.7 %)    0.07 sec    
+  48 Win:  2. PO:    42. Path:    481. Gate:   35. TFO:   6429. A: 11958.70 ( +3.6 %)  D: 526.30 ps (-22.9 %)  B: 526.30 ps (-22.9 %)    0.08 sec    
+  49 Win:  1. PO:    21. Path:    218. Gate:    8. TFO:   3341. A: 11958.93 ( +3.6 %)  D: 524.82 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.08 sec    
+  50 Win:  1. PO:    21. Path:    234. Gate:    2. TFO:    128. A: 11958.70 ( +3.6 %)  D: 524.82 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.08 sec    
+  51 Win:  2. PO:    44. Path:    683. Gate:   56. TFO:   6930. A: 11987.40 ( +3.9 %)  D: 525.09 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.08 sec    
+  52 Win:  1. PO:    21. Path:    221. Gate:    3. TFO:    425. A: 11994.39 ( +4.0 %)  D: 525.09 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.08 sec    
+  53 Win:  1. PO:    21. Path:    217. Gate:    3. TFO:   2195. A: 11999.06 ( +4.0 %)  D: 525.09 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.08 sec    
+  54 Win:  1. PO:    21. Path:    211. Gate:    4. TFO:   2613. A: 12000.46 ( +4.0 %)  D: 525.09 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.09 sec    
+  55 Win:  2. PO:    42. Path:    459. Gate:   30. TFO:   7334. A: 12021.69 ( +4.2 %)  D: 528.92 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.09 sec    
+  56 Win:  1. PO:    21. Path:    199. Gate:    5. TFO:   3132. A: 12023.55 ( +4.2 %)  D: 527.82 ps (-22.7 %)  B: 524.82 ps (-23.1 %)    0.09 sec    
+  57 Win:  2. PO:    22. Path:    394. Gate:    7. TFO:   3034. A: 12019.82 ( +4.2 %)  D: 531.71 ps (-22.1 %)  B: 524.82 ps (-23.1 %)    0.09 sec    
+  58 Win:  1. PO:    21. Path:    219. Gate:    3. TFO:   2762. A: 12025.19 ( +4.2 %)  D: 531.88 ps (-22.1 %)  B: 524.82 ps (-23.1 %)    0.09 sec    
+  59 Win:  1. PO:    21. Path:    213. Gate:    1. TFO:   2491. A: 12027.05 ( +4.2 %)  D: 531.88 ps (-22.1 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  60 Win:  1. PO:    21. Path:    204. Gate:    3. TFO:   3312. A: 12028.69 ( +4.3 %)  D: 529.16 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  61 Win:  1. PO:    21. Path:    217. Gate:    2. TFO:   2923. A: 12026.59 ( +4.2 %)  D: 529.16 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  62 Win:  2. PO:    22. Path:    379. Gate:    6. TFO:   3188. A: 12027.05 ( +4.2 %)  D: 527.14 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  63 Win:  1. PO:    21. Path:    214. Gate:    5. TFO:   3356. A: 12029.15 ( +4.3 %)  D: 526.10 ps (-23.0 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  64 Win:  1. PO:    21. Path:    217. Gate:    3. TFO:   3020. A: 12029.62 ( +4.3 %)  D: 526.07 ps (-23.0 %)  B: 524.82 ps (-23.1 %)    0.10 sec    
+  65 Win:  2. PO:    24. Path:    394. Gate:   12. TFO:   3174. A: 12027.52 ( +4.2 %)  D: 527.17 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  66 Win:  1. PO:    21. Path:    202. Gate:    1. TFO:    247. A: 12025.65 ( +4.2 %)  D: 527.17 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  67 Win:  1. PO:    21. Path:    202. Gate:    2. TFO:   2134. A: 12028.45 ( +4.3 %)  D: 527.17 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  68 Win:  1. PO:    21. Path:    196. Gate:    1. TFO:    267. A: 12026.59 ( +4.2 %)  D: 527.17 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  69 Win:  2. PO:    22. Path:    374. Gate:    5. TFO:   3309. A: 12021.45 ( +4.2 %)  D: 531.82 ps (-22.1 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  70 Win:  1. PO:    21. Path:    209. Gate:    6. TFO:   3238. A: 12027.05 ( +4.2 %)  D: 530.10 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  71 Win:  1. PO:    21. Path:    205. Gate:    3. TFO:   2851. A: 12030.79 ( +4.3 %)  D: 529.19 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  72 Win:  2. PO:    22. Path:    360. Gate:    6. TFO:   3226. A: 12029.85 ( +4.3 %)  D: 529.69 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.11 sec    
+  73 Win:  1. PO:    21. Path:    218. Gate:    1. TFO:    273. A: 12031.72 ( +4.3 %)  D: 529.69 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  74 Win:  1. PO:    21. Path:    218. Gate:    2. TFO:   3117. A: 12033.58 ( +4.3 %)  D: 528.95 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  75 Win:  1. PO:    21. Path:    201. Gate:    3. TFO:   3151. A: 12032.88 ( +4.3 %)  D: 528.68 ps (-22.6 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  76 Win:  2. PO:    24. Path:    392. Gate:   14. TFO:   3127. A: 12025.19 ( +4.2 %)  D: 529.77 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  77 Win:  1. PO:    21. Path:    219. Gate:    4. TFO:   3164. A: 12027.05 ( +4.2 %)  D: 529.56 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  78 Win:  1. PO:    21. Path:    210. Gate:    2. TFO:   2133. A: 12025.66 ( +4.2 %)  D: 529.56 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.12 sec    
+  79 Win:  2. PO:    22. Path:    502. Gate:   27. TFO:   3148. A: 12032.89 ( +4.3 %)  D: 530.49 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  80 Win:  1. PO:    21. Path:    203. Gate:    4. TFO:   1860. A: 12034.53 ( +4.3 %)  D: 530.49 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  81 Win:  1. PO:    21. Path:    203. Gate:    3. TFO:   3023. A: 12038.96 ( +4.3 %)  D: 529.92 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  82 Win:  1. PO:    21. Path:    189. Gate:    1. TFO:    145. A: 12040.82 ( +4.4 %)  D: 529.92 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  83 Win:  2. PO:    22. Path:    438. Gate:   16. TFO:   3357. A: 12046.42 ( +4.4 %)  D: 530.75 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  84 Win:  1. PO:    21. Path:    207. Gate:    3. TFO:   3134. A: 12046.89 ( +4.4 %)  D: 528.55 ps (-22.6 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  85 Win:  1. PO:    21. Path:    215. Gate:    4. TFO:   3235. A: 12048.99 ( +4.4 %)  D: 527.41 ps (-22.8 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  86 Win:  1. PO:    21. Path:    213. Gate:    2. TFO:   2993. A: 12047.82 ( +4.4 %)  D: 529.32 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  87 Win:  1. PO:    21. Path:    214. Gate:    1. TFO:     38. A: 12047.59 ( +4.4 %)  D: 529.32 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.13 sec    
+  88 Win:  1. PO:    21. Path:    214. Gate:    3. TFO:   3150. A: 12051.32 ( +4.4 %)  D: 529.12 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  89 Win:  1. PO:    21. Path:    203. Gate:    1. TFO:   2011. A: 12051.79 ( +4.5 %)  D: 529.12 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  90 Win:  2. PO:    22. Path:    392. Gate:    9. TFO:   3297. A: 12052.72 ( +4.5 %)  D: 529.76 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  91 Win:  1. PO:    21. Path:    188. Gate:    3. TFO:   3125. A: 12055.52 ( +4.5 %)  D: 530.62 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  92 Win:  1. PO:    21. Path:    210. Gate:    2. TFO:   2796. A: 12056.22 ( +4.5 %)  D: 530.62 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  93 Win:  2. PO:    22. Path:    371. Gate:    5. TFO:   3229. A: 12049.69 ( +4.4 %)  D: 530.72 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.14 sec    
+  94 Win:  1. PO:    21. Path:    218. Gate:    3. TFO:   2908. A: 12048.99 ( +4.4 %)  D: 531.01 ps (-22.2 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+  95 Win:  1. PO:    21. Path:    226. Gate:    3. TFO:   3299. A: 12047.59 ( +4.4 %)  D: 530.74 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+  96 Win:  1. PO:    21. Path:    228. Gate:    4. TFO:   3090. A: 12046.19 ( +4.4 %)  D: 530.74 ps (-22.3 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+  97 Win:  2. PO:    24. Path:    457. Gate:   14. TFO:   3122. A: 12045.96 ( +4.4 %)  D: 529.66 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+  98 Win:  1. PO:    21. Path:    226. Gate:    4. TFO:   3211. A: 12048.52 ( +4.4 %)  D: 529.77 ps (-22.4 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+  99 Win:  1. PO:    21. Path:    212. Gate:    1. TFO:   2652. A: 12049.46 ( +4.4 %)  D: 529.57 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+ 100 Win:  1. PO:    21. Path:    210. Gate:    1. TFO:   2851. A: 12049.46 ( +4.4 %)  D: 529.21 ps (-22.5 %)  B: 524.82 ps (-23.1 %)    0.15 sec    
+ 100 Win:  1. PO:    23. Path:    257. Gate:    9. TFO:   3117. A: 11958.87 ( +3.6 %)  D: 524.82 ps (-23.1 %)  B: 524.82 ps (-23.1 %)    0.16 sec    
+Runtime: Critical path =     0.00 sec (  0.94 %)
+Runtime: Sizing eval   =     0.06 sec ( 40.27 %)
+Runtime: Timing update =     0.09 sec ( 57.41 %)
+Runtime: Other         =     0.00 sec (  1.38 %)
+Runtime: TOTAL         =     0.16 sec (100.00 %)
+Parameters: Iters =    5.  UseDept = 1. UseWL = 0. Target =    0 ps. DelayGap =1000 ps. Timeout =   0 sec
+    0 : Try = 12363  Over =  7905  Fail =  4337  Win =   121  A: 11879.53 ( -0.7 %)  D: 524.67 ps ( -0.0 %)      0.02 sec    
+    1 : Try =  7905  Over =  5740  Fail =  2060  Win =   105  A: 11812.57 ( -1.2 %)  D: 523.96 ps ( -0.2 %)      0.03 sec    
+    2 : Try =  5740  Over =  4296  Fail =  1349  Win =    95  A: 11761.00 ( -1.7 %)  D: 521.50 ps ( -0.6 %)      0.04 sec    
+    3 : Try =  4296  Over =  3282  Fail =   933  Win =    81  A: 11723.20 ( -2.0 %)  D: 524.07 ps ( -0.1 %)      0.05 sec    
+    4 : Try =  3282  Over =  2696  Fail =   516  Win =    70  A: 11695.42 ( -2.2 %)  D: 523.28 ps ( -0.3 %)      0.05 sec    
+    5 : Try =  2696  Over =  2177  Fail =   441  Win =    78  A: 11665.55 ( -2.5 %)  D: 523.73 ps ( -0.2 %)      0.06 sec    
+    6 : Try =  2177  Over =  1837  Fail =   275  Win =    65  A: 11642.91 ( -2.6 %)  D: 523.73 ps ( -0.2 %)      0.07 sec    
+    7 : Try =  1837  Over =  1512  Fail =   268  Win =    57  A: 11624.01 ( -2.8 %)  D: 523.73 ps ( -0.2 %)      0.07 sec    
+    8 : Try =  1512  Over =  1277  Fail =   183  Win =    52  A: 11606.73 ( -2.9 %)  D: 523.73 ps ( -0.2 %)      0.08 sec    
+    9 : Try =  1277  Over =  1106  Fail =   119  Win =    52  A: 11589.93 ( -3.1 %)  D: 523.73 ps ( -0.2 %)      0.08 sec    
+   10 : Try =  1106  Over =   954  Fail =    98  Win =    54  A: 11575.23 ( -3.2 %)  D: 523.73 ps ( -0.2 %)      0.09 sec    
+   11 : Try =   954  Over =   830  Fail =    79  Win =    45  A: 11562.39 ( -3.3 %)  D: 523.73 ps ( -0.2 %)      0.09 sec    
+   12 : Try =   830  Over =   705  Fail =    83  Win =    42  A: 11550.95 ( -3.4 %)  D: 523.76 ps ( -0.2 %)      0.09 sec    
+   13 : Try =   705  Over =   624  Fail =    42  Win =    39  A: 11539.75 ( -3.5 %)  D: 522.31 ps ( -0.5 %)      0.10 sec    
+   14 : Try =   624  Over =   557  Fail =    33  Win =    34  A: 11530.88 ( -3.6 %)  D: 522.31 ps ( -0.5 %)      0.10 sec    
+   15 : Try =   557  Over =   491  Fail =    32  Win =    34  A: 11522.01 ( -3.7 %)  D: 522.17 ps ( -0.5 %)      0.10 sec    
+   16 : Try =   491  Over =   424  Fail =    37  Win =    30  A: 11514.31 ( -3.7 %)  D: 522.04 ps ( -0.5 %)      0.11 sec    
+   17 : Try =   424  Over =   362  Fail =    29  Win =    33  A: 11505.44 ( -3.8 %)  D: 521.90 ps ( -0.6 %)      0.11 sec    
+   18 : Try =   362  Over =   313  Fail =    18  Win =    31  A: 11497.74 ( -3.9 %)  D: 523.08 ps ( -0.3 %)      0.11 sec    
+   19 : Try =   313  Over =   243  Fail =    43  Win =    27  A: 11490.50 ( -3.9 %)  D: 523.08 ps ( -0.3 %)      0.11 sec    
+   20 : Try =   243  Over =   201  Fail =    22  Win =    20  A: 11485.13 ( -4.0 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   21 : Try =   201  Over =   160  Fail =    20  Win =    21  A: 11479.77 ( -4.0 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   22 : Try =   160  Over =   121  Fail =    24  Win =    15  A: 11476.03 ( -4.0 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   23 : Try =   121  Over =    95  Fail =    13  Win =    13  A: 11472.76 ( -4.1 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   24 : Try =    95  Over =    74  Fail =     6  Win =    15  A: 11469.03 ( -4.1 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   25 : Try =    74  Over =    58  Fail =     3  Win =    13  A: 11465.76 ( -4.1 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   26 : Try =    58  Over =    45  Fail =     3  Win =    10  A: 11463.43 ( -4.1 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   27 : Try =    45  Over =    34  Fail =     3  Win =     8  A: 11461.56 ( -4.2 %)  D: 523.08 ps ( -0.3 %)      0.12 sec    
+   28 : Try =    34  Over =    17  Fail =    12  Win =     5  A: 11460.39 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.12 sec    
+   29 : Try =    17  Over =    11  Fail =     1  Win =     5  A: 11459.23 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.12 sec    
+   30 : Try =    11  Over =     4  Fail =     5  Win =     2  A: 11458.53 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.12 sec    
+   31 : Try =     4  Over =     2  Fail =     0  Win =     2  A: 11458.06 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.12 sec    
+   32 : Try =     2  Over =     0  Fail =     2  Win =     0  A: 11458.25 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.13 sec    
+Total : Try = 50516  Over = 38153  Fail = 11089  Win =  1274  A: 11458.25 ( -4.2 %)  D: 522.87 ps ( -0.4 %)      0.13 sec    
+    0 : Try = 12363  Over =  6491  Fail =  5804  Win =    68  A: 11426.28 ( -4.5 %)  D: 523.30 ps ( -0.3 %)      0.14 sec    
+    1 : Try =  6491  Over =  4182  Fail =  2239  Win =    70  A: 11395.24 ( -4.7 %)  D: 522.98 ps ( -0.4 %)      0.15 sec    
+    2 : Try =  4182  Over =  2878  Fail =  1241  Win =    63  A: 11371.21 ( -4.9 %)  D: 523.66 ps ( -0.2 %)      0.16 sec    
+    3 : Try =  2878  Over =  2001  Fail =   822  Win =    55  A: 11350.90 ( -5.1 %)  D: 523.11 ps ( -0.3 %)      0.17 sec    
+    4 : Try =  2001  Over =  1630  Fail =   315  Win =    56  A: 11333.40 ( -5.2 %)  D: 523.11 ps ( -0.3 %)      0.17 sec    
+    5 : Try =  1630  Over =  1294  Fail =   289  Win =    47  A: 11319.87 ( -5.3 %)  D: 523.11 ps ( -0.3 %)      0.18 sec    
+    6 : Try =  1294  Over =  1044  Fail =   206  Win =    44  A: 11308.66 ( -5.4 %)  D: 523.11 ps ( -0.3 %)      0.18 sec    
+    7 : Try =  1044  Over =   841  Fail =   168  Win =    35  A: 11299.79 ( -5.5 %)  D: 523.14 ps ( -0.3 %)      0.19 sec    
+    8 : Try =   841  Over =   699  Fail =   108  Win =    34  A: 11291.39 ( -5.6 %)  D: 523.14 ps ( -0.3 %)      0.19 sec    
+    9 : Try =   699  Over =   580  Fail =    87  Win =    32  A: 11283.22 ( -5.6 %)  D: 523.43 ps ( -0.3 %)      0.19 sec    
+   10 : Try =   580  Over =   475  Fail =    76  Win =    29  A: 11276.22 ( -5.7 %)  D: 523.43 ps ( -0.3 %)      0.20 sec    
+   11 : Try =   475  Over =   404  Fail =    42  Win =    29  A: 11269.45 ( -5.8 %)  D: 523.43 ps ( -0.3 %)      0.20 sec    
+   12 : Try =   404  Over =   326  Fail =    53  Win =    25  A: 11263.38 ( -5.8 %)  D: 523.43 ps ( -0.3 %)      0.20 sec    
+   13 : Try =   326  Over =   248  Fail =    57  Win =    21  A: 11258.48 ( -5.9 %)  D: 523.42 ps ( -0.3 %)      0.20 sec    
+   14 : Try =   248  Over =   186  Fail =    45  Win =    17  A: 11254.51 ( -5.9 %)  D: 523.42 ps ( -0.3 %)      0.20 sec    
+   15 : Try =   186  Over =   152  Fail =    17  Win =    17  A: 11250.55 ( -5.9 %)  D: 523.42 ps ( -0.3 %)      0.20 sec    
+   16 : Try =   152  Over =   102  Fail =    38  Win =    12  A: 11247.75 ( -5.9 %)  D: 523.42 ps ( -0.3 %)      0.20 sec    
+   17 : Try =   102  Over =    78  Fail =    10  Win =    14  A: 11244.48 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   18 : Try =    78  Over =    58  Fail =    12  Win =     8  A: 11242.61 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   19 : Try =    58  Over =    27  Fail =    26  Win =     5  A: 11241.44 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   20 : Try =    27  Over =    14  Fail =    12  Win =     1  A: 11241.21 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   21 : Try =    14  Over =     7  Fail =     6  Win =     1  A: 11240.98 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   22 : Try =     7  Over =     5  Fail =     1  Win =     1  A: 11240.74 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   23 : Try =     5  Over =     2  Fail =     2  Win =     1  A: 11240.51 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+   24 : Try =     2  Over =     0  Fail =     1  Win =     1  A: 11240.28 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+Total : Try = 36087  Over = 23724  Fail = 11677  Win =   686  A: 11240.28 ( -6.0 %)  D: 523.42 ps ( -0.3 %)      0.21 sec    
+    0 : Try = 12363  Over =  3174  Fail =  9166  Win =    23  A: 11225.11 ( -6.1 %)  D: 522.91 ps ( -0.4 %)      0.22 sec    
+    1 : Try =  3174  Over =  1073  Fail =  2081  Win =    20  A: 11214.61 ( -6.2 %)  D: 522.91 ps ( -0.4 %)      0.23 sec    
+    2 : Try =  1073  Over =   544  Fail =   513  Win =    16  A: 11206.91 ( -6.3 %)  D: 522.91 ps ( -0.4 %)      0.23 sec    
+    3 : Try =   544  Over =   265  Fail =   271  Win =     8  A: 11201.54 ( -6.3 %)  D: 522.91 ps ( -0.4 %)      0.23 sec    
+    4 : Try =   265  Over =   196  Fail =    59  Win =    10  A: 11197.11 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.23 sec    
+    5 : Try =   196  Over =   142  Fail =    47  Win =     7  A: 11195.01 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+    6 : Try =   142  Over =   107  Fail =    31  Win =     4  A: 11193.84 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+    7 : Try =   107  Over =    64  Fail =    40  Win =     3  A: 11192.91 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+    8 : Try =    64  Over =    43  Fail =    19  Win =     2  A: 11192.44 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+    9 : Try =    43  Over =    33  Fail =     7  Win =     3  A: 11191.74 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+   10 : Try =    33  Over =    18  Fail =    13  Win =     2  A: 11191.27 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+   11 : Try =    18  Over =     8  Fail =     9  Win =     1  A: 11191.04 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+   12 : Try =     8  Over =     0  Fail =     8  Win =     0  A: 11191.14 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+Total : Try = 18030  Over =  5667  Fail = 12264  Win =    99  A: 11191.14 ( -6.4 %)  D: 522.91 ps ( -0.4 %)      0.24 sec    
+    0 : Try = 12363  Over =  1846  Fail = 10504  Win =    13  A: 11186.01 ( -6.5 %)  D: 522.91 ps ( -0.4 %)      0.26 sec    
+    1 : Try =  1846  Over =   448  Fail =  1391  Win =     7  A: 11183.67 ( -6.5 %)  D: 524.61 ps ( -0.0 %)      0.26 sec    
+    2 : Try =   448  Over =   135  Fail =   307  Win =     6  A: 11181.81 ( -6.5 %)  D: 524.38 ps ( -0.1 %)      0.27 sec    
+    3 : Try =   135  Over =    37  Fail =    96  Win =     2  A: 11181.11 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.27 sec    
+    4 : Try =    37  Over =     0  Fail =    37  Win =     0  A: 11181.11 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.27 sec    
+Total : Try = 14829  Over =  2466  Fail = 12335  Win =    28  A: 11181.11 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.27 sec    
+    0 : Try = 12363  Over =   692  Fail = 11666  Win =     5  A: 11179.94 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.29 sec    
+    1 : Try =   692  Over =    35  Fail =   656  Win =     1  A: 11179.71 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.29 sec    
+    2 : Try =    35  Over =     0  Fail =    35  Win =     0  A: 11179.71 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.29 sec    
+Total : Try = 13090  Over =   727  Fail = 12357  Win =     6  A: 11179.71 ( -6.5 %)  D: 524.16 ps ( -0.1 %)      0.29 sec    
+Runtime: Critical path =     0.08 sec ( 29.12 %)
+Runtime: Sizing eval   =     0.05 sec ( 18.36 %)
+Runtime: Timing update =     0.11 sec ( 36.61 %)
+Runtime: Other         =     0.05 sec ( 15.91 %)
+Runtime: TOTAL         =     0.29 sec (100.00 %)
