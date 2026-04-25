@@ -1,0 +1,14 @@
+Review the uncommitted stmap23 AutoEDA iteration for correctness, build integration, and campaign-contract compliance.
+
+Context:
+- Project pack requires numbered stmap variants, preserved older commands, help text, no map behavior change, complete benchmark evaluation, CEC, runtime artifacts, and canonical logging.
+- stmap23 adds command file src/base/abci/abcStmap_23.c and registers/builds it.
+- Mapper mode 24 keeps stmap20 shallow early seeds and stmap21 strong deep seeds, but allows moderate deep pre-profile seeds only when existing mapper slack is near the critical side of the middle-slack window.
+- Required evaluation artifacts are under .autoeda/runtime/results/stmap23.
+
+Please focus on:
+- missing command/build registration or skipped version issues;
+- unintended changes to map or older stmap behavior;
+- incorrect fSkipFanout mode gating, diagnostics, or off-by-one stmap number printing;
+- metric/CEC artifact completeness problems;
+- any issue that should block committing this iteration.

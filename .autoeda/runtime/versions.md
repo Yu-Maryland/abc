@@ -1166,3 +1166,62 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap22: moderate deep early seed relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap22` admits the intended moderate deep `syn2` seeds, but final `syn2` delay worsens from the `stmap21` value of `490.96 ps` to `491.54 ps` and area rises from `21541.78` to `21598.23`. For `stmap23`, revert to the `stmap21` `5.0x` deep-seed threshold for mapping decisions and add downstream-sensitive diagnostics that isolate the marginal final-`stime` effect of each deep seed before admitting the `-3 ps` to `-4 ps` cluster again.
+
+## version23 / stmap23
+
+- hypothesis: A critical-slack qualifier for moderate deep early-profile seeds can keep the strongest `stmap21` deep timing-positive seeds while blocking the less critical half of the `stmap22` moderate deep cluster that raised `syn2` area and worsened delay versus `stmap21`.
+- motivation: `stmap22` relaxed the deep pre-profile seed boundary to `2.0 * ArrivalGainMargin`, admitting two additional moderate `syn2` seeds at nodes `24798` and `37979`. That increased `syn2` area and produced `491.54 ps`, worse than `stmap21`'s `490.96 ps`. `stmap23` tests whether the moderate cluster should be split by existing mapper slack, admitting only the candidate nearer the critical side of the middle-slack window.
+- command name: `stmap23`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_23.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap23/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap23` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 24` into the mapper. Mode `24` preserves the `stmap22` lower-moderate bucket, tight-depth middle-slack window, guard counters, relief diagnostics, near-miss diagnostics, and early-seed counter. The mapping-decision change is confined to pre-profile deep seeds: shallow seeds still use the `stmap20` `pNode->Level <= 24` rule; strong deep seeds still use the `stmap21` `ArrivalDelta <= -5.0 * ArrivalGainMargin` rule; moderate deep seeds may use the `stmap22` `-2.0 * ArrivalGainMargin` boundary only when the existing mapper slack is `<= 1.2 * tDelayInv.Worst`. Existing `map` and `stmap0` through `stmap22` behavior remain on their previous mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap23/build.log`.
+  - help: `./abc -c "stmap23 -h"` printed usage text with default `-G 250.00` and the critical-slack moderate deep early-profile guard enabled. Log: `.autoeda/runtime/results/stmap23/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap23; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap23/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap23/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `relief_diag.csv`, `near_miss_stats.csv`, `near_miss_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-slack `0`, middle-relief `0`, early-seed `0`, near-miss `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`, early-seed `0`, near-miss `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, middle-slack `35`, middle-relief `2`, early-seed `2`, near-miss `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `491.54 ps`, area `21598.23`; delay delta `-17.28 ps` (`-3.40%`), area delta `+301.63` (`+1.42%`); guard stats: exact-risk `98450`, middle-slack `1992`, middle-relief `5`, early-seed `4`, near-miss `10`.
+- relief diagnostics:
+  - `benchmarks/or1200.abc.blif`: the two shallow pre-profile early seeds remain admitted at nodes `11994` and `12001`, levels `14` and `17`, with area saving `0.93` and arrival deltas `-3.340004` and `-14.400009`.
+  - `benchmarks/syn2.abc.blif`: the three `stmap21` strong deep seeds remain admitted at nodes `2318`, `21363`, and `23673`, with arrival deltas `-10.130005`, `-8.349991`, and `-11.840012`.
+  - `benchmarks/syn2.abc.blif`: one moderate deep seed remains admitted at node `37979`, level `42`, slack `7.170013`, area saving `0.93`, and arrival delta `-3.699997`.
+  - `benchmarks/syn2.abc.blif`: the `stmap22` moderate seed at node `24798` is now rejected by the new `moderate-slack-gate` because its slack is `7.919983`.
+  - The final `syn2` delay and area match `stmap22`, showing that blocking node `24798` alone is not enough to recover the `stmap21` delay.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_23.c`.
+  - numbered command exists and is registered as `stmap23`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, admitted-relief, near-miss-stat, and near-miss diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap23/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap23/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap23/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap23/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap23/review_pass1_supported.log`.
+  - accepted finding: record `stmap23` in the canonical version log before finalizing the iteration; addressed by this entry.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap23/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap23/review_pass2_supported.log`.
+  - accepted findings: none; the second review reported no blocking correctness issue in the source integration, mapper-mode gating, runtime artifacts, campaign state, or version log completeness.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none after review pass 1; the accepted finding was a runtime-log completeness issue addressed by this canonical version-log entry.
+- commit: local commit created with message `stmap23: critical moderate deep seed relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap23` proves that rejecting only the less critical `24798` moderate seed does not change final `syn2` QoR from `stmap22`; the remaining moderate seed at node `37979` or an interaction with the high-gain seeds is sufficient to keep the `491.54 ps` outcome. For `stmap24`, either return to the `stmap21` high-gain-only deep-seed policy while preserving classified near-miss diagnostics, or add a seed-ablation mode that can admit each moderate candidate independently and measure the downstream `stime` effect.
