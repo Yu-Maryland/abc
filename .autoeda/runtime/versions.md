@@ -383,3 +383,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap7: criticality-sensitive recovery guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap7` strengthens `or1200` and `syn2` delay relative to `stmap6`, but it regresses `ode` delay and gives back area on `or1200` and `syn2`. For `stmap8`, add instrumentation or a refined graph-shape gate to distinguish `ode` from `syn2`, for example allowing the exact-area override in large designs only when fanout is moderate but also when the candidate cut does not worsen mapper arrival beyond a small fraction of inverter delay.
+
+## version8 / stmap8
+
+- hypothesis: Keeping the `stmap7` graph-size, slack, and highest-fanout gates, but bounding exact-area wide-cut overrides by candidate mapper-arrival regression, can recover the `ode` timing loss while preserving broad downstream delay improvements.
+- motivation: `stmap7` improved `i10`, `or1200`, and `syn2` delay but regressed `ode` delay while allowing exact-area recovery to trade mapper slack for area. `stmap8` tests whether those area-saving wide cuts should also be rejected when their matched arrival is more than one quarter of an inverter delay slower than the existing match.
+- command name: `stmap8`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_8.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap8/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap8` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 9` into the mapper. `mapperMatch.c` interprets mode `9` as an arrival-bounded criticality-sensitive guard: during delay matching it uses the same graph-size-gated high-fanout wide-cut guard as `stmap5` through `stmap7`; during recovery on small mapper graphs (`<= 8000`) and during area-flow recovery on larger graphs it keeps the `stmap2` slack-aware guard; during exact-area recovery on larger graphs it matches the candidate cut first and rejects a high-fanout wide cut unless the existing match has more than two inverter delays of slack, the candidate is outside the highest fanout-risk bucket, the candidate worsens mapper arrival by no more than one quarter of an inverter delay, and the candidate saves at least half an inverter area. Existing `map` and `stmap0` through `stmap7` behavior are preserved because modes `0` through `8` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap8/build.log`.
+  - help: `./abc -c "stmap8 -h"` printed usage text with default `-G 250.00` and the arrival-bounded fanout guard enabled. Log: `.autoeda/runtime/results/stmap8/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap8; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap8/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap8/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, prompt artifact, and review summary.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `578.80 ps`, area `4853.16`; delay delta `-8.28 ps` (`-1.41%`), area delta `+54.82` (`+1.14%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `493.17 ps`, area `21566.97`; delay delta `-15.65 ps` (`-3.08%`), area delta `+270.37` (`+1.27%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_8.c`.
+  - numbered command exists and is registered as `stmap8`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap8/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap8/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap8/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap8` in the canonical version log before counting the iteration; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap8: arrival-bounded recovery guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap8` restores an `ode` delay win and keeps delay improvements on all four benchmarks, but area still increases on `i10`, `or1200`, and `syn2`. For `stmap9`, keep the arrival-bounded timing guard and add a targeted area-control signal, such as tightening the delay-pass guard for small graphs only when downstream area grows or adding guard-hit instrumentation to separate area-costly high-fanout choices from timing-critical ones.

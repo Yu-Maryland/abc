@@ -1,0 +1,10 @@
+Review the uncommitted stmap8 AutoEDA iteration in this ABC repository.
+
+Focus on correctness and campaign-contract risks:
+- new stmap8 command registration, help behavior, and build integration
+- mapperMatch.c mode 9 behavior and whether it is gated only to stmap8
+- preservation of map and stmap0 through stmap7 behavior
+- C correctness, null-pointer risks, and mapper invariant risks
+- evaluation/logging artifacts needed before counting the iteration
+
+Return findings ordered by severity with file and line references. If there are no blocking issues, say so clearly and mention any residual validation risk.

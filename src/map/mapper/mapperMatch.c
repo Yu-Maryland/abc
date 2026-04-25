@@ -115,7 +115,10 @@ static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t 
   recovery on larger graphs checks the cut after matching so materially cheaper
   cuts can override the fanout/load proxy. Mode 8 is the stmap7 criticality-
   sensitive version of mode 7: exact-area recovery on larger graphs allows the
-  override only with deeper mapper slack and outside the highest fanout bucket.]
+  override only with deeper mapper slack and outside the highest fanout bucket.
+  Mode 9 is the stmap8 arrival-bounded version of mode 8: the area-saving
+  override also requires the candidate match to stay within one quarter of an
+  inverter delay of the existing mapper arrival.]
 
   SideEffects []
 
@@ -243,7 +246,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout == 8 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -294,7 +297,9 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   when the existing match has slack and the candidate does not save at least
   half an inverter area. In stmap7, the area-saving override additionally
   requires more than two inverter delays of slack and excludes the highest
-  fanout-risk bucket.]
+  fanout-risk bucket. In stmap8, the override is further rejected when the
+  candidate match worsens mapper arrival by more than one quarter of an
+  inverter delay.]
 
   SideEffects []
 
@@ -303,9 +308,9 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
 ***********************************************************************/
 static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, Map_Match_t * pMatchBest, Map_Match_t * pMatch )
 {
-    float Slack, SlackMargin, SlackGate, AreaMargin;
+    float Slack, SlackMargin, SlackGate, ArrivalMargin, AreaMargin;
 
-    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 )
+    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -317,7 +322,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
     SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
-    if ( p->fSkipFanout == 8 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 )
     {
         SlackGate = 2.0 * SlackMargin;
         if ( Slack <= SlackGate + p->fEpsilon )
@@ -327,6 +332,12 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
+    if ( p->fSkipFanout == 9 )
+    {
+        ArrivalMargin = 0.25 * SlackMargin;
+        if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
+            return 1;
+    }
     AreaMargin = p->pSuperLib ? 0.5 * p->pSuperLib->AreaInv : 0.0;
     if ( pMatch->AreaFlow < pMatchBest->AreaFlow - AreaMargin - p->fEpsilon )
         return 0;
