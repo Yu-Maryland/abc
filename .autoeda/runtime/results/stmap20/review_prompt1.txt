@@ -1,0 +1,14 @@
+Review the uncommitted stmap20 AutoEDA iteration in this ABC repository.
+
+Project pack constraints:
+- New command must be stmap20 and preserve existing map/stmap0..stmap19 behavior.
+- The hypothesis is a shallow early-profile timing-quality seed: stmap20 should use mapper fSkipFanout mode 21. Before the adaptive profile opens, one-inverter middle-slack relief may be admitted only when the candidate has material mapper-arrival improvement and pNode->Level <= 24. Post-profile behavior should preserve the stmap17 timing-quality one-inverter rule.
+- Required gates already run before this review: make ABC_USE_NO_READLINE=1; stmap20 -h; smoke on benchmarks/i10.aig; full baseline/candidate stime metrics on all four required benchmarks; CEC on all four benchmarks; artifact check.
+
+Focus review on source correctness and campaign compliance:
+1. Command registration/build integration for src/base/abci/abcStmap_20.c, abc.c, module.make, and abclib.dsp.
+2. Mapper mode plumbing in mapperInt.h, mapperCore.c, and mapperMatch.c. Look for missing mode-21 cases, incorrect diagnostics labels, or behavior changes to existing modes.
+3. Whether the mode-21 fStrictFallback expression actually implements shallow pre-profile seed plus post-profile stmap17 timing-quality behavior.
+4. Runtime artifact/log completeness under .autoeda/runtime/results/stmap20 and whether any required gate should be rerun.
+
+Report findings with severity and file/line references. If no blocking findings, say so explicitly. Do not modify files.
