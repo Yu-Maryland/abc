@@ -718,3 +718,55 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap14: strengthen middle-slack area relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap14` reduces the `or1200` area cost relative to `stmap13`, but gives back much of the `or1200` delay gain and increases `syn2` area while admitting only one middle-slack relief. For `stmap15`, keep the counters and test an adaptive lower-moderate rule that restores relief only for high middle-slack/high lower-bucket profiles, or add a timing-quality discriminator to distinguish the `syn2` delay-positive relief from area-expensive downstream sizing effects.
+
+## version15 / stmap15
+
+- hypothesis: Keeping the `stmap14` lower-moderate, tight-depth, arrival-neutral middle-slack guard as the fallback, but lowering the middle-slack relief area threshold from two inverter areas to one only after the mapper observes a high lower-moderate/middle-slack exact-area profile, can recover timing-positive `syn2`-like relief without reopening the low-profile `or1200` area risk.
+- motivation: `stmap14` reduced the `or1200` area cost relative to `stmap13`, but gave back much of the `or1200` delay gain and admitted only one `syn2` middle-slack relief. The `stmap13`/`stmap14` counters showed `syn2` has a high lower-moderate and middle-slack profile, while `or1200` has a much smaller middle-slack profile. `stmap15` tests that profile split directly.
+- command name: `stmap15`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_15.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap15/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap15` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 16` into the mapper. Mode `16` preserves the `stmap13`/`stmap14` guard-stat path, the lower-moderate fanout bucket, the tight `pNode->Level <= 64` depth window, and the arrival-neutral one-to-two-inverter middle-slack window. Before the adaptive profile opens, mode `16` uses the same two-inverter area-saving threshold as `stmap14`; after the current exact-area pass has observed at least `20000` lower-moderate risk cuts and `128` middle-slack candidates, it lowers the middle-slack relief threshold to one inverter area. Modes `0` through `15` retain their previous behavior.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed after the accepted review fix; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap15/build.log`.
+  - help: `./abc -c "stmap15 -h"` printed usage text with default `-G 250.00` and the adaptive lower-moderate middle-slack guard enabled. Log: `.autoeda/runtime/results/stmap15/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap15; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap15/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap15/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-relief `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-relief `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `578.80 ps`, area `4853.16`; delay delta `-8.28 ps` (`-1.41%`), area delta `+54.82` (`+1.14%`); guard stats: exact-risk `22683`, middle-relief `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `494.17 ps`, area `21541.54`; delay delta `-14.65 ps` (`-2.88%`), area delta `+244.94` (`+1.15%`); guard stats: exact-risk `98466`, middle-relief `2`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_15.c`.
+  - numbered command exists and is registered as `stmap15`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat parsing passed and is recorded in `.autoeda/runtime/results/stmap15/guard_stats.csv`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap15/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap15/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap15/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap15/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Preserve the `stmap14` fallback before the adaptive profile opens; addressed by changing mode `16` to use a two-inverter area margin until the profile threshold is met, then revalidating build, help, smoke, full benchmark metrics, and CEC.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap15/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap15/review_pass2_supported.log`.
+- rejected findings: none.
+- open findings: none.
+- commit: local commit created with message `stmap15: adaptive middle-slack profile guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap15` keeps the `stmap14` `i10`, `ode`, and `or1200` outcomes and reduces `syn2` area relative to `stmap14`, but it loses `syn2` delay despite admitting one additional middle-slack relief. For `stmap16`, keep the counters and add a per-relief diagnostic that records whether admitted middle-slack cuts occur before or after the profile opens, along with node level, slack, area saving, and arrival delta, then use that evidence to distinguish timing-positive relief from downstream-sizing area churn.

@@ -222,7 +222,7 @@ ABC_PRT( "Time", Abc_Clock() - clk );
     p->timeArea += Abc_Clock() - clk;
     //////////////////////////////////////////////////////////////////////
 
-    if ( p->fSkipFanout == 14 || p->fSkipFanout == 15 )
+    if ( p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 )
         printf( "stmap%d guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
             p->fSkipFanout - 1,
             p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,

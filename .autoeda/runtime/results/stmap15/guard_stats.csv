@@ -1,0 +1,5 @@
+benchmark,exact_risk,highest,lower_mod,upper_mod,middle_slack,middle_relief,reject_slack,reject_highest,reject_arrival,reject_area
+benchmarks/i10.aig,0,0,0,0,0,0,0,0,0,0
+benchmarks/ode.abc.blif,49626,22601,19542,7483,765,0,12974,14866,10527,11095
+benchmarks/or1200.abc.blif,22683,8550,10852,3281,52,0,952,8476,5822,7084
+benchmarks/syn2.abc.blif,98466,48768,38545,11153,2009,2,35920,28320,16668,17216

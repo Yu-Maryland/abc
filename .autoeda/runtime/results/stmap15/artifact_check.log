@@ -1,0 +1,7 @@
+stmap15 artifact check
+missing_artifacts=[]
+metrics_rows=8
+comparison_rows=4
+guard_rows=4
+cec_all_equivalent=True
+status=passed

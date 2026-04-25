@@ -1,0 +1,20 @@
+Review the uncommitted stmap15 implementation for this ABC AutoEDA campaign.
+
+Binding context:
+- New command must be stmap15 and must preserve stmap0 through stmap14 behavior.
+- Evaluation family is stmap; baseline is map.
+- Primary quality metric is final post-flow stime delay after: topo; buffer; upsize -v; dnsize -v; stime.
+- Required correctness gates include build, help, smoke, all four benchmark metrics, CEC, and version/runtime logging.
+
+Implementation summary to review:
+- Adds src/base/abci/abcStmap_15.c and registers stmap15 in abc.c, module.make, and abclib.dsp.
+- Adds mapper fSkipFanout mode 16.
+- Mode 16 keeps the stmap13/stmap14 counter path, lower-moderate bucket, tight depth, and arrival-neutral middle-slack window, but only restores the one-inverter area-relief threshold after the current exact-area pass has observed lower_mod >= 20000 and middle_slack >= 128. Otherwise it rejects like the stricter stmap14-style guarded path.
+
+Please focus on:
+1. Any source bug or build integration omission that could break ABC or older stmap commands.
+2. Any mode-number collision or behavior leak into map/stmap0-stmap14.
+3. Any correctness/evaluation artifact issue that should block counting the iteration.
+4. Whether the adaptive profile counter logic is internally coherent and not order-of-evaluation unsafe beyond the stated hypothesis.
+
+Return findings with severity and file/line references. If there are no blocking findings, say so explicitly.
