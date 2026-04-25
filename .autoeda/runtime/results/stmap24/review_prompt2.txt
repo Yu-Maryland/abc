@@ -1,0 +1,11 @@
+Second review for the uncommitted stmap24 AutoEDA iteration.
+
+Review the current diff after addressing review pass 1's accepted finding by adding the canonical .autoeda/runtime/versions.md entry and version-log check.
+
+Focus on remaining blocking issues only:
+- stmap24 mode 25 behavior is isolated from map and older stmap modes;
+- all diagnostics and result artifacts referenced by the version log exist;
+- campaign state and version log are sufficient to count the iteration after final commit-state updates;
+- no correctness, build integration, or artifact completeness issue remains.
+
+Report concrete blocking findings first with file/line references. If there are no blocking issues, say so clearly.

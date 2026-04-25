@@ -140,7 +140,7 @@ static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_
 ***********************************************************************/
 static void Map_MatchStmap13CountRisk( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
 {
-    if ( p->fSkipFanout != 14 && p->fSkipFanout != 15 && p->fSkipFanout != 16 && p->fSkipFanout != 17 && p->fSkipFanout != 18 && p->fSkipFanout != 19 && p->fSkipFanout != 20 && p->fSkipFanout != 21 && p->fSkipFanout != 22 && p->fSkipFanout != 23 && p->fSkipFanout != 24 )
+    if ( p->fSkipFanout != 14 && p->fSkipFanout != 15 && p->fSkipFanout != 16 && p->fSkipFanout != 17 && p->fSkipFanout != 18 && p->fSkipFanout != 19 && p->fSkipFanout != 20 && p->fSkipFanout != 21 && p->fSkipFanout != 22 && p->fSkipFanout != 23 && p->fSkipFanout != 24 && p->fSkipFanout != 25 )
         return;
     p->nStmap13ExactRisk++;
     if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
@@ -202,7 +202,7 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode 
         return Map_MatchNodeHasStmapReliefDepth( pNode );
     if ( Mode == 12 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
-    if ( Mode == 13 || Mode == 14 || Mode == 15 || Mode == 16 || Mode == 17 || Mode == 18 || Mode == 19 || Mode == 20 || Mode == 21 || Mode == 22 || Mode == 23 || Mode == 24 )
+    if ( Mode == 13 || Mode == 14 || Mode == 15 || Mode == 16 || Mode == 17 || Mode == 18 || Mode == 19 || Mode == 20 || Mode == 21 || Mode == 22 || Mode == 23 || Mode == 24 || Mode == 25 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
     return 0;
 }
@@ -292,6 +292,25 @@ static int Map_MatchHasStmap23CriticalModerateDeepSeed( float ArrivalDelta, floa
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if a moderate deep seed is tight-critical for stmap24.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap24TightCriticalModerateDeepSeed( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+        return 1;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.1 * SlackMargin + Epsilon;
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
@@ -341,7 +360,8 @@ static int Map_MatchHasStmap23CriticalModerateDeepSeed( float ArrivalDelta, floa
   relaxes the deep pre-profile seed boundary to a moderate arrival gain. Mode
   24 is stmap23, which keeps the strong deep seeds but allows moderate deep
   seeds only when the existing mapper slack is near the critical side of the
-  middle-slack window.]
+  middle-slack window. Mode 25 is stmap24, which tightens the moderate deep
+  slack gate to the lower edge of that critical window.]
 
   SideEffects []
 
@@ -469,7 +489,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -542,7 +562,8 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   stmap21, deeper pre-profile seeds are allowed only with a much larger mapper
   arrival gain. In stmap22, the same deep-seed path is relaxed to a moderate
   mapper-arrival gain. In stmap23, moderate deep seeds also need near-critical
-  existing mapper slack.]
+  existing mapper slack. In stmap24, the moderate deep slack gate is tightened
+  to the lower edge of the critical slack window.]
 
   SideEffects []
 
@@ -555,7 +576,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     const char * pReason;
     int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
 
-    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 && p->fSkipFanout != 11 && p->fSkipFanout != 12 && p->fSkipFanout != 13 && p->fSkipFanout != 14 && p->fSkipFanout != 15 && p->fSkipFanout != 16 && p->fSkipFanout != 17 && p->fSkipFanout != 18 && p->fSkipFanout != 19 && p->fSkipFanout != 20 && p->fSkipFanout != 21 && p->fSkipFanout != 22 && p->fSkipFanout != 23 && p->fSkipFanout != 24 )
+    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 && p->fSkipFanout != 11 && p->fSkipFanout != 12 && p->fSkipFanout != 13 && p->fSkipFanout != 14 && p->fSkipFanout != 15 && p->fSkipFanout != 16 && p->fSkipFanout != 17 && p->fSkipFanout != 18 && p->fSkipFanout != 19 && p->fSkipFanout != 20 && p->fSkipFanout != 21 && p->fSkipFanout != 22 && p->fSkipFanout != 23 && p->fSkipFanout != 24 && p->fSkipFanout != 25 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -563,7 +584,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
         return 0;
-    fStmap13 = (p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24);
+    fStmap13 = (p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25);
     Map_MatchStmap13CountRisk( p, pNode, pCut );
     if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
         return 0;
@@ -572,11 +593,11 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
     ArrivalGainMargin = 0.25 * SlackMargin;
     fArrivalQuality = ArrivalDelta <= -ArrivalGainMargin - p->fEpsilon;
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 )
     {
         SlackGate = 2.0 * SlackMargin;
         fMiddleReliefWindow =
-             (p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24) &&
+             (p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25) &&
              Slack > SlackMargin + p->fEpsilon &&
              Slack <= SlackGate + p->fEpsilon &&
              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
@@ -593,6 +614,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
              (p->fSkipFanout != 22 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
              (p->fSkipFanout != 23 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
              (p->fSkipFanout != 24 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
+             (p->fSkipFanout != 25 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
              pMatch->tArrive.Worst <= pMatchBest->tArrive.Worst + p->fEpsilon;
         if ( fMiddleReliefWindow )
         {
@@ -607,7 +629,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 (p->fSkipFanout == 21 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode )))) ||
                 (p->fSkipFanout == 22 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap21DeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
                 (p->fSkipFanout == 23 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon )))) ||
-                (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+                (p->fSkipFanout == 24 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap23CriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
             AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
             AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
             OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
@@ -620,16 +643,16 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
                         pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
-                if ( p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 )
+                if ( p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 )
                     printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
                         p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
                         ArrivalDelta, ArrivalGainMargin, AreaMargin );
-                if ( (p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24) && !fProfileOpen && !fStrictFallback )
+                if ( (p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25) && !fProfileOpen && !fStrictFallback )
                     p->nStmap19EarlySeed++;
                 return 0;
             }
-            if ( (p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24) && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+            if ( (p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25) && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
             {
                 if ( p->fSkipFanout == 19 )
                     pReason = fProfileOpen ? "timing-gate" : "profile-closed";
@@ -641,6 +664,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     pReason = fArrivalQuality ? "moderate-gain-gate" : "arrival-gate";
                 else if ( p->fSkipFanout == 24 )
                     pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 25 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "tight-moderate-slack-gate" : "moderate-gain-gate") : "arrival-gate";
                 else
                     pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
                 p->nStmap18NearMiss++;
@@ -669,7 +694,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
-    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 )
+    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 || p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 || p->fSkipFanout == 24 || p->fSkipFanout == 25 )
     {
         ArrivalMargin = 0.25 * SlackMargin;
         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )

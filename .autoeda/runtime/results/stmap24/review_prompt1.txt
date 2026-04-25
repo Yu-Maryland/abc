@@ -1,0 +1,10 @@
+Review the uncommitted stmap24 AutoEDA iteration in this ABC repository.
+
+Focus on correctness risks in the new stmap24 command and mapper mode 25:
+- command registration and build integration preserve all older stmap0..stmap23 commands;
+- fSkipFanout mode 25 diagnostics and counters are wired consistently;
+- the new tight critical-slack moderate deep seed helper does not change map or older stmap modes;
+- generated evaluation artifacts under .autoeda/runtime/results/stmap24 are complete enough for the project pack;
+- campaign_state updates are consistent with an in-progress iteration.
+
+Report concrete blocking findings first with file/line references. If there are no blocking issues, say so clearly.
