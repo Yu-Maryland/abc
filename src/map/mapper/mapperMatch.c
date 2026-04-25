@@ -97,6 +97,22 @@ static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t 
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if the node is in the stmap10 relief depth window.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchNodeHasStmapReliefDepth( Map_Node_t * pNode )
+{
+    return pNode->Level <= 96;
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
@@ -122,7 +138,8 @@ static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t 
   middle-slack area-relief version of mode 9: it keeps the highest fanout
   bucket protected, but in the one-to-two inverter slack bucket it allows a
   wide cut only when it is arrival-neutral and saves at least one inverter
-  area.]
+  area. Mode 11 is the stmap10 depth-qualified version of mode 10: the
+  middle-slack relief is allowed only for shallow and medium-depth nodes.]
 
   SideEffects []
 
@@ -250,7 +267,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -305,7 +322,8 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   candidate match worsens mapper arrival by more than one quarter of an
   inverter delay. In stmap9, middle-slack candidates can recover area only
   when they are outside the highest fanout bucket, do not worsen mapper
-  arrival, and save at least one inverter area.]
+  arrival, and save at least one inverter area. In stmap10, that middle-slack
+  relief also requires the mapper node to be no deeper than level 96.]
 
   SideEffects []
 
@@ -316,7 +334,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
 {
     float Slack, SlackMargin, SlackGate, ArrivalMargin, AreaMargin;
 
-    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 )
+    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 && p->fSkipFanout != 11 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -328,13 +346,14 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
     SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 )
     {
         SlackGate = 2.0 * SlackMargin;
-        if ( p->fSkipFanout == 10 &&
+        if ( (p->fSkipFanout == 10 || p->fSkipFanout == 11) &&
              Slack > SlackMargin + p->fEpsilon &&
              Slack <= SlackGate + p->fEpsilon &&
              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
+             (p->fSkipFanout == 10 || Map_MatchNodeHasStmapReliefDepth( pNode )) &&
              pMatch->tArrive.Worst <= pMatchBest->tArrive.Worst + p->fEpsilon )
         {
             AreaMargin = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
@@ -348,7 +367,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
-    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 )
+    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 )
     {
         ArrivalMargin = 0.25 * SlackMargin;
         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )

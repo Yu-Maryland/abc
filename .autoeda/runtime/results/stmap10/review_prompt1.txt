@@ -1,0 +1,21 @@
+Review the uncommitted stmap10 AutoEDA iteration in this ABC repository.
+
+Context:
+- Project pack requires one numbered stmapN variant per successful iteration.
+- stmap10 adds src/base/abci/abcStmap_10.c, registers command stmap10, wires it into module.make and abclib.dsp, and extends mapper fSkipFanout mode 11.
+- The hypothesis is a depth-qualified refinement of stmap9: keep the arrival-neutral middle-slack area-relief override, but allow it only for mapper nodes at structural level <= 96 so deep reconvergent high-fanout nodes fall back to stricter stmap8-style protection.
+- Existing map and stmap0 through stmap9 behavior should remain unchanged.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap10 -h"
+- smoke flow on benchmarks/i10.aig
+- full baseline map and candidate stmap10 downstream flow on all four required benchmarks
+- CEC original strashed design versus post-flow stmap10 strashed design for all four benchmarks
+
+Please focus on:
+- build integration or command registration mistakes
+- unintended behavior changes to map or older stmap commands
+- mapper guard logic errors, especially mode 11 interactions with modes 8-10
+- correctness, logging, and artifact completeness issues that would prevent counting the iteration
+- any missing tests or revalidation needed before commit
