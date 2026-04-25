@@ -1,0 +1,4 @@
+artifact_check=passed
+required_files=65
+all metric, guard-stat, relief-diagnostic, CEC, and review artifacts present
+prompt-form review exits are recorded as the known local CLI argument conflict; supported stdin review exits are zero

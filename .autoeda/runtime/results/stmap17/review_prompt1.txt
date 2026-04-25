@@ -1,0 +1,27 @@
+Review the uncommitted stmap17 AutoEDA iteration in this ABC repository.
+
+Project contract:
+- The binding project pack is in .autoeda/project_pack/.
+- This iteration adds command stmap17 and should preserve map and stmap0 through stmap16 behavior.
+- Required flow is read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap17; topo; buffer; upsize -v; dnsize -v; stime.
+- Required benchmarks are benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, and benchmarks/syn2.abc.blif.
+
+Hypothesis:
+stmap17 keeps the stmap15/stmap16 adaptive lower-moderate middle-slack profile guard, but uses the relaxed one-inverter area threshold only after the adaptive profile opens and the candidate match improves mapper arrival by at least one quarter inverter delay. Arrival-neutral candidates retain the stricter two-inverter fallback.
+
+Implementation summary:
+- Added src/base/abci/abcStmap_17.c with fSkipFanout mode 18 and usage text.
+- Registered stmap17 in src/base/abci/abc.c.
+- Added abcStmap_17.c to src/base/abci/module.make and abclib.dsp.
+- Extended mapper mode handling in src/map/mapper/mapperMatch.c, mapperCore.c, and mapperInt.h.
+- Existing modes 0 through 17 should be behavior-preserving.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap17 -h" printed usage text.
+- Smoke flow on benchmarks/i10.aig passed and produced final stime metrics.
+- Full baseline/candidate metrics ran on all four required benchmarks and parsed.
+- CEC passed for all four required benchmarks using strashed original and post-flow candidate AIGs.
+- Artifacts are under .autoeda/runtime/results/stmap17/.
+
+Please look for correctness risks, versioning/build integration errors, behavior leaks into existing commands, missing required artifacts, unparseable diagnostics, or any issue that should block counting this iteration.

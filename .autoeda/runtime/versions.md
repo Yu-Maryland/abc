@@ -825,3 +825,58 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap16: add adaptive relief diagnostics`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap16` shows both admitted `syn2` middle-slack relief choices occur after the adaptive profile opens and both improve mapper arrival while saving modest area. For `stmap17`, use this evidence to test a timing-quality discriminator rather than a looser area threshold: for example, admit one-inverter lower-moderate relief only after profile open when arrival delta is materially negative, while keeping the two-inverter fallback for arrival-neutral choices.
+
+## version17 / stmap17
+
+- hypothesis: Keeping the `stmap15`/`stmap16` adaptive lower-moderate middle-slack profile guard, but requiring a material mapper-arrival improvement before using the relaxed one-inverter post-profile area threshold, can preserve timing-positive `syn2` relief while preventing future arrival-neutral low-area choices from reopening downstream sizing area risk.
+- motivation: `stmap16` showed both admitted `syn2` relief choices happened after the adaptive profile opened and both improved mapper arrival. The next recommended discriminator was timing quality rather than a looser area threshold. `stmap17` tests that directly by keeping the two-inverter fallback unless the candidate improves arrival by at least one quarter inverter delay.
+- command name: `stmap17`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_17.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap17/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap17` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 18` into the mapper. Mode `18` preserves the lower-moderate fanout bucket, tight-depth window, adaptive profile gate, guard-stat counters, and relief diagnostics from `stmap15`/`stmap16`. The change is that the one-inverter area-saving threshold after profile open is used only when the candidate match improves mapper arrival by at least `0.25 * tDelayInv`; otherwise the middle-slack relief candidate must satisfy the stricter two-inverter area-saving fallback. Modes `0` through `17` retain their previous behavior.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap17/build.log`.
+  - help: `./abc -c "stmap17 -h"` printed usage text with default `-G 250.00` and the timing-quality adaptive guard enabled. Log: `.autoeda/runtime/results/stmap17/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap17; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap17/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap17/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `relief_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-relief `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `578.80 ps`, area `4853.16`; delay delta `-8.28 ps` (`-1.41%`), area delta `+54.82` (`+1.14%`); guard stats: exact-risk `22683`, middle-slack `52`, middle-relief `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `494.17 ps`, area `21541.54`; delay delta `-14.65 ps` (`-2.88%`), area delta `+244.94` (`+1.15%`); guard stats: exact-risk `98466`, middle-slack `2009`, middle-relief `2`.
+- relief diagnostics:
+  - `benchmarks/syn2.abc.blif`: relief `1`, profile-open `1`, node `24250`, level `38`, refs `4`, leaves `4`, phase `0`, slack `9.709976`, area saving `1.63`, arrival delta `-9.130005`, arrival-gain margin `1.585`, area margin `0.70`.
+  - `benchmarks/syn2.abc.blif`: relief `2`, profile-open `1`, node `25927`, level `7`, refs `4`, leaves `5`, phase `0`, slack `6.619999`, area saving `0.94`, arrival delta `-1.600002`, arrival-gain margin `1.585`, area margin `0.70`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_17.c`.
+  - numbered command exists and is registered as `stmap17`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat parsing and relief diagnostic parsing passed and are recorded in `.autoeda/runtime/results/stmap17/guard_stats.csv` and `.autoeda/runtime/results/stmap17/relief_diag.csv`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap17/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap17/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap17/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap17/review_pass1_supported.log`.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap17/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap17/review_pass2_supported.log`.
+- accepted findings: none.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none.
+- commit: local commit created with message `stmap17: timing-quality relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap17` keeps the `stmap16` final QoR because both existing admitted `syn2` relief choices narrowly clear the timing-quality gate. For `stmap18`, add a diagnostic for near-miss middle-slack candidates that fail the timing-quality gate or the two-inverter fallback, so the next behavior change can target candidates that would actually diverge from `stmap16` rather than simply confirming the current two admitted choices.

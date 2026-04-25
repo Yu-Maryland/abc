@@ -1,0 +1,11 @@
+Second review pass for the uncommitted stmap17 AutoEDA iteration.
+
+No source changes were made after review pass 1. Review pass 1 reported no discrete correctness issues.
+
+Please re-check the source behavior and campaign artifacts for any remaining blocker:
+- stmap17 must be command mode 18 only, preserving map and stmap0 through stmap16.
+- The adaptive one-inverter middle-slack relief should require profile-open status and a material mapper-arrival improvement; otherwise it should retain the two-inverter area-saving fallback.
+- Build registration must include src/base/abci/abcStmap_17.c.
+- Help, smoke, all required benchmark metrics, guard/relief diagnostics, and CEC artifacts are under .autoeda/runtime/results/stmap17/.
+
+Return findings only if they are concrete correctness, reproducibility, or project-contract issues that should block counting the iteration.
