@@ -1,0 +1,18 @@
+src/map/mapper/mapperInt.h:126:    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11
+src/base/abci/abcStmap_11.c:9:  Synopsis    [stmap11 command.]
+src/base/abci/abcStmap_11.c:22:  Synopsis    [Runs the stmap11 mapper probe.]
+src/base/abci/abcStmap_11.c:24:  Description [stmap11 tests a tight-depth refinement of the stmap10
+src/base/abci/abcStmap_11.c:35:int Abc_CommandStmap11( Abc_Frame_t * pAbc, int argc, char ** argv )
+src/base/abci/abcStmap_11.c:66:    fSkipFanout = 12; // tight-depth middle-slack area-relief guard; -f disables it
+src/base/abci/abcStmap_11.c:193:            Abc_Print( -1, "Strashing before stmap11 has failed.\n" );
+src/base/abci/abcStmap_11.c:200:            Abc_Print( -1, "Balancing before stmap11 has failed.\n" );
+src/base/abci/abcStmap_11.c:203:        Abc_Print( 0, "The network was strashed and balanced before stmap11.\n" );
+src/base/abci/abcStmap_11.c:208:            Abc_Print( -1, "stmap11 has failed.\n" );
+src/base/abci/abcStmap_11.c:218:            Abc_Print( -1, "stmap11 has failed.\n" );
+src/base/abci/abcStmap_11.c:241:    Abc_Print( -2, "usage: stmap11 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+src/base/abci/abcStmap_11.c:242:    Abc_Print( -2, "\t              performs stmap11 standard-cell mapping with a tight-depth middle-slack fanout guard\n" );
+src/map/mapper/mapperMatch.c:116:  Synopsis    [Returns 1 if the node is in the stmap11 relief depth window.]
+src/map/mapper/mapperMatch.c:181:  Mode 12 is the stmap11 tight-depth version of mode 11: the middle-slack
+src/map/mapper/mapperMatch.c:367:  stmap11, that depth window is tightened to level 64.]
+src/base/abci/abc.c:311:extern int Abc_CommandStmap11                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+src/base/abci/abc.c:1169:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap11",       Abc_CommandStmap11,          1 );

@@ -1,0 +1,49 @@
+45:- review pass 1:
+48:- accepted findings:
+57:- next-step recommendation: `Gain=300` gives useful evidence but is not uniformly better: it improved `or1200` delay and reduced area on three larger designs, while delaying `i10`, `ode`, and `syn2`. For `stmap1`, move beyond a single gain probe toward a mapper-internal or SCL-aware load/fanout hypothesis, such as adding a critical fanout/load proxy or required-time bias only where downstream `stime` shows sensitivity.
+94:- review pass 1:
+97:- accepted findings:
+104:- next-step recommendation: `stmap1` improves final delay on three of four benchmarks and reduces `ode` area, but it hurts both delay and area on `or1200` and increases area on `i10` and `syn2`. For `stmap2`, keep the fanout/load direction but make it more timing-aware, for example by applying the guard only during area-recovery modes or only when mapper slack is noncritical.
+142:- review pass 1:
+145:- accepted findings:
+152:- next-step recommendation: `stmap2` repairs the `or1200` regression seen in `stmap1` and improves `i10`, but it loses the strong `ode` and `syn2` gains and increases area on all four designs. For `stmap3`, keep recovery timing awareness but add a benchmark-shape discriminator, such as applying the guard only to nodes with both high fanout and shallow slack margin, or recording per-node guard-hit instrumentation to distinguish `ode`/`syn2` from `i10`/`or1200`.
+188:- review pass 1:
+191:- accepted findings:
+195:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+198:- next-step recommendation: `stmap3` reduces the area penalty versus `stmap2` on `i10`, `ode`, and `or1200`, but it loses the `i10`/`or1200` delay gains and only improves `syn2` delay while increasing `syn2` area substantially. For `stmap4`, add instrumentation for guard hit counts and slack buckets, or shift to a two-pass/SCL-observed criticality signal, because the current mapper-slack-only discriminator is not reliable enough across benchmarks.
+234:- review pass 1:
+237:- accepted findings:
+241:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+244:- next-step recommendation: `stmap4` improves both delay and area on `ode` and `syn2`, but it regresses `i10` and `or1200`, so the global split-phase policy is still not robust. For `stmap5`, instrument guard hit counts and slack buckets per benchmark, or gate the delay-pass portion with a design-shape or SCL-observed criticality signal so `or1200` can avoid the `stmap1`-style delay-pass restriction.
+281:- review pass 1:
+284:- accepted findings:
+288:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+291:- next-step recommendation: `stmap5` improves final delay on all four required benchmarks and reduces area on `ode` and `syn2`, but it still increases area on `i10` and `or1200`. For `stmap6`, keep the graph-size discriminator and add a secondary area guard for smaller/deeper designs, such as relaxing the recovery guard when the candidate cut would increase exact area beyond a small tolerance or adding instrumentation to measure guard hits per graph-size bucket.
+328:- review pass 1:
+331:- accepted findings:
+335:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+338:- next-step recommendation: `stmap6` improves final delay and area versus baseline on three benchmarks and keeps the `i10` delay win, but compared with `stmap5` it trades away some `ode`, `or1200`, and `syn2` delay to recover area. For `stmap7`, keep the small-graph floor and add a measured criticality constraint to the exact-area override, such as allowing the area-saving wide cut only when the mapper slack exceeds a larger multiple of inverter delay or when the node is outside the highest fanout bucket.
+375:- review pass 1:
+378:- accepted findings:
+382:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+385:- next-step recommendation: `stmap7` strengthens `or1200` and `syn2` delay relative to `stmap6`, but it regresses `ode` delay and gives back area on `or1200` and `syn2`. For `stmap8`, add instrumentation or a refined graph-shape gate to distinguish `ode` from `syn2`, for example allowing the exact-area override in large designs only when fanout is moderate but also when the candidate cut does not worsen mapper arrival beyond a small fraction of inverter delay.
+422:- review pass 1:
+425:- accepted findings:
+429:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+432:- next-step recommendation: `stmap8` restores an `ode` delay win and keeps delay improvements on all four benchmarks, but area still increases on `i10`, `or1200`, and `syn2`. For `stmap9`, keep the arrival-bounded timing guard and add a targeted area-control signal, such as tightening the delay-pass guard for small graphs only when downstream area grows or adding guard-hit instrumentation to separate area-costly high-fanout choices from timing-critical ones.
+469:- review pass 1:
+472:- accepted findings:
+476:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+479:- next-step recommendation: `stmap9` improves final delay on all four required benchmarks and reduces the `stmap8` area cost on `ode` and `syn2`, but it increases `or1200` area while buying a much larger delay gain. For `stmap10`, instrument or gate the middle-slack relief by fanout bucket and structural depth so the `or1200` area tradeoff can be separated from the `ode` and `syn2` area wins.
+516:- review pass 1:
+519:- accepted findings:
+523:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+526:- next-step recommendation: `stmap10` keeps the `stmap9` delay profile and slightly reduces `or1200` area, but the effect is small because most benchmark outcomes match `stmap9`. For `stmap11`, add explicit guard-hit instrumentation or a stronger adaptive depth threshold so the campaign can distinguish whether remaining area growth is driven by deep middle-slack relief, highest-fanout cuts, or downstream sizing choices.
+528:## version11 / stmap11
+530:- hypothesis: Keeping the `stmap10` middle-slack area-relief override, but tightening its mapper-depth window from `pNode->Level <= 96` to `pNode->Level <= 64`, can reduce area spent in medium and deep exact-area recovery choices while preserving the broad final `stime` delay gains.
+531:- motivation: `stmap10` retained `stmap9` delay wins and only slightly reduced the `or1200` area cost. The previous next-step recommendation was to use a stronger depth threshold or instrumentation to determine whether remaining area growth is driven by deeper middle-slack relief. `stmap11` tests the stronger threshold directly as a single mapper-internal change.
+532:- command name: `stmap11`
+563:- review pass 1:
+566:- accepted findings:
+570:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+573:- next-step recommendation: `stmap11` preserves final delay wins on all four benchmarks and improves `or1200` delay relative to `stmap10`, but the tighter depth threshold does not materially reduce the remaining `or1200` or `syn2` area cost. For `stmap12`, add explicit guard-hit counters or split the middle-slack relief by fanout bucket so the next version can distinguish area growth caused by guarded cut shape from downstream sizing effects.

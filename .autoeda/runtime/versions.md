@@ -524,3 +524,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap10: depth-qualified area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap10` keeps the `stmap9` delay profile and slightly reduces `or1200` area, but the effect is small because most benchmark outcomes match `stmap9`. For `stmap11`, add explicit guard-hit instrumentation or a stronger adaptive depth threshold so the campaign can distinguish whether remaining area growth is driven by deep middle-slack relief, highest-fanout cuts, or downstream sizing choices.
+
+## version11 / stmap11
+
+- hypothesis: Keeping the `stmap10` middle-slack area-relief override, but tightening its mapper-depth window from `pNode->Level <= 96` to `pNode->Level <= 64`, can reduce area spent in medium and deep exact-area recovery choices while preserving the broad final `stime` delay gains.
+- motivation: `stmap10` retained `stmap9` delay wins and only slightly reduced the `or1200` area cost. The previous next-step recommendation was to use a stronger depth threshold or instrumentation to determine whether remaining area growth is driven by deeper middle-slack relief. `stmap11` tests the stronger threshold directly as a single mapper-internal change.
+- command name: `stmap11`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_11.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap11/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap11` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 12` into the mapper. `mapperMatch.c` interprets mode `12` as a tight-depth middle-slack area-relief guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap10`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but the `stmap9` one-to-two inverter slack area-relief bypass is allowed only when `pNode->Level <= 64`. Existing `map` and `stmap0` through `stmap10` behavior are preserved because modes `0` through `11` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap11/build.log`.
+  - help: `./abc -c "stmap11 -h"` printed usage text with default `-G 250.00` and the tight-depth middle-slack fanout guard enabled. Log: `.autoeda/runtime/results/stmap11/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap11; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap11/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap11/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, prompt artifact, and review summary.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `519.38 ps`, area `11327.84`; delay delta `-11.94 ps` (`-2.25%`), area delta `-1163.37` (`-9.31%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `493.20 ps`, area `21485.79`; delay delta `-15.62 ps` (`-3.07%`), area delta `+189.19` (`+0.89%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_11.c`.
+  - numbered command exists and is registered as `stmap11`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap11/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap11/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap11/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap11` in the canonical version log and complete the final campaign-state update before counting the iteration; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap11: tight-depth area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap11` preserves final delay wins on all four benchmarks and improves `or1200` delay relative to `stmap10`, but the tighter depth threshold does not materially reduce the remaining `or1200` or `syn2` area cost. For `stmap12`, add explicit guard-hit counters or split the middle-slack relief by fanout bucket so the next version can distinguish area growth caused by guarded cut shape from downstream sizing effects.

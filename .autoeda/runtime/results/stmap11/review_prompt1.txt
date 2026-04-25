@@ -1,0 +1,11 @@
+Review the uncommitted AutoEDA stmap11 iteration in this ABC repository.
+
+Context:
+- Binding project pack: .autoeda/project_pack/agent.md
+- Candidate command: stmap11
+- Hypothesis: tighten the stmap10 middle-slack exact-area recovery relief depth window from mapper level <= 96 to <= 64, preserving map and stmap0 through stmap10 behavior.
+- Required evaluation flow: read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap11; topo; buffer; upsize -v; dnsize -v; stime
+- Required benchmarks: benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif
+- Evaluation artifacts are under .autoeda/runtime/results/stmap11/.
+
+Please review for correctness regressions, command registration/build integration issues, preservation of prior stmap modes, evaluation/logging gaps, and any mismatch with the project-pack contracts. Return findings ordered by severity with file/line references where applicable.
