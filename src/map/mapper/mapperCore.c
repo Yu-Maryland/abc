@@ -222,16 +222,16 @@ ABC_PRT( "Time", Abc_Clock() - clk );
     p->timeArea += Abc_Clock() - clk;
     //////////////////////////////////////////////////////////////////////
 
-    if ( p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 )
+    if ( p->fSkipFanout == 14 || p->fSkipFanout == 15 || p->fSkipFanout == 16 || p->fSkipFanout == 17 || p->fSkipFanout == 18 || p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 )
         printf( "stmap%d guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
             p->fSkipFanout - 1,
             p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
             p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
             p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
             p->nStmap13RejectArea );
-    if ( p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 )
+    if ( p->fSkipFanout == 19 || p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 )
         printf( "stmap%d near-miss stats: near-miss = %d\n", p->fSkipFanout - 1, p->nStmap18NearMiss );
-    if ( p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 )
+    if ( p->fSkipFanout == 20 || p->fSkipFanout == 21 || p->fSkipFanout == 22 || p->fSkipFanout == 23 )
         printf( "stmap%d early-seed stats: early-seed = %d\n", p->fSkipFanout - 1, p->nStmap19EarlySeed );
 
     // print the arrival times of the latest outputs

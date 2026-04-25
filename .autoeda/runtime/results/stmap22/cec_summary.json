@@ -1,0 +1,26 @@
+{
+  "version": "stmap22",
+  "cec": [
+    {
+      "benchmark_slug": "benchmarks_i10_aig",
+      "log": ".autoeda/runtime/results/stmap22/cec_benchmarks_i10_aig.log",
+      "equivalent": true
+    },
+    {
+      "benchmark_slug": "benchmarks_ode_abc_blif",
+      "log": ".autoeda/runtime/results/stmap22/cec_benchmarks_ode_abc_blif.log",
+      "equivalent": true
+    },
+    {
+      "benchmark_slug": "benchmarks_or1200_abc_blif",
+      "log": ".autoeda/runtime/results/stmap22/cec_benchmarks_or1200_abc_blif.log",
+      "equivalent": true
+    },
+    {
+      "benchmark_slug": "benchmarks_syn2_abc_blif",
+      "log": ".autoeda/runtime/results/stmap22/cec_benchmarks_syn2_abc_blif.log",
+      "equivalent": true
+    }
+  ],
+  "all_equivalent": true
+}

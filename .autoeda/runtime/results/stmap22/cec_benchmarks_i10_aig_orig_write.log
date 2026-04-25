@@ -1,0 +1,3 @@
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; strash; write .autoeda/runtime/results/stmap22/cec_benchmarks_i10_aig_orig.aig"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.25 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").

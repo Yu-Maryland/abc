@@ -1,0 +1,221 @@
+{
+  "version": "stmap22",
+  "hypothesis": "A 2.0x moderate deep early-profile timing-quality seed boundary can admit the remaining deep -3 ps to -4 ps lower-moderate middle-slack candidates missed by stmap21.",
+  "command": "stmap22",
+  "baseline_command": "map",
+  "library": "7nm_lvt_ff.lib",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "metrics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 207.24,
+      "stime_area": 1263.44,
+      "log": ".autoeda/runtime/results/stmap22/baseline_benchmarks_i10_aig.log"
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "candidate",
+      "command": "stmap22",
+      "stime_delay_ps": 198.64,
+      "stime_area": 1303.1,
+      "log": ".autoeda/runtime/results/stmap22/candidate_benchmarks_i10_aig.log"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 531.32,
+      "stime_area": 12491.21,
+      "log": ".autoeda/runtime/results/stmap22/baseline_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "candidate",
+      "command": "stmap22",
+      "stime_delay_ps": 522.05,
+      "stime_area": 11334.38,
+      "log": ".autoeda/runtime/results/stmap22/candidate_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 587.08,
+      "stime_area": 4798.34,
+      "log": ".autoeda/runtime/results/stmap22/baseline_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "candidate",
+      "command": "stmap22",
+      "stime_delay_ps": 561.55,
+      "stime_area": 4895.15,
+      "log": ".autoeda/runtime/results/stmap22/candidate_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 508.82,
+      "stime_area": 21296.6,
+      "log": ".autoeda/runtime/results/stmap22/baseline_benchmarks_syn2_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "candidate",
+      "command": "stmap22",
+      "stime_delay_ps": 491.54,
+      "stime_area": 21598.23,
+      "log": ".autoeda/runtime/results/stmap22/candidate_benchmarks_syn2_abc_blif.log"
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "baseline_area": 1263.44,
+      "candidate_area": 1303.1,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "baseline_area": 12491.21,
+      "candidate_area": 11334.38,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "candidate_delay_ps": 561.55,
+      "delay_delta_ps": -25.530000000000086,
+      "delay_delta_pct": -4.348640730394509,
+      "baseline_area": 4798.34,
+      "candidate_area": 4895.15,
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "candidate_delay_ps": 491.54,
+      "delay_delta_ps": -17.279999999999973,
+      "delay_delta_pct": -3.396092920875746,
+      "baseline_area": 21296.6,
+      "candidate_area": 21598.23,
+      "area_delta": 301.630000000001,
+      "area_delta_pct": 1.4163293671290302
+    }
+  ],
+  "guard_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "exact_risk": 0,
+      "highest": 0,
+      "lower_mod": 0,
+      "upper_mod": 0,
+      "middle_slack": 0,
+      "middle_relief": 0,
+      "reject_slack": 0,
+      "reject_highest": 0,
+      "reject_arrival": 0,
+      "reject_area": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "exact_risk": 49626,
+      "highest": 22601,
+      "lower_mod": 19542,
+      "upper_mod": 7483,
+      "middle_slack": 765,
+      "middle_relief": 0,
+      "reject_slack": 12974,
+      "reject_highest": 14866,
+      "reject_arrival": 10527,
+      "reject_area": 11095
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "exact_risk": 22679,
+      "highest": 8550,
+      "lower_mod": 10834,
+      "upper_mod": 3295,
+      "middle_slack": 35,
+      "middle_relief": 2,
+      "reject_slack": 959,
+      "reject_highest": 8476,
+      "reject_arrival": 5835,
+      "reject_area": 7062
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "exact_risk": 98450,
+      "highest": 48768,
+      "lower_mod": 38524,
+      "upper_mod": 11158,
+      "middle_slack": 1984,
+      "middle_relief": 6,
+      "reject_slack": 35944,
+      "reject_highest": 28298,
+      "reject_arrival": 16695,
+      "reject_area": 17170
+    }
+  ],
+  "early_seed_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "early_seed": 2
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "early_seed": 5
+    }
+  ],
+  "near_miss_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "near_miss": 9
+    }
+  ],
+  "relief_diag_count": 8,
+  "near_miss_diag_count": 9,
+  "flows": {
+    "baseline": "read_lib 7nm_lvt_ff.lib; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime",
+    "candidate": "read_lib 7nm_lvt_ff.lib; read {design}; resyn; resyn2; dch -v; stmap22; topo; buffer; upsize -v; dnsize -v; stime"
+  }
+}
