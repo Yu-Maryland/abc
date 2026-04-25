@@ -770,3 +770,58 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap15: adaptive middle-slack profile guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap15` keeps the `stmap14` `i10`, `ode`, and `or1200` outcomes and reduces `syn2` area relative to `stmap14`, but it loses `syn2` delay despite admitting one additional middle-slack relief. For `stmap16`, keep the counters and add a per-relief diagnostic that records whether admitted middle-slack cuts occur before or after the profile opens, along with node level, slack, area saving, and arrival delta, then use that evidence to distinguish timing-positive relief from downstream-sizing area churn.
+
+## version16 / stmap16
+
+- hypothesis: Keeping the `stmap15` adaptive lower-moderate middle-slack profile guard behavior unchanged, but logging each admitted middle-slack relief with profile-open status, node level, slack, area saving, and arrival delta, can identify whether the remaining timing-positive relief happens only after the adaptive profile opens or whether pre-profile relief is contributing downstream area churn.
+- motivation: `stmap15` preserved the `stmap14` outcomes on `i10`, `ode`, and `or1200` and reduced `syn2` area relative to `stmap14`, but it lost `syn2` delay despite admitting one additional middle-slack relief. The prior recommendation was to add per-relief diagnostics before changing another threshold.
+- command name: `stmap16`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_16.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap16/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap16` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 17` into the mapper. Mode `17` preserves mode `16` / `stmap15` behavior: lower-moderate, tight-depth, arrival-neutral middle-slack relief uses the `stmap14` two-inverter area-saving threshold until the current exact-area pass has observed at least `20000` lower-moderate risk cuts and `128` middle-slack candidates, then lowers the area-saving threshold to one inverter area. Mode `17` additionally prints one `stmap16 relief diag` line for each admitted middle-slack relief, reporting profile-open status, node number, level, refs, leaves, phase, slack, area saving, arrival delta, and area margin. Modes `0` through `16` retain their previous behavior.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap16/build.log`.
+  - help: `./abc -c "stmap16 -h"` printed usage text with default `-G 250.00` and adaptive relief diagnostics enabled. Log: `.autoeda/runtime/results/stmap16/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap16; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap16/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap16/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `relief_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-relief `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `578.80 ps`, area `4853.16`; delay delta `-8.28 ps` (`-1.41%`), area delta `+54.82` (`+1.14%`); guard stats: exact-risk `22683`, middle-slack `52`, middle-relief `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `494.17 ps`, area `21541.54`; delay delta `-14.65 ps` (`-2.88%`), area delta `+244.94` (`+1.15%`); guard stats: exact-risk `98466`, middle-slack `2009`, middle-relief `2`.
+- relief diagnostics:
+  - `benchmarks/syn2.abc.blif`: relief `1`, profile-open `1`, node `24250`, level `38`, refs `4`, leaves `4`, phase `0`, slack `9.709976`, area saving `1.63`, arrival delta `-9.130005`, area margin `0.70`.
+  - `benchmarks/syn2.abc.blif`: relief `2`, profile-open `1`, node `25927`, level `7`, refs `4`, leaves `5`, phase `0`, slack `6.619999`, area saving `0.94`, arrival delta `-1.600002`, area margin `0.70`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_16.c`.
+  - numbered command exists and is registered as `stmap16`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat parsing and relief diagnostic parsing passed and are recorded in `.autoeda/runtime/results/stmap16/guard_stats.csv` and `.autoeda/runtime/results/stmap16/relief_diag.csv`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap16/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap16/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap16/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap16/review_pass1_supported.log`.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap16/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap16/review_pass2_supported.log`.
+- accepted findings: none.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none.
+- commit: local commit created with message `stmap16: add adaptive relief diagnostics`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap16` shows both admitted `syn2` middle-slack relief choices occur after the adaptive profile opens and both improve mapper arrival while saving modest area. For `stmap17`, use this evidence to test a timing-quality discriminator rather than a looser area threshold: for example, admit one-inverter lower-moderate relief only after profile open when arrival delta is materially negative, while keeping the two-inverter fallback for arrival-neutral choices.

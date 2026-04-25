@@ -1,0 +1,9 @@
+Review the uncommitted stmap16 AutoEDA iteration in this ABC repository.
+
+Project-pack constraints:
+- stmap16 must preserve existing map and stmap0 through stmap15 behavior.
+- The new command must be registered as stmap16, buildable, and support -h usage text.
+- The implementation hypothesis is instrumentation-only: keep stmap15 adaptive middle-slack profile guard behavior and add per-relief diagnostics that report whether admitted lower-moderate middle-slack cuts occur before or after the profile opens, plus node level, slack, area saving, and arrival delta.
+- Required validation artifacts are under .autoeda/runtime/results/stmap16.
+
+Focus the review on correctness regressions, command/build integration, mapper-mode gating, behavior preservation for older modes, diagnostic accuracy, missing validation, and artifact/log completeness. Return findings with severity and file/line references. Also state if no blocking findings remain.

@@ -1,0 +1,207 @@
+{
+  "version": "stmap16",
+  "command": "stmap16",
+  "library": "7nm_lvt_ff.lib",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "metrics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 207.24,
+      "stime_area": 1263.44
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "candidate",
+      "command": "stmap16",
+      "stime_delay_ps": 198.64,
+      "stime_area": 1303.1
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 531.32,
+      "stime_area": 12491.21
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "candidate",
+      "command": "stmap16",
+      "stime_delay_ps": 522.05,
+      "stime_area": 11334.38
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 587.08,
+      "stime_area": 4798.34
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "candidate",
+      "command": "stmap16",
+      "stime_delay_ps": 578.8,
+      "stime_area": 4853.16
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 508.82,
+      "stime_area": 21296.6
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "candidate",
+      "command": "stmap16",
+      "stime_delay_ps": 494.17,
+      "stime_area": 21541.54
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "baseline_area": 1263.44,
+      "candidate_area": 1303.1,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "baseline_area": 12491.21,
+      "candidate_area": 11334.38,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "candidate_delay_ps": 578.8,
+      "delay_delta_ps": -8.280000000000086,
+      "delay_delta_pct": -1.4103699666144454,
+      "baseline_area": 4798.34,
+      "candidate_area": 4853.16,
+      "area_delta": 54.81999999999971,
+      "area_delta_pct": 1.1424784404606532
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "candidate_delay_ps": 494.17,
+      "delay_delta_ps": -14.649999999999977,
+      "delay_delta_pct": -2.8792107228489403,
+      "baseline_area": 21296.6,
+      "candidate_area": 21541.54,
+      "area_delta": 244.94000000000233,
+      "area_delta_pct": 1.1501366415296448
+    }
+  ],
+  "guard_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "stmap": 16,
+      "exact_risk": 0,
+      "highest": 0,
+      "lower_mod": 0,
+      "upper_mod": 0,
+      "middle_slack": 0,
+      "middle_relief": 0,
+      "reject_slack": 0,
+      "reject_highest": 0,
+      "reject_arrival": 0,
+      "reject_area": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "stmap": 16,
+      "exact_risk": 49626,
+      "highest": 22601,
+      "lower_mod": 19542,
+      "upper_mod": 7483,
+      "middle_slack": 765,
+      "middle_relief": 0,
+      "reject_slack": 12974,
+      "reject_highest": 14866,
+      "reject_arrival": 10527,
+      "reject_area": 11095
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "stmap": 16,
+      "exact_risk": 22683,
+      "highest": 8550,
+      "lower_mod": 10852,
+      "upper_mod": 3281,
+      "middle_slack": 52,
+      "middle_relief": 0,
+      "reject_slack": 952,
+      "reject_highest": 8476,
+      "reject_arrival": 5822,
+      "reject_area": 7084
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "stmap": 16,
+      "exact_risk": 98466,
+      "highest": 48768,
+      "lower_mod": 38545,
+      "upper_mod": 11153,
+      "middle_slack": 2009,
+      "middle_relief": 2,
+      "reject_slack": 35920,
+      "reject_highest": 28320,
+      "reject_arrival": 16668,
+      "reject_area": 17216
+    }
+  ],
+  "relief_diag": [
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 1,
+      "profile_open": 1,
+      "node": 24250,
+      "level": 38,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 9.709976,
+      "area_save": 1.63,
+      "arrival_delta": -9.130005,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 2,
+      "profile_open": 1,
+      "node": 25927,
+      "level": 7,
+      "refs": 4,
+      "leaves": 5,
+      "phase": 0,
+      "slack": 6.619999,
+      "area_save": 0.94,
+      "arrival_delta": -1.600002,
+      "area_margin": 0.7
+    }
+  ],
+  "flows": {
+    "baseline": "./abc -c \"read_lib 7nm_lvt_ff.lib; read {design}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\"",
+    "candidate": "./abc -c \"read_lib 7nm_lvt_ff.lib; read {design}; resyn; resyn2; dch -v; stmap16; topo; buffer; upsize -v; dnsize -v; stime\""
+  }
+}

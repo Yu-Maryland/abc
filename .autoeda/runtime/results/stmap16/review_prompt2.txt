@@ -1,0 +1,9 @@
+Second review pass for the uncommitted stmap16 AutoEDA iteration.
+
+Review pass 1 reported no functional issues. No source changes were made after pass 1. Re-check the same source and runtime artifacts for any remaining blockers:
+- stmap16 command registration and help behavior.
+- Mode 17 mapper gating must preserve modes 0 through 16 and match stmap15 behavior except for per-relief diagnostic printing.
+- Relief diagnostics should be emitted only for admitted lower-moderate middle-slack cuts and include profile-open, node level, slack, area saving, and arrival delta.
+- Required artifacts under .autoeda/runtime/results/stmap16 should support build, help, smoke, all four benchmark metrics, relief diagnostic parsing, and CEC.
+
+Return severity-ranked findings with file/line references, or state that no blocking findings remain.
