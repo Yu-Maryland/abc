@@ -1,0 +1,10 @@
+Second review pass for the uncommitted stmap21 iteration after addressing review pass 1.
+
+Review pass 1 accepted one finding: the canonical .autoeda/runtime/versions.md entry for stmap21 was missing. That entry has now been added and .autoeda/runtime/results/stmap21/version_log_check.log records the check.
+
+Please verify:
+- The stmap21 source behavior remains coherent and isolated to fSkipFanout mode 22.
+- The canonical version log now contains the required hypothesis, files changed, command, algorithm summary, validation, benchmark results, correctness, review finding, commit plan, and next-step recommendation.
+- The campaign state and stmap21 results artifacts are consistent with the iteration contract.
+
+Report blocking correctness or compliance issues first with file/line references. If none remain, say so clearly.

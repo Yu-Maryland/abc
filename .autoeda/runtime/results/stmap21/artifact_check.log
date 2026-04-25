@@ -1,0 +1,8 @@
+stmap21 artifact check
+missing files: []
+comparison rows including header: 5
+relief rows including header: 7
+near-miss rows including header: 14
+version log entry present: True
+review summary present: True
+cec: all equivalent

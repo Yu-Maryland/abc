@@ -1,0 +1,31 @@
+54:- review pass 2: skipped because accepted changes after pass 1 were mechanical build-list/logging/ignore updates; affected local behavior was revalidated instead.
+101:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after pass 1.
+149:- review pass 2: skipped because the accepted post-review source change was a narrow one-line mode guard fix directly addressing the finding; all affected behavior and the full default evaluation were revalidated.
+195:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+241:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+288:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+335:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+382:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+429:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+476:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+523:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+570:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+618:- review pass 2: skipped because the only accepted source change was a mechanical namespace close and it was fully revalidated; the remaining accepted finding was logging/audit state.
+663:- accepted findings: none.
+666:- review pass 2: skipped because review pass 1 found no blocking issues and no source changes were made after review; only this logging/audit entry and final state update remained.
+711:- review pass 2:
+714:- accepted findings: none.
+765:- review pass 2:
+818:- review pass 2:
+821:- accepted findings: none.
+873:- review pass 2:
+876:- accepted findings: none.
+928:- review pass 2:
+931:- accepted findings: none.
+985:- review pass 2:
+1042:- review pass 2:
+1045:  - accepted findings: none; the second review reported no discrete correctness issue in the current changes.
+1053:## version21 / stmap21
+1100:- review pass 2:
+1103:  - accepted findings: none; the second review reported no discrete correctness issue in the source changes or runtime artifacts.
+1109:- next-step recommendation: `stmap21` improves `syn2` delay from the `stmap20` value of `494.17 ps` to `490.96 ps` while keeping the `or1200` shallow-seed result and the `i10`/`ode` outcomes unchanged. For `stmap22`, test the next moderate deep-gain boundary explicitly, for example a threshold between the current `5.0 * ArrivalGainMargin` and the rejected `-3` to `-4 ps` cluster, or add downstream-sensitive diagnostics that distinguish which deep-gain seed moves final `stime` before relaxing the gate further.

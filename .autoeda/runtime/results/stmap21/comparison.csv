@@ -1,0 +1,5 @@
+benchmark,baseline_delay_ps,candidate_delay_ps,delay_delta_ps,delay_delta_pct,baseline_area,candidate_area,area_delta,area_delta_pct
+benchmarks/i10.aig,207.24,198.64,-8.60,-4.15,1263.44,1303.10,39.66,3.14
+benchmarks/ode.abc.blif,531.32,522.05,-9.27,-1.74,12491.21,11334.38,-1156.83,-9.26
+benchmarks/or1200.abc.blif,587.08,561.55,-25.53,-4.35,4798.34,4895.15,96.81,2.02
+benchmarks/syn2.abc.blif,508.82,490.96,-17.86,-3.51,21296.60,21541.78,245.18,1.15

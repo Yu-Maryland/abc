@@ -1,0 +1,10 @@
+Review the uncommitted stmap21 iteration for correctness and campaign compliance.
+
+Focus areas:
+- stmap21 command registration, help text, and build integration.
+- Mode 22 mapper logic in mapperMatch.c and mapperCore.c, especially preservation of map and stmap0-stmap20 behavior.
+- The deep early-profile seed exception: it should keep stmap20 shallow pre-profile seeds and admit deeper pre-profile seeds only for unusually large mapper-arrival gains.
+- Diagnostic counters and logging for guard stats, relief diagnostics, near-miss diagnostics, and early-seed stats.
+- Required AutoEDA artifacts under .autoeda/runtime/results/stmap21 and state/log consistency.
+
+Report blocking correctness issues first with file/line references. If there are no blocking findings, say so clearly.
