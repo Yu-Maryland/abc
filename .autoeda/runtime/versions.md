@@ -571,3 +571,51 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap11: tight-depth area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap11` preserves final delay wins on all four benchmarks and improves `or1200` delay relative to `stmap10`, but the tighter depth threshold does not materially reduce the remaining `or1200` or `syn2` area cost. For `stmap12`, add explicit guard-hit counters or split the middle-slack relief by fanout bucket so the next version can distinguish area growth caused by guarded cut shape from downstream sizing effects.
+
+## version12 / stmap12
+
+- hypothesis: Keeping the `stmap11` tight-depth middle-slack area-relief guard, but allowing the middle-slack area-saving bypass only in the lower moderate fanout bucket (`nRefs` 4 through 5 with cuts wider than three leaves), can preserve the broad final `stime` delay wins while reducing risk from upper-moderate and highest fanout wide cuts that may drive downstream sizing area.
+- motivation: `stmap11` preserved delay wins on all four benchmarks but did not materially reduce the `or1200` or `syn2` area costs. The previous next-step recommendation was to split middle-slack relief by fanout bucket; `stmap12` tests that directly as a single mapper-internal refinement.
+- command name: `stmap12`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_12.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap12/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap12` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 13` into the mapper. `mapperMatch.c` interprets mode `13` as a fanout-bucket-split middle-slack guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap11`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but the `stmap11` one-to-two inverter slack area-relief bypass is now allowed only for lower moderate fanout-risk cuts where `nRefs > 3`, `nRefs <= 5`, and `nLeaves > 3`. Existing `map` and `stmap0` through `stmap11` behavior are preserved because modes `0` through `12` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed after the accepted namespace-close review finding; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap12/build.log`.
+  - help: `./abc -c "stmap12 -h"` printed usage text with default `-G 250.00` and the fanout-bucket-split middle-slack guard enabled. Log: `.autoeda/runtime/results/stmap12/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap12; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap12/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap12/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, prompt artifact, artifact check, and review summary.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `488.54 ps`, area `21538.51`; delay delta `-20.28 ps` (`-3.99%`), area delta `+241.91` (`+1.14%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_12.c`.
+  - numbered command exists and is registered as `stmap12`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap12/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap12/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap12/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Close the ABC namespace in `src/base/abci/abcStmap_12.c`; addressed by adding `ABC_NAMESPACE_IMPL_END` and revalidating build, help, smoke, full benchmark metrics, and CEC.
+  - P2: Record `stmap12` in the canonical version log and complete the final campaign-state update before counting the iteration; addressed by this entry and final state update.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted source change was a mechanical namespace close and it was fully revalidated; the remaining accepted finding was logging/audit state.
+- commit: local commit created with message `stmap12: fanout-bucket area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap12` keeps final delay wins on all four benchmarks and improves `syn2` delay relative to `stmap11`, but it gives back `ode` delay and increases `syn2` area. For `stmap13`, add guard-hit counters or a lower-moderate bucket sub-split that distinguishes `syn2` timing-positive choices from area-expensive downstream sizing choices, preferably logging per-bucket hit counts before changing another threshold.

@@ -1,0 +1,181 @@
+{
+  "candidate_command": "stmap12",
+  "baseline_command": "map",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "all_metrics_parseable": true,
+  "all_cec_equivalent": true,
+  "metrics": [
+    {
+      "label": "baseline",
+      "command": "map",
+      "design": "benchmarks/i10.aig",
+      "stime_delay_ps": 207.24,
+      "stime_area": 1263.44,
+      "log": ".autoeda/runtime/results/stmap12/baseline_benchmarks_i10_aig.log"
+    },
+    {
+      "label": "candidate",
+      "command": "stmap12",
+      "design": "benchmarks/i10.aig",
+      "stime_delay_ps": 198.64,
+      "stime_area": 1303.1,
+      "log": ".autoeda/runtime/results/stmap12/candidate_benchmarks_i10_aig.log"
+    },
+    {
+      "label": "baseline",
+      "command": "map",
+      "design": "benchmarks/ode.abc.blif",
+      "stime_delay_ps": 531.32,
+      "stime_area": 12491.21,
+      "log": ".autoeda/runtime/results/stmap12/baseline_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "label": "candidate",
+      "command": "stmap12",
+      "design": "benchmarks/ode.abc.blif",
+      "stime_delay_ps": 522.05,
+      "stime_area": 11334.38,
+      "log": ".autoeda/runtime/results/stmap12/candidate_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "label": "baseline",
+      "command": "map",
+      "design": "benchmarks/or1200.abc.blif",
+      "stime_delay_ps": 587.08,
+      "stime_area": 4798.34,
+      "log": ".autoeda/runtime/results/stmap12/baseline_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "label": "candidate",
+      "command": "stmap12",
+      "design": "benchmarks/or1200.abc.blif",
+      "stime_delay_ps": 561.55,
+      "stime_area": 4895.15,
+      "log": ".autoeda/runtime/results/stmap12/candidate_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "label": "baseline",
+      "command": "map",
+      "design": "benchmarks/syn2.abc.blif",
+      "stime_delay_ps": 508.82,
+      "stime_area": 21296.6,
+      "log": ".autoeda/runtime/results/stmap12/baseline_benchmarks_syn2_abc_blif.log"
+    },
+    {
+      "label": "candidate",
+      "command": "stmap12",
+      "design": "benchmarks/syn2.abc.blif",
+      "stime_delay_ps": 488.54,
+      "stime_area": 21538.51,
+      "log": ".autoeda/runtime/results/stmap12/candidate_benchmarks_syn2_abc_blif.log"
+    }
+  ],
+  "comparison": [
+    {
+      "design": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "baseline_area": 1263.44,
+      "candidate_delay_ps": 198.64,
+      "candidate_area": 1303.1,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "design": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "baseline_area": 12491.21,
+      "candidate_delay_ps": 522.05,
+      "candidate_area": 11334.38,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "design": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "baseline_area": 4798.34,
+      "candidate_delay_ps": 561.55,
+      "candidate_area": 4895.15,
+      "delay_delta_ps": -25.530000000000086,
+      "delay_delta_pct": -4.348640730394509,
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257
+    },
+    {
+      "design": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "baseline_area": 21296.6,
+      "candidate_delay_ps": 488.54,
+      "candidate_area": 21538.51,
+      "delay_delta_ps": -20.279999999999973,
+      "delay_delta_pct": -3.9856923863055647,
+      "area_delta": 241.90999999999985,
+      "area_delta_pct": 1.1359090183409553
+    }
+  ],
+  "cec_results": [
+    {
+      "design": "benchmarks/i10.aig",
+      "original_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_i10_aig_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_i10_aig_stmap12.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_i10_aig_orig_write.log",
+      "original_write_returncode": 0,
+      "candidate_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_i10_aig_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_i10_aig.log",
+      "cec_returncode": 0,
+      "equivalent": true
+    },
+    {
+      "design": "benchmarks/ode.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_ode_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_ode_abc_blif_stmap12.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_ode_abc_blif_orig_write.log",
+      "original_write_returncode": 0,
+      "candidate_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_ode_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_ode_abc_blif.log",
+      "cec_returncode": 0,
+      "equivalent": true
+    },
+    {
+      "design": "benchmarks/or1200.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_or1200_abc_blif_stmap12.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_or1200_abc_blif_orig_write.log",
+      "original_write_returncode": 0,
+      "candidate_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_or1200_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_or1200_abc_blif.log",
+      "cec_returncode": 0,
+      "equivalent": true
+    },
+    {
+      "design": "benchmarks/syn2.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap12/cec_benchmarks_syn2_abc_blif_stmap12.aig",
+      "original_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_syn2_abc_blif_orig_write.log",
+      "original_write_returncode": 0,
+      "candidate_write_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_syn2_abc_blif_candidate_write.log",
+      "candidate_write_returncode": 0,
+      "cec_log": ".autoeda/runtime/results/stmap12/cec_benchmarks_syn2_abc_blif.log",
+      "cec_returncode": 0,
+      "equivalent": true
+    }
+  ],
+  "artifacts": {
+    "build_log": ".autoeda/runtime/results/stmap12/build.log",
+    "help_log": ".autoeda/runtime/results/stmap12/help.log",
+    "smoke_log": ".autoeda/runtime/results/stmap12/smoke_i10.log",
+    "metrics_csv": ".autoeda/runtime/results/stmap12/metrics.csv",
+    "comparison_csv": ".autoeda/runtime/results/stmap12/comparison.csv"
+  }
+}

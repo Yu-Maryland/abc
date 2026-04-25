@@ -1,0 +1,15 @@
+# stmap12 version log check
+
+PASS: contains ## version12 / stmap12
+PASS: contains hypothesis:
+PASS: contains motivation:
+PASS: contains files changed:
+PASS: contains command name:
+PASS: contains algorithm summary:
+PASS: contains validation run:
+PASS: contains benchmark results:
+PASS: contains correctness results:
+PASS: contains review pass 1:
+PASS: contains accepted findings:
+PASS: contains commit:
+PASS: contains next-step recommendation:

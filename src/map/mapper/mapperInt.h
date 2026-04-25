@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11
+    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12
     int                 fUseProfile;   // use standard-cell profile
 
     // the supergate library

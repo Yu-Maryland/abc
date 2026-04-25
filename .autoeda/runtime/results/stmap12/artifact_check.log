@@ -1,0 +1,26 @@
+# stmap12 artifact check
+
+PASS: abc binary exists
+PASS: implementation file exists
+PASS: summary all metrics parseable
+PASS: summary all cec equivalent
+PASS: build.log exists
+PASS: help.log exists
+PASS: smoke_i10.log exists
+PASS: metrics.csv exists
+PASS: comparison.csv exists
+PASS: summary.json exists
+PASS: review_prompt1.txt exists
+PASS: review_pass1.log exists
+PASS: review_pass1_supported.log exists
+PASS: review_summary.md exists
+PASS: artifact_check.log exists
+PASS: version_log_check.log exists
+PASS: CEC equivalent benchmarks/i10.aig
+PASS: CEC equivalent benchmarks/ode.abc.blif
+PASS: CEC equivalent benchmarks/or1200.abc.blif
+PASS: CEC equivalent benchmarks/syn2.abc.blif
+PASS: metrics complete benchmarks/i10.aig
+PASS: metrics complete benchmarks/ode.abc.blif
+PASS: metrics complete benchmarks/or1200.abc.blif
+PASS: metrics complete benchmarks/syn2.abc.blif

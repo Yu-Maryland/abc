@@ -1,0 +1,14 @@
+Review the uncommitted stmap12 AutoEDA iteration for correctness, build integration, and campaign-policy compliance.
+
+Focus on:
+- the new stmap12 command registration and usage text
+- src/base/abci/abcStmap_12.c
+- src/map/mapper/mapperMatch.c mode 13 behavior
+- src/map/mapper/mapperInt.h comment update
+- source-list integration in src/base/abci/module.make and abclib.dsp
+- runtime artifacts under .autoeda/runtime/results/stmap12
+- whether the campaign state and version log must be updated before counting the iteration
+
+The intended hypothesis is: keep the stmap11 tight-depth middle-slack area-relief guard, but allow the middle-slack area-saving bypass only in the lower moderate fanout bucket (estimated refs 4-5 with cuts wider than 3 leaves), leaving upper-moderate and highest fanout-risk cuts on the stricter arrival-bounded protection.
+
+Report findings only when they are actionable bugs, correctness risks, missing gates, or required logging/review issues. Include severity and file/line references where applicable.

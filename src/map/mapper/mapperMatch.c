@@ -97,6 +97,22 @@ static int Map_MatchCutHasStmapHighestFanoutRisk( Map_Node_t * pNode, Map_Cut_t 
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if the cut is in the lower moderate fanout bucket.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchCutHasStmapLowerModerateFanoutRisk( Map_Node_t * pNode, Map_Cut_t * pCut )
+{
+    return pNode->nRefs > 3 && pNode->nRefs <= 5 && pCut->nLeaves > 3;
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if the node is in the stmap10 relief depth window.]
 
   Description []
@@ -146,6 +162,8 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode 
         return Map_MatchNodeHasStmapReliefDepth( pNode );
     if ( Mode == 12 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
+    if ( Mode == 13 )
+        return Map_MatchNodeHasStmapTightReliefDepth( pNode );
     return 0;
 }
 
@@ -179,7 +197,9 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode 
   area. Mode 11 is the stmap10 depth-qualified version of mode 10: the
   middle-slack relief is allowed only for shallow and medium-depth nodes.
   Mode 12 is the stmap11 tight-depth version of mode 11: the middle-slack
-  relief is allowed only for shallower nodes.]
+  relief is allowed only for shallower nodes. Mode 13 is the stmap12
+  fanout-bucket split version of mode 12: the tight-depth middle-slack relief
+  is allowed only in the lower moderate fanout bucket.]
 
   SideEffects []
 
@@ -307,7 +327,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -364,7 +384,8 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   when they are outside the highest fanout bucket, do not worsen mapper
   arrival, and save at least one inverter area. In stmap10, that middle-slack
   relief also requires the mapper node to be no deeper than level 96. In
-  stmap11, that depth window is tightened to level 64.]
+  stmap11, that depth window is tightened to level 64. In stmap12, the same
+  tight-depth relief is allowed only in the lower moderate fanout bucket.]
 
   SideEffects []
 
@@ -375,7 +396,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
 {
     float Slack, SlackMargin, SlackGate, ArrivalMargin, AreaMargin;
 
-    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 && p->fSkipFanout != 11 && p->fSkipFanout != 12 )
+    if ( p->fSkipFanout != 7 && p->fSkipFanout != 8 && p->fSkipFanout != 9 && p->fSkipFanout != 10 && p->fSkipFanout != 11 && p->fSkipFanout != 12 && p->fSkipFanout != 13 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -387,14 +408,15 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
     SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
-    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 )
+    if ( p->fSkipFanout == 8 || p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 )
     {
         SlackGate = 2.0 * SlackMargin;
-        if ( (p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12) &&
+        if ( (p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13) &&
              Slack > SlackMargin + p->fEpsilon &&
              Slack <= SlackGate + p->fEpsilon &&
              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
              Map_MatchNodeHasStmapMiddleSlackRelief( p->fSkipFanout, pNode ) &&
+             (p->fSkipFanout != 13 || Map_MatchCutHasStmapLowerModerateFanoutRisk( pNode, pCut )) &&
              pMatch->tArrive.Worst <= pMatchBest->tArrive.Worst + p->fEpsilon )
         {
             AreaMargin = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
@@ -408,7 +430,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
-    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 )
+    if ( p->fSkipFanout == 9 || p->fSkipFanout == 10 || p->fSkipFanout == 11 || p->fSkipFanout == 12 || p->fSkipFanout == 13 )
     {
         ArrivalMargin = 0.25 * SlackMargin;
         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )

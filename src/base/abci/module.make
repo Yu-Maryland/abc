@@ -78,6 +78,7 @@ SRC +=    src/base/abci/abc.c \
     src/base/abci/abcStmap_9.c \
     src/base/abci/abcStmap_10.c \
     src/base/abci/abcStmap_11.c \
+    src/base/abci/abcStmap_12.c \
     src/base/abci/abcStrash.c \
     src/base/abci/abcSweep.c \
     src/base/abci/abcSymm.c \
