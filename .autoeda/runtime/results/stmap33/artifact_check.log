@@ -1,0 +1,3 @@
+artifact check passed for stmap33
+benchmarks: benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif
+CEC all equivalent: True

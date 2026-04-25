@@ -1,0 +1,9 @@
+benchmark,flow,command,exit_code,stime_delay_ps,stime_area,log
+benchmarks/i10.aig,baseline,map,0,207.24,1263.44,baseline_benchmarks_i10_aig.log
+benchmarks/i10.aig,candidate,stmap33,0,198.64,1303.1,candidate_benchmarks_i10_aig.log
+benchmarks/ode.abc.blif,baseline,map,0,531.32,12491.21,baseline_benchmarks_ode_abc_blif.log
+benchmarks/ode.abc.blif,candidate,stmap33,0,522.05,11334.38,candidate_benchmarks_ode_abc_blif.log
+benchmarks/or1200.abc.blif,baseline,map,0,587.08,4798.34,baseline_benchmarks_or1200_abc_blif.log
+benchmarks/or1200.abc.blif,candidate,stmap33,0,561.55,4895.15,candidate_benchmarks_or1200_abc_blif.log
+benchmarks/syn2.abc.blif,baseline,map,0,508.82,21296.6,baseline_benchmarks_syn2_abc_blif.log
+benchmarks/syn2.abc.blif,candidate,stmap33,0,490.96,21541.78,candidate_benchmarks_syn2_abc_blif.log

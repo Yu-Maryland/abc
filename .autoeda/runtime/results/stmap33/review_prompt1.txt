@@ -1,0 +1,36 @@
+Review the uncommitted stmap33 iteration in this ABC repository.
+
+Project context:
+- This is AutoEDA iteration stmap33 in the stmap mapper family.
+- The binding project pack requires preserving older stmap commands, adding a numbered command with -h usage, and validating against build/help/smoke/full benchmark/CEC gates.
+- stmap33 should keep prior stmap32 behavior available and add only the new mode 34 behavior for the stmap33 command.
+
+Implementation hypothesis:
+- Keep the stmap32 cut-leaf load proxy path, but normalize the strong deep seed penalty by the selected supergate fanout limit.
+- The goal is to test a library-derived drive/load signal rather than relying only on raw cut-leaf reference counts.
+
+Files of interest:
+- src/base/abci/abc.c
+- src/base/abci/abcStmap_33.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperInt.h
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperMatch.c
+- .autoeda/runtime/results/stmap33/*
+
+Validation already run before this review:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap33 -h"
+- smoke flow on benchmarks/i10.aig
+- baseline and candidate flows on all four required benchmarks
+- CEC on all four required benchmarks
+
+Please focus on correctness and campaign-contract risks:
+- command registration/build integration
+- whether mode 34 is properly gated and does not alter map or stmap0 through stmap32 behavior
+- whether the stmap33 penalty/diagnostic counters are internally consistent
+- whether any uninitialized values, bad short-circuit assumptions, or parse/logging hazards exist
+- whether any required artifacts or validation steps appear missing
+
+Return findings first, ordered by severity, with file/line references where possible. If there are no actionable findings, say so clearly and mention residual risk.

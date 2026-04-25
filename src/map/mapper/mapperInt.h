@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32
+    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32, 34 stmap33
     int                 fUseProfile;   // use standard-cell profile
     int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
     int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
@@ -158,6 +158,10 @@ struct Map_ManStruct_t_
     int                 nStmap32ModeratePenaltyBlocked; // stmap32 continuous moderate deep penalty rejects
     int                 nStmap32StrongPenaltySeed; // stmap32 cut-leaf strong seed penalty choices
     int                 nStmap32StrongPenaltyBlocked; // stmap32 cut-leaf strong seed penalty rejects
+    int                 nStmap33ModeratePenaltySeed; // stmap33 continuous moderate deep penalty choices
+    int                 nStmap33ModeratePenaltyBlocked; // stmap33 continuous moderate deep penalty rejects
+    int                 nStmap33StrongPenaltySeed; // stmap33 drive-normalized strong seed penalty choices
+    int                 nStmap33StrongPenaltyBlocked; // stmap33 drive-normalized strong seed penalty rejects
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

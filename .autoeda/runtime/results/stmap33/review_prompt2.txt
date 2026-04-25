@@ -1,0 +1,15 @@
+Second review pass for the uncommitted stmap33 iteration.
+
+Context:
+- Review pass 1 reported no discrete correctness issues.
+- No source changes were made after pass 1.
+- The iteration implements stmap33 as command glue plus mapper mode 34.
+
+Please re-check the final uncommitted diff and runtime artifacts for any remaining blockers:
+- stmap33 command registration and build inclusion
+- mode 34 range updates and diagnostic counters
+- preservation of map and stmap0 through stmap32 behavior
+- build/help/smoke/full benchmark/CEC artifacts under .autoeda/runtime/results/stmap33
+- any campaign logging or validation artifacts that would prevent counting this iteration
+
+Return findings first, with file/line references. If no actionable issues remain, say so clearly.
