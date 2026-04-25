@@ -1,0 +1,11 @@
+Second review pass for the uncommitted stmap18 AutoEDA iteration.
+
+Pass 1 reported no discrete correctness issues. No source changes were made after pass 1.
+
+Please focus on whether the final uncommitted diff still satisfies the project pack:
+- stmap18 must remain a numbered command with help text and build integration.
+- Mode 19 should preserve stmap17 mapping choices while adding relief and near-miss diagnostics only.
+- Runtime artifacts under .autoeda/runtime/results/stmap18 should support build, help, smoke, full benchmark metrics, CEC, diagnostic parsing, and review logging.
+- Campaign state and version logging will be finalized after this pass.
+
+Report any blocking source, validation, or campaign-contract finding that should be addressed before counting stmap18.

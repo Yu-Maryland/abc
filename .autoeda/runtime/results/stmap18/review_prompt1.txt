@@ -1,0 +1,14 @@
+Review the uncommitted stmap18 AutoEDA iteration in this ABC repository.
+
+Focus on correctness risks in the source changes and campaign-contract issues in the iteration artifacts.
+
+Context:
+- stmap18 adds command src/base/abci/abcStmap_18.c and registers it as a versioned standard-cell mapping command.
+- The mapper mode is fSkipFanout = 19. It is intended to preserve stmap17 mode 18 mapping decisions while adding bounded near-miss diagnostics for middle-slack candidates that would pass a one-inverter area threshold but are still rejected by the timing-quality/profile fallback.
+- Required validation already passed locally: make ABC_USE_NO_READLINE=1, stmap18 -h, i10 smoke, full baseline/candidate benchmark flow on all four required designs, guard/relief/near-miss diagnostic parsing, and CEC for all four designs. Artifacts are under .autoeda/runtime/results/stmap18/.
+
+Please report:
+1. Source bugs that could change stmap17/stmap18 behavior unintentionally.
+2. Logging or parser issues that make the diagnostics misleading or incomplete.
+3. Missing campaign-contract artifacts or required validation gaps.
+4. Any findings that must be fixed before counting the iteration.
