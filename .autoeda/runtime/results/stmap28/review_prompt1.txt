@@ -1,0 +1,29 @@
+Review the uncommitted stmap28 implementation and runtime artifacts for correctness.
+
+Project context:
+- This is AutoEDA iteration 28 for the stmap family in ABC.
+- The new command is stmap28.
+- The project-pack policy requires preserving map and all prior stmap0..stmap27 behavior.
+- Required validation already run: clean build with ABC_USE_NO_READLINE=1, stmap28 -h, smoke on benchmarks/i10.aig, full required benchmark evaluation, parseable final stime metrics, diagnostics, and CEC for all four required benchmarks.
+
+Hypothesis:
+stmap28 replaces stmap27's hard moderate-seed signature blocker with a soft high-reference load-risk area penalty. It keeps moderate candidates in the next slack band eligible, but raises the required area saving for high-reference candidates according to reference count, slack risk, and arrival-gain risk.
+
+Files to inspect:
+- src/base/abci/abcStmap_28.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperInt.h
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperMatch.c
+- .autoeda/runtime/results/stmap28/*
+- .autoeda/runtime/campaign_state.json
+
+Please focus on:
+- command registration/build integration for stmap28
+- whether mode 29 is fully included in all intended stmap13+ diagnostic/counter ranges
+- whether the new soft penalty is gated only to fSkipFanout == 29
+- whether previous map and stmap0..stmap27 behavior is preserved
+- whether diagnostics and artifacts are complete enough for the version log
+- any correctness or reproducibility issue that should be fixed before committing

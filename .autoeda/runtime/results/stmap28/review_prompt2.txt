@@ -1,0 +1,14 @@
+Review the fixed stmap28 implementation and completed AutoEDA artifacts after review pass 1.
+
+Context:
+- Review pass 1 accepted one diagnostic finding: low-reference moderate candidates with `penalty-factor = 0.0` were being counted as `moderate-penalty-seed`.
+- The fix gates `stmap28 penalty seed diag` and `nStmap28ModeratePenaltySeed` on `Stmap28PenaltyFactor > 0.0`.
+- Build, help, smoke, full benchmark evaluation, diagnostics, artifact check, version-log check, and CEC were rerun after the fix.
+- The canonical version entry for `version28 / stmap28` has been added to `.autoeda/runtime/versions.md`.
+
+Please check for remaining blockers:
+- mode 29 is still gated only to stmap28 and does not alter map or stmap0..stmap27
+- the accepted review finding is actually fixed in source and artifacts
+- `penalty_stats.csv`, `penalty_seed_diag.csv`, and `penalty_block_diag.csv` are internally consistent
+- required metrics and CEC artifacts are complete and parseable
+- `versions.md`, `review_summary.md`, and campaign state are sufficiently complete before commit

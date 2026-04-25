@@ -140,7 +140,7 @@ static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_
 ***********************************************************************/
 static void Map_MatchStmap13CountRisk( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
 {
-    if ( p->fSkipFanout < 14 || p->fSkipFanout > 28 )
+    if ( p->fSkipFanout < 14 || p->fSkipFanout > 29 )
         return;
     p->nStmap13ExactRisk++;
     if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
@@ -202,7 +202,7 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode 
         return Map_MatchNodeHasStmapReliefDepth( pNode );
     if ( Mode == 12 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
-    if ( Mode >= 13 && Mode <= 28 )
+    if ( Mode >= 13 && Mode <= 29 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
     return 0;
 }
@@ -460,6 +460,68 @@ static int Map_MatchHasStmap27SignatureSafeModerateDeepSeed( Map_Node_t * pNode,
 
 /**Function*************************************************************
 
+  Synopsis    [Returns 1 if this is an stmap28 soft-penalty candidate.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchIsStmap28ModeratePenaltyCandidate( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0;
+    return Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) &&
+        Slack <= 1.25 * SlackMargin + Epsilon;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns the stmap28 extra area margin in inverter-area units.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static float Map_MatchStmap28ModeratePenaltyFactor( Map_Node_t * pNode, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    float Penalty = 0.0;
+    if ( !Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0.0;
+    if ( pNode->nRefs < 5 )
+        return 0.0;
+    Penalty += 0.15 * (float)(pNode->nRefs - 4);
+    if ( Slack <= 1.15 * SlackMargin + Epsilon )
+        Penalty += 0.15;
+    if ( ArrivalDelta <= -2.25 * ArrivalGainMargin - Epsilon )
+        Penalty += 0.15;
+    return Penalty > 1.0 ? 1.0 : Penalty;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns 1 if stmap28 allows a deep pre-profile seed.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static int Map_MatchHasStmap28SoftPenaltyModerateDeepSeed( float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    return Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) ||
+        Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+}
+
+/**Function*************************************************************
+
   Synopsis    [Returns 1 if a fanout/load proxy should reject this cut.]
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
@@ -515,7 +577,10 @@ static int Map_MatchHasStmap27SignatureSafeModerateDeepSeed( Map_Node_t * pNode,
   slack band as an ablation diagnostic. Mode 27 is stmap26, which skips the
   first such moderate seed and admits only the second qualifying seed. Mode 28
   is stmap27, which reopens the next slack band except for the high-reference,
-  low-slack, stronger-moderate signature isolated by stmap26.]
+  low-slack, stronger-moderate signature isolated by stmap26. Mode 29 is
+  stmap28, which replaces that hard signature blocker with a high-reference
+  moderate-seed area penalty that scales with reference count, slack risk, and
+  arrival-gain risk.]
 
   SideEffects []
 
@@ -643,7 +708,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 29 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -722,7 +787,10 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   ablation. In stmap26, the first such moderate seed is skipped and only the
   second qualifying seed is admitted. In stmap27, moderate deep candidates in
   the next slack band are admitted unless they match the high-reference,
-  low-slack, stronger-moderate signature isolated by stmap26.]
+  low-slack, stronger-moderate signature isolated by stmap26. In stmap28, that
+  hard blocker is replaced by a soft area-margin penalty on high-reference
+  moderate seeds whose slack and arrival-gain ratios resemble load-risky
+  choices.]
 
   SideEffects []
 
@@ -731,13 +799,14 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
 ***********************************************************************/
 static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, Map_Match_t * pMatchBest, Map_Match_t * pMatch )
 {
-    float Slack, SlackMargin, SlackGate, ArrivalMargin, ArrivalDelta, ArrivalGainMargin, AreaMargin, AreaSave, OneInvArea;
+    float Slack, SlackMargin, SlackGate, ArrivalMargin, ArrivalDelta, ArrivalGainMargin, AreaMargin, AreaSave, OneInvArea, Stmap28PenaltyFactor;
     const char * pReason;
     int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
     int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
     int fStmap27ModerateSignatureSeed, fStmap27ModerateSignatureBlocked;
+    int fStmap28ModeratePenaltyCandidate;
 
-    if ( p->fSkipFanout < 7 || p->fSkipFanout > 28 )
+    if ( p->fSkipFanout < 7 || p->fSkipFanout > 29 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -745,7 +814,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
         return 0;
-    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 28);
+    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 29);
     Map_MatchStmap13CountRisk( p, pNode, pCut );
     if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
         return 0;
@@ -754,11 +823,11 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
     ArrivalGainMargin = 0.25 * SlackMargin;
     fArrivalQuality = ArrivalDelta <= -ArrivalGainMargin - p->fEpsilon;
-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 28 )
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 29 )
     {
         SlackGate = 2.0 * SlackMargin;
         fMiddleReliefWindow =
-             (p->fSkipFanout >= 10 && p->fSkipFanout <= 28) &&
+             (p->fSkipFanout >= 10 && p->fSkipFanout <= 29) &&
              Slack > SlackMargin + p->fEpsilon &&
              Slack <= SlackGate + p->fEpsilon &&
              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
@@ -793,6 +862,13 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 !fProfileOpen &&
                 !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
                 Map_MatchIsStmap27BlockedModerateSignature( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap28ModeratePenaltyCandidate =
+                p->fSkipFanout == 29 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            Stmap28PenaltyFactor = fStmap28ModeratePenaltyCandidate ?
+                Map_MatchStmap28ModeratePenaltyFactor( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ) : 0.0;
             fStrictFallback =
                 p->fSkipFanout == 15 ||
                 ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
@@ -805,8 +881,11 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 (p->fSkipFanout == 25 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
                 (p->fSkipFanout == 26 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap25SingleModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
                 (p->fSkipFanout == 27 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap26RankTwoModerateDeepSeed( p, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
-                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
+                (p->fSkipFanout == 28 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap27SignatureSafeModerateDeepSeed( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon )))) ||
+                (p->fSkipFanout == 29 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) && !Map_MatchHasStmap28SoftPenaltyModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon ))));
             AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
+            if ( p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0 && p->pSuperLib )
+                AreaMargin = (1.0 + Stmap28PenaltyFactor) * p->pSuperLib->AreaInv;
             AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
             OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
             if ( AreaSave > AreaMargin + p->fEpsilon )
@@ -818,7 +897,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
                         pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
-                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 28 )
+                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 29 )
                     printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
                         p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
@@ -845,11 +924,21 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         p->nStmap27ModerateSignatureSeed, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
                 }
-                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 28 && !fProfileOpen && !fStrictFallback )
+                if ( p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0 )
+                {
+                    p->nStmap28ModeratePenaltySeed++;
+                    printf( "stmap28 penalty seed diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f\n",
+                        p->nStmap28ModeratePenaltySeed, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap28PenaltyFactor, AreaMargin );
+                }
+                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 29 && !fProfileOpen && !fStrictFallback )
                     p->nStmap19EarlySeed++;
                 return 0;
             }
-            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 28 && fStrictFallback && AreaSave > OneInvArea + p->fEpsilon )
+            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 29 &&
+                 (fStrictFallback || (p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0)) &&
+                 AreaSave > OneInvArea + p->fEpsilon )
             {
                 if ( p->fSkipFanout == 19 )
                     pReason = fProfileOpen ? "timing-gate" : "profile-closed";
@@ -869,6 +958,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? "rank2-ablation-gate" : "moderate-gain-gate") : "arrival-gate";
                 else if ( p->fSkipFanout == 28 )
                     pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap27ModerateSignatureBlocked ? "signature-block-gate" : "signature-band-gate") : "moderate-gain-gate") : "arrival-gate";
+                else if ( p->fSkipFanout == 29 )
+                    pReason = fArrivalQuality ? (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0 ? "soft-penalty-area-gate" : "soft-penalty-band-gate") : "moderate-gain-gate") : "arrival-gate";
                 else
                     pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
                 if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
@@ -884,6 +975,14 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     printf( "stmap27 signature block diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f\n",
                         p->nStmap27ModerateSignatureBlocked, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
+                if ( p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0 )
+                {
+                    p->nStmap28ModeratePenaltyBlocked++;
+                    printf( "stmap28 penalty block diag: index = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f\n",
+                        p->nStmap28ModeratePenaltyBlocked, pNode->Num, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap28PenaltyFactor, AreaMargin );
                 }
                 p->nStmap18NearMiss++;
                 if ( p->nStmap18NearMiss <= 128 )
@@ -911,7 +1010,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
-    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 28 )
+    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 29 )
     {
         ArrivalMargin = 0.25 * SlackMargin;
         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
