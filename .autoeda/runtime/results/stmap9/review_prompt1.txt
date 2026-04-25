@@ -1,0 +1,14 @@
+Review the uncommitted stmap9 AutoEDA iteration in this ABC repository.
+
+Binding context:
+- Project pack requires numbered stmapN commands, preserved prior variants, help text, build integration, benchmark artifacts, CEC, review, and version/campaign logging before the iteration is counted.
+- stmap9 hypothesis: middle-slack area-relief fanout guard. It should preserve map and stmap0..stmap8 behavior while adding command stmap9 and mapper fSkipFanout mode 10.
+
+Please review the uncommitted source and artifact changes for bugs or blocking risks, focusing on:
+- src/base/abci/abcStmap_9.c command behavior and help text
+- src/base/abci/abc.c registration and module/build integration
+- src/map/mapper/mapperMatch.c mode 10 logic and whether modes 0..9 remain unchanged
+- src/map/mapper/mapperInt.h comments/build compatibility
+- runtime artifacts under .autoeda/runtime/results/stmap9 and campaign state consistency
+
+Report findings first, ordered by severity, with file/line references. Include whether each finding must be fixed before counting stmap9. Do not modify files.

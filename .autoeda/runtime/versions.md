@@ -430,3 +430,50 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap8: arrival-bounded recovery guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap8` restores an `ode` delay win and keeps delay improvements on all four benchmarks, but area still increases on `i10`, `or1200`, and `syn2`. For `stmap9`, keep the arrival-bounded timing guard and add a targeted area-control signal, such as tightening the delay-pass guard for small graphs only when downstream area grows or adding guard-hit instrumentation to separate area-costly high-fanout choices from timing-critical ones.
+
+## version9 / stmap9
+
+- hypothesis: Keeping the `stmap8` arrival-bounded high-fanout guard, but allowing only arrival-neutral and materially area-saving wide cuts in the middle-slack exact-area recovery bucket, can recover downstream area without giving up the broad final `stime` delay gains.
+- motivation: `stmap8` improved final delay on all four required benchmarks but still increased area on `i10`, `or1200`, and `syn2`. The area increases suggested that rejecting every one-to-two inverter slack wide-cut candidate was too conservative when the candidate reduced mapper exact area and did not worsen mapper arrival.
+- command name: `stmap9`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_9.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap9/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap9` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 10` into the mapper. `mapperMatch.c` interprets mode `10` as a middle-slack area-relief guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap8`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but a candidate in the one-to-two inverter slack bucket may bypass rejection when it is outside the highest fanout bucket, does not worsen mapper arrival, and saves at least one inverter area. Existing `map` and `stmap0` through `stmap8` behavior are preserved because modes `0` through `9` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap9/build.log`.
+  - help: `./abc -c "stmap9 -h"` printed usage text with default `-G 250.00` and the middle-slack area-relief fanout guard enabled. Log: `.autoeda/runtime/results/stmap9/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap9; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap9/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap9/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, prompt artifact, and review summary.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `519.38 ps`, area `11327.84`; delay delta `-11.94 ps` (`-2.25%`), area delta `-1163.37` (`-9.31%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `563.51 ps`, area `4899.58`; delay delta `-23.57 ps` (`-4.01%`), area delta `+101.24` (`+2.11%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `493.20 ps`, area `21485.79`; delay delta `-15.62 ps` (`-3.07%`), area delta `+189.19` (`+0.89%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_9.c`.
+  - numbered command exists and is registered as `stmap9`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap9/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap9/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap9/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Record `stmap9` in the canonical version log and complete the final campaign-state update before counting the iteration; addressed by this entry and revalidated with version-log/artifact checks.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+- commit: local commit created with message `stmap9: middle-slack area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap9` improves final delay on all four required benchmarks and reduces the `stmap8` area cost on `ode` and `syn2`, but it increases `or1200` area while buying a much larger delay gain. For `stmap10`, instrument or gate the middle-slack relief by fanout bucket and structural depth so the `or1200` area tradeoff can be separated from the `ode` and `syn2` area wins.
