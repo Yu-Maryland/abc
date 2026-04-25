@@ -123,8 +123,18 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12
+    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13
     int                 fUseProfile;   // use standard-cell profile
+    int                 nStmap13ExactRisk;      // stmap13 exact-area risky cuts
+    int                 nStmap13HighestRisk;    // stmap13 highest fanout bucket hits
+    int                 nStmap13LowerModRisk;   // stmap13 lower-moderate fanout bucket hits
+    int                 nStmap13UpperModRisk;   // stmap13 upper-moderate fanout bucket hits
+    int                 nStmap13MiddleSlack;    // stmap13 middle-slack candidates
+    int                 nStmap13MiddleRelief;   // stmap13 middle-slack candidates admitted
+    int                 nStmap13RejectSlack;    // stmap13 rejects due to slack gate
+    int                 nStmap13RejectHighest;  // stmap13 rejects due to highest bucket
+    int                 nStmap13RejectArrival;  // stmap13 rejects due to arrival regression
+    int                 nStmap13RejectArea;     // stmap13 rejects due to insufficient area saving
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

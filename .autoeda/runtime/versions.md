@@ -619,3 +619,51 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap12: fanout-bucket area-relief guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap12` keeps final delay wins on all four benchmarks and improves `syn2` delay relative to `stmap11`, but it gives back `ode` delay and increases `syn2` area. For `stmap13`, add guard-hit counters or a lower-moderate bucket sub-split that distinguishes `syn2` timing-positive choices from area-expensive downstream sizing choices, preferably logging per-bucket hit counts before changing another threshold.
+
+## version13 / stmap13
+
+- hypothesis: Keeping the `stmap12` fanout-bucket split middle-slack guard decisions unchanged, but adding exact-area guard-hit counters for highest, lower-moderate, and upper-moderate fanout buckets, will provide the evidence needed to separate `syn2` timing-positive lower-bucket choices from area-expensive downstream sizing choices before another threshold change.
+- motivation: `stmap12` preserved final delay wins on all four benchmarks, but it gave back `ode` delay and increased `syn2` area. The prior recommendation was to record guard-hit counters before tuning the lower-moderate bucket further. `stmap13` is an instrumentation-first version that keeps mapper behavior comparable to `stmap12`.
+- command name: `stmap13`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_13.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap13/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap13` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 14` into the mapper. `mapperMatch.c` treats mode `14` as the same decision policy as `stmap12` mode `13`: delay matching and small-graph/area-flow behavior match the existing shape-gated fanout guard, and exact-area recovery on larger graphs allows the tight-depth one-to-two inverter slack area-relief bypass only in the lower moderate fanout bucket. Mode `14` additionally records exact-area risky-cut, fanout-bucket, middle-slack, relief, and rejection counters; `mapperCore.c` prints one `stmap13 guard stats` line after mapping. Existing `map` and `stmap0` through `stmap12` behavior are preserved because modes `0` through `13` retain their prior meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. Log: `.autoeda/runtime/results/stmap13/build.log`.
+  - help: `./abc -c "stmap13 -h"` printed usage text with default `-G 250.00` and the stmap12 guard counters enabled. Log: `.autoeda/runtime/results/stmap13/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap13; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap13/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap13/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-relief `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, highest `22601`, lower-moderate `19542`, upper-moderate `7483`, middle-slack `765`, middle-relief `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, highest `8550`, lower-moderate `10834`, upper-moderate `3295`, middle-slack `35`, middle-relief `2`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `488.54 ps`, area `21538.51`; delay delta `-20.28 ps` (`-3.99%`), area delta `+241.91` (`+1.14%`); guard stats: exact-risk `98462`, highest `48780`, lower-moderate `38524`, upper-moderate `11158`, middle-slack `1959`, middle-relief `12`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_13.c`.
+  - numbered command exists and is registered as `stmap13`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat parsing passed and is recorded in `.autoeda/runtime/results/stmap13/guard_stats.csv`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap13/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap13/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap13/review_pass1_supported.log`.
+- accepted findings: none.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because review pass 1 found no blocking issues and no source changes were made after review; only this logging/audit entry and final state update remained.
+- commit: local commit created with message `stmap13: guard-hit instrumentation`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap13` shows the lower-moderate bucket is heavily exercised on `ode` and `syn2`, but actual middle-slack relief is concentrated in `syn2` (`12`) and lightly in `or1200` (`2`) while `ode` has none. For `stmap14`, keep the counters and test a behavior change that admits lower-moderate middle-slack relief only when the candidate clears a stronger area-saving ratio or when the rejection is arrival-neutral and occurs in the `syn2`-like high lower-bucket/high middle-slack profile.

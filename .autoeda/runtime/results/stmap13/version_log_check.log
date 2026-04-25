@@ -1,0 +1,4 @@
+623:## version13 / stmap13
+627:- command name: `stmap13`
+667:- commit: local commit created with message `stmap13: guard-hit instrumentation`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+stmap13 version log check passed

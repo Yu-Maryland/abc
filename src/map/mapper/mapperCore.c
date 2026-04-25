@@ -222,10 +222,16 @@ ABC_PRT( "Time", Abc_Clock() - clk );
     p->timeArea += Abc_Clock() - clk;
     //////////////////////////////////////////////////////////////////////
 
+    if ( p->fSkipFanout == 14 )
+        printf( "stmap13 guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
+            p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
+            p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
+            p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
+            p->nStmap13RejectArea );
+
     // print the arrival times of the latest outputs
     if ( p->fVerbose )
         Map_MappingPrintOutputArrivals( p );
     return 1;
 }
 ABC_NAMESPACE_IMPL_END
-

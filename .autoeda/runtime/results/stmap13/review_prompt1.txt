@@ -1,0 +1,37 @@
+Review the uncommitted `stmap13` AutoEDA iteration for Berkeley ABC.
+
+Project constraints:
+- `stmap13` must be additive and preserve `map` and `stmap0` through `stmap12`.
+- New command must be registered, buildable, and support `stmap13 -h`.
+- Shared mapper changes must be gated by the new `fSkipFanout == 14` path unless comments/build wiring are version-neutral.
+- Required flow is `read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap13; topo; buffer; upsize -v; dnsize -v; stime`.
+
+Hypothesis:
+`stmap13` keeps the `stmap12` mode-13 fanout-bucket split middle-slack guard decisions, but records per-bucket exact-area guard counters in mode 14 so the next threshold change can be based on observed guard-hit evidence.
+
+Primary files to inspect:
+- `src/base/abci/abcStmap_13.c`
+- `src/base/abci/abc.c`
+- `src/base/abci/module.make`
+- `abclib.dsp`
+- `src/map/mapper/mapperInt.h`
+- `src/map/mapper/mapperMatch.c`
+- `src/map/mapper/mapperCore.c`
+- `.autoeda/runtime/results/stmap13/*`
+- `.autoeda/runtime/campaign_state.json`
+
+Validation already run:
+- `make ABC_USE_NO_READLINE=1`
+- `./abc -c "stmap13 -h"`
+- smoke on `benchmarks/i10.aig`
+- full baseline/candidate metrics on all four required benchmarks
+- CEC original-vs-post-flow candidate on all four required benchmarks
+
+Results summary:
+- i10: delay 198.64 ps vs baseline 207.24 ps; area 1303.10 vs 1263.44.
+- ode: delay 522.05 ps vs baseline 531.32 ps; area 11334.38 vs 12491.21.
+- or1200: delay 561.55 ps vs baseline 587.08 ps; area 4895.15 vs 4798.34.
+- syn2: delay 488.54 ps vs baseline 508.82 ps; area 21538.51 vs 21296.60.
+- Guard counters are nonzero on ode/or1200/syn2 and zero on i10, as expected for the small-graph gate.
+
+Please prioritize correctness bugs, behavior regressions versus `stmap12`, build integration gaps, missing artifacts, or campaign logging issues. Return findings with severity and file/line references.
