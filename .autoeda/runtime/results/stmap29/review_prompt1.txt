@@ -1,0 +1,24 @@
+Review the uncommitted stmap29 implementation and artifacts for the AutoEDA ABC mapper campaign.
+
+Binding context:
+- Project pack policy is .autoeda/project_pack/agent.md.
+- New version is stmap29, command mode fSkipFanout = 30.
+- Evaluation flow uses read_lib 7nm_lvt_ff.lib, the four required benchmarks, downstream topo/buffer/upsize/dnsize/stime, and CEC on strashed original versus candidate temporaries.
+
+Hypothesis:
+- stmap29 keeps the stmap28 moderate deep seed eligibility band but replaces the stepwise refs-5 area penalty with a continuous load-risk gradient based on reference count, Slack/SlackMargin, and -ArrivalDelta/ArrivalGainMargin.
+
+Please review:
+- command registration and build integration for src/base/abci/abcStmap_29.c, src/base/abci/abc.c, src/base/abci/module.make, and abclib.dsp.
+- mapper mode-30 gating in src/map/mapper/mapperMatch.c, mapperCore.c, and mapperInt.h, especially that stmap0 through stmap28 behavior is preserved.
+- diagnostic counters and printed labels for guard/near-miss/early-seed/penalty stats.
+- runtime artifacts under .autoeda/runtime/results/stmap29, including build/help/smoke, metrics, diagnostics, CEC, artifact_check.log, and the version29 entry in .autoeda/runtime/versions.md.
+
+Validation already run:
+- build passed.
+- stmap29 -h passed.
+- smoke on benchmarks/i10.aig passed with final stime delay 198.64 ps and area 1303.10.
+- full benchmark metrics passed for i10, ode, or1200, and syn2.
+- CEC passed for all four required benchmarks.
+
+Return prioritized findings. For each finding, identify whether it is blocking for counting the iteration.

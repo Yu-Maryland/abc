@@ -1510,3 +1510,59 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap28: soften moderate seed blocker`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap28` confirms that the harmful refs-5 moderate seed can be rejected by a load-risk area penalty instead of a hard blocker. For `stmap29`, test whether the penalty can be tuned more aggressively for accepted high-reference seeds, or bring in a direct SCL/load signal so the penalty is calibrated by downstream capacitance rather than mapper reference count alone.
+
+## version29 / stmap29
+
+- hypothesis: A continuous high-reference load-risk penalty over the `stmap28` moderate deep seed band can preserve the timing-safe rejection of the harmful refs-5 seed while reducing dependence on step thresholds for slack and arrival gain.
+- motivation: `stmap28` replaced the `stmap27` hard signature blocker with a stepwise penalty and kept the better `syn2` timing. The next question is whether a smoother penalty based on slack ratio and arrival-gain ratio can make the same decision with less hand-coded thresholding.
+- command name: `stmap29`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_29.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap29/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap29` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 30` into the mapper. Mode 30 preserves the `stmap28` moderate deep seed eligibility band, guard counters, early-seed and near-miss diagnostics, and previous `stmap0` through `stmap28` behavior. The new mapping decision is limited to pre-profile, non-shallow, refs-5 moderate deep seeds outside the `stmap24` tight gate: the extra area margin becomes a continuous penalty using reference count, `Slack / SlackMargin`, and `-ArrivalDelta / ArrivalGainMargin`, capped at one inverter area.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap29/build.log`.
+  - help: `./abc -c "stmap29 -h"` printed usage text with default `-G 250.00` and the continuous moderate seed load penalty enabled. Log: `.autoeda/runtime/results/stmap29/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap29; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap29/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap29/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `relief_diag.csv`, `near_miss_diag.csv`, `penalty_seed_diag.csv`, `penalty_block_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-slack `0`, middle-relief `0`, early-seed `0`, moderate-penalty-seed `0`, moderate-penalty-blocked `0`, near-miss `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`, early-seed `0`, moderate-penalty-seed `0`, moderate-penalty-blocked `0`, near-miss `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, middle-slack `35`, middle-relief `2`, early-seed `2`, moderate-penalty-seed `0`, moderate-penalty-blocked `0`, near-miss `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); guard stats: exact-risk `98465`, middle-slack `1992`, middle-relief `5`, early-seed `4`, moderate-penalty-seed `0`, moderate-penalty-blocked `2`, near-miss `12`.
+- penalty diagnostics:
+  - `benchmarks/syn2.abc.blif`: the harmful refs-5 candidate at node `37979` is rejected twice by `continuous-penalty-area-gate`; its continuous penalty factor is `0.349`, raising the area margin to `0.944093`, above its area saving of `0.93`.
+  - The final benchmark QoR is identical to `stmap28`, but the diagnostic factor confirms that the softer continuous surface still blocks the isolated harmful seed with less margin than the step penalty (`0.349` instead of `0.45`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_29.c`.
+  - numbered command exists and is registered as `stmap29`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, relief, penalty-block, and near-miss diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap29/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap29/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap29/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap29/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap29/review_pass1_supported.log`.
+  - accepted findings: none; the reviewer reported no discrete correctness issue in the changed or untracked source files.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap29/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap29/review_pass2_supported.log`.
+  - accepted findings: none; the reviewer reported no discrete correctness issue in command registration, build inclusion, or mapper mode-30 updates.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none; both review passes reported no source issue, and no post-review source edits were needed.
+- commit: local commit created with message `stmap29: smooth moderate seed penalty`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap29` preserves `stmap28` QoR while showing that a lower continuous penalty can still reject node `37979`. For `stmap30`, test whether this continuous surface can be extended to accepted high-reference strong deep seeds or use a downstream `stime`/SCL-derived capacitance diagnostic to replace reference count as the load-risk term.

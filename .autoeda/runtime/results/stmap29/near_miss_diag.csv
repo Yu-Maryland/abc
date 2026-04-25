@@ -1,0 +1,13 @@
+benchmark,index,reason,profile_open,node,level,refs,leaves,phase,slack,area_save,arrival_delta,arrival_gain_margin,area_margin,one_inv_area
+benchmarks/syn2.abc.blif,1,arrival-gate,0,5785,44,4,4,0,10.839981,0.93,-0.800003,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,2,moderate-gain-gate,0,5785,44,4,4,1,7.61998,0.93,-2.76001,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,3,arrival-gate,0,5785,44,4,5,1,7.61998,0.93,-1.26001,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,4,moderate-gain-gate,0,23628,38,4,4,0,6.52002,0.93,-1.75,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,5,arrival-gate,0,23628,38,4,4,1,7.550034,1.17,-1.049988,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,6,arrival-gate,0,23628,38,4,5,1,7.550034,1.17,-0.029999,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,7,arrival-gate,0,27904,57,4,5,1,9.659973,0.93,-1.459991,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,8,moderate-gain-gate,0,35068,45,4,4,0,11.949997,0.93,-2.11998,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,9,moderate-gain-gate,0,35068,45,4,4,0,11.949997,0.93,-2.11998,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,10,continuous-penalty-area-gate,0,37979,42,5,4,1,7.170013,0.93,-3.699997,1.585,0.944093,0.7
+benchmarks/syn2.abc.blif,11,continuous-penalty-area-gate,0,37979,42,5,4,1,7.170013,0.93,-3.699997,1.585,0.944093,0.7
+benchmarks/syn2.abc.blif,12,moderate-gain-gate,0,37979,42,5,5,1,7.170013,0.93,-2.199997,1.585,1.4,0.7

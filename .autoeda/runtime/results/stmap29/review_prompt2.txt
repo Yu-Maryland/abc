@@ -1,0 +1,14 @@
+Second review pass for the uncommitted stmap29 AutoEDA ABC mapper iteration.
+
+Focus on remaining blocking issues after pass 1 reported no discrete correctness issues. Re-check:
+- stmap29 command registration, help text, and build integration.
+- mode-30 gating in mapperMatch.c, mapperCore.c, and mapperInt.h.
+- preservation of stmap0 through stmap28 behavior.
+- diagnostic labels and counters for stmap29 guard, near-miss, early-seed, and penalty outputs.
+- consistency of .autoeda/runtime/results/stmap29 artifacts and the version29 log entry.
+
+Validation evidence:
+- build, help, smoke, full four-benchmark metrics, diagnostics, artifact check, and CEC all passed.
+- stmap29 has identical final stime QoR to stmap28 on the required benchmarks, with the harmful syn2 node 37979 blocked by a continuous penalty factor of 0.349.
+
+Return only actionable findings, ordered by severity, and say clearly if there are no blocking findings.

@@ -1,0 +1,58 @@
+[
+  {
+    "benchmark": "benchmarks/i10.aig",
+    "original": ".autoeda/runtime/results/stmap29/cec_benchmarks_i10_aig_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap29/cec_benchmarks_i10_aig_stmap29.aig",
+    "log": ".autoeda/runtime/results/stmap29/cec_benchmarks_i10_aig.log",
+    "equivalent": true,
+    "returncode": 0,
+    "orig_returncode": 0,
+    "candidate_returncode": 0,
+    "orig_timed_out": false,
+    "candidate_timed_out": false,
+    "timed_out": false,
+    "elapsed_seconds": 0.2663867473602295
+  },
+  {
+    "benchmark": "benchmarks/ode.abc.blif",
+    "original": ".autoeda/runtime/results/stmap29/cec_benchmarks_ode_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap29/cec_benchmarks_ode_abc_blif_stmap29.aig",
+    "log": ".autoeda/runtime/results/stmap29/cec_benchmarks_ode_abc_blif.log",
+    "equivalent": true,
+    "returncode": 0,
+    "orig_returncode": 0,
+    "candidate_returncode": 0,
+    "orig_timed_out": false,
+    "candidate_timed_out": false,
+    "timed_out": false,
+    "elapsed_seconds": 1.139596939086914
+  },
+  {
+    "benchmark": "benchmarks/or1200.abc.blif",
+    "original": ".autoeda/runtime/results/stmap29/cec_benchmarks_or1200_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap29/cec_benchmarks_or1200_abc_blif_stmap29.aig",
+    "log": ".autoeda/runtime/results/stmap29/cec_benchmarks_or1200_abc_blif.log",
+    "equivalent": true,
+    "returncode": 0,
+    "orig_returncode": 0,
+    "candidate_returncode": 0,
+    "orig_timed_out": false,
+    "candidate_timed_out": false,
+    "timed_out": false,
+    "elapsed_seconds": 0.7413721084594727
+  },
+  {
+    "benchmark": "benchmarks/syn2.abc.blif",
+    "original": ".autoeda/runtime/results/stmap29/cec_benchmarks_syn2_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap29/cec_benchmarks_syn2_abc_blif_stmap29.aig",
+    "log": ".autoeda/runtime/results/stmap29/cec_benchmarks_syn2_abc_blif.log",
+    "equivalent": true,
+    "returncode": 0,
+    "orig_returncode": 0,
+    "candidate_returncode": 0,
+    "orig_timed_out": false,
+    "candidate_timed_out": false,
+    "timed_out": false,
+    "elapsed_seconds": 2.653337001800537
+  }
+]
