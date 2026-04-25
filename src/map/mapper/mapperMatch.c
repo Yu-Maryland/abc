@@ -69,19 +69,41 @@ void Map_MatchClean( Map_Match_t * pMatch )
 
   Description [Mode 1 is the classic map -f guard. Mode 2 is the stmap1
   selective guard, which only rejects wider cuts when the node has higher
-  estimated fanout.]
+  estimated fanout. Mode 3 is the stmap2 guard, which uses the same fanout
+  thresholds only during area recovery and only when the current phase has
+  slack over the mapper required time.]
 
   SideEffects []
 
   SeeAlso     []
 
 ***********************************************************************/
-static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
+static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase )
 {
+    Map_Cut_t * pCutBest;
+    Map_Match_t * pMatchBest;
+    float Slack, SlackMargin;
+
     if ( !p->fSkipFanout )
         return 0;
     if ( p->fSkipFanout == 2 )
         return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+    if ( p->fSkipFanout == 3 )
+    {
+        if ( p->fMappingMode < 1 || p->fMappingMode > 3 )
+            return 0;
+        pCutBest = pNode->pCutBest[fPhase];
+        if ( pCutBest == NULL )
+            return 0;
+        pMatchBest = pCutBest->M + fPhase;
+        if ( pMatchBest->pSuperBest == NULL )
+            return 0;
+        Slack = pNode->tRequired[fPhase].Worst - pMatchBest->tArrive.Worst;
+        SlackMargin = p->pSuperLib ? p->pSuperLib->tDelayInv.Worst : 0.0;
+        if ( Slack <= SlackMargin + p->fEpsilon )
+            return 0;
+        return (pNode->nRefs > 6 && pCut->nLeaves > 2) || (pNode->nRefs > 3 && pCut->nLeaves > 3);
+    }
     return (pNode->nRefs > 3 && pCut->nLeaves > 2) || (pNode->nRefs > 1 && pCut->nLeaves > 3);
 }
 
@@ -330,7 +352,7 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
     for ( pCut = pNode->pCuts->pNext; pCut; pCut = pCut->pNext )
     {
         // limit gate sizes based on fanout count
-        if ( Map_MatchSkipCutForFanout( p, pNode, pCut ) )
+        if ( Map_MatchSkipCutForFanout( p, pNode, pCut, fPhase ) )
             continue;
         pMatch = pCut->M + fPhase;
         if ( pMatch->pSupers == NULL )

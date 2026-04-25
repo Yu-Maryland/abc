@@ -1,0 +1,10 @@
+Review the uncommitted stmap2 AutoEDA iteration in this Berkeley ABC repository.
+
+Focus on correctness and campaign compliance:
+- new stmap2 command registration, help text, and build integration
+- mapperMatch.c fSkipFanout mode 3 behavior and whether it preserves map, stmap0, and stmap1 semantics
+- risks in the slack-aware area-recovery fanout guard
+- completeness of evaluation artifacts under .autoeda/runtime/results/stmap2
+- any missing correctness or logging work before committing
+
+Treat the project pack under .autoeda/project_pack as binding. Return findings first, with file and line references where applicable.

@@ -102,3 +102,51 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap1: selective fanout cut guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: current project-pack `git.yaml` has `push_mode: normal`; the validated local commit is eligible for push under the full-campaign policy.
 - next-step recommendation: `stmap1` improves final delay on three of four benchmarks and reduces `ode` area, but it hurts both delay and area on `or1200` and increases area on `i10` and `syn2`. For `stmap2`, keep the fanout/load direction but make it more timing-aware, for example by applying the guard only during area-recovery modes or only when mapper slack is noncritical.
+
+## version2 / stmap2
+
+- hypothesis: Applying the selective fanout/load wide-cut guard only during mapper area-recovery modes, and only when the current phase has local required-time slack, can preserve delay-oriented mapping freedom while still reducing noncritical downstream load/slew pressure.
+- motivation: `stmap1` improved final delay on three benchmarks but hurt `or1200`, suggesting that constraining the initial delay pass was too blunt. `stmap2` keeps the fanout/load direction but makes the intervention timing-aware inside the mapper recovery loop.
+- command name: `stmap2`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_2.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap2/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap2` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 3` into the mapper. `mapperMatch.c` interprets mode `3` as a slack-aware recovery guard: it is inactive during delay matching and switching recovery, applies only during mapping modes `1..3`, requires the current best phase match to have more than one inverter-delay of slack, then uses the same high-fanout cut-width thresholds as `stmap1`. Existing `map`, `map -f`, `stmap0`, and `stmap1` behavior are preserved because modes `0`, `1`, and `2` retain their old meanings.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed; artifact `./abc` produced. After review fix, `build_revalidate.log` also passed.
+  - help: `./abc -c "stmap2 -h"` printed usage text with default `-G 250.00` and the slack-aware recovery fanout guard enabled.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap2; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`.
+  - review revalidation: `stmap2 -p` smoke passed after the mode guard fix with final delay `218.43 ps` and area `1753.80`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap2/summary.json`, `metrics.csv`, `comparison.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, and prompt/summary artifacts.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `541.61 ps`, area `12516.41`; delay delta `+10.29 ps` (`+1.94%`), area delta `+25.20` (`+0.20%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `553.77 ps`, area `5005.96`; delay delta `-33.31 ps` (`-5.67%`), area delta `+207.62` (`+4.33%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `509.57 ps`, area `21604.99`; delay delta `+0.75 ps` (`+0.15%`), area delta `+308.39` (`+1.45%`).
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_2.c`.
+  - numbered command exists and is registered as `stmap2`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap2/`.
+  - staged source/state whitespace check passed; raw ABC stdout logs intentionally retain original simulator whitespace.
+- review pass 1:
+  - configured prompt form failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap2/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap2/review_pass1_supported.log`.
+- accepted findings:
+  - P2: Keep the `stmap2` guard out of switching recovery when `stmap2 -p` is used; addressed by limiting mode `3` to mapper modes `1..3` and revalidating build, help, default smoke, `-p` smoke, full default benchmark metrics, and CEC.
+- rejected findings: none.
+- open findings: none.
+- review pass 2: skipped because the accepted post-review source change was a narrow one-line mode guard fix directly addressing the finding; all affected behavior and the full default evaluation were revalidated.
+- commit: local commit created with message `stmap2: slack-aware recovery fanout guard`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap2` repairs the `or1200` regression seen in `stmap1` and improves `i10`, but it loses the strong `ode` and `syn2` gains and increases area on all four designs. For `stmap3`, keep recovery timing awareness but add a benchmark-shape discriminator, such as applying the guard only to nodes with both high fanout and shallow slack margin, or recording per-node guard-hit instrumentation to distinguish `ode`/`syn2` from `i10`/`or1200`.
