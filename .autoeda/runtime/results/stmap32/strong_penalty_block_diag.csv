@@ -1,0 +1,3 @@
+benchmark,index,node,level,refs,leaves,phase,slack,area_save,arrival_delta,arrival_gain_margin,penalty_factor,area_margin,cut_leaf_load_avg
+benchmarks/syn2.abc.blif,1,2318,29,5,4,0,7.430023,0.930000,-10.130005,1.585000,0.530,1.070667,6.750
+benchmarks/syn2.abc.blif,2,2318,29,5,4,0,7.430023,0.930000,-10.130005,1.585000,0.480,1.035667,5.500

@@ -1,0 +1,25 @@
+Review the uncommitted stmap32 AutoEDA iteration for correctness, build integration, and evaluation/logging completeness.
+
+Context:
+- Required project pack is binding: .autoeda/project_pack/agent.md, evaluation.yaml, git.yaml.
+- New command: stmap32, implemented as fSkipFanout mode 33.
+- Hypothesis: preserve the stmap31 continuous moderate-seed blocker, but add a cut-leaf-load-average term to the strong deep high-reference seed penalty so strong seeds are separated by candidate cut fanout shape instead of root reference count alone.
+- Main source files: src/base/abci/abcStmap_32.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, src/map/mapper/mapperInt.h, src/map/mapper/mapperCore.c, src/map/mapper/mapperMatch.c.
+- Required artifacts are under .autoeda/runtime/results/stmap32/.
+
+Validation already run before this review:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap32 -h" printed usage.
+- Smoke flow on benchmarks/i10.aig passed with final stime delay 198.64 ps and area 1303.10.
+- Full baseline/candidate evaluation passed for all four required benchmarks and produced parseable final stime metrics.
+- CEC passed for all four required benchmarks using original and post-flow strashed AIGs.
+- artifact_check.log reports passed.
+
+Key result:
+- QoR matches stmap31 on the required benchmarks.
+- syn2 moderate penalty blocks node 37979 twice.
+- stmap32 strong cut-leaf load proxy blocks node 2318 twice, with cut-leaf-load-avg values 6.750 and 5.500.
+
+Please report discrete findings only. Focus on bugs or contract violations that must be fixed before this iteration can count. Include file/line references where possible.
+
+This is review pass 2. Review pass 1 completed with no actionable correctness issues, and no source changes were made after pass 1. Re-check for any blocking correctness, build integration, evaluation, or logging issue before the iteration is finalized. Report discrete findings only.

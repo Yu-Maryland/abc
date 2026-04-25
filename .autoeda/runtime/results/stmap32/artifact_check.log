@@ -1,0 +1,5 @@
+valid_metrics: passed
+valid_cec: passed
+required_files: passed
+version_log_check: passed
+artifact_check: passed
