@@ -935,3 +935,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap18: add near-miss relief diagnostics`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap18` shows the candidates that diverge from a looser one-inverter rule are not timing-gate failures after the profile opens; they are early profile-closed candidates, concentrated in `syn2` with a smaller `or1200` population. For `stmap19`, test a narrow early-profile seed rule that admits pre-profile near-misses only when the candidate has one-inverter-plus area saving and material mapper-arrival improvement, while keeping the existing two-inverter fallback for arrival-neutral pre-profile candidates.
+
+## version19 / stmap19
+
+- hypothesis: A narrow early-profile seed rule can capture the high-quality pre-profile near misses seen by `stmap18`: before the adaptive profile opens, admit lower-moderate middle-slack one-inverter relief only when the candidate also has material mapper-arrival improvement, while keeping the two-inverter fallback for arrival-neutral pre-profile choices.
+- motivation: `stmap18` found `21` one-inverter-plus near misses, all rejected because the adaptive profile was still closed. Several had large negative mapper-arrival deltas, especially in `or1200` and `syn2`. `stmap19` tests whether those timing-positive early candidates are useful seeds rather than waiting for the profile gate.
+- command name: `stmap19`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_19.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap19/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap19` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 20` into the mapper. Mode `20` preserves the `stmap18` lower-moderate fanout bucket, tight-depth window, guard-stat counters, relief diagnostics, and near-miss diagnostics. Its behavior change is confined to the middle-slack area-sensitive exact-area path: for `stmap17`/`stmap18`, one-inverter relief before profile-open is always blocked; for `stmap19`, pre-profile relief may use the one-inverter threshold only when `ArrivalDelta <= -0.25 * tDelayInv`. Pre-profile candidates without that material arrival gain continue to require the stricter two-inverter area saving. Existing `map` and `stmap0` through `stmap18` behavior remain on their previous mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed after a clean no-readline rebuild corrected a stale readline-compiled object; final incremental validation log: `.autoeda/runtime/results/stmap19/build.log`.
+  - help: `./abc -c "stmap19 -h"` printed usage text with default `-G 250.00` and the early-profile timing-quality guard enabled. Log: `.autoeda/runtime/results/stmap19/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap19; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap19/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap19/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `relief_diag.csv`, `near_miss_stats.csv`, `near_miss_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); guard stats: exact-risk `0`, middle-slack `0`, middle-relief `0`, early-seed `0`, near-miss `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); guard stats: exact-risk `49626`, middle-slack `765`, middle-relief `0`, early-seed `0`, near-miss `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); guard stats: exact-risk `22679`, middle-slack `35`, middle-relief `2`, early-seed `2`, near-miss `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `495.30 ps`, area `21486.25`; delay delta `-13.52 ps` (`-2.66%`), area delta `+189.65` (`+0.89%`); guard stats: exact-risk `98459`, middle-slack `1947`, middle-relief `9`, early-seed `8`, near-miss `4`.
+- relief diagnostics:
+  - `benchmarks/or1200.abc.blif`: two pre-profile early seeds were admitted at nodes `11994` and `12001`, both level `17` or shallower, one-inverter-plus area saving, and arrival deltas `-3.340004` and `-14.400009`.
+  - `benchmarks/syn2.abc.blif`: eight pre-profile early seeds were admitted, plus one post-profile relief at node `25927`. The pre-profile seeds have area saving around `0.93` to `0.94`, arrival deltas from `-1.75` to `-11.840012`, and levels `29` through `49`.
+  - remaining near misses after the fix are four `syn2` pre-profile `arrival-gate` rejects; no `or1200` near misses remain.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_19.c`.
+  - numbered command exists and is registered as `stmap19`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, admitted-relief, near-miss-stat, and near-miss diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap19/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap19/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap19/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap19/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap19/review_pass1_supported.log`.
+  - accepted findings: keep final campaign state out of stale `agent-running`, and count only relaxed early-seed admissions. The source counter was fixed and build/help/smoke/full evaluation/CEC were rerun.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap19/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap19/review_pass2_supported.log`.
+  - accepted finding: record `stmap19` in the canonical version log before completing the iteration; addressed by this entry and final campaign-state update.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: the early-seed diagnostic counter was gated on the relaxed pre-profile path; no mapping-decision source changes were made after review pass 1.
+- commit: local commit created with message `stmap19: seed early profile relief`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap19` materially improves `or1200` delay versus `stmap18` (`578.80 ps` to `561.55 ps`) but gives back a small amount of `syn2` delay (`494.17 ps` to `495.30 ps`) while improving `syn2` area. For `stmap20`, test a shallower early-seed qualifier, for example allowing the pre-profile one-inverter timing-quality seed only at shallow levels such as `<= 24`, while preserving the post-profile `stmap17` timing-quality rule. This targets the two shallow `or1200` wins and blocks the deeper `syn2` pre-profile seeds for a cleaner delay/area split.

@@ -1,0 +1,10 @@
+Second review pass for stmap19 after accepted findings were addressed.
+
+Review the current uncommitted tree for remaining correctness or campaign-contract issues.
+
+Changes since pass 1:
+- The stmap19 early-seed counter now increments only for pre-profile admissions using the relaxed one-inverter path (`!fProfileOpen && !fStrictFallback`).
+- Build, help, smoke, full benchmark metrics, early-seed diagnostic parsing, and CEC artifacts were regenerated under .autoeda/runtime/results/stmap19.
+- campaign_state.json was moved out of stale agent-running state to restartable evaluation-complete pending final log/commit/push.
+
+Please report only concrete remaining bugs, broken gates, missing artifacts, or unsafe campaign-state/git issues. If no blocking issues remain, say so explicitly.

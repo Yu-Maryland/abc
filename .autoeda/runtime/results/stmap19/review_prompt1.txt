@@ -1,0 +1,11 @@
+Review the uncommitted stmap19 AutoEDA iteration for correctness and campaign-contract issues.
+
+Context:
+- This is Berkeley ABC in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness.
+- Binding policy is .autoeda/project_pack/agent.md.
+- New version should be stmap19, command name stmap19, mapper internal mode fSkipFanout=20.
+- Hypothesis: admit pre-profile lower-moderate middle-slack one-inverter relief only when the candidate also has material mapper-arrival improvement; arrival-neutral pre-profile candidates must keep the stricter two-inverter fallback.
+- Existing map and stmap0..stmap18 behavior should remain preserved.
+- Required evaluation artifacts for stmap19 are under .autoeda/runtime/results/stmap19 and should include build/help/smoke/full metrics/CEC diagnostics.
+
+Please focus on concrete bugs, behavior regressions, missing correctness gates, or broken campaign logging/artifacts. If no blocking issues are found, say so explicitly. Do not request broad refactors or unrelated cleanup.

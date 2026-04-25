@@ -1,0 +1,571 @@
+{
+  "version": "stmap19",
+  "command": "stmap19",
+  "library": "7nm_lvt_ff.lib",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "flow_results": [
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 0.7914209365844727,
+      "log": ".autoeda/runtime/results/stmap19/baseline_benchmarks_i10_aig.log",
+      "flow": "baseline",
+      "benchmark": "benchmarks/i10.aig",
+      "command": "map",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 0.8067388534545898,
+      "log": ".autoeda/runtime/results/stmap19/candidate_benchmarks_i10_aig.log",
+      "flow": "candidate",
+      "benchmark": "benchmarks/i10.aig",
+      "command": "stmap19",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap19; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 6.710845947265625,
+      "log": ".autoeda/runtime/results/stmap19/baseline_benchmarks_ode_abc_blif.log",
+      "flow": "baseline",
+      "benchmark": "benchmarks/ode.abc.blif",
+      "command": "map",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 6.706300973892212,
+      "log": ".autoeda/runtime/results/stmap19/candidate_benchmarks_ode_abc_blif.log",
+      "flow": "candidate",
+      "benchmark": "benchmarks/ode.abc.blif",
+      "command": "stmap19",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; stmap19; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 3.210747003555298,
+      "log": ".autoeda/runtime/results/stmap19/baseline_benchmarks_or1200_abc_blif.log",
+      "flow": "baseline",
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "command": "map",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 3.3029749393463135,
+      "log": ".autoeda/runtime/results/stmap19/candidate_benchmarks_or1200_abc_blif.log",
+      "flow": "candidate",
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "command": "stmap19",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; stmap19; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 12.270618200302124,
+      "log": ".autoeda/runtime/results/stmap19/baseline_benchmarks_syn2_abc_blif.log",
+      "flow": "baseline",
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "command": "map",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    },
+    {
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 12.258409976959229,
+      "log": ".autoeda/runtime/results/stmap19/candidate_benchmarks_syn2_abc_blif.log",
+      "flow": "candidate",
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "command": "stmap19",
+      "abc_cmd": "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap19; topo; buffer; upsize -v; dnsize -v; stime"
+    }
+  ],
+  "metrics": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 207.24,
+      "stime_area": 1263.44
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "flow": "candidate",
+      "command": "stmap19",
+      "stime_delay_ps": 198.64,
+      "stime_area": 1303.1
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 531.32,
+      "stime_area": 12491.21
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "flow": "candidate",
+      "command": "stmap19",
+      "stime_delay_ps": 522.05,
+      "stime_area": 11334.38
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 587.08,
+      "stime_area": 4798.34
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "flow": "candidate",
+      "command": "stmap19",
+      "stime_delay_ps": 561.55,
+      "stime_area": 4895.15
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "baseline",
+      "command": "map",
+      "stime_delay_ps": 508.82,
+      "stime_area": 21296.6
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "flow": "candidate",
+      "command": "stmap19",
+      "stime_delay_ps": 495.3,
+      "stime_area": 21486.25
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "baseline_area": 1263.44,
+      "candidate_area": 1303.1,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "baseline_area": 12491.21,
+      "candidate_area": 11334.38,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "candidate_delay_ps": 561.55,
+      "delay_delta_ps": -25.530000000000086,
+      "delay_delta_pct": -4.348640730394509,
+      "baseline_area": 4798.34,
+      "candidate_area": 4895.15,
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "candidate_delay_ps": 495.3,
+      "delay_delta_ps": -13.519999999999982,
+      "delay_delta_pct": -2.657128257537043,
+      "baseline_area": 21296.6,
+      "candidate_area": 21486.25,
+      "area_delta": 189.65000000000146,
+      "area_delta_pct": 0.890517735225348
+    }
+  ],
+  "guard_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "stmap": 19,
+      "exact_risk": 0,
+      "highest": 0,
+      "lower_mod": 0,
+      "upper_mod": 0,
+      "middle_slack": 0,
+      "middle_relief": 0,
+      "reject_slack": 0,
+      "reject_highest": 0,
+      "reject_arrival": 0,
+      "reject_area": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "stmap": 19,
+      "exact_risk": 49626,
+      "highest": 22601,
+      "lower_mod": 19542,
+      "upper_mod": 7483,
+      "middle_slack": 765,
+      "middle_relief": 0,
+      "reject_slack": 12974,
+      "reject_highest": 14866,
+      "reject_arrival": 10527,
+      "reject_area": 11095
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "stmap": 19,
+      "exact_risk": 22679,
+      "highest": 8550,
+      "lower_mod": 10834,
+      "upper_mod": 3295,
+      "middle_slack": 35,
+      "middle_relief": 2,
+      "reject_slack": 959,
+      "reject_highest": 8476,
+      "reject_arrival": 5835,
+      "reject_area": 7062
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "stmap": 19,
+      "exact_risk": 98459,
+      "highest": 48775,
+      "lower_mod": 38526,
+      "upper_mod": 11158,
+      "middle_slack": 1947,
+      "middle_relief": 9,
+      "reject_slack": 35846,
+      "reject_highest": 28347,
+      "reject_arrival": 16753,
+      "reject_area": 17165
+    }
+  ],
+  "near_miss_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "near_miss": 0
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "near_miss": 4
+    }
+  ],
+  "early_seed_stats": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "early_seed": 0
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "early_seed": 2
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "early_seed": 8
+    }
+  ],
+  "relief_diag": [
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "index": 1,
+      "profile_open": 0,
+      "node": 11994,
+      "level": 14,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 11.98037,
+      "area_save": 0.93,
+      "arrival_delta": -3.340004,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "index": 2,
+      "profile_open": 0,
+      "node": 12001,
+      "level": 17,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 10.310364,
+      "area_save": 0.93,
+      "arrival_delta": -14.400009,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 1,
+      "profile_open": 0,
+      "node": 2318,
+      "level": 29,
+      "refs": 5,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 7.430023,
+      "area_save": 0.93,
+      "arrival_delta": -10.130005,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 2,
+      "profile_open": 0,
+      "node": 5785,
+      "level": 44,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 7.61998,
+      "area_save": 0.93,
+      "arrival_delta": -2.76001,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 3,
+      "profile_open": 0,
+      "node": 21363,
+      "level": 49,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 11.790039,
+      "area_save": 0.93,
+      "arrival_delta": -8.349991,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 4,
+      "profile_open": 0,
+      "node": 23628,
+      "level": 38,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 6.52002,
+      "area_save": 0.93,
+      "arrival_delta": -1.75,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 5,
+      "profile_open": 0,
+      "node": 23673,
+      "level": 37,
+      "refs": 4,
+      "leaves": 5,
+      "phase": 1,
+      "slack": 7.850021,
+      "area_save": 0.93,
+      "arrival_delta": -11.840012,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 6,
+      "profile_open": 0,
+      "node": 24798,
+      "level": 46,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 7.919983,
+      "area_save": 0.94,
+      "arrival_delta": -3.179993,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 7,
+      "profile_open": 0,
+      "node": 35068,
+      "level": 45,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 11.949997,
+      "area_save": 0.93,
+      "arrival_delta": -2.11998,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 8,
+      "profile_open": 0,
+      "node": 37979,
+      "level": 42,
+      "refs": 5,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 7.170013,
+      "area_save": 0.93,
+      "arrival_delta": -3.699997,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 9,
+      "profile_open": 1,
+      "node": 25927,
+      "level": 7,
+      "refs": 4,
+      "leaves": 5,
+      "phase": 0,
+      "slack": 6.619999,
+      "area_save": 0.94,
+      "arrival_delta": -1.600002,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 0.7
+    }
+  ],
+  "near_miss_diag": [
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 1,
+      "reason": "arrival-gate",
+      "profile_open": 0,
+      "node": 5785,
+      "level": 44,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 0,
+      "slack": 10.839981,
+      "area_save": 0.93,
+      "arrival_delta": -0.800003,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 1.4,
+      "one_inv_area": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 2,
+      "reason": "arrival-gate",
+      "profile_open": 0,
+      "node": 23628,
+      "level": 38,
+      "refs": 4,
+      "leaves": 4,
+      "phase": 1,
+      "slack": 7.550034,
+      "area_save": 1.17,
+      "arrival_delta": -1.049988,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 1.4,
+      "one_inv_area": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 3,
+      "reason": "arrival-gate",
+      "profile_open": 0,
+      "node": 23628,
+      "level": 38,
+      "refs": 4,
+      "leaves": 5,
+      "phase": 1,
+      "slack": 7.550034,
+      "area_save": 1.17,
+      "arrival_delta": -0.029999,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 1.4,
+      "one_inv_area": 0.7
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "index": 4,
+      "reason": "arrival-gate",
+      "profile_open": 0,
+      "node": 27904,
+      "level": 57,
+      "refs": 4,
+      "leaves": 5,
+      "phase": 1,
+      "slack": 9.659973,
+      "area_save": 0.93,
+      "arrival_delta": -1.459991,
+      "arrival_gain_margin": 1.585,
+      "area_margin": 1.4,
+      "one_inv_area": 0.7
+    }
+  ],
+  "cec": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "original_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_i10_aig_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_i10_aig_stmap19.aig",
+      "orig_write_returncode": 0,
+      "candidate_write_returncode": 0,
+      "cec_returncode": 0,
+      "equivalent": true,
+      "cec_log": ".autoeda/runtime/results/stmap19/cec_benchmarks_i10_aig.log"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_ode_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_ode_abc_blif_stmap19.aig",
+      "orig_write_returncode": 0,
+      "candidate_write_returncode": 0,
+      "cec_returncode": 0,
+      "equivalent": true,
+      "cec_log": ".autoeda/runtime/results/stmap19/cec_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_or1200_abc_blif_stmap19.aig",
+      "orig_write_returncode": 0,
+      "candidate_write_returncode": 0,
+      "cec_returncode": 0,
+      "equivalent": true,
+      "cec_log": ".autoeda/runtime/results/stmap19/cec_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "original_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "candidate_temp": ".autoeda/runtime/results/stmap19/cec_benchmarks_syn2_abc_blif_stmap19.aig",
+      "orig_write_returncode": 0,
+      "candidate_write_returncode": 0,
+      "cec_returncode": 0,
+      "equivalent": true,
+      "cec_log": ".autoeda/runtime/results/stmap19/cec_benchmarks_syn2_abc_blif.log"
+    }
+  ],
+  "errors": []
+}

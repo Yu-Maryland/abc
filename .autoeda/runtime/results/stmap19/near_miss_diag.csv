@@ -1,0 +1,5 @@
+benchmark,index,reason,profile_open,node,level,refs,leaves,phase,slack,area_save,arrival_delta,arrival_gain_margin,area_margin,one_inv_area
+benchmarks/syn2.abc.blif,1,arrival-gate,0,5785,44,4,4,0,10.839981,0.93,-0.800003,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,2,arrival-gate,0,23628,38,4,4,1,7.550034,1.17,-1.049988,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,3,arrival-gate,0,23628,38,4,5,1,7.550034,1.17,-0.029999,1.585,1.4,0.7
+benchmarks/syn2.abc.blif,4,arrival-gate,0,27904,57,4,5,1,9.659973,0.93,-1.459991,1.585,1.4,0.7
