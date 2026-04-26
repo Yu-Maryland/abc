@@ -1,0 +1,9 @@
+kind,command,benchmark,exit_code,parse_ok,stime_delay_ps,stime_area,log
+baseline,map,benchmarks/i10.aig,0,True,207.24,1263.44,.autoeda/runtime/results/stmap35/baseline_benchmarks_i10_aig.log
+candidate,stmap35,benchmarks/i10.aig,0,True,198.64,1303.1,.autoeda/runtime/results/stmap35/candidate_benchmarks_i10_aig.log
+baseline,map,benchmarks/ode.abc.blif,0,True,531.32,12491.21,.autoeda/runtime/results/stmap35/baseline_benchmarks_ode_abc_blif.log
+candidate,stmap35,benchmarks/ode.abc.blif,0,True,522.05,11334.38,.autoeda/runtime/results/stmap35/candidate_benchmarks_ode_abc_blif.log
+baseline,map,benchmarks/or1200.abc.blif,0,True,587.08,4798.34,.autoeda/runtime/results/stmap35/baseline_benchmarks_or1200_abc_blif.log
+candidate,stmap35,benchmarks/or1200.abc.blif,0,True,561.55,4895.15,.autoeda/runtime/results/stmap35/candidate_benchmarks_or1200_abc_blif.log
+baseline,map,benchmarks/syn2.abc.blif,0,True,508.82,21296.6,.autoeda/runtime/results/stmap35/baseline_benchmarks_syn2_abc_blif.log
+candidate,stmap35,benchmarks/syn2.abc.blif,0,True,490.96,21541.78,.autoeda/runtime/results/stmap35/candidate_benchmarks_syn2_abc_blif.log

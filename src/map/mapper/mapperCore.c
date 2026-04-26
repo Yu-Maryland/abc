@@ -222,16 +222,16 @@ ABC_PRT( "Time", Abc_Clock() - clk );
     p->timeArea += Abc_Clock() - clk;
     //////////////////////////////////////////////////////////////////////
 
-    if ( p->fSkipFanout >= 14 && p->fSkipFanout <= 35 )
+    if ( p->fSkipFanout >= 14 && p->fSkipFanout <= 36 )
         printf( "stmap%d guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
             p->fSkipFanout - 1,
             p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
             p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
             p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
             p->nStmap13RejectArea );
-    if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 35 )
+    if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 36 )
         printf( "stmap%d near-miss stats: near-miss = %d\n", p->fSkipFanout - 1, p->nStmap18NearMiss );
-    if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 35 )
+    if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 36 )
         printf( "stmap%d early-seed stats: early-seed = %d\n", p->fSkipFanout - 1, p->nStmap19EarlySeed );
     if ( p->fSkipFanout == 26 )
         printf( "stmap25 ablation stats: moderate-ablation-seed = %d\n", p->nStmap25ModerateAblationSeed );
@@ -263,6 +263,10 @@ ABC_PRT( "Time", Abc_Clock() - clk );
         printf( "stmap34 penalty stats: moderate-penalty-seed = %d  moderate-penalty-blocked = %d  strong-penalty-seed = %d  strong-penalty-blocked = %d\n",
             p->nStmap34ModeratePenaltySeed, p->nStmap34ModeratePenaltyBlocked,
             p->nStmap34StrongPenaltySeed, p->nStmap34StrongPenaltyBlocked );
+    if ( p->fSkipFanout == 36 )
+        printf( "stmap35 penalty stats: moderate-penalty-seed = %d  moderate-penalty-blocked = %d  strong-penalty-seed = %d  strong-penalty-blocked = %d\n",
+            p->nStmap35ModeratePenaltySeed, p->nStmap35ModeratePenaltyBlocked,
+            p->nStmap35StrongPenaltySeed, p->nStmap35StrongPenaltyBlocked );
 
     // print the arrival times of the latest outputs
     if ( p->fVerbose )
