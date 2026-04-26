@@ -3771,3 +3771,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap66: diagnose near-threshold load-drop seeds`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap67`, do not lower the strong-node threshold based on this diagnostic alone. The only near-band candidate is the already-observed low-final-criticality `syn2` seed, so the next useful step is either a downstream final-witness diagnostic for near-band candidates before admission or a stricter final-criticality/load-pressure filter, rather than widening one-sided cut-pressure admission.
+
+
+## version67 / stmap67
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy and the `stmap66` near-threshold diagnostic unchanged, but record area-cap-passing near-band strong-node load-drop candidates as downstream `stime` witnesses. This tests whether blocked near-band candidates remain visible, highly loaded, or timing-critical after `topo`, `buffer`, `upsize`, and `dnsize`.
+- motivation: `stmap66` found one `syn2` near-band candidate with node pressure `1.165`, cut pressure `2.100`, and area-cap pass, but it did not show whether that exact candidate survived to final timing context. A final-witness diagnostic provides direct evidence before any threshold-lowering experiment.
+- command name: `stmap67`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_64.c`
+  - `src/base/abci/abcStmap_67.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap67/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap67` is a diagnostic-only wrapper over the reviewed `stmap65` two-pass bounded-pressure flow. It enables the existing `stmap66` near-strong-node diagnostic while also enabling a new command-scoped witness recorder for near-band candidates that pass the inherited `1.35x` inverter area-save cap. The mapper policy is not changed: the strong-node load-drop guard still requires node pressure at least `1.25`, and the final remap still uses mapper mode `57`, severe-feedback bounded pressure transfer, selected-gain policy, and inherited area cap. The new witness entries reuse the existing `stmap64` final-witness machinery with a label hook so downstream `stime` prints `stmap67 final-witness` rows while older `stmap64` behavior keeps its default label.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`; log: `.autoeda/runtime/results/stmap67/build.log`.
+  - help: `./abc -c "stmap67 -h"` printed usage text; log: `.autoeda/runtime/results/stmap67/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap67; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`; log: `.autoeda/runtime/results/stmap67/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap67/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss leaf diagnostics, near-strong-node diagnostics, new `final_witness.csv`, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- near-band final-witness diagnostic results:
+  - `i10`, `ode`, and `or1200` had `0` near-band candidates and no final witnesses.
+  - `syn2` had `1` near-band candidate, matching the `stmap66` diagnostic: mapper node `12167`, AIG ID `13915`, phase `1`, node pressure `1.165`, cut pressure `2.100`, slack `6.739990`, area save `0.930000`, area cap `0.945000`, arrival delta `-4.720001`, arrival-gain margin `1.510000`, pressure entries `8980`, and feedback severity `0.884`.
+  - The `syn2` witness matched final node `11282` after downstream flow with gate `O2A1O1Ixp33_ASAP7_75t_L`, final fanouts `1`, final load `0.446`, final max cap `11.520`, final load ratio `0.039`, final criticality `0.272`, and final slack `62.842468`.
+  - The final-witness summary was `witnesses = 1`, `matched = 1`, `criticality-ge-0p50 = 0`, so the diagnostic does not support lowering the strong-node threshold.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_67.c`.
+  - numbered command exists and is registered as `stmap67`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - final-witness diagnostics, near-strong-node diagnostics, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap67/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap67/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap67/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap67/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap67/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap67/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap67/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap67/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap67/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues in the final source state.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap67: trace near-threshold final witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap68`, keep the `1.25` strong-node threshold closed. The only near-band witness was present after downstream timing but had final load ratio `0.039` and final criticality `0.272`, so a threshold-lowering variant would be poorly supported. The next useful hypothesis is to search for final-criticality evidence on other pressure-transfer classes, or to require final-witness criticality at least `0.50` before reopening any one-sided cut-pressure admission.

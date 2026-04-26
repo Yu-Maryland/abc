@@ -1,0 +1,7 @@
+artifact check for stmap67
+required files checked: 71
+missing files: 0
+flow metrics parseable: 1
+cec passed: 1
+version log check passed: 1
+status: PASS

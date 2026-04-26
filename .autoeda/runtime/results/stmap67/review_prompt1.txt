@@ -1,0 +1,16 @@
+Review the uncommitted stmap67 implementation for correctness, build integration, command registration, diagnostic isolation, and campaign-policy compliance.
+
+Context:
+- New command: stmap67.
+- Hypothesis: preserve the reviewed stmap65/stmap66 mapping policy and record area-cap-passing near-threshold strong-node load-drop candidates as downstream stime witnesses.
+- Key changed files: src/base/abci/abcStmap_67.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, src/map/mapper/mapperMatch.c, src/base/abci/abcStmap_64.c.
+- The candidate should not change classic map or older stmap command behavior, except for a label hook in the existing stmap64 final-witness printer that should default to stmap64 for older flows.
+- Validation already run before review: make ABC_USE_NO_READLINE=1, stmap67 -h, i10 smoke, full baseline/candidate benchmark flow for the four required benchmarks, and CEC for all four benchmarks.
+
+Please prioritize concrete correctness or maintainability findings that could invalidate the iteration:
+- stale global diagnostic state across commands
+- witness recording of the wrong candidates
+- final-witness scope/label lifecycle issues through topo/buffer/upsize/dnsize/stime
+- missed build registration or command help behavior
+- unintended behavior changes for map, stmap64, stmap65, or stmap66
+- gaps in required evaluation or logging artifacts

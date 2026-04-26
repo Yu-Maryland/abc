@@ -1420,6 +1420,7 @@ static int s_fStmap62CutOnlyBeforeModerate = 0;
 static int s_fStmap63CutOnlyLoadDropGuard = 0;
 static int s_fStmap65StrongNodeLoadDropGuard = 0;
 static int s_fStmap66NearStrongNodeLoadDropDiag = 0;
+static int s_fStmap67NearStrongNodeWitnessDiag = 0;
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1506,6 +1507,13 @@ int Map_Stmap66NearStrongNodeLoadDropDiagEnabled( void )
     return s_fStmap66NearStrongNodeLoadDropDiag;
 }
 
+void Map_Stmap67SetNearStrongNodeWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+        s_nStmap64CutOnlyWitnesses = 0;
+    s_fStmap67NearStrongNodeWitnessDiag = fEnable;
+}
+
 void Map_Stmap64ClearCutOnlyWitnesses( void )
 {
     s_fStmap64CutOnlyWitnessDiag = 0;
@@ -1551,10 +1559,10 @@ int Map_Stmap64ReadCutOnlyWitness( int i, int * pAigId, int * pPhase, int * pNod
     return 1;
 }
 
-static void Map_Stmap64RecordCutOnlyWitness( Map_Node_t * pNode, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin )
+static void Map_Stmap64RecordCutOnlyWitnessRaw( Map_Node_t * pNode, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin )
 {
     int i;
-    if ( !s_fStmap64CutOnlyWitnessDiag || pNode == NULL || AigId < 0 )
+    if ( pNode == NULL || AigId < 0 )
         return;
     fPhase = fPhase ? 1 : 0;
     for ( i = 0; i < s_nStmap64CutOnlyWitnesses; i++ )
@@ -1584,6 +1592,20 @@ static void Map_Stmap64RecordCutOnlyWitness( Map_Node_t * pNode, int AigId, int 
     s_Stmap64WitnessArrivalDeltas[i] = ArrivalDelta;
     s_Stmap64WitnessArrivalGainMargins[i] = ArrivalGainMargin;
     s_Stmap64WitnessFeedbacks[i] = s_Stmap45SclFeedback;
+}
+
+static void Map_Stmap64RecordCutOnlyWitness( Map_Node_t * pNode, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin )
+{
+    if ( !s_fStmap64CutOnlyWitnessDiag )
+        return;
+    Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+}
+
+static void Map_Stmap67RecordNearStrongNodeWitness( Map_Node_t * pNode, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin )
+{
+    if ( !s_fStmap67NearStrongNodeWitnessDiag )
+        return;
+    Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -3154,7 +3176,10 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 int fAreaCapPass = Map_MatchStmap56CutOnlyAreaCapPass( AreaSave, OneInvArea, p->fEpsilon );
                 p->nStmap66NearStrongNodeLoadDrop++;
                 if ( fAreaCapPass )
+                {
                     p->nStmap66NearStrongNodeAreaCapPass++;
+                    Map_Stmap67RecordNearStrongNodeWitness( pNode, Stmap56NodeAigId, fPhase, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+                }
                 if ( p->nStmap66NearStrongNodeLoadDrop <= 64 )
                     printf( "stmap66 near-strong-node load-drop diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  area-cap-pass = %d  slack = %.6f  area-save = %.6f  area-save-cap = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  pressure-entries = %d  scl-feedback = %.3f\n",
                         p->nStmap66NearStrongNodeLoadDrop, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,

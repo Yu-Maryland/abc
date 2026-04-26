@@ -593,6 +593,7 @@ static float Abc_Stmap64FinalLoadRatio( SC_Man * pTime, Abc_Obj_t * pObj, float 
 static int s_fStmap64FinalWitnessScope = 0;
 static Abc_Ntk_t * s_pStmap64FinalWitnessNtk = NULL;
 static Vec_Int_t * s_pStmap64FinalWitnessOrigIds = NULL;
+static const char * s_pStmap64FinalWitnessLabel = "stmap64";
 
 void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOldOrigNodeIds, Abc_Ntk_t * pNewNtk, Vec_Int_t * pNewOrigNodeIds )
 {
@@ -611,6 +612,7 @@ static void Abc_Stmap64ClearFinalWitnessScope( void )
     s_fStmap64FinalWitnessScope = 0;
     s_pStmap64FinalWitnessNtk = NULL;
     s_pStmap64FinalWitnessOrigIds = NULL;
+    s_pStmap64FinalWitnessLabel = "stmap64";
     Map_Stmap64ClearCutOnlyWitnesses();
 }
 
@@ -620,6 +622,14 @@ static void Abc_Stmap64SetFinalWitnessScope( Abc_Ntk_t * pNtk )
     s_fStmap64FinalWitnessScope = pNtk != NULL && pNtk->vOrigNodeIds != NULL && Map_Stmap64CutOnlyWitnessCount() > 0;
     s_pStmap64FinalWitnessNtk = s_fStmap64FinalWitnessScope ? pNtk : NULL;
     s_pStmap64FinalWitnessOrigIds = s_fStmap64FinalWitnessScope ? pNtk->vOrigNodeIds : NULL;
+}
+
+void Abc_Stmap64EnableFinalWitnessScope( Abc_Ntk_t * pNtk, const char * pLabel )
+{
+    s_pStmap64FinalWitnessLabel = pLabel && pLabel[0] ? pLabel : "stmap64";
+    Abc_Stmap64SetFinalWitnessScope( pNtk );
+    if ( !s_fStmap64FinalWitnessScope )
+        s_pStmap64FinalWitnessLabel = "stmap64";
 }
 
 void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
@@ -650,7 +660,7 @@ void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
         return;
     }
     pNtk = pTime->pNtk;
-    printf( "stmap64 final-witness stats: witnesses = %d  final-delay = %.3f\n", nWitnesses, pTime->MaxDelay );
+    printf( "%s final-witness stats: witnesses = %d  final-delay = %.3f\n", s_pStmap64FinalWitnessLabel, nWitnesses, pTime->MaxDelay );
     for ( i = 0; i < nWitnesses; i++ )
     {
         if ( !Map_Stmap64ReadCutOnlyWitness( i, &AigId, &SeedPhase, &SeedNode, &SeedNodePressure, &SeedCutPressure, &SeedSlack, &SeedAreaSave, &SeedArrivalDelta, &SeedArrivalGainMargin, &SeedFeedback ) )
@@ -677,7 +687,8 @@ void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
         }
         if ( pBestObj == NULL )
         {
-            printf( "stmap64 final-witness: index = %d  aig-id = %d  phase = %d  seed-node = %d  final-node = -1  matched = 0  seed-node-pressure-ratio = %.3f  seed-cut-pressure-ratio = %.3f  seed-slack = %.6f  seed-area-save = %.6f  seed-arrival-delta = %.6f  seed-arrival-gain-margin = %.6f  scl-feedback = %.3f\n",
+            printf( "%s final-witness: index = %d  aig-id = %d  phase = %d  seed-node = %d  final-node = -1  matched = 0  seed-node-pressure-ratio = %.3f  seed-cut-pressure-ratio = %.3f  seed-slack = %.6f  seed-area-save = %.6f  seed-arrival-delta = %.6f  seed-arrival-gain-margin = %.6f  scl-feedback = %.3f\n",
+                s_pStmap64FinalWitnessLabel,
                 i + 1, AigId, SeedPhase, SeedNode, SeedNodePressure, SeedCutPressure,
                 SeedSlack, SeedAreaSave, SeedArrivalDelta, SeedArrivalGainMargin,
                 SeedFeedback );
@@ -688,13 +699,14 @@ void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
             nCritical++;
         Fanouts = Abc_ObjFanoutNum(pBestObj);
         pGate = (Mio_Gate_t *)pBestObj->pData;
-        printf( "stmap64 final-witness: index = %d  aig-id = %d  phase = %d  seed-node = %d  final-node = %d  matched = 1  final-gate = %s  final-fanouts = %d  final-load = %.3f  final-max-cap = %.3f  final-load-ratio = %.3f  final-criticality = %.3f  final-slack = %.6f  seed-node-pressure-ratio = %.3f  seed-cut-pressure-ratio = %.3f  seed-slack = %.6f  seed-area-save = %.6f  seed-arrival-delta = %.6f  seed-arrival-gain-margin = %.6f  scl-feedback = %.3f\n",
+        printf( "%s final-witness: index = %d  aig-id = %d  phase = %d  seed-node = %d  final-node = %d  matched = 1  final-gate = %s  final-fanouts = %d  final-load = %.3f  final-max-cap = %.3f  final-load-ratio = %.3f  final-criticality = %.3f  final-slack = %.6f  seed-node-pressure-ratio = %.3f  seed-cut-pressure-ratio = %.3f  seed-slack = %.6f  seed-area-save = %.6f  seed-arrival-delta = %.6f  seed-arrival-gain-margin = %.6f  scl-feedback = %.3f\n",
+            s_pStmap64FinalWitnessLabel,
             i + 1, AigId, SeedPhase, SeedNode, Abc_ObjId(pBestObj), pGate ? Mio_GateReadName(pGate) : "?",
             Fanouts, BestLoad, BestMaxCap, BestLoadRatio, BestCriticality, BestSlack,
             SeedNodePressure, SeedCutPressure, SeedSlack, SeedAreaSave,
             SeedArrivalDelta, SeedArrivalGainMargin, SeedFeedback );
     }
-    printf( "stmap64 final-witness summary: witnesses = %d  matched = %d  criticality-ge-0p50 = %d\n", nWitnesses, nMatched, nCritical );
+    printf( "%s final-witness summary: witnesses = %d  matched = %d  criticality-ge-0p50 = %d\n", s_pStmap64FinalWitnessLabel, nWitnesses, nMatched, nCritical );
     Abc_Stmap64ClearFinalWitnessScope();
 }
 
