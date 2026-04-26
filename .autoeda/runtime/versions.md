@@ -4385,3 +4385,62 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap76: trace final phase survival`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap77`, instrument the `ode` reconstruction/phase-survival path directly: record when `Abc_NtkFromMap` emits or drops the phase `0` and phase `1` implementations for watched AIG `5219`, including fanout polarity/output demand and whether the phase `1` `O2A1O1Ixp33_ASAP7_75t_L` survives because of downstream critical fanout structure. Keep `i10` as a secondary case because both phases survive with near-critical timing, but avoid pressure-threshold changes until a final-critical phase/reconstruction mechanism is isolated.
+
+## version77 / stmap77
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace final-remap reconstruction for the `stmap74`/`stmap75`/`stmap76` watched final-critical AIG IDs. If the `ode` watched AIG `5219` is only reconstructed in phase `1`, then the selected-match/final-critical phase discrepancy is caused by final reconstruction demand rather than by a later post-sizing phase-loss artifact.
+- motivation: `stmap76` confirmed that `ode` AIG `5219` only survives as phase `1` in the final network, while its selected-match summary still shows a latest phase `0` mapper row. The next useful probe is therefore the mapper-to-network reconstruction boundary, not another pressure-threshold tweak.
+- command name: `stmap77`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcMap.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_77.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap77/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap77` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It configures one benchmark-specific watched AIG ID, enables the existing selected-match watch under the `stmap77` label, delegates to the unchanged `stmap65` mapping policy, and scopes final `stime` phase-survival diagnostics. New reconstruction instrumentation in `Abc_NtkFromMap` records final-remap requests, direct phase materialization, cache reuse, and inverter fallback for the watched AIG. Review pass 1 found that tracing both `stmap65` mapping passes made the diagnostic counts ambiguous; the accepted fix leaves the watch configured by `stmap77` but activates and resets reconstruction tracing only around the final `stmap65` remap. No mapper scoring, gate selection, pressure-transfer policy, buffering, sizing, or classic `map` behavior is intentionally changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap77/build.log`.
+  - help: `./abc -c "stmap77 -h"` printed `stmap77` usage. Log: `.autoeda/runtime/results/stmap77/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap77; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and printed final-remap reconstruction, selected-match, final-critical, phase-survival, and phase-output-context diagnostics. Log: `.autoeda/runtime/results/stmap77/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap77` selected watch AIG `855` and printed `16` selected-match rows plus final-remap reconstruction rows. Log: `.autoeda/runtime/results/stmap77/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap77/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported `watched-aigs = 0` and `rows = 0` for both reconstruction and selected-match diagnostics. Log: `.autoeda/runtime/results/stmap77/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap77/summary.json`, `metrics.csv`, `comparison.csv`, `reconstruct_stats.csv`, `reconstruct_request.csv`, `reconstruct_emit.csv`, `reconstruct_cache.csv`, `reconstruct_inverter.csv`, `reconstruct_summary.csv`, `selected_match.csv`, `selected_match_stats.csv`, `selected_match_summary.csv`, `phase_survival.csv`, `phase_survival_stats.csv`, `phase_output_context.csv`, `phase_survival_summary.csv`, `final_critical_lineage.csv`, `final_critical_stats.csv`, `final_critical_summary.csv`, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- reconstruction diagnostic results:
+  - `i10` watched AIG `855`: final remap requested phases `0` and `1`, directly emitted both phases (`NAND5xp2_ASAP7_75t_L` and `NOR4xp25_ASAP7_75t_L`), and both phases survived in the final network.
+  - `ode` watched AIG `5219`: final remap requested only phase `1`, directly emitted only `O2A1O1Ixp33_ASAP7_75t_L`, and only phase `1` survived in the final network. This isolates the prior discrepancy to final reconstruction demand: phase `0` can be selected by the mapper diagnostics, but the final network asks for and materializes phase `1`.
+  - `or1200` watched AIG `11491`: final remap requested/emitted only phase `0` through `A2O1A1Ixp33_ASAP7_75t_L`, and only phase `0` survived.
+  - `syn2` watched AIG `18002`: final remap requested/emitted only phase `1` through `NOR2xp33_ASAP7_75t_L`, and only phase `1` survived.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_77.c`.
+  - numbered command exists and is registered as `stmap77`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - final-remap reconstruction, selected-match, final-critical lineage, phase-survival, phase-output-context, path-normalization, stale-state, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap77/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap77/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap77/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap77/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap77/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap77/review_pass1.log`.
+  - accepted source finding: reconstruction tracing was initially scoped over both `stmap65` mapping passes. The final-remap-only activation/reset fix was implemented and revalidated.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap77/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap77/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness, build, or maintainability issues after the final-remap scoping fix.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap77: trace final reconstruction phases`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap78`, use the `stmap77` finding to test a narrow final-demand hypothesis on `ode`: add a diagnostic that walks final CO/reconstruction demand polarity for watched AIG `5219` and its best downstream fanout AIG `5229`, recording which output path requests phase `1` and whether phase `0` would require an added inverter or different cut boundary. Keep the mapping policy unchanged until that demand path is identified; pressure changes are still not the targeted mechanism.

@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 77,
-  "next_iteration": 77,
+  "completed_iterations": 78,
+  "next_iteration": 78,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 76,
-  "last_completed_version": "stmap76",
-  "last_successful_commit": "local commit to be created: stmap76: trace final phase survival; see git history for hash",
+  "last_completed_iteration": 77,
+  "last_completed_version": "stmap77",
+  "last_successful_commit": "local commit to be created: stmap77: trace final reconstruction phases; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -495,8 +495,13 @@
     "stmap76 validation passed: build, help, smoke, full benchmark metrics, selected-match diagnostics, final-critical lineage parsing, phase-survival diagnostics, phase-output-context parsing, path-normalization check, stale-state check, artifact check, version-log check, and CEC.",
     "stmap76 review completed with no findings across two supported review passes.",
     "stmap76 diagnostic result: i10 retained both watched phases while ode, or1200, and syn2 retained only the final-critical phase; ode confirmed the phase-survival discrepancy on watched AIG 5219.",
-    "stmap76 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap76 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap77 active iteration prepared: mapper reconstruction and phase-survival diagnostic for the ode watched AIG 5219 discrepancy.",
+    "stmap77 validation passed: build, help, smoke, full benchmark metrics, final-remap reconstruction diagnostics, selected-match diagnostics, final-critical lineage parsing, phase-survival diagnostics, phase-output-context parsing, path-normalization check, stale-state check, artifact check, version-log check, and CEC.",
+    "stmap77 review pass 1 accepted a final-remap diagnostic scoping fix; review pass 2 completed with no findings after the fix.",
+    "stmap77 diagnostic result: ode watched AIG 5219 was requested and reconstructed only in phase 1 during the final remap, matching final phase survival and isolating the selected-vs-final discrepancy to final reconstruction demand.",
+    "stmap77 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T15:57:55Z",
-  "updated_at_utc": "2026-04-26T15:57:55Z"
+  "updated_at": "2026-04-26T16:23:11Z",
+  "updated_at_utc": "2026-04-26T16:23:11Z"
 }

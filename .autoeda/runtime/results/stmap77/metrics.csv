@@ -1,0 +1,9 @@
+benchmark,flow,stime_delay_ps,stime_area,log
+benchmarks/i10.aig,baseline,207.24,1263.44,.autoeda/runtime/results/stmap77/baseline_benchmarks_i10_aig.log
+benchmarks/i10.aig,candidate,198.64,1303.1,.autoeda/runtime/results/stmap77/candidate_benchmarks_i10_aig.log
+benchmarks/ode.abc.blif,baseline,531.32,12491.21,.autoeda/runtime/results/stmap77/baseline_benchmarks_ode_abc_blif.log
+benchmarks/ode.abc.blif,candidate,522.05,11334.38,.autoeda/runtime/results/stmap77/candidate_benchmarks_ode_abc_blif.log
+benchmarks/or1200.abc.blif,baseline,587.08,4798.34,.autoeda/runtime/results/stmap77/baseline_benchmarks_or1200_abc_blif.log
+benchmarks/or1200.abc.blif,candidate,561.55,4895.15,.autoeda/runtime/results/stmap77/candidate_benchmarks_or1200_abc_blif.log
+benchmarks/syn2.abc.blif,baseline,508.82,21296.6,.autoeda/runtime/results/stmap77/baseline_benchmarks_syn2_abc_blif.log
+benchmarks/syn2.abc.blif,candidate,479.78,22203.59,.autoeda/runtime/results/stmap77/candidate_benchmarks_syn2_abc_blif.log

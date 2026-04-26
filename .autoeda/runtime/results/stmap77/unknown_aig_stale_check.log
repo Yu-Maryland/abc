@@ -1,0 +1,162 @@
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap77; read .autoeda/runtime/results/stmap77/cec_benchmarks_i10_aig_orig.aig; stmap77"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.22 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Starting:  benchmarks/i10  : pi =   257  po =   224  and =    1786  lev =  33
+Rewrite:   benchmarks/i10  : pi =   257  po =   224  and =    1779  lev =  33
+Refactor:  benchmarks/i10  : pi =   257  po =   224  and =    1775  lev =  33
+Balance:   benchmarks/i10  : pi =   257  po =   224  and =    1775  lev =  33
+RewriteZ:  benchmarks/i10  : pi =   257  po =   224  and =    1739  lev =  33
+Starting:  benchmarks/i10  : pi =   257  po =   224  and =    1739  lev =  33
+Rewrite:   benchmarks/i10  : pi =   257  po =   224  and =    1730  lev =  33
+Refactor:  benchmarks/i10  : pi =   257  po =   224  and =    1730  lev =  33
+Balance:   benchmarks/i10  : pi =   257  po =   224  and =    1729  lev =  33
+Rewrite:   benchmarks/i10  : pi =   257  po =   224  and =    1725  lev =  33
+RewriteZ:  benchmarks/i10  : pi =   257  po =   224  and =    1720  lev =  33
+Balance:   benchmarks/i10  : pi =   257  po =   224  and =    1720  lev =  32
+RefactorZ: benchmarks/i10  : pi =   257  po =   224  and =    1718  lev =  32
+RewriteZ:  benchmarks/i10  : pi =   257  po =   224  and =    1703  lev =  32
+Balance:   benchmarks/i10  : pi =   257  po =   224  and =    1703  lev =  32
+Parameters: Sim words = 8. Conf limit = 1000. SAT var max = 5000.
+AIG nodes : Total =   4318. Dangling =   2879. Main =   1439. ( 33.33 %)
+SAT solver: Vars = 2060. Max cone = 439. Recycles = 1.
+SAT calls : All =    750. Unsat =    494. Sat =    256. Fail =      0.
+Choices   : Lits =   1875. Reprs =     0. Equivs =     0. Choices =     0.
+Choicing runtime statistics:
+Sim init    =     0.00 sec (  3.09 %)
+Sim SAT     =     0.00 sec (  7.99 %)
+SAT solving =     0.02 sec ( 82.45 %)
+  sat       =     0.02 sec ( 66.59 %)
+  unsat     =     0.00 sec ( 17.04 %)
+  undecided =     0.00 sec (  0.00 %)
+Choice      =     0.00 sec (  0.00 %)
+Other       =     0.00 sec (  6.48 %)
+TOTAL       =     0.02 sec (100.00 %)
+Synthesis   =     0.06 sec
+Old choice computation time =     0.02 sec
+STATS:  Ands:    4318  ->    2823.  Reprs:   1812  ->    403.  Choices =    363.
+stmap77 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = 1  network = benchmarks/i10  watch-aig = 855  source = stmap74-final-critical-top-aigs  reconstruction-phase-trace = 1  final-phase-survival = 1  mapping-policy-change = 0
+stmap77 selected-match: index = 1  watch-index = 0  mapper-mode = 0  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.230003  required = -1.000000  slack = 0.000000  area-flow = 23.789753  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 2  watch-index = 0  mapper-mode = 0  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = -1.000000  slack = 0.000000  area-flow = 31.130444  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 3  watch-index = 0  mapper-mode = 1  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 3.880042  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 4  watch-index = 0  mapper-mode = 1  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 8.181529  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 5  watch-index = 0  mapper-mode = 2  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 1.630000  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 6  watch-index = 0  mapper-mode = 2  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 1.400000  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 7  watch-index = 0  mapper-mode = 3  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 1.630000  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 8  watch-index = 0  mapper-mode = 3  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 1.400000  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap35 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+stmap35 near-miss stats: near-miss = 0
+stmap35 early-seed stats: early-seed = 0
+stmap35 penalty stats: moderate-penalty-seed = 0  moderate-penalty-blocked = 0  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap65 feedback-load stats: nodes = 1540  matched = 1540  fanout-pins = 3650  over-max = 3  avg-load-ratio = 0.068  max-load-ratio = 1.544
+stmap65 feedback-load criticality: timing-delay = 395.938  critical-nodes = 385  avg-criticality = 0.140  max-criticality = 1.000
+stmap65 feedback-load top: rank = 1  node = 557  gate = A2O1A1Ixp33_ASAP7_75t_L  fanouts = 40  load = 17.782  max-cap = 11.520  load-ratio = 1.544
+stmap65 feedback-load top: rank = 2  node = 709  gate = O2A1O1Ixp33_ASAP7_75t_L  fanouts = 36  load = 15.877  max-cap = 11.520  load-ratio = 1.378
+stmap65 feedback-load top: rank = 3  node = 573  gate = NAND5xp2_ASAP7_75t_L  fanouts = 26  load = 12.348  max-cap = 11.520  load-ratio = 1.072
+stmap65 feedback-load top: rank = 4  node = 513  gate = AOI311xp33_ASAP7_75t_L  fanouts = 25  load = 10.838  max-cap = 11.520  load-ratio = 0.941
+stmap65 feedback-load top: rank = 5  node = 529  gate = NOR2xp33_ASAP7_75t_L  fanouts = 21  load = 9.378  max-cap = 11.520  load-ratio = 0.814
+stmap65 sink-pressure stats: roots = 3  consumer-fanin = 651  consumer-fanout = 252  raw-pressure-entries = 262  raw-pressure-updates = 6  sink-pressure-entries = 262  sink-pressure-updates = 48  pressure-missed = 0  pressure-capacity = 4096  tracked-aig = 27645  tracked-node = -1  tracked-raw-ratio = 0.000  tracked-sink-ratio = 0.000
+stmap65 sink-pressure: rank = 1  aig-id = 856  mapped-node = 656  sink-pressure-ratio = 1.544
+stmap65 sink-pressure: rank = 2  aig-id = 777  mapped-node = 769  sink-pressure-ratio = 1.514
+stmap65 sink-pressure: rank = 3  aig-id = 946  mapped-node = 783  sink-pressure-ratio = 1.508
+stmap65 sink-pressure: rank = 4  aig-id = 950  mapped-node = 690  sink-pressure-ratio = 1.494
+stmap65 sink-pressure: rank = 5  aig-id = 1023  mapped-node = 919  sink-pressure-ratio = 1.483
+stmap65 sink-pressure: rank = 6  aig-id = 829  mapped-node = 1003  sink-pressure-ratio = 1.481
+stmap65 sink-pressure: rank = 7  aig-id = 1019  mapped-node = 921  sink-pressure-ratio = 1.474
+stmap65 sink-pressure: rank = 8  aig-id = 841  mapped-node = 902  sink-pressure-ratio = 1.461
+stmap65 sink-pressure: rank = 9  aig-id = 970  mapped-node = 1166  sink-pressure-ratio = 1.456
+stmap65 sink-pressure: rank = 10  aig-id = 963  mapped-node = 798  sink-pressure-ratio = 1.444
+stmap65 feedback: remap = 1  active = 0  max-load-ratio = 1.544  over-max-frac = 0.001948  severity = 0.000  raw-pressure-entries = 262  sink-pressure-entries = 262  pressure-capacity = 4096
+stmap65 blended-gain: base-gain = 250.00  blend-gain = 225.00  selected-gain = 250.00  severity-threshold = 0.850  raw-pressure-threshold = 8000  selected-blend-gain = 0
+stmap65 bounded-pressure stats: severe-transfer = 0  raw-weight = 0.72  ratio-cap = 2.100  bounded-pressure-entries = 262  lifted = 0  capped = 0  raw-only = 0  sink-fallback = 262  tracked-aig = 27645  tracked-raw-ratio = 0.000  tracked-sink-ratio = 0.000  tracked-bounded-ratio = 0.000
+stmap65 mapper-mode: bounded-pressure-transfer-mode = 57  cut-only-before-moderate = 0  load-drop-cut-only-guard = 0  strong-node-load-drop-guard = 1  strong-node-pressure-min = 1.250  blended-gain = 250.00  pressure-feed = sink-fallback  raw-weight = 0.72  bounded-ratio-cap = 2.100  inherited-cut-only-area-save-cap = 1.35x-inverter  tracked-near-miss-node = 23628  cut-only-gate-diag = 1
+stmap77 selected-match: index = 9  watch-index = 0  mapper-mode = 0  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.230003  required = -1.000000  slack = 0.000000  area-flow = 23.789753  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 10  watch-index = 0  mapper-mode = 0  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = -1.000000  slack = 0.000000  area-flow = 31.130444  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 11  watch-index = 0  mapper-mode = 1  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 3.880042  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 12  watch-index = 0  mapper-mode = 1  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 8.181529  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 13  watch-index = 0  mapper-mode = 2  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 1.630000  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 14  watch-index = 0  mapper-mode = 2  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 1.400000  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 15  watch-index = 0  mapper-mode = 3  node = 612  aig-id = 855  level = 18  refs = 1  phase = 0  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  cut-leaf-load-avg = 10.400  fanout-limit = 1  load-drive-ratio = 10.400  arrival = 71.320000  required = 71.490013  slack = 0.170013  area-flow = 1.630000  u-phase-best = 25  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 423  leaf2-aig-id = 649  leaf3-node = 430  leaf3-aig-id = 629  leaf4-node = 610  leaf4-aig-id = 853  leaf5-node = -1  leaf5-aig-id = -1
+stmap77 selected-match: index = 16  watch-index = 0  mapper-mode = 3  node = 612  aig-id = 855  level = 18  refs = 1  phase = 1  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  cut-leaf-load-avg = 9.500  fanout-limit = 1  load-drive-ratio = 9.500  arrival = 70.980003  required = 70.980011  slack = 0.000008  area-flow = 1.400000  u-phase-best = 10  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 0.000  scl-feedback = 0.000  leaf0-node = 347  leaf0-aig-id = 572  leaf1-node = 398  leaf1-aig-id = 623  leaf2-node = 430  leaf2-aig-id = 629  leaf3-node = 611  leaf3-aig-id = 854  leaf4-node = -1  leaf4-aig-id = -1  leaf5-node = -1  leaf5-aig-id = -1
+stmap56 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+stmap56 near-miss stats: near-miss = 0
+stmap56 early-seed stats: early-seed = 0
+stmap56 penalty stats: pressure-near-exception-seed = 0  pressure-near-exception-blocked = 0  cut-only-exception-seed = 0  cut-only-exception-blocked = 0  cut-only-area-cap-blocked = 0  moderate-penalty-seed = 0  moderate-penalty-blocked = 0  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap60 near-miss leaf stats: tracked-node = 23628  hits = 0  leaf-rows = 0  max-leaf-node = -1  max-leaf-aig-id = -1  max-leaf-pressure-ratio = 0.000
+stmap61 cut-only gate stats: tracked-node = 23628  hits = 0  primitive-pass = 0  raw-pass = 0  raw-blocked-by-moderate = 0  raw-blocked-by-primitive = 0  area-cap-pass = 0  area-cap-blocked = 0  accepted = 0  soft-seed-fail = 0  moderate-candidate-fail = 0  feedback-fail = 0  entry-fail = 0  agreement-blocked = 0  node-zero-fail = 0  cut-band-fail = 0  arrival-fail = 0  slack-fail = 0
+stmap77 reconstruct-request: index = 1  watch-index = 0  node = 612  aig-id = 855  requested-phase = 1  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 0  cached-opposite = 0  level = 18
+stmap77 reconstruct-emit: index = 2  watch-index = 0  node = 612  aig-id = 855  phase = 1  new-node = 756  gate = NOR4xp25_ASAP7_75t_L  leaves = 4  u-phase-best = 10  fanout-limit = 1  leaf0-aig-id = 572  leaf0-phase = 1  leaf1-aig-id = 623  leaf1-phase = 0  leaf2-aig-id = 629  leaf2-phase = 1  leaf3-aig-id = 854  leaf3-phase = 0  leaf4-aig-id = -1  leaf4-phase = -1  leaf5-aig-id = -1  leaf5-phase = -1
+stmap77 reconstruct-request: index = 3  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 0  cached-opposite = 1  level = 18
+stmap77 reconstruct-emit: index = 4  watch-index = 0  node = 612  aig-id = 855  phase = 0  new-node = 809  gate = NAND5xp2_ASAP7_75t_L  leaves = 5  u-phase-best = 25  fanout-limit = 1  leaf0-aig-id = 572  leaf0-phase = 0  leaf1-aig-id = 623  leaf1-phase = 1  leaf2-aig-id = 649  leaf2-phase = 1  leaf3-aig-id = 629  leaf3-phase = 0  leaf4-aig-id = 853  leaf4-phase = 0  leaf5-aig-id = -1  leaf5-phase = -1
+stmap77 reconstruct-request: index = 5  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 6  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 7  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 8  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 9  watch-index = 0  node = 612  aig-id = 855  requested-phase = 1  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 10  watch-index = 0  node = 612  aig-id = 855  phase = 1  cached-node = 756  via = request
+stmap77 reconstruct-request: index = 11  watch-index = 0  node = 612  aig-id = 855  requested-phase = 1  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 12  watch-index = 0  node = 612  aig-id = 855  phase = 1  cached-node = 756  via = request
+stmap77 reconstruct-request: index = 13  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 14  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 15  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 16  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 17  watch-index = 0  node = 612  aig-id = 855  requested-phase = 1  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 18  watch-index = 0  node = 612  aig-id = 855  phase = 1  cached-node = 756  via = request
+stmap77 reconstruct-request: index = 19  watch-index = 0  node = 612  aig-id = 855  requested-phase = 1  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 20  watch-index = 0  node = 612  aig-id = 855  phase = 1  cached-node = 756  via = request
+stmap77 reconstruct-request: index = 21  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 22  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 23  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 24  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap77 reconstruct-request: index = 25  watch-index = 0  node = 612  aig-id = 855  requested-phase = 0  has-cut-requested = 1  has-cut-opposite = 1  cached-requested = 1  cached-opposite = 1  level = 18
+stmap77 reconstruct-cache: index = 26  watch-index = 0  node = 612  aig-id = 855  phase = 0  cached-node = 809  via = request
+stmap65 scl-load stats: nodes = 1540  matched = 1540  fanout-pins = 3650  over-max = 3  avg-load-ratio = 0.068  max-load-ratio = 1.544
+stmap65 scl-load criticality: timing-delay = 395.938  critical-nodes = 385  avg-criticality = 0.140  max-criticality = 1.000
+stmap65 scl-load top: rank = 1  node = 557  gate = A2O1A1Ixp33_ASAP7_75t_L  fanouts = 40  load = 17.782  max-cap = 11.520  load-ratio = 1.544
+stmap65 scl-load top: rank = 2  node = 709  gate = O2A1O1Ixp33_ASAP7_75t_L  fanouts = 36  load = 15.877  max-cap = 11.520  load-ratio = 1.378
+stmap65 scl-load top: rank = 3  node = 573  gate = NAND5xp2_ASAP7_75t_L  fanouts = 26  load = 12.348  max-cap = 11.520  load-ratio = 1.072
+stmap65 scl-load top: rank = 4  node = 513  gate = AOI311xp33_ASAP7_75t_L  fanouts = 25  load = 10.838  max-cap = 11.520  load-ratio = 0.941
+stmap65 scl-load top: rank = 5  node = 529  gate = NOR2xp33_ASAP7_75t_L  fanouts = 21  load = 9.378  max-cap = 11.520  load-ratio = 0.814
+stmap77 reconstruct stats: watched-aigs = 1  rows = 26  demands = 0  requests = 13  direct-emits = 2  inverters = 0  cache-hits = 11  phase0-requests = 8  phase1-requests = 5  phase0-direct = 1  phase1-direct = 1  phase0-inverters = 0  phase1-inverters = 0  phase0-cache = 7  phase1-cache = 4
+stmap77 selected-match stats: watched-aigs = 1  rows = 16  watch0-aig-id = 855  watch0-rows = 16  watch1-aig-id = -1  watch1-rows = 0  watch2-aig-id = -1  watch2-rows = 0  watch3-aig-id = -1  watch3-rows = 0
+stmap77 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = 0  network = .autoeda/runtime/results/stmap77/cec_benchmarks_i10_aig_orig  watch-aig = -1  source = stmap74-final-critical-top-aigs  reconstruction-phase-trace = 1  final-phase-survival = 1  mapping-policy-change = 0
+stmap35 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+stmap35 near-miss stats: near-miss = 0
+stmap35 early-seed stats: early-seed = 0
+stmap35 penalty stats: moderate-penalty-seed = 0  moderate-penalty-blocked = 0  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap65 feedback-load stats: nodes = 1716  matched = 1716  fanout-pins = 4156  over-max = 4  avg-load-ratio = 0.068  max-load-ratio = 1.922
+stmap65 feedback-load criticality: timing-delay = 817.585  critical-nodes = 369  avg-criticality = 0.123  max-criticality = 1.000
+stmap65 feedback-load top: rank = 1  node = 574  gate = NAND2xp33_ASAP7_75t_L  fanouts = 45  load = 22.140  max-cap = 11.520  load-ratio = 1.922
+stmap65 feedback-load top: rank = 2  node = 489  gate = NOR2xp33_ASAP7_75t_L  fanouts = 35  load = 15.613  max-cap = 11.520  load-ratio = 1.355
+stmap65 feedback-load top: rank = 3  node = 543  gate = NOR3xp33_ASAP7_75t_L  fanouts = 34  load = 15.186  max-cap = 11.520  load-ratio = 1.318
+stmap65 feedback-load top: rank = 4  node = 616  gate = AOI21xp33_ASAP7_75t_L  fanouts = 36  load = 14.395  max-cap = 11.520  load-ratio = 1.250
+stmap65 feedback-load top: rank = 5  node = 566  gate = NOR2xp33_ASAP7_75t_L  fanouts = 24  load = 11.394  max-cap = 11.520  load-ratio = 0.989
+stmap65 sink-pressure stats: roots = 4  consumer-fanin = 1931  consumer-fanout = 548  raw-pressure-entries = 497  raw-pressure-updates = 65  sink-pressure-entries = 497  sink-pressure-updates = 74  pressure-missed = 0  pressure-capacity = 4096  tracked-aig = 27645  tracked-node = -1  tracked-raw-ratio = 0.000  tracked-sink-ratio = 0.000
+stmap65 sink-pressure: rank = 1  aig-id = 616  mapped-node = 575  sink-pressure-ratio = 1.922
+stmap65 sink-pressure: rank = 2  aig-id = 1210  mapped-node = 1089  sink-pressure-ratio = 1.909
+stmap65 sink-pressure: rank = 3  aig-id = 616  mapped-node = 574  sink-pressure-ratio = 1.730
+stmap65 sink-pressure: rank = 4  aig-id = 721  mapped-node = 835  sink-pressure-ratio = 1.644
+stmap65 sink-pressure: rank = 5  aig-id = 724  mapped-node = 836  sink-pressure-ratio = 1.644
+stmap65 sink-pressure: rank = 6  aig-id = 1209  mapped-node = 1088  sink-pressure-ratio = 1.644
+stmap65 sink-pressure: rank = 7  aig-id = 847  mapped-node = 826  sink-pressure-ratio = 1.579
+stmap65 sink-pressure: rank = 8  aig-id = 802  mapped-node = 789  sink-pressure-ratio = 1.515
+stmap65 sink-pressure: rank = 9  aig-id = 1064  mapped-node = 973  sink-pressure-ratio = 1.470
+stmap65 sink-pressure: rank = 10  aig-id = 849  mapped-node = 827  sink-pressure-ratio = 1.455
+stmap65 feedback: remap = 1  active = 1  max-load-ratio = 1.922  over-max-frac = 0.002331  severity = 0.019  raw-pressure-entries = 497  sink-pressure-entries = 497  pressure-capacity = 4096
+stmap65 blended-gain: base-gain = 250.00  blend-gain = 225.00  selected-gain = 250.00  severity-threshold = 0.850  raw-pressure-threshold = 8000  selected-blend-gain = 0
+stmap65 bounded-pressure stats: severe-transfer = 0  raw-weight = 0.72  ratio-cap = 2.100  bounded-pressure-entries = 497  lifted = 0  capped = 0  raw-only = 0  sink-fallback = 497  tracked-aig = 27645  tracked-raw-ratio = 0.000  tracked-sink-ratio = 0.000  tracked-bounded-ratio = 0.000
+stmap65 mapper-mode: bounded-pressure-transfer-mode = 57  cut-only-before-moderate = 0  load-drop-cut-only-guard = 0  strong-node-load-drop-guard = 1  strong-node-pressure-min = 1.250  blended-gain = 250.00  pressure-feed = sink-fallback  raw-weight = 0.72  bounded-ratio-cap = 2.100  inherited-cut-only-area-save-cap = 1.35x-inverter  tracked-near-miss-node = 23628  cut-only-gate-diag = 1
+stmap56 guard stats: exact-risk = 0  highest = 0  lower-mod = 0  upper-mod = 0  middle-slack = 0  middle-relief = 0  reject-slack = 0  reject-highest = 0  reject-arrival = 0  reject-area = 0
+stmap56 near-miss stats: near-miss = 0
+stmap56 early-seed stats: early-seed = 0
+stmap56 penalty stats: pressure-near-exception-seed = 0  pressure-near-exception-blocked = 0  cut-only-exception-seed = 0  cut-only-exception-blocked = 0  cut-only-area-cap-blocked = 0  moderate-penalty-seed = 0  moderate-penalty-blocked = 0  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap60 near-miss leaf stats: tracked-node = 23628  hits = 0  leaf-rows = 0  max-leaf-node = -1  max-leaf-aig-id = -1  max-leaf-pressure-ratio = 0.000
+stmap61 cut-only gate stats: tracked-node = 23628  hits = 0  primitive-pass = 0  raw-pass = 0  raw-blocked-by-moderate = 0  raw-blocked-by-primitive = 0  area-cap-pass = 0  area-cap-blocked = 0  accepted = 0  soft-seed-fail = 0  moderate-candidate-fail = 0  feedback-fail = 0  entry-fail = 0  agreement-blocked = 0  node-zero-fail = 0  cut-band-fail = 0  arrival-fail = 0  slack-fail = 0
+stmap65 scl-load stats: nodes = 1716  matched = 1716  fanout-pins = 4156  over-max = 4  avg-load-ratio = 0.068  max-load-ratio = 1.922
+stmap65 scl-load criticality: timing-delay = 817.585  critical-nodes = 369  avg-criticality = 0.123  max-criticality = 1.000
+stmap65 scl-load top: rank = 1  node = 574  gate = NAND2xp33_ASAP7_75t_L  fanouts = 45  load = 22.140  max-cap = 11.520  load-ratio = 1.922
+stmap65 scl-load top: rank = 2  node = 489  gate = NOR2xp33_ASAP7_75t_L  fanouts = 35  load = 15.613  max-cap = 11.520  load-ratio = 1.355
+stmap65 scl-load top: rank = 3  node = 543  gate = NOR3xp33_ASAP7_75t_L  fanouts = 34  load = 15.186  max-cap = 11.520  load-ratio = 1.318
+stmap65 scl-load top: rank = 4  node = 616  gate = AOI21xp33_ASAP7_75t_L  fanouts = 36  load = 14.395  max-cap = 11.520  load-ratio = 1.250
+stmap65 scl-load top: rank = 5  node = 566  gate = NOR2xp33_ASAP7_75t_L  fanouts = 24  load = 11.394  max-cap = 11.520  load-ratio = 0.989
+stmap77 reconstruct stats: watched-aigs = 0  rows = 0  demands = 0  requests = 0  direct-emits = 0  inverters = 0  cache-hits = 0  phase0-requests = 0  phase1-requests = 0  phase0-direct = 0  phase1-direct = 0  phase0-inverters = 0  phase1-inverters = 0  phase0-cache = 0  phase1-cache = 0
+stmap77 selected-match stats: watched-aigs = 0  rows = 0  watch0-aig-id = -1  watch0-rows = 0  watch1-aig-id = -1  watch1-rows = 0  watch2-aig-id = -1  watch2-rows = 0  watch3-aig-id = -1  watch3-rows = 0

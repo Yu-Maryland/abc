@@ -48,6 +48,219 @@ static Abc_Obj_t *  Abc_NodeFromMapSuperChoice_rec( Abc_Ntk_t * pNtkNew, Map_Sup
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
 
+#define ABC_STMAP77_MAX_WATCH_AIGS 4
+static int s_fStmap77ReconstructionDiag = 0;
+static int s_fStmap77ReconstructionActive = 0;
+static const char * s_pStmap77ReconstructionLabel = "stmap77";
+static int s_nStmap77ReconstructionWatchAigs = 0;
+static int s_Stmap77ReconstructionWatchAigIds[ABC_STMAP77_MAX_WATCH_AIGS] = { -1, -1, -1, -1 };
+static int s_nStmap77ReconstructionRows = 0;
+static int s_nStmap77ReconstructionDemands = 0;
+static int s_nStmap77ReconstructionRequests = 0;
+static int s_nStmap77ReconstructionDirectEmits = 0;
+static int s_nStmap77ReconstructionInverters = 0;
+static int s_nStmap77ReconstructionCacheHits = 0;
+static int s_Stmap77ReconstructionRequestPhase[2] = { 0, 0 };
+static int s_Stmap77ReconstructionDirectPhase[2] = { 0, 0 };
+static int s_Stmap77ReconstructionInverterPhase[2] = { 0, 0 };
+static int s_Stmap77ReconstructionCachePhase[2] = { 0, 0 };
+
+static void Abc_Stmap77ResetReconstructionCounters( void )
+{
+    int i;
+    s_nStmap77ReconstructionRows = 0;
+    s_nStmap77ReconstructionDemands = 0;
+    s_nStmap77ReconstructionRequests = 0;
+    s_nStmap77ReconstructionDirectEmits = 0;
+    s_nStmap77ReconstructionInverters = 0;
+    s_nStmap77ReconstructionCacheHits = 0;
+    for ( i = 0; i < 2; i++ )
+    {
+        s_Stmap77ReconstructionRequestPhase[i] = 0;
+        s_Stmap77ReconstructionDirectPhase[i] = 0;
+        s_Stmap77ReconstructionInverterPhase[i] = 0;
+        s_Stmap77ReconstructionCachePhase[i] = 0;
+    }
+}
+
+static void Abc_Stmap77ClearReconstructionDiag( void )
+{
+    int i;
+    s_fStmap77ReconstructionDiag = 0;
+    s_fStmap77ReconstructionActive = 0;
+    s_pStmap77ReconstructionLabel = "stmap77";
+    s_nStmap77ReconstructionWatchAigs = 0;
+    for ( i = 0; i < ABC_STMAP77_MAX_WATCH_AIGS; i++ )
+        s_Stmap77ReconstructionWatchAigIds[i] = -1;
+    Abc_Stmap77ResetReconstructionCounters();
+}
+
+void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Abc_Stmap77ClearReconstructionDiag();
+    if ( !fEnable || pWatchAigIds == NULL || nWatchAigs <= 0 )
+        return;
+    for ( i = 0; i < nWatchAigs && s_nStmap77ReconstructionWatchAigs < ABC_STMAP77_MAX_WATCH_AIGS; i++ )
+        if ( pWatchAigIds[i] >= 0 )
+            s_Stmap77ReconstructionWatchAigIds[s_nStmap77ReconstructionWatchAigs++] = pWatchAigIds[i];
+    if ( s_nStmap77ReconstructionWatchAigs == 0 )
+        return;
+    s_fStmap77ReconstructionDiag = 1;
+    s_pStmap77ReconstructionLabel = pLabel && pLabel[0] ? pLabel : "stmap77";
+}
+
+int Abc_Stmap77ReconstructionDiagConfigured( void )
+{
+    return s_fStmap77ReconstructionDiag;
+}
+
+void Abc_Stmap77SetReconstructionActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap77ReconstructionDiag )
+        return;
+    if ( fActive )
+        Abc_Stmap77ResetReconstructionCounters();
+    s_fStmap77ReconstructionActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Abc_Stmap77ReconstructionWatchIndex( Map_Node_t * pNodeMap, int * pAigId )
+{
+    Map_Node_t * pNodeRegular;
+    int i, AigId;
+    if ( pAigId )
+        *pAigId = -1;
+    if ( !s_fStmap77ReconstructionDiag || !s_fStmap77ReconstructionActive || pNodeMap == NULL )
+        return -1;
+    pNodeRegular = Map_Regular( pNodeMap );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return -1;
+    AigId = Map_NodeReadAigId( pNodeRegular );
+    if ( pAigId )
+        *pAigId = AigId;
+    for ( i = 0; i < s_nStmap77ReconstructionWatchAigs; i++ )
+        if ( s_Stmap77ReconstructionWatchAigIds[i] == AigId )
+            return i;
+    return -1;
+}
+
+static void Abc_Stmap77RecordReconstructionDemand( const char * pKind, int CoIndex, Map_Node_t * pNodeMap, int fPhase )
+{
+    int AigId, WatchIndex;
+    WatchIndex = Abc_Stmap77ReconstructionWatchIndex( pNodeMap, &AigId );
+    if ( WatchIndex < 0 )
+        return;
+    s_nStmap77ReconstructionRows++;
+    s_nStmap77ReconstructionDemands++;
+    printf( "%s reconstruct-demand: index = %d  watch-index = %d  co-kind = %s  co-index = %d  node = %d  aig-id = %d  requested-phase = %d  complemented-driver = %d\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionRows, WatchIndex, pKind ? pKind : "?",
+        CoIndex, Map_NodeReadNum(Map_Regular(pNodeMap)), AigId, fPhase, Map_IsComplement(pNodeMap) );
+}
+
+static void Abc_Stmap77RecordReconstructionRequest( Map_Node_t * pNodeMap, int fPhase )
+{
+    int AigId, WatchIndex;
+    WatchIndex = Abc_Stmap77ReconstructionWatchIndex( pNodeMap, &AigId );
+    if ( WatchIndex < 0 )
+        return;
+    s_nStmap77ReconstructionRows++;
+    s_nStmap77ReconstructionRequests++;
+    if ( fPhase >= 0 && fPhase < 2 )
+        s_Stmap77ReconstructionRequestPhase[fPhase]++;
+    printf( "%s reconstruct-request: index = %d  watch-index = %d  node = %d  aig-id = %d  requested-phase = %d  has-cut-requested = %d  has-cut-opposite = %d  cached-requested = %d  cached-opposite = %d  level = %d\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionRows, WatchIndex,
+        Map_NodeReadNum(Map_Regular(pNodeMap)), AigId, fPhase,
+        Map_NodeReadCutBest(Map_Regular(pNodeMap), fPhase) != NULL,
+        Map_NodeReadCutBest(Map_Regular(pNodeMap), !fPhase) != NULL,
+        Map_NodeReadData(Map_Regular(pNodeMap), fPhase) != NULL,
+        Map_NodeReadData(Map_Regular(pNodeMap), !fPhase) != NULL,
+        Map_NodeReadLevel(Map_Regular(pNodeMap)) );
+}
+
+static void Abc_Stmap77RecordReconstructionCache( Map_Node_t * pNodeMap, int fPhase, Abc_Obj_t * pNodeNew, const char * pVia )
+{
+    int AigId, WatchIndex;
+    WatchIndex = Abc_Stmap77ReconstructionWatchIndex( pNodeMap, &AigId );
+    if ( WatchIndex < 0 )
+        return;
+    s_nStmap77ReconstructionRows++;
+    s_nStmap77ReconstructionCacheHits++;
+    if ( fPhase >= 0 && fPhase < 2 )
+        s_Stmap77ReconstructionCachePhase[fPhase]++;
+    printf( "%s reconstruct-cache: index = %d  watch-index = %d  node = %d  aig-id = %d  phase = %d  cached-node = %d  via = %s\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionRows, WatchIndex,
+        Map_NodeReadNum(Map_Regular(pNodeMap)), AigId, fPhase,
+        pNodeNew ? Abc_ObjId(pNodeNew) : -1, pVia ? pVia : "?" );
+}
+
+static void Abc_Stmap77RecordReconstructionEmit( Map_Node_t * pNodeMap, int fPhase, Abc_Obj_t * pNodeNew, Map_Cut_t * pCutBest, Map_Super_t * pSuperBest, unsigned uPhaseBest )
+{
+    Map_Node_t ** ppLeaves;
+    Mio_Gate_t * pGate;
+    int AigId, WatchIndex, nLeaves, i, LeafAigId[6], LeafPhase[6];
+    WatchIndex = Abc_Stmap77ReconstructionWatchIndex( pNodeMap, &AigId );
+    if ( WatchIndex < 0 )
+        return;
+    nLeaves = pCutBest ? Map_CutReadLeavesNum( pCutBest ) : 0;
+    ppLeaves = pCutBest ? Map_CutReadLeaves( pCutBest ) : NULL;
+    for ( i = 0; i < 6; i++ )
+    {
+        LeafAigId[i] = -1;
+        LeafPhase[i] = -1;
+        if ( ppLeaves != NULL && i < nLeaves )
+        {
+            LeafAigId[i] = Map_NodeReadAigId( Map_Regular(ppLeaves[i]) );
+            LeafPhase[i] = ((uPhaseBest & (1 << i)) > 0) ? 0 : 1;
+        }
+    }
+    pGate = pNodeNew ? (Mio_Gate_t *)pNodeNew->pData : NULL;
+    s_nStmap77ReconstructionRows++;
+    s_nStmap77ReconstructionDirectEmits++;
+    if ( fPhase >= 0 && fPhase < 2 )
+        s_Stmap77ReconstructionDirectPhase[fPhase]++;
+    printf( "%s reconstruct-emit: index = %d  watch-index = %d  node = %d  aig-id = %d  phase = %d  new-node = %d  gate = %s  leaves = %d  u-phase-best = %u  fanout-limit = %d  leaf0-aig-id = %d  leaf0-phase = %d  leaf1-aig-id = %d  leaf1-phase = %d  leaf2-aig-id = %d  leaf2-phase = %d  leaf3-aig-id = %d  leaf3-phase = %d  leaf4-aig-id = %d  leaf4-phase = %d  leaf5-aig-id = %d  leaf5-phase = %d\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionRows, WatchIndex,
+        Map_NodeReadNum(Map_Regular(pNodeMap)), AigId, fPhase,
+        pNodeNew ? Abc_ObjId(pNodeNew) : -1, pGate ? Mio_GateReadName(pGate) : "?",
+        nLeaves, uPhaseBest, pSuperBest ? Map_SuperReadFanoutLimit(pSuperBest) : -1,
+        LeafAigId[0], LeafPhase[0], LeafAigId[1], LeafPhase[1], LeafAigId[2], LeafPhase[2],
+        LeafAigId[3], LeafPhase[3], LeafAigId[4], LeafPhase[4], LeafAigId[5], LeafPhase[5] );
+}
+
+static void Abc_Stmap77RecordReconstructionInverter( Map_Node_t * pNodeMap, int fPhase, Abc_Obj_t * pNodeSource, Abc_Obj_t * pNodeInv )
+{
+    Mio_Gate_t * pSourceGate, * pInvGate;
+    int AigId, WatchIndex;
+    WatchIndex = Abc_Stmap77ReconstructionWatchIndex( pNodeMap, &AigId );
+    if ( WatchIndex < 0 )
+        return;
+    pSourceGate = pNodeSource ? (Mio_Gate_t *)pNodeSource->pData : NULL;
+    pInvGate = pNodeInv ? (Mio_Gate_t *)pNodeInv->pData : NULL;
+    s_nStmap77ReconstructionRows++;
+    s_nStmap77ReconstructionInverters++;
+    if ( fPhase >= 0 && fPhase < 2 )
+        s_Stmap77ReconstructionInverterPhase[fPhase]++;
+    printf( "%s reconstruct-inverter: index = %d  watch-index = %d  node = %d  aig-id = %d  requested-phase = %d  source-phase = %d  source-node = %d  source-gate = %s  inverter-node = %d  inverter-gate = %s\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionRows, WatchIndex,
+        Map_NodeReadNum(Map_Regular(pNodeMap)), AigId, fPhase, !fPhase,
+        pNodeSource ? Abc_ObjId(pNodeSource) : -1, pSourceGate ? Mio_GateReadName(pSourceGate) : "?",
+        pNodeInv ? Abc_ObjId(pNodeInv) : -1, pInvGate ? Mio_GateReadName(pInvGate) : "?" );
+}
+
+void Abc_Stmap77PrintReconstructionSummary( void )
+{
+    printf( "%s reconstruct stats: watched-aigs = %d  rows = %d  demands = %d  requests = %d  direct-emits = %d  inverters = %d  cache-hits = %d  phase0-requests = %d  phase1-requests = %d  phase0-direct = %d  phase1-direct = %d  phase0-inverters = %d  phase1-inverters = %d  phase0-cache = %d  phase1-cache = %d\n",
+        s_pStmap77ReconstructionLabel, s_nStmap77ReconstructionWatchAigs, s_nStmap77ReconstructionRows,
+        s_nStmap77ReconstructionDemands, s_nStmap77ReconstructionRequests,
+        s_nStmap77ReconstructionDirectEmits, s_nStmap77ReconstructionInverters,
+        s_nStmap77ReconstructionCacheHits, s_Stmap77ReconstructionRequestPhase[0],
+        s_Stmap77ReconstructionRequestPhase[1], s_Stmap77ReconstructionDirectPhase[0],
+        s_Stmap77ReconstructionDirectPhase[1], s_Stmap77ReconstructionInverterPhase[0],
+        s_Stmap77ReconstructionInverterPhase[1], s_Stmap77ReconstructionCachePhase[0],
+        s_Stmap77ReconstructionCachePhase[1] );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Interface with the mapping package.]
@@ -420,7 +633,10 @@ Abc_Obj_t * Abc_NodeFromMapPhase_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap
     // check if the phase is already implemented
     pNodeNew = (Abc_Obj_t *)Map_NodeReadData( pNodeMap, fPhase );
     if ( pNodeNew )
+    {
+        Abc_Stmap77RecordReconstructionCache( pNodeMap, fPhase, pNodeNew, "phase" );
         return pNodeNew;
+    }
 
     // get the information about the best cut 
     pCutBest   = Map_NodeReadCutBest( pNodeMap, fPhase );
@@ -442,6 +658,7 @@ Abc_Obj_t * Abc_NodeFromMapPhase_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap
     pNodeNew = Abc_NodeFromMapSuper_rec( pNtkNew, pNodeMap, pSuperBest, pNodePIs, nLeaves );
     Vec_IntWriteEntry( pNtkNew->vOrigNodeIds, pNodeNew->Id, Abc_Var2Lit( Map_NodeReadAigId(pNodeMap), fPhase ) );
     Map_NodeSetData( pNodeMap, fPhase, (char *)pNodeNew );
+    Abc_Stmap77RecordReconstructionEmit( pNodeMap, fPhase, pNodeNew, pCutBest, pSuperBest, uPhaseBest );
     return pNodeNew;
 }
 Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int fPhase )
@@ -457,10 +674,15 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
         return pNodeNew;
     }
 
+    Abc_Stmap77RecordReconstructionRequest( pNodeMap, fPhase );
+
     // check if the phase is already implemented
     pNodeNew = (Abc_Obj_t *)Map_NodeReadData( pNodeMap, fPhase );
     if ( pNodeNew )
+    {
+        Abc_Stmap77RecordReconstructionCache( pNodeMap, fPhase, pNodeNew, "request" );
         return pNodeNew;
+    }
 
     // implement the node if the best cut is assigned
     if ( Map_NodeReadCutBest(pNodeMap, fPhase) != NULL )
@@ -478,6 +700,7 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
 
     // set the inverter
     Map_NodeSetData( pNodeMap, fPhase, (char *)pNodeInv );
+    Abc_Stmap77RecordReconstructionInverter( pNodeMap, fPhase, pNodeNew, pNodeInv );
     return pNodeInv;
 }
 Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
@@ -510,6 +733,7 @@ Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
         if ( i < Abc_NtkCoNum(pNtk) - pNtk->nBarBufs )
             continue;
         pNodeMap = Map_ManReadBufDriver( pMan, i - (Abc_NtkCoNum(pNtk) - pNtk->nBarBufs) );
+        Abc_Stmap77RecordReconstructionDemand( "barbuf", i, pNodeMap, !Map_IsComplement(pNodeMap) );
         pNodeNew = Abc_NodeFromMap_rec( pNtkNew, Map_Regular(pNodeMap), !Map_IsComplement(pNodeMap) );
         assert( !Abc_ObjIsComplement(pNodeNew) );
         Abc_ObjAddFanin( pNode->pCopy, pNodeNew );
@@ -519,6 +743,7 @@ Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
         if ( i >= Abc_NtkCoNum(pNtk) - pNtk->nBarBufs )
             break;
         pNodeMap = Map_ManReadOutputs(pMan)[i];
+        Abc_Stmap77RecordReconstructionDemand( "co", i, pNodeMap, !Map_IsComplement(pNodeMap) );
         pNodeNew = Abc_NodeFromMap_rec( pNtkNew, Map_Regular(pNodeMap), !Map_IsComplement(pNodeMap) );
         assert( !Abc_ObjIsComplement(pNodeNew) );
         Abc_ObjAddFanin( pNode->pCopy, pNodeNew );
@@ -1238,4 +1463,3 @@ void Abc_NtkSetAndGateDelay( Abc_Frame_t * pAbc, float Delay )
 
 
 ABC_NAMESPACE_IMPL_END
-
