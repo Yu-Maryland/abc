@@ -1430,6 +1430,12 @@ static int s_nStmap71ModeratePenaltyWitnessSources = 0;
 static int s_fStmap72PathProximityWitnessDiag = 0;
 static int s_fStmap73AcceptedPressureWitnessDiag = 0;
 static int s_nStmap73AcceptedPressureWitnessSources = 0;
+#define MAP_STMAP75_WATCH_AIGS 4
+static int s_fStmap75FinalCriticalAigDiag = 0;
+static int s_nStmap75ActiveWatchAigs = 0;
+static int s_nStmap75SelectedMatchRows = 0;
+static int s_Stmap75WatchAigIds[MAP_STMAP75_WATCH_AIGS] = { -1, -1, -1, -1 };
+static int s_Stmap75WatchHitCounts[MAP_STMAP75_WATCH_AIGS];
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1573,6 +1579,42 @@ void Map_Stmap73SetAcceptedPressureWitnessDiag( int fEnable )
         s_nStmap73AcceptedPressureWitnessSources = 0;
     }
     s_fStmap73AcceptedPressureWitnessDiag = fEnable;
+}
+
+static void Map_Stmap75ResetFinalCriticalAigDiagState( void )
+{
+    int i;
+    s_nStmap75ActiveWatchAigs = 0;
+    s_nStmap75SelectedMatchRows = 0;
+    for ( i = 0; i < MAP_STMAP75_WATCH_AIGS; i++ )
+    {
+        s_Stmap75WatchAigIds[i] = -1;
+        s_Stmap75WatchHitCounts[i] = 0;
+    }
+}
+
+void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId )
+{
+    if ( fEnable )
+    {
+        Map_Stmap75ResetFinalCriticalAigDiagState();
+        s_nStmap75ActiveWatchAigs = WatchAigId >= 0 ? 1 : 0;
+        if ( WatchAigId >= 0 )
+            s_Stmap75WatchAigIds[0] = WatchAigId;
+    }
+    else
+        Map_Stmap75ResetFinalCriticalAigDiagState();
+    s_fStmap75FinalCriticalAigDiag = fEnable;
+}
+
+void Map_Stmap75PrintFinalCriticalAigSummary( void )
+{
+    printf( "stmap75 selected-match stats: watched-aigs = %d  rows = %d  watch0-aig-id = %d  watch0-rows = %d  watch1-aig-id = %d  watch1-rows = %d  watch2-aig-id = %d  watch2-rows = %d  watch3-aig-id = %d  watch3-rows = %d\n",
+        s_nStmap75ActiveWatchAigs, s_nStmap75SelectedMatchRows,
+        s_Stmap75WatchAigIds[0], s_Stmap75WatchHitCounts[0],
+        s_Stmap75WatchAigIds[1], s_Stmap75WatchHitCounts[1],
+        s_Stmap75WatchAigIds[2], s_Stmap75WatchHitCounts[2],
+        s_Stmap75WatchAigIds[3], s_Stmap75WatchHitCounts[3] );
 }
 
 void Map_Stmap64ClearCutOnlyWitnesses( void )
@@ -1874,6 +1916,88 @@ static float Map_MatchStmap45CutPressureRatio( Map_Cut_t * pCut )
             RatioMax = Ratio;
     }
     return RatioMax;
+}
+
+static int Map_Stmap75WatchIndex( int AigId )
+{
+    int i;
+    if ( !s_fStmap75FinalCriticalAigDiag )
+        return -1;
+    for ( i = 0; i < s_nStmap75ActiveWatchAigs; i++ )
+        if ( s_Stmap75WatchAigIds[i] == AigId )
+            return i;
+    return -1;
+}
+
+static void Map_Stmap75ReadLeaf( Map_Cut_t * pCut, int iLeaf, int * pLeafNode, int * pLeafAigId )
+{
+    Map_Node_t * pLeaf;
+    if ( pLeafNode )
+        *pLeafNode = -1;
+    if ( pLeafAigId )
+        *pLeafAigId = -1;
+    if ( pCut == NULL || iLeaf < 0 || iLeaf >= (int)pCut->nLeaves )
+        return;
+    pLeaf = Map_Regular( pCut->ppLeaves[iLeaf] );
+    if ( pLeaf == NULL )
+        return;
+    if ( pLeafNode )
+        *pLeafNode = pLeaf->Num;
+    if ( pLeafAigId )
+        *pLeafAigId = Map_NodeReadAigId( pLeaf );
+}
+
+static void Map_Stmap75PrintSelectedMatches( Map_Man_t * p, Map_Node_t * pNode )
+{
+    Map_Cut_t * pCut;
+    Map_Match_t * pMatch;
+    Mio_Gate_t * pGate;
+    float NodePressureRatio, CutPressureRatio, LeafLoadAvg, LoadDriveRatio;
+    float Arrival, Required, Slack, AreaFlow;
+    int Phase, AigId, WatchIndex, FanLimit, Leaves, LeafNode[6], LeafAigId[6], i;
+
+    if ( !s_fStmap75FinalCriticalAigDiag || p == NULL || pNode == NULL )
+        return;
+    NodePressureRatio = Map_MatchStmap45NodePressureRatio( pNode, &AigId );
+    WatchIndex = Map_Stmap75WatchIndex( AigId );
+    if ( WatchIndex < 0 )
+        return;
+    for ( Phase = 0; Phase < 2; Phase++ )
+    {
+        pCut = pNode->pCutBest[Phase];
+        if ( pCut == NULL )
+            continue;
+        pMatch = pCut->M + Phase;
+        if ( pMatch->pSuperBest == NULL )
+            continue;
+        pGate = pMatch->pSuperBest->pRoot;
+        CutPressureRatio = Map_MatchStmap45CutPressureRatio( pCut );
+        LeafLoadAvg = Map_MatchStmap32CutLeafLoadAvg( pCut );
+        FanLimit = (int)pMatch->pSuperBest->nFanLimit;
+        LoadDriveRatio = FanLimit > 0 ? LeafLoadAvg / (float)FanLimit : LeafLoadAvg;
+        Arrival = pMatch->tArrive.Worst;
+        Required = pNode->tRequired[Phase].Worst;
+        if ( Required > MAP_FLOAT_LARGE / 2 )
+        {
+            Required = -1.0;
+            Slack = 0.0;
+        }
+        else
+            Slack = Required - Arrival;
+        AreaFlow = pMatch->AreaFlow;
+        Leaves = (int)pCut->nLeaves;
+        for ( i = 0; i < 6; i++ )
+            Map_Stmap75ReadLeaf( pCut, i, LeafNode + i, LeafAigId + i );
+        s_nStmap75SelectedMatchRows++;
+        s_Stmap75WatchHitCounts[WatchIndex]++;
+        printf( "stmap75 selected-match: index = %d  watch-index = %d  mapper-mode = %d  node = %d  aig-id = %d  level = %u  refs = %d  phase = %d  gate = %s  leaves = %d  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  arrival = %.6f  required = %.6f  slack = %.6f  area-flow = %.6f  u-phase-best = %u  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f  leaf0-node = %d  leaf0-aig-id = %d  leaf1-node = %d  leaf1-aig-id = %d  leaf2-node = %d  leaf2-aig-id = %d  leaf3-node = %d  leaf3-aig-id = %d  leaf4-node = %d  leaf4-aig-id = %d  leaf5-node = %d  leaf5-aig-id = %d\n",
+            s_nStmap75SelectedMatchRows, WatchIndex, p->fMappingMode, pNode->Num, AigId,
+            pNode->Level, pNode->nRefs, Phase, pGate ? Mio_GateReadName(pGate) : "?",
+            Leaves, LeafLoadAvg, FanLimit, LoadDriveRatio, Arrival, Required, Slack, AreaFlow,
+            pMatch->uPhaseBest, NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback,
+            LeafNode[0], LeafAigId[0], LeafNode[1], LeafAigId[1], LeafNode[2], LeafAigId[2],
+            LeafNode[3], LeafAigId[3], LeafNode[4], LeafAigId[4], LeafNode[5], LeafAigId[5] );
+    }
 }
 
 static void Map_MatchStmap60PrintNearMissLeafDiag( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int NearMissIndex, const char * pReason, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float AreaMargin, float NodePressureRatio, float CutPressureRatio )
@@ -5267,6 +5391,8 @@ int Map_MappingMatches( Map_Man_t * p )
         Map_NodeTryDroppingOnePhase( p, pNode );
         // set the arrival times of the node using the best cuts
         Map_NodeTransferArrivalTimes( p, pNode );
+        // command-scoped stmap75 diagnostics; no mapper decisions depend on this.
+        Map_Stmap75PrintSelectedMatches( p, pNode );
 
         // update the progress bar
         Extra_ProgressBarUpdate( pProgress, i, "Matches ..." );

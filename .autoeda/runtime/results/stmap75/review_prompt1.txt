@@ -1,0 +1,16 @@
+Review the uncommitted stmap75 AutoEDA iteration for correctness risks.
+
+Context:
+- stmap75 should preserve stmap65 mapping behavior and only add diagnostics.
+- New behavior watches mapper-selected match records for stmap74 final-critical AIG IDs 855, 5219, 11491, and 18002.
+- Source changes are expected in src/map/mapper/mapperMatch.c, src/base/abci/abcStmap_75.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, and runtime evaluation artifacts.
+- The hook in Map_MappingMatches must not affect cut selection, match comparison, phase dropping, references, arrivals, reconstruction, or older commands unless stmap75 explicitly enables the diagnostic.
+- Check C build integration, command registration/help, diagnostic scoping/reset, parser regexes, and whether the diagnostic can crash on missing cuts/supergates/leaves or stale global state.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap75 -h"
+- smoke flow on benchmarks/i10.aig
+- full four-benchmark evaluation and CEC using .autoeda/runtime/results/stmap75/run_stmap75_eval.py
+
+Return findings first with file/line references and severity. If there are no correctness issues, say that explicitly and mention residual risk.

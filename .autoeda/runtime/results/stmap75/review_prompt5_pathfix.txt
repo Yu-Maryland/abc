@@ -1,0 +1,11 @@
+Final focused review for stmap75 after fixing the accepted path-normalization finding.
+
+Accepted finding now fixed:
+- stmap75 strips directory prefixes from the ABC network name before exact benchmark-name matching, so common equivalent paths such as ./benchmarks/i10.aig still select watch AIG 855 while unknown basenames remain disabled.
+
+Additional validation after this fix:
+- build, help, required smoke, full four-benchmark evaluation, parser output, and CEC.
+- path-normalization check: ./benchmarks/i10.aig reports mapper-selected-match-watch = 1 and watch-aig = 855.
+- unknown/stale-state check: one ABC process runs watched i10 then a copied unknown decoder.aig; the unknown network reports watched-aigs = 0 and rows = 0.
+
+Review only the current uncommitted stmap75 diff for remaining correctness issues. The selected-match diagnostic must remain scoped, non-mutating, active for equivalent paths to the required benchmarks, and inactive for unknown networks. Return findings first with file/line references and severity. If there are no issues, say so explicitly and mention residual risk.

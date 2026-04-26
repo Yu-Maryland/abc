@@ -1,0 +1,13 @@
+Second review pass for the uncommitted stmap75 AutoEDA iteration.
+
+Focus on residual correctness issues after pass 1 reported no findings:
+- stmap75 must remain diagnostic-only over stmap65.
+- The Map_MappingMatches hook should be inert unless Map_Stmap75SetFinalCriticalAigDiag(1) is active.
+- The selected-match printer must not mutate mapper cuts, matches, references, timing, phase dropping, or global SCL feedback state.
+- The command should reset diagnostics after failure or success, print a useful summary, and preserve final-critical lineage scope for downstream stime.
+- The evaluation parser should correctly capture selected-match rows, selected-match stats, final-critical rows, metrics, and CEC artifacts.
+
+Validation already passed:
+- build, help, smoke, full required benchmark metrics, selected-match parsing, final-critical parsing, and CEC.
+
+Return findings first with file/line references and severity. If there are no correctness issues, say so explicitly and note any residual risk.

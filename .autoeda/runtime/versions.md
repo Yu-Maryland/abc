@@ -4251,3 +4251,76 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap74: trace final critical lineage`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap75`, instrument the mapper-side selected match records for the final-critical AIG IDs reported by `stmap74`, including top `i10` AIG `855`, `ode` AIG `5219`, `or1200` AIG `11491`, and `syn2` AIG `18002`. The goal should be to correlate final-critical lineage rows with cut leaves, selected supergate, arrival/slack, and pressure-feedback context before changing any admission rule. Also preserve downstream buffer-origin rows because `i10` exposed a top critical buffer with no direct mapper AIG ID.
+
+
+## version75 / stmap75
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace mapper-selected match records for the top final-critical AIG IDs reported by `stmap74`. If those final-critical AIG IDs expose phase, supergate, cut-leaf, slack, or pressure-feedback patterns, they can guide a later policy change with direct final-path evidence.
+- motivation: `stmap74` showed that the most useful evidence now comes from final `stime` critical-lineage nodes, not the low-criticality pressure-class witnesses from `stmap67` through `stmap73`. The top final-critical mapper-origin AIG IDs were `855` for `i10`, `5219` for `ode`, `11491` for `or1200`, and `18002` for `syn2`; `stmap75` correlates those IDs with the mapper choices that created them.
+- command name: `stmap75`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_75.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap75/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap75` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It enables a command-scoped selected-match watch for exactly one required benchmark AIG ID, delegates to the unchanged `stmap65` policy, prints selected-match rows from `Map_MappingMatches()` after phase dropping and arrival transfer, then disables and resets the diagnostic state. Network matching strips directory prefixes before exact basename matching, so canonical and equivalent paths such as `benchmarks/i10.aig` and `./benchmarks/i10.aig` select the same watch ID while unknown basenames remain disabled. Each row records mapper mode, AIG ID, level, refs, phase, selected supergate, cut leaves and leaf AIG IDs, arrival, required, slack, area-flow, cut-leaf load average, fanout/load ratio, node/cut pressure ratios, and SCL feedback. A successful run also reuses the `stmap74` final-critical scope so downstream `stime` prints final-critical lineage. The mapper scoring, admission, area-recovery, reconstruction, and downstream sizing policies are intentionally unchanged.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap75/build.log`.
+  - help: `./abc -c "stmap75 -h"` printed `stmap75` usage. Log: `.autoeda/runtime/results/stmap75/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap75; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap75/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap75` selected watch AIG `855` and printed `16` selected-match rows. Log: `.autoeda/runtime/results/stmap75/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap75/decoder.aig`; the unknown network reported `watched-aigs = 0` and `rows = 0`. Log: `.autoeda/runtime/results/stmap75/unknown_decoder_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap75/summary.json`, `metrics.csv`, `comparison.csv`, `selected_match.csv`, `selected_match_stats.csv`, `selected_match_summary.csv`, `final_critical_lineage.csv`, `final_critical_stats.csv`, `final_critical_summary.csv`, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- selected-match diagnostic results:
+  - `i10`: watched AIG `855`; `16` selected-match rows across mapper modes `0+1+2+3`; max node/cut pressure `0.000/0.000`; latest mode-3 selected gate `NAND5xp2_ASAP7_75t_L`, phase `0`. The final-critical top row for the same AIG is phase `0`, gate `NAND5xp2_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, arrival `121.962936`, and load ratio `0.313`.
+  - `ode`: watched AIG `5219`; `16` selected-match rows across mapper modes `0+1+2+3`; max node/cut pressure `2.818/2.818`; latest mode-3 summary row selected `A2O1A1Ixp33_ASAP7_75t_L`, phase `0`, while the final-critical top row is phase `1`, gate `O2A1O1Ixp33_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, arrival `241.037704`, and load ratio `0.338`.
+  - `or1200`: watched AIG `11491`; `12` selected-match rows across mapper modes `0+1+2+3`; max node/cut pressure `1.187/1.879`; latest mode-3 selected gate `A2O1A1Ixp33_ASAP7_75t_L`, phase `0`. The final-critical top row matches phase `0`, gate `A2O1A1Ixp33_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, arrival `72.399895`, and load ratio `0.187`.
+  - `syn2`: watched AIG `18002`; `14` selected-match rows across mapper modes `0+1+2+3`; max node/cut pressure `0.000/0.000`; latest mode-3 selected gate `NOR2xp33_ASAP7_75t_L`, phase `1`. The final-critical top row matches phase `1`, gate `NOR2xp33_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, arrival `35.844803`, and load ratio `0.234`.
+  - The diagnostic shows that `i10` and `syn2` top final-critical IDs see zero pressure feedback, while `ode` exposes a phase/gate mismatch between the latest selected-match summary row and the final-critical top row. This suggests the next policy-relevant evidence should inspect phase choice and downstream reconstruction around the final-critical path before changing pressure thresholds.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_75.c`.
+  - numbered command exists and is registered as `stmap75`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - selected-match diagnostics, final-critical lineage diagnostics, path-normalization diagnostics, stale-state diagnostics, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap75/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap75/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap75/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap75/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap75/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap75/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap75/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap75/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap75/review_pass2.log`.
+  - accepted source finding: a global watch list could conflate benchmark-local AIG IDs across designs. Fixed by selecting one benchmark-specific watch ID per current network and revalidating.
+- review pass 3:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap75/review_pass3_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap75/review_pass3_postfix.log`.
+  - accepted findings: exact-name matching was needed instead of substring matching, and disabling diagnostics needed to reset row/watch state. Fixed both issues and revalidated with build, help, smoke, full evaluation, CEC, and unknown/stale-state checks.
+- review pass 4:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap75/review_pass4_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap75/review_pass4_final.log`.
+  - accepted finding: equivalent paths such as `./benchmarks/i10.aig` produced network name `./benchmarks/i10` and missed the exact watch. Fixed by stripping directory prefixes before exact basename matching and revalidated.
+- review pass 5:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap75/review_pass5_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap75/review_pass5_pathfix.log`.
+  - accepted source findings: none. Pass 5 reported no discrete correctness issues after the path-normalization fix.
+- rejected findings: none.
+- open findings: none after pass 5.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap75: trace mapper selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap76`, start from the `ode` phase/gate discrepancy: the final-critical top row is phase `1` with `O2A1O1Ixp33_ASAP7_75t_L`, while the latest selected-match summary row records phase `0` with `A2O1A1Ixp33_ASAP7_75t_L`. Instrument selected-vs-final phase survival and downstream reconstruction/output-path context before changing mapper pressure policy. Also keep `i10` and `syn2` in view because their final-critical IDs show zero pressure feedback, so pressure thresholds alone are unlikely to target those paths.

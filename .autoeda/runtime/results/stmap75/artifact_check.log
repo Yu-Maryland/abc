@@ -1,0 +1,56 @@
+stmap75 artifact check
+PASS: build.exit exists
+PASS: help.exit exists
+PASS: smoke_i10.exit exists
+PASS: eval.exit exists
+PASS: path_norm_i10.exit exists
+PASS: unknown_decoder_stale_check.exit exists
+PASS: review_pass1.exit exists
+PASS: review_pass2.exit exists
+PASS: review_pass3_postfix.exit exists
+PASS: review_pass4_final.exit exists
+PASS: review_pass5_pathfix.exit exists
+PASS: comparison.csv exists
+PASS: metrics.csv exists
+PASS: summary.json exists
+PASS: selected_match.csv exists
+PASS: selected_match_stats.csv exists
+PASS: selected_match_summary.csv exists
+PASS: final_critical_lineage.csv exists
+PASS: final_critical_stats.csv exists
+PASS: final_critical_summary.csv exists
+PASS: cec_summary.json exists
+PASS: review_summary.md exists
+PASS: build.exit exit code is 0
+PASS: help.exit exit code is 0
+PASS: smoke_i10.exit exit code is 0
+PASS: eval.exit exit code is 0
+PASS: path_norm_i10.exit exit code is 0
+PASS: unknown_decoder_stale_check.exit exit code is 0
+PASS: review_pass5_pathfix.exit exit code is 0
+PASS: comparison.csv has four benchmark rows
+PASS: comparison.csv benchmark set matches required benchmarks
+PASS: comparison.csv has candidate delay/area for every benchmark
+PASS: selected_match_summary.csv has four rows
+PASS: selected summary benchmark benchmarks/i10.aig is expected
+PASS: benchmarks/i10.aig watched AIG is 855
+PASS: benchmarks/i10.aig selected-match row count is 16
+PASS: selected summary benchmark benchmarks/ode.abc.blif is expected
+PASS: benchmarks/ode.abc.blif watched AIG is 5219
+PASS: benchmarks/ode.abc.blif selected-match row count is 16
+PASS: selected summary benchmark benchmarks/or1200.abc.blif is expected
+PASS: benchmarks/or1200.abc.blif watched AIG is 11491
+PASS: benchmarks/or1200.abc.blif selected-match row count is 12
+PASS: selected summary benchmark benchmarks/syn2.abc.blif is expected
+PASS: benchmarks/syn2.abc.blif watched AIG is 18002
+PASS: benchmarks/syn2.abc.blif selected-match row count is 14
+PASS: final_critical_summary.csv has four rows
+PASS: all top final-critical rows have criticality 1.000
+PASS: cec_summary.json has four entries
+PASS: all CEC entries passed with return code 0
+PASS: path-normalized i10 selects watch AIG 855
+PASS: path-normalized i10 records selected-match rows
+PASS: unknown decoder network remains disabled
+PASS: unknown decoder selected-match stats remain empty
+PASS: final path-fix review has no discrete correctness issues
+summary: passes=54 failures=0

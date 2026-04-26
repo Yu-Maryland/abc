@@ -1,0 +1,11 @@
+Final focused review for stmap75 after the second accepted post-fix findings were addressed.
+
+Accepted findings now fixed:
+- Benchmark watch IDs are selected by exact expected network names instead of substring matching.
+- Map_Stmap75SetFinalCriticalAigDiag resets active watch count, row count, watch IDs, and hit counts when enabling or disabling diagnostics.
+
+Additional validation after these fixes:
+- build, help, required smoke, full four-benchmark evaluation, parser output, CEC.
+- unknown/stale-state check: one ABC process runs watched i10 then a copied unknown decoder.aig; the unknown network reports watched-aigs=0 and rows=0.
+
+Review only the current uncommitted stmap75 diff for remaining correctness issues. The selected-match diagnostic must remain scoped, non-mutating, and inactive for unknown networks. Return findings first with file/line references and severity. If there are no issues, say so explicitly and mention residual risk.

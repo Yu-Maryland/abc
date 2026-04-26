@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 75,
-  "next_iteration": 75,
+  "completed_iterations": 76,
+  "next_iteration": 76,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 74,
-  "last_completed_version": "stmap74",
-  "last_successful_commit": "local commit to be created: stmap74: trace final critical lineage; see git history for hash",
+  "last_completed_iteration": 75,
+  "last_completed_version": "stmap75",
+  "last_successful_commit": "local commit to be created: stmap75: trace mapper selected matches; see git history for hash",
   "last_launch_time": "2026-04-26T14:38:47+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 84798,
@@ -484,8 +484,13 @@
     "stmap74 validation passed: build, help, smoke, full benchmark metrics, final-critical lineage parsing, artifact check, version-log check, and CEC.",
     "stmap74 review completed with no findings across two supported review passes.",
     "stmap74 diagnostic result: all four benchmarks produced top final-critical AIG lineage rows; one i10 top row is an inserted buffer with no mapper-origin AIG ID.",
-    "stmap74 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap74 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap75 active iteration prepared: mapper selected-match diagnostics for stmap74 final-critical AIG IDs.",
+    "stmap75 validation passed: build, help, smoke, full benchmark metrics, selected-match diagnostics, final-critical lineage parsing, path-normalization check, stale-state check, artifact check, version-log check, and CEC.",
+    "stmap75 review accepted scoped-watch, exact-match, stale-reset, and path-normalization findings; all fixes were revalidated and final pass reported no remaining source findings.",
+    "stmap75 diagnostic result: top final-critical AIG selected-match records were captured for all four required benchmarks; ode exposed a phase/gate discrepancy between selected-match summary and final-critical top row.",
+    "stmap75 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T14:54:25Z",
-  "updated_at_utc": "2026-04-26T14:54:25Z"
+  "updated_at": "2026-04-26T15:37:02Z",
+  "updated_at_utc": "2026-04-26T15:37:02Z"
 }

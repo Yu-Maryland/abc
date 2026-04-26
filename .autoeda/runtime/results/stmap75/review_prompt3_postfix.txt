@@ -1,0 +1,20 @@
+Post-fix review for stmap75 after accepting the pass-2 finding.
+
+Accepted finding fixed:
+- The selected-match watch list was global and could conflate AIG IDs across benchmarks.
+
+Current intended behavior:
+- src/base/abci/abcStmap_75.c derives one watch AIG ID from the current network name before invoking stmap65:
+  - i10 -> 855
+  - ode -> 5219
+  - or1200 -> 11491
+  - syn2 -> 18002
+- Unknown networks run stmap65 but disable selected-match watch output.
+- src/map/mapper/mapperMatch.c stores only the active watch ID and reports rows for that ID.
+- The selected-match hook remains diagnostic-only and must not affect mapping choices.
+
+Fresh validation after the fix:
+- build, help, smoke, full four-benchmark evaluation, selected-match parser output, final-critical parser output, and CEC passed.
+- selected_match_stats.csv now reports watched_aigs=1 for each required benchmark.
+
+Review the current uncommitted diff for remaining correctness issues. Return findings first with file/line references and severity. If there are no issues, say so explicitly and mention residual risk.

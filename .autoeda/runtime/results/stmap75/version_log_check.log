@@ -1,0 +1,23 @@
+stmap75 version log check
+PASS: version75 / stmap75 heading exists
+PASS: hypothesis: recorded
+PASS: motivation: recorded
+PASS: files changed: recorded
+PASS: command name: `stmap75` recorded
+PASS: algorithm summary: recorded
+PASS: validation run: recorded
+PASS: benchmark results: recorded
+PASS: correctness results: recorded
+PASS: review pass 1: recorded
+PASS: review pass 5: recorded
+PASS: commit: recorded
+PASS: next-step recommendation: recorded
+PASS: benchmarks/i10.aig recorded
+PASS: benchmarks/ode.abc.blif recorded
+PASS: benchmarks/or1200.abc.blif recorded
+PASS: benchmarks/syn2.abc.blif recorded
+PASS: selected_match.csv referenced
+PASS: final_critical_summary.csv referenced
+PASS: artifact_check.log referenced
+PASS: review_summary.md referenced
+summary: passes=21 failures=0
