@@ -1,0 +1,5 @@
+Review the post-fix uncommitted stmap73 implementation.
+
+The first review found that accepted-pressure witness source lines could be suppressed after the 64-line diagnostic cap even when a later candidate was stored or replaced. The source now logs every stored or replaced accepted-pressure witness in addition to the first 64 candidate sources.
+
+Please check whether the accepted finding was correctly addressed and whether any remaining correctness, state-leakage, command registration, build integration, or artifact/provenance issue remains. Focus on concrete blockers only.

@@ -4128,3 +4128,66 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap72: rank closed-class path proximity`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap73`, keep all four closed witness classes closed because the combined ranking found no final-critical witness above `0.35`, much less the `0.50` reopening gate. The next useful hypothesis should leave pressure-class reopening aside and instead search final-critical accepted mapper choices or first-pass SCL critical cones for a class with direct path-critical evidence.
+
+
+## version73 / stmap73
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace accepted pressure-assisted mode-57 mapper choices as downstream final witnesses. If accepted pressure-guided choices survive `topo; buffer; upsize; dnsize; stime` with high final criticality, they identify a better class for future mapper policy changes than the closed blocker classes tested by `stmap67` through `stmap72`.
+- motivation: `stmap72` showed that closed near-strong-node, blocked strong-pressure, pressure-near, and moderate-penalty classes did not produce final-critical witnesses on the required benchmarks. The next diagnostic should inspect accepted pressure-guided choices instead of reopening closed classes without path-critical evidence.
+- command name: `stmap73`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_73.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap73/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap73` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It enables `Map_Stmap73SetAcceptedPressureWitnessDiag(1)` only while delegating to the reviewed `stmap65` policy, disables the flag immediately afterward, and scopes the existing final-witness printer to the resulting mapped network with label `stmap73`. The mapper policy is unchanged: the final remap still uses mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new mapper hook records accepted pressure-assisted choices only when a real pressure class is active: pressure agreement, pressure-near, cut-only pressure, moderate penalty, or strong penalty. Stored/replaced witnesses are always logged so final-witness rows keep source provenance.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap73/build.log`.
+  - help: `./abc -c "stmap73 -h"` printed `stmap73` usage. Log: `.autoeda/runtime/results/stmap73/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap73; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap73/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap73/summary.json`, `metrics.csv`, `comparison.csv`, `accepted_pressure_witness_source.csv`, `final_witness.csv`, `final_witness_stats.csv`, `final_witness_summary.csv`, `path_proximity_ranking.csv`, `path_proximity_summary.csv`, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- accepted-pressure witness diagnostic results:
+  - `i10`, `ode`, and `or1200` had no accepted-pressure witness source rows.
+  - `syn2` had one accepted pressure-agreement source: mapper node `23595`, AIG ID `26951`, phase `1`, node and cut pressure ratios `2.100`, witness score `2.165685`, seed slack `10.410019`, area save `0.930000`, arrival delta `-8.000000`, and arrival-gain margin `1.510000`.
+  - The `syn2` source matched final node `16572` after downstream flow with gate `A2O1A1O1Ixp25_ASAP7_75t_L`, final fanouts `2`, final load ratio `0.054`, final criticality `0.246`, and final slack `65.153625`.
+  - Final-witness summary was `witnesses = 1`, `matched = 1`, `criticality_ge_0p50 = 0`. This does not support changing the current accepted pressure-agreement policy or using accepted pressure-guided choices as a final-critical reopening signal yet.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_73.c`.
+  - numbered command exists and is registered as `stmap73`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - accepted-pressure source parsing, final-witness parsing, path-proximity ranking, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap73/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap73/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap73/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap73/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap73/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap73/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap73/review_pass1.log`.
+  - accepted source finding: stored/replaced witness rows could lose provenance after the 64-line source cap. Fixed by logging every stored or replaced accepted-pressure source row and revalidating build, help, smoke, full benchmark metrics, diagnostic parsing, and CEC.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap73/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap73/review_pass2.log`.
+  - accepted source finding: accepted-pressure witnesses could be recorded without a real pressure class. Fixed by requiring pressure agreement, pressure-near, cut-only pressure, moderate penalty, or strong penalty before recording and revalidating build, help, smoke, full benchmark metrics, diagnostic parsing, and CEC.
+- review pass 3:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap73/review_pass3_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap73/review_pass3.log`.
+  - accepted metadata finding: finalize the canonical version log and campaign state before counting the iteration. This entry and the finalized state update address the finding.
+- rejected findings: none.
+- open findings: none after metadata finalization.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap73: trace accepted pressure witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap74`, keep pressure-class reopening closed on the current evidence because both closed classes and the accepted pressure-agreement witness remain below final criticality `0.35`. The next useful hypothesis should inspect first-pass SCL critical cones or final `stime` critical-path lineage directly, then connect those final-critical nodes back to mapper choices before proposing another policy change.

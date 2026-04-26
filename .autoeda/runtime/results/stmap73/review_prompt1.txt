@@ -1,0 +1,11 @@
+Review the uncommitted stmap73 implementation for correctness.
+
+Context:
+- This is Berkeley ABC with an AutoEDA stmap campaign.
+- stmap73 should preserve the reviewed stmap65 mapping policy.
+- stmap73 adds a command wrapper, registers command stmap73, and adds a command-scoped mapper diagnostic that records accepted pressure-assisted mode-57 choices as final witnesses.
+- The diagnostic must not alter map, stmap65, or older stmapN behavior outside the explicit stmap73 command path.
+- The final-witness scope must be reset safely and must not leak across commands or networks.
+- Build, stmap73 -h, smoke, full benchmark metrics, and CEC have passed locally.
+
+Please prioritize concrete correctness issues, build integration mistakes, stale global state risks, witness recording/scoping bugs, and missing required artifacts. Do not comment on unrelated style.

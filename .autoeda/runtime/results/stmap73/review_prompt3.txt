@@ -1,0 +1,7 @@
+Review the final stmap73 source after addressing review pass 2.
+
+The second review found that accepted-pressure witnesses could be recorded without a real pressure class. The source now requires at least one real stmap56 pressure class before recording an accepted-pressure witness: pressure agreement, pressure-near, cut-only pressure, moderate penalty, or strong penalty.
+
+Validation after the fix passed: build, stmap73 -h, smoke, full four-benchmark metrics, accepted-pressure witness parsing, final-witness parsing, and CEC.
+
+Please report only remaining concrete correctness or campaign-blocking issues in the uncommitted source/artifact state.

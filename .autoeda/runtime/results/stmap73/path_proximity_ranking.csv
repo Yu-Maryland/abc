@@ -1,0 +1,2 @@
+rank,benchmark,aig_id,phase,seed_node,final_node,matched,source_classes,final_criticality,final_slack,final_load_ratio,seed_node_pressure_ratio,seed_cut_pressure_ratio,seed_slack,seed_area_save,seed_arrival_delta
+1,benchmarks/syn2.abc.blif,26951,1,23595,16572,1,pressure-agreement,0.246,65.153625,0.054,2.100,2.100,10.410019,0.930000,-8.000000

@@ -1,0 +1,2 @@
+benchmark,index,aig_id,phase,seed_node,final_node,matched,final_gate,final_fanouts,final_load,final_max_cap,final_load_ratio,final_criticality,final_slack,seed_node_pressure_ratio,seed_cut_pressure_ratio,seed_slack,seed_area_save,seed_arrival_delta,seed_arrival_gain_margin,scl_feedback
+benchmarks/syn2.abc.blif,1,26951,1,23595,16572,1,A2O1A1O1Ixp25_ASAP7_75t_L,2,0.623,11.520,0.054,0.246,65.153625,2.100,2.100,10.410019,0.930000,-8.000000,1.510000,0.884
