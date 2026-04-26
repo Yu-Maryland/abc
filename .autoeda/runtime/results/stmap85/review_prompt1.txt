@@ -1,0 +1,10 @@
+Review the uncommitted stmap85 changes for correctness, build integration, stale global state, and diagnostic/evaluation soundness.
+
+Project constraints:
+- This is iteration stmap85 in the stmap family.
+- The command keeps the stmap83/stmap84 strict sticky policy and dual child/parent final phase-survival watch.
+- The new change is moving the mapper selected-match watch to the downstream parent AIG, so selected_match.csv captures parent AIG mapper decisions.
+- Classic map and earlier stmap commands must remain unchanged unless explicitly configured.
+- Required benchmark flow and CEC have passed under .autoeda/runtime/results/stmap85.
+
+Focus on changed/untracked files only. Report concrete P0/P1/P2 findings with file/line references. If there are no correctness issues, say so.

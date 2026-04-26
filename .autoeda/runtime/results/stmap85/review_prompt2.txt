@@ -1,0 +1,5 @@
+Second review pass for stmap85 after pass 1 reported no correctness-impacting issues.
+
+Re-check the current uncommitted changes for missed correctness, isolation, build-registration, stale-state, or evaluation-artifact issues. Pay special attention to the selected-match watch moving to ParentAigId while dual phase-survival still watches both child and parent.
+
+Report concrete P0/P1/P2 findings with file/line references. If there are no issues, say so.

@@ -1,0 +1,5 @@
+benchmark,inherited_policy,mapper_selected_match_watch,network,child_aig,parent_aig,selected_watch_aig,dual_phase_survival_watch_count,source,reconstruction_phase_trace,demand_path_trace,parent_cut_trace,candidate_cut_trace,parent_phase_bias,sticky_parent_phase,final_phase_survival,mapping_policy_change
+benchmarks/i10.aig,stmap65,1,benchmarks/i10,855,861,861,2,stmap84-parent-selected-match-probe,1,1,1,1,1,1,1,watched-parent-child-phase0-strict-sticky
+benchmarks/ode.abc.blif,stmap65,1,ode,5219,5229,5229,2,stmap84-parent-selected-match-probe,1,1,1,1,1,1,1,watched-parent-child-phase0-strict-sticky
+benchmarks/or1200.abc.blif,stmap65,1,or1200_flat,11491,13829,13829,2,stmap84-parent-selected-match-probe,1,1,1,1,1,1,1,watched-parent-child-phase0-strict-sticky
+benchmarks/syn2.abc.blif,stmap65,1,syn2,18002,18467,18467,2,stmap84-parent-selected-match-probe,1,1,1,1,1,1,1,watched-parent-child-phase0-strict-sticky
