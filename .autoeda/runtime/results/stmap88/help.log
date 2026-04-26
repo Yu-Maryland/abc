@@ -1,0 +1,19 @@
+======== ABC command line "stmap88 -h"
+usage: stmap88 [-DABFSG float] [-M num] [-arspfuovh]
+	              performs stmap88 bounded-pressure mapping with parent phase targeting plus child phase-1 speed targeting
+	-D float : sets the global required times [default = not used]
+	-A float : "area multiplier" to bias gate selection [default = 0.00]
+	-B float : "delay multiplier" to bias gate selection [default = 0.00]
+	-F float : the logarithmic fanout delay parameter [default = 0.00]
+	-S float : the slew parameter used to generate the library [default = 0.00]
+	-G float : the SCL/genlib gain parameter used to generate the library [default = 250.00]
+	-M num   : skip gate classes whose size is less than this [default = 0]
+	-a       : toggles area-only mapping [default = no]
+	-r       : toggles area recovery [default = yes]
+	-s       : toggles sweep after mapping [default = no]
+	-p       : optimizes power by minimizing switching [default = no]
+	-f       : disables the bounded-pressure SCL feedback mapper mode [default = yes]
+	-u       : use standard-cell profile [default = no]
+	-o       : toggles using buffers to decouple combinational outputs [default = no]
+	-v       : toggles verbose output [default = no]
+	-h       : print the command usage

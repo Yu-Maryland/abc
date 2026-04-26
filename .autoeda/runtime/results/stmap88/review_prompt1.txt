@@ -1,0 +1,14 @@
+Review the uncommitted stmap88 implementation for correctness risks.
+
+Context:
+- Project pack requires one numbered ABC mapper variant per successful iteration.
+- stmap88 extends stmap87 by adding a command-scoped child phase-1 speed-target helper in src/map/mapper/mapperMatch.c.
+- The helper must be inactive unless stmap88 configures it and stmap65 activates the final remap pass.
+- The command is registered as stmap88 in src/base/abci/abc.c and wired into src/base/abci/module.make and abclib.dsp.
+- Validation already passed: build, stmap88 -h, i10 smoke, path-normalization, stale-state reset, implementation check, full four-benchmark evaluation, and CEC 4/4.
+
+Focus on:
+- Whether the new mapper hook can affect older stmap/map commands.
+- Whether activation/deactivation around the two stmap65 mapping passes is complete.
+- Whether the child-phase-target override can corrupt MatchBest, cut selection, or required-time handling.
+- Whether any source or artifact issue should block committing this iteration.

@@ -1,0 +1,5 @@
+benchmark,child_aig,target_phase,rows,phase_hits,eligible,overrides,already_selected,blocked_mode,blocked_phase,blocked_best,blocked_window,blocked_speed,min_arrival_gain,area_premium_window,area_ratio_window
+benchmarks/i10.aig,855,1,13,6,0,0,0,4,7,0,0,2,0.020,1.200,2.000
+benchmarks/ode.abc.blif,5219,1,28,6,0,0,0,4,22,0,0,2,0.020,1.200,2.000
+benchmarks/or1200.abc.blif,11491,1,50,24,4,3,1,13,26,0,4,3,0.020,1.200,2.000
+benchmarks/syn2.abc.blif,18002,1,52,26,0,0,0,16,26,0,0,10,0.020,1.200,2.000

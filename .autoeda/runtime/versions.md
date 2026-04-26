@@ -5034,3 +5034,57 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap87: target final parent phase pair`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap88`, stop spending policy on parent phase `0` self-ties. `stmap87` proves the final-surviving parent/child pair can be explicitly targeted but QoR is unchanged, so the next probe should move one level upstream and bias the child AIG phase `1` match itself, where `stmap86` showed the effective zero-slack condition.
+
+
+## version88 / stmap88
+
+- hypothesis: A scoped exact-area recovery speed bias on the watched child AIG's final-surviving phase `1` can protect faster local choices before the downstream parent sees them. If the child phase has a faster near-tie candidate within bounded area windows, preserving that speed should improve or at least diagnose the zero-slack child condition seen in `stmap86`.
+- motivation: `stmap87` successfully targeted the final-surviving parent phase `0` / child phase `1` relationship, but the parent overrides reinforced existing self-ties and QoR stayed unchanged. The next logical probe is one level upstream: the child AIG phase `1` selected match itself, especially for `ode` child AIG `5219`, which previously had effectively zero mapper slack.
+- command name: `stmap88`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_88.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap88/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap88` keeps the `stmap87` diagnostics and parent phase-target baseline, then adds `Map_Stmap88SetChildPhaseTarget()` in `mapperMatch.c`. The helper is inactive by default and is activated by `stmap65` only around the final remap when explicitly configured by `stmap88`. During exact-area modes `2` and `3`, it may override a non-selected match for the watched child AIG in target phase `1` only when the candidate is at least `0.02 ps` faster than the current best, has area-flow premium at most `1.20`, and has area ratio at most `2.00x`. The override is command-scoped and older commands remain gated off.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap88/build.log`.
+  - help: `./abc -c "stmap88 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap88/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap88; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap88/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` selected child AIG `855`, parent AIG `861`, selected-watch count `2`, child-phase target enabled, and zero selected-match rows without a library as expected. Log: `.autoeda/runtime/results/stmap88/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then an unknown network; the second command reported selected-watch count `0`, child-phase target disabled, selected-match rows `0`, and child-phase-target rows `0`. Log: `.autoeda/runtime/results/stmap88/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap88/summary.json`, `metrics.csv`, `comparison.csv`, `child_phase_target.csv`, `child_phase_target_stats.csv`, selected-match diagnostics, parent-phase-target diagnostics, phase-survival diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- child-phase-target diagnostic results:
+  - `i10`: `13` rows, `6` target phase hits, `0` eligible overrides, `2` blocked-speed rows.
+  - `ode`: `28` rows, `6` target phase hits, `0` eligible overrides, `2` blocked-speed rows. The zero-slack child phase had no faster exact-area near-tie within the configured windows.
+  - `or1200`: `50` rows, `24` target phase hits, `4` eligible candidates, `3` overrides, and `1` already-selected faster candidate, but final QoR remained unchanged.
+  - `syn2`: `52` rows, `26` target phase hits, `0` eligible overrides, `10` blocked-speed rows.
+  - The unchanged benchmark QoR indicates that local child phase-1 speed changes are either unavailable on the key `ode` path or absorbed by downstream reconstruction/sizing without changing final `stime`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_88.c`.
+  - numbered command exists and is registered as `stmap88`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - child-phase-target, parent-phase-target, selected-match, phase-survival, sticky-parent-phase, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no correctness-impacting issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no correctness-impacting issues. The review noted the command is gated through explicit configuration and activation.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap88: target child phase speed`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap89`, move from local child-match speed to a consumer-aware target. `stmap88` shows the watched child itself has no useful faster near-tie on `ode`, while `or1200` local overrides do not move final QoR, so the next probe should target the watched child's most critical final fanout/consumer or reconstruction context instead of the child match alone.

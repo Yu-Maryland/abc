@@ -777,6 +777,174 @@ void Map_Stmap87PrintParentPhaseTargetSummary( void )
         0.20f, 0.60f, 1.75f );
 }
 
+static int s_fStmap88ChildPhaseTarget = 0;
+static int s_fStmap88ChildPhaseTargetActive = 0;
+static const char * s_pStmap88ChildPhaseTargetLabel = "stmap88";
+static int s_Stmap88ChildAigId = -1;
+static int s_Stmap88TargetPhase = 1;
+static int s_nStmap88ChildTargetRows = 0;
+static int s_nStmap88ChildTargetPhaseHits = 0;
+static int s_nStmap88ChildTargetEligible = 0;
+static int s_nStmap88ChildTargetOverrides = 0;
+static int s_nStmap88ChildTargetAlready = 0;
+static int s_nStmap88ChildTargetBlockedMode = 0;
+static int s_nStmap88ChildTargetBlockedPhase = 0;
+static int s_nStmap88ChildTargetBlockedBest = 0;
+static int s_nStmap88ChildTargetBlockedWindow = 0;
+static int s_nStmap88ChildTargetBlockedSpeed = 0;
+
+static void Map_Stmap88ResetChildPhaseTargetCounters( void )
+{
+    s_nStmap88ChildTargetRows = 0;
+    s_nStmap88ChildTargetPhaseHits = 0;
+    s_nStmap88ChildTargetEligible = 0;
+    s_nStmap88ChildTargetOverrides = 0;
+    s_nStmap88ChildTargetAlready = 0;
+    s_nStmap88ChildTargetBlockedMode = 0;
+    s_nStmap88ChildTargetBlockedPhase = 0;
+    s_nStmap88ChildTargetBlockedBest = 0;
+    s_nStmap88ChildTargetBlockedWindow = 0;
+    s_nStmap88ChildTargetBlockedSpeed = 0;
+}
+
+static void Map_Stmap88ClearChildPhaseTarget( void )
+{
+    s_fStmap88ChildPhaseTarget = 0;
+    s_fStmap88ChildPhaseTargetActive = 0;
+    s_pStmap88ChildPhaseTargetLabel = "stmap88";
+    s_Stmap88ChildAigId = -1;
+    s_Stmap88TargetPhase = 1;
+    Map_Stmap88ResetChildPhaseTargetCounters();
+}
+
+void Map_Stmap88SetChildPhaseTarget( int fEnable, const char * pLabel, int ChildAigId, int TargetPhase )
+{
+    Map_Stmap88ClearChildPhaseTarget();
+    s_pStmap88ChildPhaseTargetLabel = pLabel && pLabel[0] ? pLabel : "stmap88";
+    if ( !fEnable || ChildAigId < 0 || TargetPhase < 0 || TargetPhase > 1 )
+        return;
+    s_fStmap88ChildPhaseTarget = 1;
+    s_Stmap88ChildAigId = ChildAigId;
+    s_Stmap88TargetPhase = TargetPhase;
+}
+
+int Map_Stmap88ChildPhaseTargetConfigured( void )
+{
+    return s_fStmap88ChildPhaseTarget;
+}
+
+void Map_Stmap88SetChildPhaseTargetActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap88ChildPhaseTarget )
+        return;
+    if ( fActive )
+        Map_Stmap88ResetChildPhaseTargetCounters();
+    s_fStmap88ChildPhaseTargetActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Map_Stmap88MaybeTargetChildPhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
+{
+    Map_Node_t * pNodeRegular;
+    Mio_Gate_t * pGate, * pGateBefore;
+    int AigId, fEligible, fOverride;
+    float ArrivalGain, AreaPremium, AreaRatio, MinArrivalGain, AreaPremiumWindow, AreaRatioWindow;
+    const char * pAction;
+    if ( !s_fStmap88ChildPhaseTarget || !s_fStmap88ChildPhaseTargetActive || p == NULL || pNode == NULL || pMatch == NULL )
+        return fAccepted;
+    pNodeRegular = Map_Regular( pNode );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return fAccepted;
+    AigId = Map_NodeReadAigId( pNodeRegular );
+    if ( AigId != s_Stmap88ChildAigId )
+        return fAccepted;
+
+    s_nStmap88ChildTargetRows++;
+    if ( fPhase == s_Stmap88TargetPhase )
+        s_nStmap88ChildTargetPhaseHits++;
+
+    MinArrivalGain = 0.02f;
+    AreaPremiumWindow = 1.20f;
+    AreaRatioWindow = 2.00f;
+    ArrivalGain = pBestBefore ? pBestBefore->tArrive.Worst - pMatch->tArrive.Worst : -MAP_FLOAT_LARGE;
+    AreaPremium = pBestBefore ? pMatch->AreaFlow - pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
+    AreaRatio = (pBestBefore && pBestBefore->AreaFlow > p->fEpsilon) ? pMatch->AreaFlow / pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
+    fEligible = 0;
+    fOverride = 0;
+    pAction = "blocked-phase";
+
+    if ( fPhase != s_Stmap88TargetPhase )
+    {
+        s_nStmap88ChildTargetBlockedPhase++;
+        pAction = "blocked-phase";
+    }
+    else if ( p->fMappingMode != 2 && p->fMappingMode != 3 )
+    {
+        s_nStmap88ChildTargetBlockedMode++;
+        pAction = "blocked-mode";
+    }
+    else if ( pBestBefore == NULL || pBestBefore->pSuperBest == NULL )
+    {
+        s_nStmap88ChildTargetBlockedBest++;
+        pAction = "blocked-no-best";
+    }
+    else if ( ArrivalGain < MinArrivalGain - p->fEpsilon )
+    {
+        s_nStmap88ChildTargetBlockedSpeed++;
+        pAction = "blocked-speed";
+    }
+    else if ( AreaPremium > AreaPremiumWindow + p->fEpsilon || AreaRatio > AreaRatioWindow + p->fEpsilon )
+    {
+        s_nStmap88ChildTargetBlockedWindow++;
+        pAction = "blocked-window";
+    }
+    else
+    {
+        s_nStmap88ChildTargetEligible++;
+        fEligible = 1;
+        if ( fAccepted )
+        {
+            s_nStmap88ChildTargetAlready++;
+            pAction = "already-selected";
+        }
+        else
+        {
+            s_nStmap88ChildTargetOverrides++;
+            fOverride = 1;
+            pAction = "override";
+            fAccepted = 1;
+        }
+    }
+
+    if ( fPhase == s_Stmap88TargetPhase || fOverride )
+    {
+        pGate = pMatch && pMatch->pSuperBest ? pMatch->pSuperBest->pRoot : NULL;
+        pGateBefore = pBestBefore && pBestBefore->pSuperBest ? pBestBefore->pSuperBest->pRoot : NULL;
+        printf( "%s child-phase-target: index = %d  child-aig = %d  target-phase = %d  mapper-mode = %d  phase = %d  cut-ordinal = %d  action = %s  eligible = %d  override = %d  accepted-before = %d  gate = %s  best-gate = %s  arrival = %.3f  best-arrival = %.3f  arrival-gain = %.3f  area-flow = %.3f  best-area-flow = %.3f  area-premium = %.3f  area-ratio = %.3f  min-arrival-gain = %.3f  area-premium-window = %.3f  area-ratio-window = %.3f\n",
+            s_pStmap88ChildPhaseTargetLabel, s_nStmap88ChildTargetRows,
+            s_Stmap88ChildAigId, s_Stmap88TargetPhase, p->fMappingMode, fPhase,
+            CutOrdinal, pAction, fEligible, fOverride, fAccepted && !fOverride,
+            pGate ? Mio_GateReadName(pGate) : "?",
+            pGateBefore ? Mio_GateReadName(pGateBefore) : "?",
+            pMatch->tArrive.Worst, pBestBefore ? pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE,
+            ArrivalGain, pMatch->AreaFlow, pBestBefore ? pBestBefore->AreaFlow : MAP_FLOAT_LARGE,
+            AreaPremium, AreaRatio, MinArrivalGain, AreaPremiumWindow, AreaRatioWindow );
+    }
+    return fAccepted;
+}
+
+void Map_Stmap88PrintChildPhaseTargetSummary( void )
+{
+    printf( "%s child-phase-target stats: child-aig = %d  target-phase = %d  rows = %d  phase-hits = %d  eligible = %d  overrides = %d  already-selected = %d  blocked-mode = %d  blocked-phase = %d  blocked-best = %d  blocked-window = %d  blocked-speed = %d  min-arrival-gain = %.3f  area-premium-window = %.3f  area-ratio-window = %.3f\n",
+        s_pStmap88ChildPhaseTargetLabel, s_Stmap88ChildAigId, s_Stmap88TargetPhase,
+        s_nStmap88ChildTargetRows, s_nStmap88ChildTargetPhaseHits,
+        s_nStmap88ChildTargetEligible, s_nStmap88ChildTargetOverrides,
+        s_nStmap88ChildTargetAlready, s_nStmap88ChildTargetBlockedMode,
+        s_nStmap88ChildTargetBlockedPhase, s_nStmap88ChildTargetBlockedBest,
+        s_nStmap88ChildTargetBlockedWindow, s_nStmap88ChildTargetBlockedSpeed,
+        0.02f, 1.20f, 2.00f );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
@@ -5821,6 +5989,7 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         fAccepted = Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode );
         fAccepted = Map_Stmap81MaybeBiasParentPhase( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap87MaybeTargetParentPhase( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
+        fAccepted = Map_Stmap88MaybeTargetChildPhase( p, pNode, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap82MaybeBlockStickyReplacement( p, pNode, pCut, fPhase, CutOrdinal, pMatch, fAccepted, fStmap82Sticky, &Stmap82StickyMatch, pStmap82StickyCut, Stmap82StickyCutOrdinal );
         Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
         if ( fAccepted )
