@@ -3034,3 +3034,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap54: add cut-only severe pressure exception`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap54` recovers the one useful one-sided `syn2` candidate and improves delay by `0.36 ps` versus `stmap53`, but it costs `6.53` area and only fires once on the required set. For `stmap55`, keep the preserved `stmap53` branch and add a tiny area-ratio or area-save cap around cut-only exceptions, or test a reconstruction-consistent pressure transfer that can turn one-sided cut pressure into paired evidence without allowing missing pressure to masquerade as agreement.
+
+
+## version55 / stmap55
+
+- hypothesis: Keep the reviewed `stmap54` severe-feedback branch, but cap cut-only one-sided pressure exceptions to at most `1.25` inverter areas of local area-save. This tests whether the one accepted `stmap54` `syn2` exception was worth its area cost.
+- motivation: `stmap54` improved `syn2` delay by `0.36 ps` versus `stmap53`, but cost `6.53` extra area and fired only once on the required set. The campaign recommendation was to preserve the reviewed severe branch while adding a small area-ratio or area-save cap around cut-only exceptions.
+- command name: `stmap55`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_55.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperInt.h`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap55/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap55` is a numbered two-pass `stmap` command. It clones the `stmap54` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects the blended gain only under the same severe feedback conditions, and performs the final remap with mapper mode `56`. Mode `56` preserves the reviewed `stmap53` pressure-near branch through `Map_MatchStmap54ModeratePenaltyFactor()`, preserves the `stmap54` cut-only candidate test, then admits a cut-only exception only when `AreaSave <= 1.25 * inverter_area + epsilon`. Cap-blocked cut-only candidates are reported separately and fall back to the normal strict area gate. Existing `map` and `stmap0` through `stmap54` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap55/build.log`.
+  - help: `./abc -c "stmap55 -h"` printed command usage with the area-capped cut-only mode. Log: `.autoeda/runtime/results/stmap55/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap55; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap55/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap55/summary.json`, `metrics.csv`, `comparison.csv`, `feedback_stats.csv`, `mapper_mode_stats.csv`, guard/near-miss/early-seed diagnostics, sink-pressure diagnostics, penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompt, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; feedback severity `0.000`; sink-pressure entries `262`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; feedback severity `0.627`; sink-pressure entries `4816`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; feedback severity `0.733`; sink-pressure entries `4362`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.50 ps`, area `22232.05`; delay delta `-29.32 ps` (`-5.76%`), area delta `+935.45` (`+4.39%`); selected gain `225.00`; feedback severity `0.884`; sink-pressure entries `8980`.
+- cut-only and severe-pressure diagnostics:
+  - mapper mode `56` was used for all candidate benchmark runs; final blended gain was `225.00` only on `syn2`.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, entries `262`; `ode` severity `0.627`, entries `4816`; `or1200` severity `0.733`, entries `4362`; `syn2` severity `0.884`, entries `8980`.
+  - `benchmarks/syn2.abc.blif`: the prior `stmap54` cut-only seed at mapper node `23628` / AIG ID `27645` was blocked by the new cap. It had slack `6.719986`, area-save `0.930000`, area-save cap `0.875000`, arrival-delta `-4.100006`, arrival-gain-margin `1.510000`, cut sink-pressure ratio `1.794`, node sink-pressure ratio `0.000`, and SCL feedback `0.884`.
+  - `benchmarks/syn2.abc.blif`: pressure-near exception seeds/blocks `0/0`, cut-only exception seeds/blocks `0/0`, cut-only area-cap blocks `1`, moderate penalty seeds/blocks `0/1`, strong penalty seeds/blocks `0/2`, near-miss count `18`, and guard middle-relief count `1`.
+  - Required-set QoR matches the lower-area `stmap53` point on `syn2`: delay is `479.50 ps` and area is `22232.05`. Relative to `stmap54`, the cap saves `6.53` area but gives back `0.36 ps` delay.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_55.c`.
+  - numbered command exists and is registered as `stmap55`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - mapper-mode, sink-pressure, feedback, guard, early-seed, near-miss, pressure-near exception, cut-only exception, cut-only area-cap block, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap55/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap55/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap55/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap55/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap55/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap55/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no actionable correctness regressions in the final uncommitted source changes.
+- rejected findings: none.
+- open findings: none after pass 1.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap55: cap cut-only pressure exception area`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: The simple area-save cap confirms the `stmap54` one-sided seed was a delay/area tradeoff rather than free QoR. For `stmap56`, prefer a reconstruction-consistent pressure-transfer experiment that can turn cut-only pressure into paired evidence, or a very narrow cap sweep around `1.35x` inverter area to see whether the single `syn2` delay gain can be recovered with a bounded area budget.

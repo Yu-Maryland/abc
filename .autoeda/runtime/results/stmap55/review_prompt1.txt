@@ -1,0 +1,39 @@
+Review the uncommitted stmap55 changes for correctness regressions.
+
+Project constraints:
+- Numbered command: stmap55.
+- Family: stmap.
+- Build command: make ABC_USE_NO_READLINE=1.
+- Required library load: read_lib 7nm_lvt_ff.lib.
+- Required benchmarks: benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif.
+- Candidate flow: read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap55; topo; buffer; upsize -v; dnsize -v; stime.
+- CEC gate: original read_lib/read/strash versus candidate full flow/strash.
+
+Hypothesis:
+stmap55 keeps the reviewed stmap54 severe-feedback branch but caps cut-only one-sided pressure exceptions at 1.25 inverter areas of local AreaSave. The goal is to test whether the one accepted stmap54 syn2 cut-only exception was worth its area cost.
+
+Source changes to inspect:
+- src/base/abci/abcStmap_55.c: new numbered command cloned from stmap54, final mapper mode 56, help text and diagnostics for area-capped cut-only mode.
+- src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp: command registration/build integration.
+- src/map/mapper/mapperInt.h and src/map/mapper/mapperCore.c: stmap55 counters and summary diagnostics.
+- src/map/mapper/mapperMatch.c: mode-56 extension, stmap55 wrapper around stmap54 pressure logic, cut-only area-save cap, diagnostics, and gate/reason plumbing.
+
+Validation already run:
+- git diff --check: passed, with only the existing abclib.dsp CRLF notice.
+- make ABC_USE_NO_READLINE=1: passed.
+- ./abc -c "stmap55 -h": passed.
+- i10 smoke flow: passed, final stime delay 198.64 ps, area 1303.10.
+- Full benchmark metrics passed for all four required designs.
+- CEC passed for all four required designs.
+
+Observed required-set metrics:
+- i10: baseline 207.24 ps / 1263.44 area; stmap55 198.64 ps / 1303.10 area.
+- ode: baseline 531.32 ps / 12491.21 area; stmap55 522.05 ps / 11334.38 area.
+- or1200: baseline 587.08 ps / 4798.34 area; stmap55 561.55 ps / 4895.15 area.
+- syn2: baseline 508.82 ps / 21296.60 area; stmap55 479.50 ps / 22232.05 area.
+
+Diagnostic of interest:
+- stmap54 accepted one syn2 cut-only exception at AreaSave 0.93 and improved delay to 479.14 ps with area 22238.58.
+- stmap55 blocks that same case because the cap is 0.875, yielding cut-only-area-cap-blocked = 1 and no cut-only exception seeds.
+
+Please focus on actionable P1/P2 correctness issues: wrong mode registration, broken preservation of stmap54/stmap53 behavior, cap applied in the wrong branch, unsafe uninitialized state, diagnostics that hide failures, or evaluation-contract violations. Ignore style-only concerns.

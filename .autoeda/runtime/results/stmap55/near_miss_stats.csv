@@ -1,0 +1,9 @@
+benchmark,near_miss
+
+benchmarks/i10.aig,0
+
+benchmarks/ode.abc.blif,0
+
+benchmarks/or1200.abc.blif,0
+
+benchmarks/syn2.abc.blif,19

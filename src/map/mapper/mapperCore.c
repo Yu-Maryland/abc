@@ -222,16 +222,16 @@ ABC_PRT( "Time", Abc_Clock() - clk );
     p->timeArea += Abc_Clock() - clk;
     //////////////////////////////////////////////////////////////////////
 
-    if ( p->fSkipFanout >= 14 && p->fSkipFanout <= 55 )
+    if ( p->fSkipFanout >= 14 && p->fSkipFanout <= 56 )
         printf( "stmap%d guard stats: exact-risk = %d  highest = %d  lower-mod = %d  upper-mod = %d  middle-slack = %d  middle-relief = %d  reject-slack = %d  reject-highest = %d  reject-arrival = %d  reject-area = %d\n",
             p->fSkipFanout - 1,
             p->nStmap13ExactRisk, p->nStmap13HighestRisk, p->nStmap13LowerModRisk,
             p->nStmap13UpperModRisk, p->nStmap13MiddleSlack, p->nStmap13MiddleRelief,
             p->nStmap13RejectSlack, p->nStmap13RejectHighest, p->nStmap13RejectArrival,
             p->nStmap13RejectArea );
-    if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 55 )
+    if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 56 )
         printf( "stmap%d near-miss stats: near-miss = %d\n", p->fSkipFanout - 1, p->nStmap18NearMiss );
-    if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 55 )
+    if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 56 )
         printf( "stmap%d early-seed stats: early-seed = %d\n", p->fSkipFanout - 1, p->nStmap19EarlySeed );
     if ( p->fSkipFanout == 26 )
         printf( "stmap25 ablation stats: moderate-ablation-seed = %d\n", p->nStmap25ModerateAblationSeed );
@@ -327,6 +327,13 @@ ABC_PRT( "Time", Abc_Clock() - clk );
             p->nStmap54CutOnlyExceptionSeed, p->nStmap54CutOnlyExceptionBlocked,
             p->nStmap54ModeratePenaltySeed, p->nStmap54ModeratePenaltyBlocked,
             p->nStmap54StrongPenaltySeed, p->nStmap54StrongPenaltyBlocked );
+    if ( p->fSkipFanout == 56 )
+        printf( "stmap55 penalty stats: pressure-near-exception-seed = %d  pressure-near-exception-blocked = %d  cut-only-exception-seed = %d  cut-only-exception-blocked = %d  cut-only-area-cap-blocked = %d  moderate-penalty-seed = %d  moderate-penalty-blocked = %d  strong-penalty-seed = %d  strong-penalty-blocked = %d\n",
+            p->nStmap55PressureNearExceptionSeed, p->nStmap55PressureNearExceptionBlocked,
+            p->nStmap55CutOnlyExceptionSeed, p->nStmap55CutOnlyExceptionBlocked,
+            p->nStmap55CutOnlyAreaCapBlocked,
+            p->nStmap55ModeratePenaltySeed, p->nStmap55ModeratePenaltyBlocked,
+            p->nStmap55StrongPenaltySeed, p->nStmap55StrongPenaltyBlocked );
 
     // print the arrival times of the latest outputs
     if ( p->fVerbose )
