@@ -1,0 +1,8 @@
+benchmark,index,profile-open,node,level,refs,leaves,phase,slack,area-save,arrival-delta,arrival-gain-margin,area-margin
+benchmarks/or1200.abc.blif,1,0,11994,14,4,4,1,11.98037,0.93,-3.340004,1.585,0.7
+benchmarks/or1200.abc.blif,2,0,12001,17,4,4,1,10.310364,0.93,-14.400009,1.585,0.7
+benchmarks/syn2.abc.blif,1,0,2318,29,5,4,0,7.430023,0.93,-10.130005,1.585,0.921593
+benchmarks/syn2.abc.blif,2,0,21363,49,4,4,0,11.790039,0.93,-8.349991,1.585,0.7
+benchmarks/syn2.abc.blif,3,0,23673,37,4,5,1,7.850021,0.93,-11.840012,1.585,0.7
+benchmarks/syn2.abc.blif,4,0,24798,46,4,4,1,7.919983,0.94,-3.179993,1.585,0.7
+benchmarks/syn2.abc.blif,5,1,25927,7,4,5,0,6.619999,0.94,-1.600002,1.585,0.7

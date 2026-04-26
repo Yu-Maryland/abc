@@ -1,0 +1,11 @@
+Second review pass for `stmap34`.
+
+No source changes were made after review pass 1, which reported no discrete correctness issue.
+
+Please re-check the current uncommitted changes for:
+- any missed `fSkipFanout` mode range that should include mode 35 or should remain capped at earlier modes;
+- command/help/build registration omissions for `stmap34`;
+- diagnostic counter or CSV artifact inconsistencies that would make the logged evaluation misleading;
+- correctness-gate gaps in the build, help, smoke, benchmark, artifact-check, or CEC evidence under `.autoeda/runtime/results/stmap34/`.
+
+Focus on actionable correctness findings only.

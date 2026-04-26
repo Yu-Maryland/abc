@@ -1794,3 +1794,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap33: normalize cut-leaf load by drive`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap33` confirms that the selected strong seed at node `2318` has a fanout-limit `1` cell driving a much larger cut-leaf load proxy. For `stmap34`, replace the saturating ratio-only term with a gentler load/drive curve or add a direct SCL capacitance diagnostic after mapping so high load/drive ratios can be distinguished from cases where downstream buffering repairs the load without QoR loss.
+
+## version34 / stmap34
+
+- hypothesis: A bounded sublinear drive-normalized load penalty can keep the selected-supergate drive/load diagnostic from `stmap33` without automatically saturating high-ratio strong deep seeds that downstream buffering may repair.
+- motivation: `stmap33` showed that the `syn2` strong seed at node `2318` had fanout-limit `1` and cut-leaf load averages `6.75`/`5.50`, causing the linear ratio term to saturate the strong penalty at `0.750` and block the seed. Earlier `stmap31` admitted the same seed without changing final `stime`, so `stmap34` tests whether a bounded curve can retain the diagnostic signal while avoiding over-blocking.
+- command name: `stmap34`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_34.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap34/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap34` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 35` into the mapper. Mode 35 preserves the `stmap33` continuous moderate-seed penalty and strong-seed eligibility shape, but replaces the saturating linear load/drive term with `0.02 * (load_drive_ratio - 1.0) / load_drive_ratio` when the ratio exceeds one. The base strong-seed penalty remains the damped `stmap31` factor and the total strong penalty remains capped at `0.75` inverter area. Existing `map` and `stmap0` through `stmap33` remain on their prior modes.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap34/build.log`.
+  - help: `./abc -c "stmap34 -h"` printed usage text with default `-G 250.00` and the bounded drive-normalized strong seed load proxy enabled. Log: `.autoeda/runtime/results/stmap34/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap34; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap34/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap34/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `relief_diag.csv`, `near_miss_diag.csv`, `moderate_penalty_seed_diag.csv`, `moderate_penalty_block_diag.csv`, `strong_penalty_seed_diag.csv`, `strong_penalty_block_diag.csv`, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `1`, strong blocked `0`.
+- bounded load/drive diagnostics:
+  - `benchmarks/syn2.abc.blif`: `stmap34` admits the refs-5 strong seed at node `2318`, level `29`, leaves `4`, phase `0`, slack `7.430023`, area saving `0.93`, arrival delta `-10.130005`, arrival-gain margin `1.585`, penalty factor `0.317`, area margin `0.921593`, cut-leaf-load average `6.750`, fanout limit `1`, and load/drive ratio `6.750`.
+  - `benchmarks/syn2.abc.blif`: the moderate refs-5 seed at node `37979` remains blocked twice with penalty factor `0.349` and area margin `0.944093`, preserving the `stmap29`-through-`stmap33` moderate load-risk blocker.
+  - Final required-benchmark QoR is identical to `stmap31`, `stmap32`, and `stmap33`; the bounded curve changes the strong-seed diagnostic decision without changing final downstream `stime`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_34.c`.
+  - numbered command exists and is registered as `stmap34`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, relief, moderate-penalty-block, strong-penalty-seed, and strong-penalty-block diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap34/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap34/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap34/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap34/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap34/review_pass1_supported.log`.
+  - accepted findings: none; the reviewer reported no discrete correctness issue in the source changes.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap34/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap34/review_pass2_supported.log`.
+  - accepted findings: finalize `campaign_state.json` after validation and add the canonical `version34 / stmap34` entry; addressed by the final runtime-state update and this log entry, then revalidated with artifact and version-log checks.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none; the accepted pass-2 findings were runtime metadata and canonical logging issues.
+- commit: local commit created with message `stmap34: bound strong load penalty`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap34` shows that a bounded load/drive term can admit the redundant strong seed at node `2318` while retaining the moderate blocker at node `37979` and preserving final `syn2` QoR. For `stmap35`, move from mapper-reference load proxies toward a direct SCL/load diagnostic, such as mapped net capacitance or a post-buffer critical-load observation, so the penalty can distinguish repaired high ratios from ratios that actually harm final `stime`.

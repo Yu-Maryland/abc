@@ -1,0 +1,16 @@
+Review the uncommitted stmap34 implementation for correctness risks.
+
+Context:
+- Project pack requires numbered `stmapN` commands, preserved older variants, full benchmark metrics, CEC, runtime artifacts, and one coherent commit.
+- `stmap34` adds `src/base/abci/abcStmap_34.c`, registers `stmap34`, wires it into Make/module lists, and extends mapper `fSkipFanout` mode 35.
+- Hypothesis: replace `stmap33`'s saturating drive-normalized strong-seed load penalty with a bounded sublinear load/drive term while preserving the continuous moderate-seed blocker.
+- Expected behavior: existing `map` and `stmap0` through `stmap33` remain unchanged; `stmap34` uses `fSkipFanout = 35`; help text works.
+- Validation already run locally: build, help, smoke, all four benchmark baseline/candidate flows, parsed metrics, artifact check, and CEC all passed under `.autoeda/runtime/results/stmap34/`.
+
+Please prioritize:
+- mode range or off-by-one mistakes that could affect older `stmap` commands;
+- uninitialized variables, incorrect diagnostic counters, or stale mode-number gating;
+- command registration/build-list omissions;
+- correctness or reproducibility gaps in the validation artifacts.
+
+Do not propose unrelated style refactors.

@@ -1,0 +1,4 @@
+artifact check passed for stmap34 final
+required files: 83
+all required non-review-prompt-form exits zero
+review prompt-form failures are logged expected CLI limitation

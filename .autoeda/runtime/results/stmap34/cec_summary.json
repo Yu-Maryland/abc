@@ -1,0 +1,38 @@
+{
+  "version": "stmap34",
+  "all_equivalent": true,
+  "results": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "original": ".autoeda/runtime/results/stmap34/cec_benchmarks_i10_aig_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap34/cec_benchmarks_i10_aig_stmap34.aig",
+      "log": ".autoeda/runtime/results/stmap34/cec_benchmarks_i10_aig.log",
+      "exit_code": 0,
+      "equivalent": true
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "original": ".autoeda/runtime/results/stmap34/cec_benchmarks_ode_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap34/cec_benchmarks_ode_abc_blif_stmap34.aig",
+      "log": ".autoeda/runtime/results/stmap34/cec_benchmarks_ode_abc_blif.log",
+      "exit_code": 0,
+      "equivalent": true
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "original": ".autoeda/runtime/results/stmap34/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap34/cec_benchmarks_or1200_abc_blif_stmap34.aig",
+      "log": ".autoeda/runtime/results/stmap34/cec_benchmarks_or1200_abc_blif.log",
+      "exit_code": 0,
+      "equivalent": true
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "original": ".autoeda/runtime/results/stmap34/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap34/cec_benchmarks_syn2_abc_blif_stmap34.aig",
+      "log": ".autoeda/runtime/results/stmap34/cec_benchmarks_syn2_abc_blif.log",
+      "exit_code": 0,
+      "equivalent": true
+    }
+  ]
+}
