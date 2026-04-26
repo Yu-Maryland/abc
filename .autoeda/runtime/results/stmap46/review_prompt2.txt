@@ -1,0 +1,17 @@
+Review the patched stmap46 implementation after review pass 1.
+
+Pass 1 accepted finding:
+- The tight exception was too wide because it only checked arrival gain and could bypass pressure agreement for loose-slack candidates.
+
+Accepted fix:
+- Map_MatchHasStmap46TightException now requires both strong arrival gain and Slack <= 1.10 * SlackMargin + Epsilon.
+- The mode 47 call site passes Slack and SlackMargin into that predicate.
+
+Revalidation after the fix:
+- make ABC_USE_NO_READLINE=1 passed.
+- stmap46 -h passed.
+- smoke_i10 passed.
+- Full four-benchmark baseline/candidate evaluation passed with parseable stime metrics.
+- CEC passed on all four required benchmarks.
+
+Please focus on remaining correctness issues in the patched implementation, especially whether the stmap46 exception and diagnostics are internally consistent, whether older stmap commands remain preserved, and whether any validation artifact could be misleading.

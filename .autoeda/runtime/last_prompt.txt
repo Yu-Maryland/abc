@@ -23,8 +23,8 @@ Target repo:
 
 Current campaign state:
 - status: preflight-complete
-- completed_iterations: 45
-- next_iteration: 45
+- completed_iterations: 46
+- next_iteration: 46
 - target_iterations: 100
 
 Execution contract:

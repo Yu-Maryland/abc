@@ -1,0 +1,28 @@
+Review the uncommitted stmap46 implementation in this ABC repository.
+
+Project contract:
+- New command is stmap46 and should preserve map and stmap0..stmap45 behavior.
+- stmap46 should build, support -h usage text, run the configured SCL downstream flow, and keep CEC equivalence.
+- Evaluation flow uses: read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap46; topo; buffer; upsize -v; dnsize -v; stime.
+
+Hypothesis:
+stmap46 keeps stmap45's sink-pressure agreement requirement for broad moderate deep recovery, but adds a narrow exception for high-arrival-gain tight-class moderate seeds. Strong SCL pressure blocks, especially the AIG 5548 syn2 case, should remain active.
+
+Files of interest:
+- src/base/abci/abc.c
+- src/base/abci/abcStmap_46.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperInt.h
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperMatch.c
+- .autoeda/runtime/results/stmap46/*
+
+Validation already run before review:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap46 -h"
+- smoke flow on benchmarks/i10.aig
+- full baseline/candidate metrics on all four required benchmarks
+- CEC on all four required benchmarks
+
+Please focus on correctness issues, behavior regressions, missing version integration, broken diagnostics or counters, and any flaw that could make the recorded evaluation invalid. Do not request cosmetic refactors unless they affect correctness or maintainability of this experimental path.
