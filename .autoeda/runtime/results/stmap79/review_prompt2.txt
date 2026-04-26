@@ -1,0 +1,9 @@
+Review the uncommitted stmap79 changes for a second pass.
+
+Context:
+- stmap79 is diagnostic-only and should not alter stmap65 mapping policy.
+- It adds final-remap parent-cut diagnostics for the downstream fanout AIG and reuses stmap78 demand-path tracing.
+- Review pass 1 reported no correctness, build, or runtime regression findings.
+- Build/help/smoke/path-normalization/stale-state/full eval/CEC have passed.
+
+Please focus on remaining subtle issues: final-pass scoping, stale diagnostic labels/state, parent-cut row semantics, parser/artifact consistency, and build registration. Return findings with file/line references. If no issues remain, say so clearly.

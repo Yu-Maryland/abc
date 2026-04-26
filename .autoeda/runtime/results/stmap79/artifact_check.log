@@ -1,0 +1,102 @@
+OK run_stmap79_eval.py
+OK summary.json
+OK metrics.csv
+OK comparison.csv
+OK build.log
+OK help.log
+OK smoke_i10.log
+OK path_norm_i10.log
+OK unknown_aig_stale_check.log
+OK cec_summary.json
+OK implementation_check.log
+OK selected_match.csv
+OK selected_match_stats.csv
+OK selected_match_summary.csv
+OK reconstruct_stats.csv
+OK reconstruct_request.csv
+OK reconstruct_emit.csv
+OK reconstruct_cache.csv
+OK reconstruct_inverter.csv
+OK reconstruct_summary.csv
+OK demand_path.csv
+OK demand_leaf.csv
+OK demand_path_stats.csv
+OK demand_path_summary.csv
+OK parent_cut.csv
+OK parent_cut_stats.csv
+OK parent_cut_summary.csv
+OK phase_survival.csv
+OK phase_survival_stats.csv
+OK phase_survival_summary.csv
+OK final_critical_lineage.csv
+OK final_critical_stats.csv
+OK final_critical_summary.csv
+OK review_prompt1.txt
+OK review_pass1_positional.log
+OK review_pass1.log
+OK review_prompt2.txt
+OK review_pass2_positional.log
+OK review_pass2.log
+OK review_summary.md
+OK eval.log
+OK baseline_benchmarks_i10_aig.log
+OK candidate_benchmarks_i10_aig.log
+OK baseline_benchmarks_i10_aig.exit
+OK baseline_benchmarks_i10_aig.exit == 0
+OK candidate_benchmarks_i10_aig.exit
+OK candidate_benchmarks_i10_aig.exit == 0
+OK cec_benchmarks_i10_aig.log
+OK cec_benchmarks_i10_aig.exit
+OK cec_benchmarks_i10_aig.exit == 0
+OK baseline_benchmarks_ode_abc_blif.log
+OK candidate_benchmarks_ode_abc_blif.log
+OK baseline_benchmarks_ode_abc_blif.exit
+OK baseline_benchmarks_ode_abc_blif.exit == 0
+OK candidate_benchmarks_ode_abc_blif.exit
+OK candidate_benchmarks_ode_abc_blif.exit == 0
+OK cec_benchmarks_ode_abc_blif.log
+OK cec_benchmarks_ode_abc_blif.exit
+OK cec_benchmarks_ode_abc_blif.exit == 0
+OK baseline_benchmarks_or1200_abc_blif.log
+OK candidate_benchmarks_or1200_abc_blif.log
+OK baseline_benchmarks_or1200_abc_blif.exit
+OK baseline_benchmarks_or1200_abc_blif.exit == 0
+OK candidate_benchmarks_or1200_abc_blif.exit
+OK candidate_benchmarks_or1200_abc_blif.exit == 0
+OK cec_benchmarks_or1200_abc_blif.log
+OK cec_benchmarks_or1200_abc_blif.exit
+OK cec_benchmarks_or1200_abc_blif.exit == 0
+OK baseline_benchmarks_syn2_abc_blif.log
+OK candidate_benchmarks_syn2_abc_blif.log
+OK baseline_benchmarks_syn2_abc_blif.exit
+OK baseline_benchmarks_syn2_abc_blif.exit == 0
+OK candidate_benchmarks_syn2_abc_blif.exit
+OK candidate_benchmarks_syn2_abc_blif.exit == 0
+OK cec_benchmarks_syn2_abc_blif.log
+OK cec_benchmarks_syn2_abc_blif.exit
+OK cec_benchmarks_syn2_abc_blif.exit == 0
+OK build.exit
+OK build.exit == 0
+OK help.exit
+OK help.exit == 0
+OK smoke_i10.exit
+OK smoke_i10.exit == 0
+OK path_norm_i10.exit
+OK path_norm_i10.exit == 0
+OK unknown_aig_stale_check.exit
+OK unknown_aig_stale_check.exit == 0
+OK eval.exit
+OK eval.exit == 0
+OK review_pass1.exit
+OK review_pass1.exit == 0
+OK review_pass2.exit
+OK review_pass2.exit == 0
+OK review_pass1_positional.exit
+OK review_pass1_positional.exit == 2
+OK review_pass2_positional.exit
+OK review_pass2_positional.exit == 2
+OK summary candidate benchmark coverage is complete
+OK CEC all four required benchmarks passed
+OK parent_cut_summary.csv has four benchmark rows
+OK ode parent-cut observation captured
+artifact_check: PASS

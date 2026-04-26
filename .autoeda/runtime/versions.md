@@ -4510,3 +4510,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap78: trace final demand paths`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap79`, watch both the `ode` child AIG `5219` and downstream parent AIG `5229` at the selected-match/reconstruction boundary. Record `5229` selected parent cuts, leaf polarities, and any alternate cuts that request phase `0` of `5219`. If parent alternatives exist with comparable timing/area, the next policy target should be parent-cut polarity selection around final-critical fanouts rather than child reconstruction or pressure thresholds.
+
+
+## version79 / stmap79
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace selected downstream parent cuts for the `stmap78` watched child/parent AIG pairs. If the `ode` parent AIG `5229` has a selected cut alternative that requests child AIG `5219` phase `0`, then the next policy target should be parent-cut polarity selection around final-critical fanouts; if not, the phase discrepancy is not addressable by simply flipping the selected parent phase.
+- motivation: `stmap78` showed that `ode` AIG `5219` is requested only as phase `1` through downstream AIG `5229`, even though the child has a direct phase `0` cut available. The missing question was whether the selected downstream parent cuts contain any alternative that would naturally consume child phase `0`.
+- command name: `stmap79`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcMap.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_79.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap79/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap79` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It configures benchmark-specific watched child/parent AIG pairs, reuses selected-match, final-remap reconstruction, demand-path, final-critical, and phase-survival diagnostics under the `stmap79` label, and adds final-remap parent-cut tracing. The parent-cut trace records each selected parent phase cut for the watched downstream parent, whether the watched child appears as a leaf, the child leaf index, requested child phase, inverted-pin status, and leaf phase vector. The inherited mapping policy, mapper scoring, buffering, sizing, and classic `map` behavior are intentionally unchanged.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap79/build.log`.
+  - help: `./abc -c "stmap79 -h"` printed `stmap79` usage. Log: `.autoeda/runtime/results/stmap79/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap79; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and printed parent-cut, demand-path, reconstruction, selected-match, final-critical, and phase-survival diagnostics. Log: `.autoeda/runtime/results/stmap79/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap79` selected watch child AIG `855` and downstream parent AIG `861`, printed selected-match, reconstruction, and demand-path rows, and reported zero parent-cut rows because parent `861` was not reached in that shorter direct-read flow. Log: `.autoeda/runtime/results/stmap79/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap77/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported zero/unknown selected-match, reconstruction, demand-path, and parent-cut diagnostics. Log: `.autoeda/runtime/results/stmap79/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap79/summary.json`, `metrics.csv`, `comparison.csv`, `parent_cut.csv`, `parent_cut_stats.csv`, `parent_cut_summary.csv`, `demand_path.csv`, `demand_leaf.csv`, `demand_path_stats.csv`, `demand_path_summary.csv`, `reconstruct_stats.csv`, `reconstruct_request.csv`, `reconstruct_emit.csv`, `reconstruct_cache.csv`, `reconstruct_inverter.csv`, `reconstruct_summary.csv`, selected-match, phase-survival, final-critical, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- parent-cut diagnostic results:
+  - `i10` child AIG `855` / parent AIG `861`: selected parent phase `0` uses `OAI22xp33_ASAP7_75t_L` and requests child phase `1`; selected parent phase `1` uses `AOI22xp33_ASAP7_75t_L` and requests child phase `0`. Both parent phases include the watched child.
+  - `ode` child AIG `5219` / parent AIG `5229`: selected parent phase `0` uses `OAI211xp5_ASAP7_75t_L` and requests child phase `1`; selected parent phase `1` uses `NOR2xp33_ASAP7_75t_L` but does not include child `5219`. Therefore the selected parent cuts contain no downstream-parent alternative that requests child `5219` phase `0`.
+  - `or1200` child AIG `11491` / parent AIG `13829`: selected parent phase `1` uses `NOR2xp33_ASAP7_75t_L` and requests child phase `0`; selected parent phase `0` has no cut.
+  - `syn2` child AIG `18002` / parent AIG `18467`: selected parent phase `1` uses `AOI32xp33_ASAP7_75t_L` and requests child phase `1`; selected parent phase `0` uses `A2O1A1Ixp33_ASAP7_75t_L` but does not include the watched child.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_79.c`.
+  - numbered command exists and is registered as `stmap79`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, phase-survival, path-normalization, stale-state, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap79/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap79/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap79/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap79/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap79/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap79/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no evident correctness, build, or runtime regression in the diagnostic wrapper or parent-cut instrumentation.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap79/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap79/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issue in the modified or untracked source files.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap79: trace downstream parent cuts`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap80`, move one level earlier than selected parent cuts. Instrument mapper candidate matches or cut ranking for the `ode` downstream parent AIG `5229` to determine whether any non-selected candidate requests child AIG `5219` phase `0` with comparable timing/area. If no such candidate exists, the phase behavior is structural or farther upstream; if such a candidate exists, target parent-cut scoring or polarity selection around final-critical fanouts.

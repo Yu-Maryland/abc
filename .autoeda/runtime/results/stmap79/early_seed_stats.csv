@@ -1,0 +1,5 @@
+benchmark,early_seed
+benchmarks/i10.aig,0
+benchmarks/ode.abc.blif,0
+benchmarks/or1200.abc.blif,2
+benchmarks/syn2.abc.blif,1

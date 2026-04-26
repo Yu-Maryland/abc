@@ -1,0 +1,5 @@
+benchmark,aig_id,rows,requests,direct_emits,inverters,cache_hits,requested_phases,direct_phases,inverter_requested_phases,cache_phases,phase0_direct_gate,phase1_direct_gate,phase0_final_nodes,phase1_final_nodes,both_direct_phases,both_final_phases
+benchmarks/i10.aig,855,26,13,2,0,11,0+1,0+1,,0+1,NAND5xp2_ASAP7_75t_L,NOR4xp25_ASAP7_75t_L,1,1,1,1
+benchmarks/ode.abc.blif,5219,18,9,1,0,8,1,1,,1,,O2A1O1Ixp33_ASAP7_75t_L,0,1,0,0
+benchmarks/or1200.abc.blif,11491,13,6,1,0,5,0,0,,0,A2O1A1Ixp33_ASAP7_75t_L,,1,0,0,0
+benchmarks/syn2.abc.blif,18002,12,6,1,0,5,1,1,,1,,NOR2xp33_ASAP7_75t_L,0,1,0,0

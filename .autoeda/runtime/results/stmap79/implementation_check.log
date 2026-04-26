@@ -1,0 +1,21 @@
+src/base/abci/module.make:148:    src/base/abci/abcStmap_79.c \
+src/base/abci/abcStmap_79.c:3:  FileName    [abcStmap_79.c]
+src/base/abci/abcStmap_79.c:9:  Synopsis    [stmap79 command.]
+src/base/abci/abcStmap_79.c:65:  Synopsis    [Runs the stmap79 downstream-parent cut diagnostic.]
+src/base/abci/abcStmap_79.c:67:  Description [stmap79 keeps the reviewed stmap65 mapping policy unchanged,
+src/base/abci/abcStmap_79.c:77:int Abc_CommandStmap79( Abc_Frame_t * pAbc, int argc, char ** argv )
+src/base/abci/abcStmap_79.c:103:    printf( "stmap79 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  source = stmap78-parent-polarity-hypothesis  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  final-phase-survival = 1  mapping-policy-change = 0\n",
+src/base/abci/abcStmap_79.c:107:    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap79" );
+src/base/abci/abcStmap_79.c:108:    Abc_Stmap77SetReconstructionDiag( ChildAigId >= 0, "stmap79", WatchAigs, ChildAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_79.c:109:    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap79", ChildAigId, ParentAigId );
+src/base/abci/abcStmap_79.c:110:    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap79", ChildAigId, ParentAigId );
+src/base/abci/abcStmap_79.c:115:    Abc_Stmap79SetParentCutDiag( 0, "stmap79", -1, -1 );
+src/base/abci/abcStmap_79.c:116:    Abc_Stmap78SetDemandPathDiag( 0, "stmap79", -1, -1 );
+src/base/abci/abcStmap_79.c:117:    Abc_Stmap77SetReconstructionDiag( 0, "stmap79", NULL, 0 );
+src/base/abci/abcStmap_79.c:123:        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap79" );
+src/base/abci/abcStmap_79.c:124:        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap79", WatchAigs, ChildAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_79.c:129:    Abc_Print( -2, "usage: stmap79 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+src/base/abci/abcStmap_79.c:130:    Abc_Print( -2, "\t              performs stmap79 bounded-pressure mapping with downstream parent-cut diagnostics\n" );
+abclib.dsp:798:SOURCE=.\src\base\abci\abcStmap_79.c
+src/base/abci/abc.c:379:extern int Abc_CommandStmap79                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+src/base/abci/abc.c:1305:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap79",       Abc_CommandStmap79,          1 );

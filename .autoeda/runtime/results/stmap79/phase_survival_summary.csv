@@ -1,0 +1,5 @@
+benchmark,aig_id,final_nodes,both_phases_survived,dominant_final_phase,phase0_best_gate,phase0_best_criticality,phase0_best_slack,phase1_best_gate,phase1_best_criticality,phase1_best_slack,best_context_phase,best_context_fanouts,best_context_co_fanouts,best_context_best_fanout_aig,best_context_best_fanout_phase,best_context_best_fanout_gate
+benchmarks/i10.aig,855,2,1,0,NAND5xp2_ASAP7_75t_L,1.000,0.000000,NOR4xp25_ASAP7_75t_L,0.996,0.139130,0,8,0,861,1,AOI22xp5_ASAP7_75t_L
+benchmarks/ode.abc.blif,5219,1,0,1,?,0.000,0.000000,O2A1O1Ixp33_ASAP7_75t_L,1.000,0.000000,1,9,0,5229,0,OAI211xp5_ASAP7_75t_L
+benchmarks/or1200.abc.blif,11491,1,0,0,A2O1A1Ixp33_ASAP7_75t_L,1.000,0.000000,?,0.000,0.000000,0,6,1,13829,1,NOR2xp33_ASAP7_75t_L
+benchmarks/syn2.abc.blif,18002,1,0,1,?,0.000,0.000000,NOR2xp33_ASAP7_75t_L,1.000,0.000000,1,6,0,18467,1,AOI32xp33_ASAP7_75t_L

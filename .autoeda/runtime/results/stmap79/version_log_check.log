@@ -1,0 +1,18 @@
+OK version79 heading present
+OK required field: hypothesis
+OK required field: motivation
+OK required field: files changed
+OK required field: command name
+OK required field: algorithm summary
+OK required field: validation run
+OK required field: benchmark results
+OK required field: correctness results
+OK required field: review pass 1
+OK required field: review pass 2
+OK required field: commit
+OK required field: next-step recommendation
+OK evidence text: parent-cut diagnostic results
+OK evidence text: benchmarks/ode.abc.blif
+OK evidence text: CEC passed for all four
+OK evidence text: artifact check passed
+version_log_check: PASS

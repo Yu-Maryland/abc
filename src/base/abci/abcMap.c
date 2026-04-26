@@ -315,10 +315,10 @@ static void Abc_Stmap78ClearDemandPathDiag( void )
 void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId )
 {
     Abc_Stmap78ClearDemandPathDiag();
+    s_pStmap78DemandPathLabel = pLabel && pLabel[0] ? pLabel : "stmap78";
     if ( !fEnable || WatchAigId < 0 )
         return;
     s_fStmap78DemandPathDiag = 1;
-    s_pStmap78DemandPathLabel = pLabel && pLabel[0] ? pLabel : "stmap78";
     s_Stmap78WatchAigId = WatchAigId;
     s_Stmap78DownstreamAigId = DownstreamAigId;
 }
@@ -540,6 +540,149 @@ void Abc_Stmap78PrintDemandPathSummary( void )
         s_Stmap78LeafPhaseRequests[0], s_Stmap78LeafPhaseRequests[1],
         s_nStmap78LeafViaDownstream, s_nStmap78Phase0Direct,
         s_nStmap78Phase0Invert );
+}
+
+static int s_fStmap79ParentCutDiag = 0;
+static int s_fStmap79ParentCutActive = 0;
+static const char * s_pStmap79ParentCutLabel = "stmap79";
+static int s_Stmap79ChildAigId = -1;
+static int s_Stmap79ParentAigId = -1;
+static int s_nStmap79ParentCutRows = 0;
+static int s_nStmap79ParentCutRequests = 0;
+static int s_Stmap79ParentCutLogged[2] = { 0, 0 };
+static int s_Stmap79ParentCutHasCut[2] = { 0, 0 };
+static int s_Stmap79ParentCutChildPhase[2] = { 0, 0 };
+static int s_nStmap79ParentCutChildMissing = 0;
+
+static void Abc_Stmap79ResetParentCutCounters( void )
+{
+    s_nStmap79ParentCutRows = 0;
+    s_nStmap79ParentCutRequests = 0;
+    s_Stmap79ParentCutLogged[0] = 0;
+    s_Stmap79ParentCutLogged[1] = 0;
+    s_Stmap79ParentCutHasCut[0] = 0;
+    s_Stmap79ParentCutHasCut[1] = 0;
+    s_Stmap79ParentCutChildPhase[0] = 0;
+    s_Stmap79ParentCutChildPhase[1] = 0;
+    s_nStmap79ParentCutChildMissing = 0;
+}
+
+static void Abc_Stmap79ClearParentCutDiag( void )
+{
+    s_fStmap79ParentCutDiag = 0;
+    s_fStmap79ParentCutActive = 0;
+    s_pStmap79ParentCutLabel = "stmap79";
+    s_Stmap79ChildAigId = -1;
+    s_Stmap79ParentAigId = -1;
+    Abc_Stmap79ResetParentCutCounters();
+}
+
+void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId )
+{
+    Abc_Stmap79ClearParentCutDiag();
+    s_pStmap79ParentCutLabel = pLabel && pLabel[0] ? pLabel : "stmap79";
+    if ( !fEnable || ChildAigId < 0 || ParentAigId < 0 )
+        return;
+    s_fStmap79ParentCutDiag = 1;
+    s_Stmap79ChildAigId = ChildAigId;
+    s_Stmap79ParentAigId = ParentAigId;
+}
+
+int Abc_Stmap79ParentCutDiagConfigured( void )
+{
+    return s_fStmap79ParentCutDiag;
+}
+
+void Abc_Stmap79SetParentCutActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap79ParentCutDiag )
+        return;
+    if ( fActive )
+        Abc_Stmap79ResetParentCutCounters();
+    s_fStmap79ParentCutActive = fActive;
+    (void)pPassLabel;
+}
+
+static void Abc_Stmap79RecordParentCutPhase( Map_Node_t * pParentMap, int fPhase )
+{
+    Map_Cut_t * pCutBest;
+    Map_Super_t * pSuperBest;
+    Map_Node_t ** ppLeaves;
+    Mio_Gate_t * pGate;
+    unsigned uPhaseBest = 0;
+    int nLeaves = 0, i, ChildLeaf = -1, ChildPhase = -1, LeafAigId[6], LeafPhase[6];
+    if ( fPhase < 0 || fPhase > 1 || s_Stmap79ParentCutLogged[fPhase] )
+        return;
+    s_Stmap79ParentCutLogged[fPhase] = 1;
+    for ( i = 0; i < 6; i++ )
+    {
+        LeafAigId[i] = -1;
+        LeafPhase[i] = -1;
+    }
+    pCutBest = Map_NodeReadCutBest( Map_Regular(pParentMap), fPhase );
+    if ( pCutBest )
+    {
+        s_Stmap79ParentCutHasCut[fPhase] = 1;
+        pSuperBest = Map_CutReadSuperBest( pCutBest, fPhase );
+        pGate = pSuperBest ? Map_SuperReadRoot( pSuperBest ) : NULL;
+        uPhaseBest = Map_CutReadPhaseBest( pCutBest, fPhase );
+        nLeaves = Map_CutReadLeavesNum( pCutBest );
+        ppLeaves = Map_CutReadLeaves( pCutBest );
+        for ( i = 0; i < nLeaves && i < 6; i++ )
+        {
+            LeafAigId[i] = Map_NodeReadAigId( Map_Regular(ppLeaves[i]) );
+            LeafPhase[i] = ((uPhaseBest & (1 << i)) > 0) ? 0 : 1;
+            if ( LeafAigId[i] == s_Stmap79ChildAigId )
+            {
+                ChildLeaf = i;
+                ChildPhase = LeafPhase[i];
+            }
+        }
+    }
+    else
+    {
+        pSuperBest = NULL;
+        pGate = NULL;
+    }
+    if ( ChildPhase >= 0 && ChildPhase < 2 )
+        s_Stmap79ParentCutChildPhase[ChildPhase]++;
+    else if ( pCutBest )
+        s_nStmap79ParentCutChildMissing++;
+    s_nStmap79ParentCutRows++;
+    printf( "%s parent-cut: index = %d  parent-aig = %d  child-aig = %d  phase = %d  has-cut = %d  gate = %s  leaves = %d  u-phase-best = %u  fanout-limit = %d  child-leaf-index = %d  child-requested-phase = %d  child-inverted-pin = %d  leaf0-aig-id = %d  leaf0-phase = %d  leaf1-aig-id = %d  leaf1-phase = %d  leaf2-aig-id = %d  leaf2-phase = %d  leaf3-aig-id = %d  leaf3-phase = %d  leaf4-aig-id = %d  leaf4-phase = %d  leaf5-aig-id = %d  leaf5-phase = %d\n",
+        s_pStmap79ParentCutLabel, s_nStmap79ParentCutRows,
+        s_Stmap79ParentAigId, s_Stmap79ChildAigId, fPhase, pCutBest != NULL,
+        pGate ? Mio_GateReadName(pGate) : "?", nLeaves, uPhaseBest,
+        pSuperBest ? Map_SuperReadFanoutLimit(pSuperBest) : -1, ChildLeaf,
+        ChildPhase, ChildPhase >= 0 ? !ChildPhase : -1,
+        LeafAigId[0], LeafPhase[0], LeafAigId[1], LeafPhase[1],
+        LeafAigId[2], LeafPhase[2], LeafAigId[3], LeafPhase[3],
+        LeafAigId[4], LeafPhase[4], LeafAigId[5], LeafPhase[5] );
+}
+
+static void Abc_Stmap79RecordParentCuts( Map_Node_t * pNodeMap )
+{
+    Map_Node_t * pNodeRegular;
+    if ( !s_fStmap79ParentCutDiag || !s_fStmap79ParentCutActive || pNodeMap == NULL )
+        return;
+    pNodeRegular = Map_Regular( pNodeMap );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return;
+    if ( Map_NodeReadAigId( pNodeRegular ) != s_Stmap79ParentAigId )
+        return;
+    s_nStmap79ParentCutRequests++;
+    Abc_Stmap79RecordParentCutPhase( pNodeRegular, 0 );
+    Abc_Stmap79RecordParentCutPhase( pNodeRegular, 1 );
+}
+
+void Abc_Stmap79PrintParentCutSummary( void )
+{
+    printf( "%s parent-cut stats: child-aig = %d  parent-aig = %d  requests = %d  rows = %d  phase0-has-cut = %d  phase1-has-cut = %d  child-phase0 = %d  child-phase1 = %d  child-missing = %d\n",
+        s_pStmap79ParentCutLabel, s_Stmap79ChildAigId, s_Stmap79ParentAigId,
+        s_nStmap79ParentCutRequests, s_nStmap79ParentCutRows,
+        s_Stmap79ParentCutHasCut[0], s_Stmap79ParentCutHasCut[1],
+        s_Stmap79ParentCutChildPhase[0], s_Stmap79ParentCutChildPhase[1],
+        s_nStmap79ParentCutChildMissing );
 }
 
 /**Function*************************************************************
@@ -957,6 +1100,7 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
         return pNodeNew;
     }
 
+    Abc_Stmap79RecordParentCuts( pNodeMap );
     Abc_Stmap78DemandPathPush( pNodeMap, fPhase );
     fPushed = s_fStmap78DemandPathDiag && s_fStmap78DemandPathActive;
     Abc_Stmap77RecordReconstructionRequest( pNodeMap, fPhase );

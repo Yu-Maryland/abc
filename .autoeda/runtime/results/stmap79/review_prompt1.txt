@@ -1,0 +1,9 @@
+Review the uncommitted stmap79 changes for correctness, build integration, and diagnostic reliability.
+
+Context:
+- stmap79 should keep stmap65 mapping policy unchanged.
+- It reuses stmap78 demand-path tracing and adds parent-cut diagnostics for the downstream fanout AIG, focused on ode child AIG 5219 and parent AIG 5229.
+- Parent-cut diagnostics should be active only around the final stmap65 remap, should not alter mapper scoring or reconstruction behavior, and should clear correctly on unknown networks.
+- Build, help, smoke, path-normalization, stale-state, full four-benchmark evaluation, and CEC have passed.
+
+Please prioritize bugs that could affect correctness, alter mapping behavior, contaminate diagnostics across feedback/final passes or across ABC commands, break build registration, or make the parent-cut rows misleading. Return findings with file/line references. If no issues, say so clearly.
