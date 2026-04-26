@@ -1,0 +1,2 @@
+benchmark,index,watch_index,co_kind,co_index,node,aig_id,requested_phase,complemented_driver
+benchmarks/or1200.abc.blif,1,0,co,428,9641,11491,0,1

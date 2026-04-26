@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 92,
-  "next_iteration": 92,
+  "completed_iterations": 93,
+  "next_iteration": 93,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 91,
-  "last_completed_version": "stmap91",
-  "last_successful_commit": "local commit to be created: stmap91: allow phase flex drive target; see git history for hash",
+  "last_completed_iteration": 92,
+  "last_completed_version": "stmap92",
+  "last_successful_commit": "local commit to be created: stmap92: target emitted critical drive; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T20:38:35Z",
   "launcher_pid": 60423,
@@ -590,8 +590,13 @@
     "stmap91 validation passed: build, help, smoke, path-normalization, stale-state, implementation check, full benchmark metrics, consumer-flex-drive diagnostics, CEC, artifact check, version-log check, and two-pass review.",
     "stmap91 review completed with no findings across two supported review passes; no source changes were made after final review.",
     "stmap91 diagnostic result: one syn2 phase-flex drive/load override fired, but final benchmark QoR stayed unchanged.",
-    "stmap91 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap91 local commit 8083bc021b94082a2c00197025110cf34398509e was pushed to origin/master.",
+    "stmap92 active iteration prepared: direct final-critical AIG drive/load target for reconstructed survivor phases.",
+    "stmap92 validation passed: build, help, smoke, path-normalization, stale-state, implementation check, full benchmark metrics, emitted-drive diagnostics, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap92 review completed with no findings across two supported review passes; no source changes were made after final review.",
+    "stmap92 diagnostic result: direct emitted-AIG drive targeting found or1200 eligible rows but they were already selected, so final benchmark QoR stayed unchanged.",
+    "stmap92 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T20:38:35Z",
-  "updated_at_utc": "2026-04-26T20:38:35Z"
+  "updated_at": "2026-04-26T20:57:47Z",
+  "updated_at_utc": "2026-04-26T20:57:47Z"
 }
