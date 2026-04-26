@@ -1,0 +1,5 @@
+benchmark,cut_only_exception_mode,blended_gain
+benchmarks/i10.aig,55,250.00
+benchmarks/ode.abc.blif,55,250.00
+benchmarks/or1200.abc.blif,55,250.00
+benchmarks/syn2.abc.blif,55,225.00

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "missing": [],
+  "exits": {
+    "build.exit": "0",
+    "help.exit": "0",
+    "smoke_i10.exit": "0",
+    "evaluation.exit": "0",
+    "review_pass1.exit": "0",
+    "review_pass2.exit": "0"
+  },
+  "parseable_metrics": true,
+  "cec_passed": true,
+  "penalty_schema": true,
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ]
+}

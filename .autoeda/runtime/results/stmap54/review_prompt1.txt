@@ -1,0 +1,21 @@
+Review the uncommitted stmap54 implementation for correctness and campaign-policy issues.
+
+Context:
+- stmap54 is iteration 54 in the stmap family.
+- It clones the stmap53 two-pass SCL load feedback command and uses mapper mode 55.
+- The intended source change is a cut-only one-sided severe-pressure exception: keep the reviewed stmap53 pressure-agreement/pressure-near behavior intact, but in mode 55 admit only candidates with missing node pressure, bounded cut pressure, severe feedback, measured sink-pressure entries >= 8000, and stronger mapper-arrival gain.
+- Existing map and stmap0 through stmap53 behavior must remain unchanged.
+
+Please prioritize:
+- correctness bugs, memory lifetime bugs, mode gating mistakes, or parser/logging issues that would invalidate evaluation;
+- accidental behavior changes to existing commands or mapper modes;
+- missing validation artifacts or required runtime records.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap54 -h"
+- smoke flow on benchmarks/i10.aig
+- full baseline/candidate flows on i10, ode, or1200, syn2
+- CEC for all four required benchmarks
+
+Return findings only, with severity and file/line references. If no actionable findings, say so.

@@ -1,0 +1,40 @@
+Review the uncommitted stmap54 iteration after the accepted pass-1 fix.
+
+Context:
+- Target repo: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+- Version: stmap54
+- Family: stmap
+- Baseline command: map
+- Candidate command: stmap54
+- Binding pack: .autoeda/project_pack/agent.md
+
+Hypothesis:
+stmap54 preserves the reviewed stmap53 severe pressure branch and adds a separately labelled cut-only one-sided severe sink-pressure exception. The new exception should be admitted only when first-pass SCL feedback is severe, sink-pressure coverage is sufficient, node pressure is absent, cut pressure is bounded, mapper arrival gain is strong, and existing slack is not tight.
+
+Pass-1 accepted finding:
+- Preserve the stmap53 pressure-near path in mode 55. The first implementation called Map_MatchStmap52ModeratePenaltyFactor() and therefore skipped Map_MatchStmap53HasPressureNearException().
+
+Fix applied:
+- Map_MatchStmap54ModeratePenaltyFactor() now calls Map_MatchStmap53ModeratePenaltyFactor() first and propagates the pressure-near flag.
+- Mode 55 strict-fallback, area-save gate, reason strings, and block/seed diagnostics now treat either the inherited pressure-near exception or the new cut-only exception as exception paths.
+- stmap54 penalty stats now report pressure-near-exception seed/block counts separately from cut-only-exception seed/block counts.
+- The stmap54 evaluation parser was updated for the expanded penalty stats schema.
+
+Revalidation after the fix:
+- make ABC_USE_NO_READLINE=1: passed
+- ./abc -c "stmap54 -h": passed
+- smoke flow on benchmarks/i10.aig: passed, final stime Delay = 198.64 ps, Area = 1303.10
+- Full required benchmark evaluation: passed and parseable for all four required benchmarks.
+- CEC: passed for all four required benchmarks.
+
+Required benchmark results after the fix:
+- benchmarks/i10.aig: baseline 207.24 ps / 1263.44 area; stmap54 198.64 ps / 1303.10 area; delay delta -8.60 ps (-4.15%), area delta +39.66 (+3.14%).
+- benchmarks/ode.abc.blif: baseline 531.32 ps / 12491.21 area; stmap54 522.05 ps / 11334.38 area; delay delta -9.27 ps (-1.74%), area delta -1156.83 (-9.26%).
+- benchmarks/or1200.abc.blif: baseline 587.08 ps / 4798.34 area; stmap54 561.55 ps / 4895.15 area; delay delta -25.53 ps (-4.35%), area delta +96.81 (+2.02%).
+- benchmarks/syn2.abc.blif: baseline 508.82 ps / 21296.60 area; stmap54 479.14 ps / 22238.58 area; delay delta -29.68 ps (-5.83%), area delta +941.98 (+4.42%).
+
+Diagnostics after the fix:
+- stmap54 penalty stats now have columns pressure_near_exception_seed, pressure_near_exception_blocked, cut_only_exception_seed, cut_only_exception_blocked, moderate_penalty_seed, moderate_penalty_blocked, strong_penalty_seed, strong_penalty_blocked.
+- Required benchmark counts: pressure-near exception counts are 0 on all four benchmarks; syn2 has cut_only_exception_seed=1, moderate_penalty_blocked=1, strong_penalty_blocked=2; other benchmarks have zeros.
+
+Please review for correctness bugs, behavior regressions, broken preservation of older stmap commands, build integration problems, evaluation/logging contract issues, and unresolved accepted findings. Prioritize concrete blocking findings with file/line references. If there are no issues, say so clearly.

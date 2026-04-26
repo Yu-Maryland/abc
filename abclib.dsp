@@ -695,6 +695,10 @@ SOURCE=.\src\base\abci\abcStmap_53.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\base\abci\abcStmap_54.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\base\abci\abcStrash.c
 # End Source File
 # Begin Source File
