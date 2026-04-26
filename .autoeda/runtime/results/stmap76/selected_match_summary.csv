@@ -1,0 +1,5 @@
+benchmark,selected_match_rows,watched_aigs_seen,mapper_modes_seen,max_node_sink_pressure_ratio,max_node_sink_pressure_aig,max_cut_sink_pressure_ratio,latest_mode,latest_mode_gate,latest_mode_aig,latest_mode_phase
+benchmarks/i10.aig,16,855,0+1+2+3,0.000,855,0.000,3,NAND5xp2_ASAP7_75t_L,855,0
+benchmarks/ode.abc.blif,16,5219,0+1+2+3,2.818,5219,2.818,3,A2O1A1Ixp33_ASAP7_75t_L,5219,0
+benchmarks/or1200.abc.blif,12,11491,0+1+2+3,1.187,11491,1.879,3,A2O1A1Ixp33_ASAP7_75t_L,11491,0
+benchmarks/syn2.abc.blif,14,18002,0+1+2+3,0.000,18002,0.000,3,NOR2xp33_ASAP7_75t_L,18002,1

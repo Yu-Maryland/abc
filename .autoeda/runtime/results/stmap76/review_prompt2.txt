@@ -1,0 +1,11 @@
+Second review pass for the uncommitted stmap76 AutoEDA iteration.
+
+Pass 1 reported no discrete correctness issues. No source changes were made after pass 1 before this prompt. Please independently re-check the final uncommitted source and evaluation-script changes for stmap76, focusing on:
+- command registration/build integration for stmap76,
+- preserving map and stmap0..stmap75 behavior,
+- command-scoped global diagnostic state and stale-state reset,
+- vOrigNodeIds/final timing scope propagation through downstream topo/buffer/size operations,
+- correctness of phase-survival and phase-output-context diagnostics,
+- parser/artifact consistency with the emitted diagnostic lines.
+
+Report only discrete correctness findings with file/line references. If no source findings remain, say so explicitly.

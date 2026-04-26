@@ -1,0 +1,10 @@
+src/base/abci/abcStmap_76.c:9:  Synopsis    [stmap76 command.]
+src/base/abci/abcStmap_76.c:47:  Synopsis    [Runs the stmap76 phase-survival diagnostic.]
+src/base/abci/abcStmap_76.c:49:  Description [stmap76 keeps the reviewed stmap65 mapping policy unchanged,
+src/base/abci/abcStmap_76.c:78:    printf( "stmap76 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  watch-aig = %d  source = stmap74-final-critical-top-aigs  final-phase-survival = 1  mapping-policy-change = 0\n",
+src/base/abci/abcStmap_76.c:81:    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap76" );
+src/base/abci/abcStmap_76.c:89:        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap76" );
+src/base/abci/abcStmap_76.c:90:        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap76", WatchAigs, WatchAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_76.c:95:    Abc_Print( -2, "usage: stmap76 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+src/base/abci/abcStmap_76.c:96:    Abc_Print( -2, "\t              performs stmap76 bounded-pressure mapping with selected-vs-final phase survival diagnostics\n" );
+src/base/abci/abc.c:1299:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap76",       Abc_CommandStmap76,          1 );

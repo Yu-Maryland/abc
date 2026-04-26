@@ -1,0 +1,24 @@
+artifact check for stmap76
+source file exists
+command declaration/registration present
+module.make includes abcStmap_76.c
+abclib.dsp includes abcStmap_76.c
+build exit ok
+help exit ok
+smoke_i10 exit ok
+eval exit ok
+path_norm_i10 exit ok
+unknown_aig_stale_check exit ok
+review_pass1 exit ok
+review_pass2 exit ok
+review pass 1 positional rejection logged
+review pass 2 positional rejection logged
+metrics rows ok
+comparison rows ok
+final critical lineage rows ok
+selected match rows ok
+phase survival rows ok
+phase output context rows ok
+phase survival summary rows ok
+cec passed entries present
+no cec failures

@@ -1,0 +1,26 @@
+Review the uncommitted stmap76 AutoEDA iteration in this ABC repository.
+
+Project-pack constraints:
+- Preserve classic map and previous stmap0..stmap75 behavior.
+- stmap76 must be a numbered command with -h usage text.
+- The hypothesis is diagnostic only: keep reviewed stmap65 mapping behavior unchanged while tracing selected-vs-final phase survival and fanout/output context for the stmap74/stmap75 final-critical watched AIG IDs.
+- Focus on correctness, command scoping, stale global state, vOrigNodeIds propagation through downstream topo/buffer/size steps, parser/artifact validity, and build integration.
+
+Key changed source/artifact files:
+- src/base/abci/abcStmap_76.c
+- src/base/abci/abcStmap_64.c
+- src/map/mapper/mapperMatch.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- .autoeda/runtime/results/stmap76/run_stmap76_eval.py
+
+Validation already run before this review:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap76 -h" passed.
+- smoke flow on benchmarks/i10.aig passed with parseable stime and stmap76 phase diagnostics.
+- full baseline/candidate evaluation on all four required benchmarks passed with parseable metrics.
+- ABC CEC passed for all four required benchmarks using strashed AIG temporaries.
+- path normalization and unknown-network stale-state checks passed.
+
+Please report discrete findings with severity and file/line references. If no blocking source findings remain, say so explicitly. Do not request broad refactors unrelated to stmap76.

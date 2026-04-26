@@ -4324,3 +4324,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap75: trace mapper selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap76`, start from the `ode` phase/gate discrepancy: the final-critical top row is phase `1` with `O2A1O1Ixp33_ASAP7_75t_L`, while the latest selected-match summary row records phase `0` with `A2O1A1Ixp33_ASAP7_75t_L`. Instrument selected-vs-final phase survival and downstream reconstruction/output-path context before changing mapper pressure policy. Also keep `i10` and `syn2` in view because their final-critical IDs show zero pressure feedback, so pressure thresholds alone are unlikely to target those paths.
+
+## version76 / stmap76
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace selected-vs-final phase survival for the `stmap74`/`stmap75` top final-critical AIG IDs. If a watched AIG's mapper-selected phases do not survive the downstream reconstructed/post-sized network in the same way, the next mapper change should target phase survival or reconstruction context rather than pressure thresholds.
+- motivation: `stmap75` showed that the `ode` watched AIG `5219` had a latest selected-match summary row at phase `0` with `A2O1A1Ixp33_ASAP7_75t_L`, while the final-critical top row was phase `1` with `O2A1O1Ixp33_ASAP7_75t_L`. `i10` and `syn2` also showed zero pressure feedback on their top final-critical IDs, so pressure-only threshold changes remain poorly targeted.
+- command name: `stmap76`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_64.c`
+  - `src/base/abci/abcStmap_76.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap76/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap76` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It enables the existing selected-match watch for exactly one required-benchmark AIG ID, labels those rows as `stmap76`, delegates to the unchanged `stmap65` mapping policy, and then scopes the mapped network for downstream final `stime` diagnostics. The new `Abc_Stmap76EnablePhaseSurvivalScope()` path follows `vOrigNodeIds` through network duplication and, during final `stime`, reports per watched AIG whether phase 0 and/or phase 1 survived, each phase's best final node/gate/criticality/slack/load ratio, and immediate fanout/output context. No mapper scoring, phase dropping, reconstruction rule, pressure-transfer policy, buffering, sizing, or classic `map` behavior is intentionally changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap76/build.log`.
+  - help: `./abc -c "stmap76 -h"` printed `stmap76` usage. Log: `.autoeda/runtime/results/stmap76/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap76; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and printed selected-match, final-critical, phase-survival, and phase-output-context diagnostics. Log: `.autoeda/runtime/results/stmap76/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap76` selected watch AIG `855` and printed `16` selected-match rows. Log: `.autoeda/runtime/results/stmap76/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap76/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported `watched-aigs = 0` and `rows = 0`. Log: `.autoeda/runtime/results/stmap76/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap76/summary.json`, `metrics.csv`, `comparison.csv`, `selected_match.csv`, `selected_match_stats.csv`, `selected_match_summary.csv`, `phase_survival.csv`, `phase_survival_stats.csv`, `phase_output_context.csv`, `phase_survival_summary.csv`, `final_critical_lineage.csv`, `final_critical_stats.csv`, `final_critical_summary.csv`, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- phase-survival diagnostic results:
+  - `i10` watched AIG `855`: both phases survived; phase `0` was dominant with `NAND5xp2_ASAP7_75t_L`, final criticality `1.000`, slack `0.000000`, load ratio `0.313`, `8` final fanouts, and best fanout AIG `861` phase `1` through `AOI22xp5_ASAP7_75t_L`. Phase `1` also survived through `NOR4xp25_ASAP7_75t_L` with final criticality `0.996` and slack `0.139130`.
+  - `ode` watched AIG `5219`: only phase `1` survived in the final network, through `O2A1O1Ixp33_ASAP7_75t_L` with final criticality `1.000`, slack `0.000000`, `9` final fanouts, and best fanout AIG `5229` phase `0` through `OAI211xp5_ASAP7_75t_L`. This confirms the selected-match/final phase discrepancy is a real downstream survival issue, not just a final-critical lineage parsing artifact.
+  - `or1200` watched AIG `11491`: only phase `0` survived, through `A2O1A1Ixp33_ASAP7_75t_L` with final criticality `1.000`, slack `0.000000`, `6` final fanouts, `1` CO fanout, and best fanout AIG `13829` phase `1` through `NOR2xp33_ASAP7_75t_L`.
+  - `syn2` watched AIG `18002`: only phase `1` survived, through `NOR2xp33_ASAP7_75t_L` with final criticality `1.000`, slack `0.000000`, `6` final fanouts, and best fanout AIG `18467` phase `1` through `AOI32xp33_ASAP7_75t_L`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_76.c`.
+  - numbered command exists and is registered as `stmap76`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - selected-match, final-critical lineage, phase-survival, phase-output-context, path-normalization, stale-state, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap76/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap76/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap76/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap76/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap76/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap76/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap76/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues in the changed source or `stmap76` integration.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap76/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap76/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues in the changed source, build wiring, or diagnostic integration.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap76: trace final phase survival`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap77`, instrument the `ode` reconstruction/phase-survival path directly: record when `Abc_NtkFromMap` emits or drops the phase `0` and phase `1` implementations for watched AIG `5219`, including fanout polarity/output demand and whether the phase `1` `O2A1O1Ixp33_ASAP7_75t_L` survives because of downstream critical fanout structure. Keep `i10` as a secondary case because both phases survive with near-critical timing, but avoid pressure-threshold changes until a final-critical phase/reconstruction mechanism is isolated.

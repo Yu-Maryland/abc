@@ -598,6 +598,13 @@ static int s_fStmap74FinalCriticalScope = 0;
 static Abc_Ntk_t * s_pStmap74FinalCriticalNtk = NULL;
 static Vec_Int_t * s_pStmap74FinalCriticalOrigIds = NULL;
 static const char * s_pStmap74FinalCriticalLabel = "stmap74";
+#define ABC_STMAP76_MAX_WATCH_AIGS 4
+static int s_fStmap76PhaseSurvivalScope = 0;
+static Abc_Ntk_t * s_pStmap76PhaseSurvivalNtk = NULL;
+static Vec_Int_t * s_pStmap76PhaseSurvivalOrigIds = NULL;
+static const char * s_pStmap76PhaseSurvivalLabel = "stmap76";
+static int s_nStmap76WatchAigs = 0;
+static int s_Stmap76WatchAigIds[ABC_STMAP76_MAX_WATCH_AIGS];
 
 static void Abc_Stmap74ClearFinalCriticalScope( void )
 {
@@ -605,6 +612,18 @@ static void Abc_Stmap74ClearFinalCriticalScope( void )
     s_pStmap74FinalCriticalNtk = NULL;
     s_pStmap74FinalCriticalOrigIds = NULL;
     s_pStmap74FinalCriticalLabel = "stmap74";
+}
+
+static void Abc_Stmap76ClearPhaseSurvivalScope( void )
+{
+    int i;
+    s_fStmap76PhaseSurvivalScope = 0;
+    s_pStmap76PhaseSurvivalNtk = NULL;
+    s_pStmap76PhaseSurvivalOrigIds = NULL;
+    s_pStmap76PhaseSurvivalLabel = "stmap76";
+    s_nStmap76WatchAigs = 0;
+    for ( i = 0; i < ABC_STMAP76_MAX_WATCH_AIGS; i++ )
+        s_Stmap76WatchAigIds[i] = -1;
 }
 
 void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOldOrigNodeIds, Abc_Ntk_t * pNewNtk, Vec_Int_t * pNewOrigNodeIds )
@@ -622,6 +641,13 @@ void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOld
     {
         s_pStmap74FinalCriticalNtk = pNewNtk;
         s_pStmap74FinalCriticalOrigIds = pNewOrigNodeIds;
+    }
+    if ( s_fStmap76PhaseSurvivalScope &&
+         s_pStmap76PhaseSurvivalNtk == pOldNtk &&
+         s_pStmap76PhaseSurvivalOrigIds == pOldOrigNodeIds )
+    {
+        s_pStmap76PhaseSurvivalNtk = pNewNtk;
+        s_pStmap76PhaseSurvivalOrigIds = pNewOrigNodeIds;
     }
 }
 
@@ -659,6 +685,175 @@ void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel 
     s_pStmap74FinalCriticalLabel = pLabel && pLabel[0] ? pLabel : "stmap74";
     if ( !s_fStmap74FinalCriticalScope )
         s_pStmap74FinalCriticalLabel = "stmap74";
+}
+
+void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Abc_Stmap76ClearPhaseSurvivalScope();
+    if ( pNtk == NULL || pNtk->vOrigNodeIds == NULL || pWatchAigIds == NULL || nWatchAigs <= 0 )
+        return;
+    for ( i = 0; i < nWatchAigs && s_nStmap76WatchAigs < ABC_STMAP76_MAX_WATCH_AIGS; i++ )
+        if ( pWatchAigIds[i] >= 0 )
+            s_Stmap76WatchAigIds[s_nStmap76WatchAigs++] = pWatchAigIds[i];
+    if ( s_nStmap76WatchAigs == 0 )
+        return;
+    s_fStmap76PhaseSurvivalScope = 1;
+    s_pStmap76PhaseSurvivalNtk = pNtk;
+    s_pStmap76PhaseSurvivalOrigIds = pNtk->vOrigNodeIds;
+    s_pStmap76PhaseSurvivalLabel = pLabel && pLabel[0] ? pLabel : "stmap76";
+}
+
+static int Abc_Stmap76WatchIndex( int AigId )
+{
+    int i;
+    for ( i = 0; i < s_nStmap76WatchAigs; i++ )
+        if ( s_Stmap76WatchAigIds[i] == AigId )
+            return i;
+    return -1;
+}
+
+static int Abc_Stmap76ObjAigPhase( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, int * pAigId, int * pPhase )
+{
+    int Lit;
+    if ( pAigId )
+        *pAigId = -1;
+    if ( pPhase )
+        *pPhase = -1;
+    if ( pNtk == NULL || pObj == NULL || pNtk->vOrigNodeIds == NULL )
+        return 0;
+    if ( Abc_ObjId(pObj) < 0 || Abc_ObjId(pObj) >= Vec_IntSize(pNtk->vOrigNodeIds) )
+        return 0;
+    Lit = Vec_IntEntry( pNtk->vOrigNodeIds, Abc_ObjId(pObj) );
+    if ( Lit < 0 )
+        return 0;
+    if ( pAigId )
+        *pAigId = Abc_Lit2Var(Lit);
+    if ( pPhase )
+        *pPhase = Abc_LitIsCompl(Lit);
+    return 1;
+}
+
+static void Abc_Stmap76PrintFanoutContext( SC_Man * pTime, Abc_Obj_t * pObj, int WatchIndex, int WatchAigId, int Phase, float Criticality, float Slack, float LoadRatio )
+{
+    Abc_Obj_t * pFanout, * pBestFanout = NULL;
+    Mio_Gate_t * pGate, * pBestGate;
+    float FanoutCriticality, FanoutSlack, BestFanoutCriticality = -1.0, BestFanoutSlack = 0.0;
+    int i, nCoFanouts = 0, nNodeFanouts = 0;
+    int BestFanoutAigId = -1, BestFanoutPhase = -1;
+
+    if ( pTime == NULL || pTime->pNtk == NULL || pObj == NULL )
+        return;
+    Abc_ObjForEachFanout( pObj, pFanout, i )
+    {
+        if ( Abc_ObjIsCo(pFanout) )
+        {
+            nCoFanouts++;
+            continue;
+        }
+        if ( !Abc_ObjIsNode(pFanout) )
+            continue;
+        nNodeFanouts++;
+        FanoutCriticality = Abc_Stmap64FinalCriticality( pTime, pFanout, &FanoutSlack );
+        if ( pBestFanout == NULL || FanoutCriticality > BestFanoutCriticality ||
+             (FanoutCriticality == BestFanoutCriticality && FanoutSlack < BestFanoutSlack) )
+        {
+            pBestFanout = pFanout;
+            BestFanoutCriticality = FanoutCriticality;
+            BestFanoutSlack = FanoutSlack;
+            Abc_Stmap76ObjAigPhase( pTime->pNtk, pFanout, &BestFanoutAigId, &BestFanoutPhase );
+        }
+    }
+    pGate = pObj ? (Mio_Gate_t *)pObj->pData : NULL;
+    pBestGate = pBestFanout ? (Mio_Gate_t *)pBestFanout->pData : NULL;
+    printf( "%s phase-output-context: watch-index = %d  aig-id = %d  phase = %d  top-node = %d  top-gate = %s  top-criticality = %.3f  top-slack = %.6f  top-load-ratio = %.3f  final-fanouts = %d  node-fanouts = %d  co-fanouts = %d  best-fanout-node = %d  best-fanout-aig-id = %d  best-fanout-phase = %d  best-fanout-gate = %s  best-fanout-criticality = %.3f  best-fanout-slack = %.6f\n",
+        s_pStmap76PhaseSurvivalLabel, WatchIndex, WatchAigId, Phase, Abc_ObjId(pObj),
+        pGate ? Mio_GateReadName(pGate) : "?", Criticality, Slack, LoadRatio,
+        Abc_ObjFanoutNum(pObj), nNodeFanouts, nCoFanouts,
+        pBestFanout ? Abc_ObjId(pBestFanout) : -1, BestFanoutAigId, BestFanoutPhase,
+        pBestGate ? Mio_GateReadName(pBestGate) : "?", pBestFanout ? BestFanoutCriticality : 0.0,
+        pBestFanout ? BestFanoutSlack : 0.0 );
+}
+
+static void Abc_Stmap76PrintPhaseSurvival( SC_Man * pTime )
+{
+    Abc_Ntk_t * pNtk;
+    Abc_Obj_t * pObj;
+    Mio_Gate_t * pGate0, * pGate1;
+    float BestCriticality[ABC_STMAP76_MAX_WATCH_AIGS][2];
+    float BestSlack[ABC_STMAP76_MAX_WATCH_AIGS][2];
+    float BestLoadRatio[ABC_STMAP76_MAX_WATCH_AIGS][2];
+    int Counts[ABC_STMAP76_MAX_WATCH_AIGS][2];
+    int BestNode[ABC_STMAP76_MAX_WATCH_AIGS][2];
+    int i, k, AigId, Phase, WatchIndex, nMatchedAigs = 0;
+    float Criticality, Slack, LoadRatio;
+
+    if ( !s_fStmap76PhaseSurvivalScope )
+        return;
+    if ( pTime == NULL || pTime->pNtk == NULL ||
+         pTime->pNtk != s_pStmap76PhaseSurvivalNtk ||
+         pTime->pNtk->vOrigNodeIds == NULL ||
+         pTime->pNtk->vOrigNodeIds != s_pStmap76PhaseSurvivalOrigIds )
+    {
+        Abc_Stmap76ClearPhaseSurvivalScope();
+        return;
+    }
+    pNtk = pTime->pNtk;
+    for ( i = 0; i < ABC_STMAP76_MAX_WATCH_AIGS; i++ )
+    {
+        for ( k = 0; k < 2; k++ )
+        {
+            Counts[i][k] = 0;
+            BestNode[i][k] = -1;
+            BestCriticality[i][k] = -1.0;
+            BestSlack[i][k] = 0.0;
+            BestLoadRatio[i][k] = 0.0;
+        }
+    }
+    Abc_NtkForEachNode( pNtk, pObj, i )
+    {
+        if ( !Abc_Stmap76ObjAigPhase( pNtk, pObj, &AigId, &Phase ) )
+            continue;
+        WatchIndex = Abc_Stmap76WatchIndex( AigId );
+        if ( WatchIndex < 0 || Phase < 0 || Phase > 1 )
+            continue;
+        Counts[WatchIndex][Phase]++;
+        Criticality = Abc_Stmap64FinalCriticality( pTime, pObj, &Slack );
+        LoadRatio = Abc_Stmap64FinalLoadRatio( pTime, pObj, NULL, NULL );
+        if ( BestNode[WatchIndex][Phase] < 0 || Criticality > BestCriticality[WatchIndex][Phase] ||
+             (Criticality == BestCriticality[WatchIndex][Phase] && Slack < BestSlack[WatchIndex][Phase]) ||
+             (Criticality == BestCriticality[WatchIndex][Phase] && Slack == BestSlack[WatchIndex][Phase] && LoadRatio > BestLoadRatio[WatchIndex][Phase]) )
+        {
+            BestNode[WatchIndex][Phase] = Abc_ObjId(pObj);
+            BestCriticality[WatchIndex][Phase] = Criticality;
+            BestSlack[WatchIndex][Phase] = Slack;
+            BestLoadRatio[WatchIndex][Phase] = LoadRatio;
+        }
+    }
+    for ( i = 0; i < s_nStmap76WatchAigs; i++ )
+        if ( Counts[i][0] + Counts[i][1] > 0 )
+            nMatchedAigs++;
+    printf( "%s phase-survival stats: watched-aigs = %d  matched-aigs = %d  final-delay = %.3f\n",
+        s_pStmap76PhaseSurvivalLabel, s_nStmap76WatchAigs, nMatchedAigs, pTime->MaxDelay );
+    for ( i = 0; i < s_nStmap76WatchAigs; i++ )
+    {
+        pGate0 = BestNode[i][0] >= 0 && (pObj = Abc_NtkObj( pNtk, BestNode[i][0] )) ? (Mio_Gate_t *)pObj->pData : NULL;
+        pGate1 = BestNode[i][1] >= 0 && (pObj = Abc_NtkObj( pNtk, BestNode[i][1] )) ? (Mio_Gate_t *)pObj->pData : NULL;
+        printf( "%s phase-survival: watch-index = %d  aig-id = %d  final-nodes = %d  phase0-nodes = %d  phase0-best-node = %d  phase0-best-gate = %s  phase0-best-criticality = %.3f  phase0-best-slack = %.6f  phase0-best-load-ratio = %.3f  phase1-nodes = %d  phase1-best-node = %d  phase1-best-gate = %s  phase1-best-criticality = %.3f  phase1-best-slack = %.6f  phase1-best-load-ratio = %.3f\n",
+            s_pStmap76PhaseSurvivalLabel, i, s_Stmap76WatchAigIds[i], Counts[i][0] + Counts[i][1],
+            Counts[i][0], BestNode[i][0], pGate0 ? Mio_GateReadName(pGate0) : "?",
+            BestNode[i][0] >= 0 ? BestCriticality[i][0] : 0.0,
+            BestNode[i][0] >= 0 ? BestSlack[i][0] : 0.0,
+            BestNode[i][0] >= 0 ? BestLoadRatio[i][0] : 0.0,
+            Counts[i][1], BestNode[i][1], pGate1 ? Mio_GateReadName(pGate1) : "?",
+            BestNode[i][1] >= 0 ? BestCriticality[i][1] : 0.0,
+            BestNode[i][1] >= 0 ? BestSlack[i][1] : 0.0,
+            BestNode[i][1] >= 0 ? BestLoadRatio[i][1] : 0.0 );
+        for ( k = 0; k < 2; k++ )
+            if ( BestNode[i][k] >= 0 )
+                Abc_Stmap76PrintFanoutContext( pTime, Abc_NtkObj( pNtk, BestNode[i][k] ), i, s_Stmap76WatchAigIds[i], k, BestCriticality[i][k], BestSlack[i][k], BestLoadRatio[i][k] );
+    }
+    Abc_Stmap76ClearPhaseSurvivalScope();
 }
 
 static void Abc_Stmap74PrintFinalCriticalLineage( SC_Man * pTime )
@@ -764,6 +959,7 @@ static void Abc_Stmap74PrintFinalCriticalLineage( SC_Man * pTime )
             TopArrival[i], TopDeparture[i], TopSlew[i], TopLoad[i], TopMaxCap[i],
             TopLoadRatio[i] );
     }
+    Abc_Stmap76PrintPhaseSurvival( pTime );
     Abc_Stmap74ClearFinalCriticalScope();
 }
 

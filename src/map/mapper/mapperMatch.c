@@ -1436,6 +1436,7 @@ static int s_nStmap75ActiveWatchAigs = 0;
 static int s_nStmap75SelectedMatchRows = 0;
 static int s_Stmap75WatchAigIds[MAP_STMAP75_WATCH_AIGS] = { -1, -1, -1, -1 };
 static int s_Stmap75WatchHitCounts[MAP_STMAP75_WATCH_AIGS];
+static const char * s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1603,14 +1604,22 @@ void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId )
             s_Stmap75WatchAigIds[0] = WatchAigId;
     }
     else
+    {
         Map_Stmap75ResetFinalCriticalAigDiagState();
+        s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
+    }
     s_fStmap75FinalCriticalAigDiag = fEnable;
+}
+
+void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel )
+{
+    s_pStmap75FinalCriticalAigDiagLabel = pLabel && pLabel[0] ? pLabel : "stmap75";
 }
 
 void Map_Stmap75PrintFinalCriticalAigSummary( void )
 {
-    printf( "stmap75 selected-match stats: watched-aigs = %d  rows = %d  watch0-aig-id = %d  watch0-rows = %d  watch1-aig-id = %d  watch1-rows = %d  watch2-aig-id = %d  watch2-rows = %d  watch3-aig-id = %d  watch3-rows = %d\n",
-        s_nStmap75ActiveWatchAigs, s_nStmap75SelectedMatchRows,
+    printf( "%s selected-match stats: watched-aigs = %d  rows = %d  watch0-aig-id = %d  watch0-rows = %d  watch1-aig-id = %d  watch1-rows = %d  watch2-aig-id = %d  watch2-rows = %d  watch3-aig-id = %d  watch3-rows = %d\n",
+        s_pStmap75FinalCriticalAigDiagLabel, s_nStmap75ActiveWatchAigs, s_nStmap75SelectedMatchRows,
         s_Stmap75WatchAigIds[0], s_Stmap75WatchHitCounts[0],
         s_Stmap75WatchAigIds[1], s_Stmap75WatchHitCounts[1],
         s_Stmap75WatchAigIds[2], s_Stmap75WatchHitCounts[2],
@@ -1990,8 +1999,8 @@ static void Map_Stmap75PrintSelectedMatches( Map_Man_t * p, Map_Node_t * pNode )
             Map_Stmap75ReadLeaf( pCut, i, LeafNode + i, LeafAigId + i );
         s_nStmap75SelectedMatchRows++;
         s_Stmap75WatchHitCounts[WatchIndex]++;
-        printf( "stmap75 selected-match: index = %d  watch-index = %d  mapper-mode = %d  node = %d  aig-id = %d  level = %u  refs = %d  phase = %d  gate = %s  leaves = %d  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  arrival = %.6f  required = %.6f  slack = %.6f  area-flow = %.6f  u-phase-best = %u  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f  leaf0-node = %d  leaf0-aig-id = %d  leaf1-node = %d  leaf1-aig-id = %d  leaf2-node = %d  leaf2-aig-id = %d  leaf3-node = %d  leaf3-aig-id = %d  leaf4-node = %d  leaf4-aig-id = %d  leaf5-node = %d  leaf5-aig-id = %d\n",
-            s_nStmap75SelectedMatchRows, WatchIndex, p->fMappingMode, pNode->Num, AigId,
+        printf( "%s selected-match: index = %d  watch-index = %d  mapper-mode = %d  node = %d  aig-id = %d  level = %u  refs = %d  phase = %d  gate = %s  leaves = %d  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  arrival = %.6f  required = %.6f  slack = %.6f  area-flow = %.6f  u-phase-best = %u  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f  leaf0-node = %d  leaf0-aig-id = %d  leaf1-node = %d  leaf1-aig-id = %d  leaf2-node = %d  leaf2-aig-id = %d  leaf3-node = %d  leaf3-aig-id = %d  leaf4-node = %d  leaf4-aig-id = %d  leaf5-node = %d  leaf5-aig-id = %d\n",
+            s_pStmap75FinalCriticalAigDiagLabel, s_nStmap75SelectedMatchRows, WatchIndex, p->fMappingMode, pNode->Num, AigId,
             pNode->Level, pNode->nRefs, Phase, pGate ? Mio_GateReadName(pGate) : "?",
             Leaves, LeafLoadAvg, FanLimit, LoadDriveRatio, Arrival, Required, Slack, AreaFlow,
             pMatch->uPhaseBest, NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback,
