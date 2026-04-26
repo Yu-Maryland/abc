@@ -1,0 +1,5 @@
+benchmark,timing_delay,critical_nodes,avg_criticality,max_criticality
+benchmarks/i10.aig,395.938,385,0.140,1.000
+benchmarks/ode.abc.blif,2921.614,1380,0.076,1.000
+benchmarks/or1200.abc.blif,3226.886,988,0.082,1.000
+benchmarks/syn2.abc.blif,3122.294,2346,0.066,1.000

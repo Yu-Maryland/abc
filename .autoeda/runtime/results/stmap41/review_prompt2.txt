@@ -1,0 +1,18 @@
+Second review pass for the uncommitted AutoEDA stmap41 changes after pass 1 reported no actionable defects.
+
+Please independently review the current tree for correctness, memory safety, version isolation, and evaluation-contract compliance.
+
+Focus areas:
+- `stmap41` command registration and mode 42 mapper wiring.
+- Preservation of existing `map` and `stmap0` through `stmap40` behavior.
+- Lifetime of the dense critical-pressure vector passed through `Map_Stmap41SetSclLoadFeedback`.
+- Side effects of using `Abc_SclManStart`/`Abc_SclManFree` for first-pass criticality diagnostics.
+- Correctness of parsing/evaluation artifacts under `.autoeda/runtime/results/stmap41`.
+
+Known review-command note:
+- The configured positional-prompt form fails locally with `--uncommitted`; the same prompt is also run through stdin with the configured tool options.
+
+Validation already passed:
+- build, help, smoke, four-benchmark metrics, and CEC.
+
+Report only actionable findings with file and line references.

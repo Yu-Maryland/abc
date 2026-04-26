@@ -1,0 +1,22 @@
+Review the uncommitted AutoEDA stmap41 changes for correctness, memory safety, command registration, version isolation, and evaluation-contract compliance.
+
+Project constraints:
+- `agent.md` is binding.
+- Preserve existing `map` and `stmap0` through `stmap40` behavior.
+- New version is `stmap41`.
+- Full flow is `read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap41; topo; buffer; upsize -v; dnsize -v; stime`.
+- CEC compares original strashed design to candidate post-flow strashed design.
+
+Implementation summary:
+- Added `src/base/abci/abcStmap_41.c` and registered command `stmap41`.
+- Added mapper mode 42.
+- `stmap41` first maps with mode 36, measures direct SCL load/max-cap pressure, computes first-pass SCL timing criticality using `Abc_SclManStart`/`Abc_SclObjGetSlack`, stores both raw dense AIG pressure and critical-weighted dense AIG pressure, then remaps with mode 42 using the critical-weighted vector.
+- Mode 42 keeps the `stmap40` strong-seed pressure path but uses critical-weighted pressure diagnostics (`node-critical-pressure-ratio`, `cut-critical-pressure-ratio`).
+
+Validation already run before this review:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `./abc -c "stmap41 -h"` passed.
+- i10 smoke flow passed.
+- Full baseline/candidate metrics and CEC passed for all four required benchmarks.
+
+Please report only actionable findings. Include file and line references. Pay special attention to pointer lifetime around `Map_Stmap41SetSclLoadFeedback`, SCL timing manager side effects, dense vector allocation, mode 42 wiring, and whether existing modes can regress.
