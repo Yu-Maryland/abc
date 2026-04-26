@@ -1,0 +1,20 @@
+Second independent review pass for the uncommitted stmap52 campaign changes. Treat this as a fresh local code-review context, not as a summary review.
+
+Focus areas:
+- Any source-level correctness issue missed in pass 1.
+- Whether mapper mode 53 can affect existing map/stmap0..stmap51 behavior.
+- Whether stmap52 diagnostic counters are accurate and initialized.
+- Whether command/build registration is complete.
+- Whether validation artifacts support the campaign claims.
+
+Pass 1 result:
+- Positional configured prompt form failed because the local Codex CLI rejects [PROMPT] with --uncommitted; logged in review_pass1_positional.log.
+- Supported stdin review completed with exit 0 and reported no actionable correctness findings.
+- No source files were changed after pass 1.
+
+Validation artifacts:
+- build/help/smoke/full evaluation/artifact check all passed under .autoeda/runtime/results/stmap52.
+- CEC passed for all four required benchmarks in cec_summary.json.
+- stmap52 required-benchmark QoR matches the severe-pressure stmap49 point for syn2 and preserves the other existing points; the local area-cap hypothesis is not an area improvement, but correctness gates pass.
+
+Please report actionable findings with file/line references only. If no issues remain, state that clearly and note residual risk.

@@ -1,0 +1,2 @@
+2853:## version52 / stmap52
+2908:- commit: local commit to be created with message `stmap52: cap pressure-area guard at severe gain`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.

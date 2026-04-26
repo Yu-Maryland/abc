@@ -1,0 +1,5 @@
+benchmark,local_area_cap_mode,blended_gain
+benchmarks/i10.aig,53,250.00
+benchmarks/ode.abc.blif,53,250.00
+benchmarks/or1200.abc.blif,53,250.00
+benchmarks/syn2.abc.blif,53,225.00

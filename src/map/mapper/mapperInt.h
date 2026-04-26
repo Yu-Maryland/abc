@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32, 34 stmap33, 35 stmap34, 36 stmap35, 37 stmap36, 38 stmap37, 39 stmap38, 40 stmap39, 41 stmap40, 42 stmap41, 43 stmap42, 44 stmap43, 45 stmap44, 46 stmap45, 47 stmap46
+    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32, 34 stmap33, 35 stmap34, 36 stmap35, 37 stmap36, 38 stmap37, 39 stmap38, 40 stmap39, 41 stmap40, 42 stmap41, 43 stmap42, 44 stmap43, 45 stmap44, 46 stmap45, 47 stmap46, 53 stmap52
     int                 fUseProfile;   // use standard-cell profile
     int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
     int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
@@ -216,6 +216,10 @@ struct Map_ManStruct_t_
     int                 nStmap46TightExceptionBlocked; // stmap46 high-gain tight-critical rejects
     int                 nStmap46StrongPenaltySeed; // stmap46 high-gain exception strong pressure choices
     int                 nStmap46StrongPenaltyBlocked; // stmap46 high-gain exception strong pressure rejects
+    int                 nStmap52ModeratePenaltySeed; // stmap52 pressure area-cap moderate choices
+    int                 nStmap52ModeratePenaltyBlocked; // stmap52 pressure area-cap moderate rejects
+    int                 nStmap52StrongPenaltySeed; // stmap52 inherited strong pressure choices
+    int                 nStmap52StrongPenaltyBlocked; // stmap52 inherited strong pressure rejects
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

@@ -1,0 +1,33 @@
+Review the uncommitted stmap52 campaign changes as a code reviewer. Focus on correctness, behavioral regressions, undefined/uninitialized state, command registration/build integration, diagnostic accuracy, and whether the implementation actually matches the stated hypothesis.
+
+Project constraints:
+- Treat .autoeda/project_pack/agent.md as binding.
+- Family: stmap. This iteration adds numbered command stmap52 and must preserve existing stmap0..stmap51 and map behavior.
+- Required flow: read_lib 7nm_lvt_ff.lib; read <bench>; resyn; resyn2; dch -v; candidate command; topo; buffer; upsize -v; dnsize -v; stime.
+- Required benchmarks: benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif.
+
+Hypothesis:
+stmap52 returns to the stmap49 severe-pressure selected gain of 225.00 for high first-pass SCL pressure, but uses new mapper mode 53 to cap only moderate pressure penalties for area-saving candidates with local pressure conditions. Expected outcome was to reduce severe-pressure area cost while preserving stmap49 timing.
+
+Main source changes:
+- src/base/abci/abcStmap_52.c: new numbered two-pass command, copied from stmap49 lineage, with fSkipFanout 53, selected blend gain 225.00 when severity >= 0.850 and sink-pressure entries >= 8000, and stmap52 diagnostics.
+- src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp: command/build registration.
+- src/map/mapper/mapperMatch.c: extends stmap guard range to mode 53 and adds stmap52 moderate penalty cap logic and diagnostics.
+- src/map/mapper/mapperCore.c, src/map/mapper/mapperInt.h: diagnostic counter range and stmap52 counters.
+- .autoeda/runtime/results/stmap52/run_stmap52_eval.py: evaluation artifact driver for metrics/diagnostics/CEC.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1: passed, .autoeda/runtime/results/stmap52/build.log
+- ./abc -c "stmap52 -h": passed, .autoeda/runtime/results/stmap52/help.log
+- smoke on benchmarks/i10.aig: passed, .autoeda/runtime/results/stmap52/smoke_i10.log
+- full required evaluation: passed, .autoeda/runtime/results/stmap52/evaluation.exit
+- artifact check: passed, .autoeda/runtime/results/stmap52/artifact_check.log
+- CEC passed for all four required benchmarks, .autoeda/runtime/results/stmap52/cec_summary.json
+
+Observed required-benchmark QoR:
+- i10: 198.64 ps, area 1303.10
+- ode: 522.05 ps, area 11334.38
+- or1200: 561.55 ps, area 4895.15
+- syn2: 479.50 ps, area 22232.05
+
+Please report only actionable findings with file/line references. If there are no issues, state that clearly and mention any residual test risk.
