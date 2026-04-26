@@ -3648,3 +3648,66 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap64: trace downstream load-drop witness`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap65`, keep the load-drop guard at `stmap63/stmap64` strictness. The single accepted `syn2` seed is phase-correct and survives to final `stime`, but its final load ratio is only `0.039` and final criticality is only `0.272`; do not widen one-sided cut-pressure admission until a diagnostic finds accepted seeds with final criticality at least `0.50` or materially higher final load pressure.
+
+
+## version65 / stmap65
+
+- hypothesis: Keep the reviewed `stmap64` bounded-pressure two-pass flow, but tighten the command-scoped load-drop cut-only guard so a one-sided cut-pressure seed is admitted only when node-side bounded pressure is at least `1.25`. This tests whether the lone `stmap64` accepted `syn2` seed, which survived final `stime` with only final load ratio `0.039` and final criticality `0.272`, can be blocked without losing measured downstream QoR.
+- motivation: `stmap64` showed the accepted load-drop witness was visible after buffering/sizing but was lightly loaded and not close to the final critical path. The next conservative policy test is to require stronger mapper-side node pressure before allowing one-sided cut pressure to bypass the moderate-candidate ordering.
+- command name: `stmap65`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap65/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap65` clones the `stmap63`/`stmap64` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap64`. It first maps with the existing SCL load collector, builds the bounded pressure table with raw weight `0.72` and cap `2.10`, selects the same reduced gain only for severe feedback, and remaps through inherited mapper mode `57`. The intentional mapper change is command-scoped: `Map_Stmap65SetStrongNodeLoadDropGuard(1)` is enabled only around the final remap and reset immediately afterward. The new guard admits cut-only load-drop exceptions only when severe feedback and pressure-entry gates pass, pressure agreement is absent, the moderate deep-seed gain predicate passes, node pressure is in `[1.25, 1.55]`, cut pressure is in `[1.95, 2.20]`, arrival improvement is at least `2.0x` the gain margin, and slack passes. The broader `stmap63` load-drop guard remains disabled for `stmap65`, and the inherited `1.35x` inverter area-save cap is unchanged.
+- validation run:
+  - build: initial incremental `make ABC_USE_NO_READLINE=1` failed because stale `mainUtils.o` still referenced readline while no-readline linking omitted it; this is logged in `.autoeda/runtime/results/stmap65/build.log`.
+  - clean/build: `make clean` followed by `make ABC_USE_NO_READLINE=1` passed and produced `./abc`; logs: `.autoeda/runtime/results/stmap65/clean.log` and `.autoeda/runtime/results/stmap65/build_after_clean.log`.
+  - post-review build: `make ABC_USE_NO_READLINE=1` passed after the accepted diagnostic fix; log: `.autoeda/runtime/results/stmap65/build_after_review1.log`.
+  - help: `./abc -c "stmap65 -h"` printed command usage; final log: `.autoeda/runtime/results/stmap65/help_after_review1.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap65; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`; final log: `.autoeda/runtime/results/stmap65/smoke_i10_after_review1.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap65/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, inherited cut-only gate and near-miss leaf diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- strong-node guard diagnostics:
+  - mapper mode `57` was used for all candidate benchmark runs with `cut-only-before-moderate = 0`, `load-drop-cut-only-guard = 0`, `strong-node-load-drop-guard = 1`, and `strong-node-pressure-min = 1.250`.
+  - `syn2` first-pass feedback severity was `0.884` with `8980` raw pressure entries and bounded transfer active.
+  - `syn2` penalty stats recorded `0` cut-only exception seeds, `0` cut-only exception blocks, `0` cut-only area-cap blocks, `1` moderate-penalty seed, and `2` strong-penalty seeds.
+  - the tracked `syn2` mapper node `23628` / AIG ID `27645` still had two diagnostic hits; the useful primitive cut-only event retained node pressure `0.000`, cut pressure `2.100`, slack `6.719986`, area save `0.930000`, arrival delta `-12.100006`, and SCL feedback `0.884`, but `raw_expected = 0` under `stmap65` because node pressure is below the new `1.25` minimum.
+  - QoR matches `stmap64`/`stmap63` on the four required benchmarks while blocking the low-final-criticality load-drop seed from `stmap64`.
+- correctness results:
+  - build passed after the configured clean rebuild and post-review incremental rebuild.
+  - numbered implementation exists: `src/base/abci/abcStmap_65.c`.
+  - numbered command exists and is registered as `stmap65`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss cut-leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap65/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap65/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap65/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap65/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap65/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap65/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap65/review_pass1.log`.
+  - accepted source finding: `Map_MatchStmap61PrintCutOnlyGateDiag()` needed to include the new `stmap65` strong-node guard when computing the diagnostic `fLoadDropGate` and `raw_expected`.
+  - fix: the diagnostic helper now includes the old `stmap63` node-pressure window `[1.05, 1.55]` when that guard is active and the new `stmap65` window `[1.25, 1.55]` when the strong-node guard is active.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap65/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap65/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues in the final source state.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap65: tighten load-drop cut-only pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap66`, keep the `1.25` node-pressure minimum and add a diagnostic for near-miss strong-node load-drop candidates with node pressure in `[1.15, 1.25)`. If any such candidate later shows final criticality at least `0.50` or materially higher final load pressure, test a narrow adaptive node-pressure threshold; otherwise continue tightening around final-criticality evidence instead of widening one-sided cut-pressure admission.

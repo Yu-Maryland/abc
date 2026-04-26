@@ -1,0 +1,15 @@
+`` Generating dependency: /src/map/mapper/mapperMatch.c
+`` Generating dependency: /src/base/abci/abcStmap_65.c
+`` Generating dependency: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abcStmap_65.c
+`` Compiling: /src/map/mapper/mapperMatch.c
+`` Building binary: abc
+Undefined symbols for architecture arm64:
+  "_add_history", referenced from:
+      _Abc_UtilsGetUsersInput in mainUtils.o
+  "_readline", referenced from:
+      _Abc_UtilsGetUsersInput in mainUtils.o
+ld: symbol(s) not found for architecture arm64
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [abc] Error 1
