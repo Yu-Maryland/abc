@@ -1,0 +1,9 @@
+benchmark,watch_index,aig_id,final_nodes,phase0_nodes,phase0_best_node,phase0_best_gate,phase0_best_criticality,phase0_best_slack,phase0_best_load_ratio,phase1_nodes,phase1_best_node,phase1_best_gate,phase1_best_criticality,phase1_best_slack,phase1_best_load_ratio
+benchmarks/i10.aig,0,855,2,1,732,NAND5xp2_ASAP7_75t_L,1.000,0.000000,0.313,1,635,NOR4xp25_ASAP7_75t_L,0.996,0.139130,0.196
+benchmarks/i10.aig,1,861,2,1,742,OAI22xp5_ASAP7_75t_L,0.807,6.904266,0.074,1,734,AOI22xp5_ASAP7_75t_L,1.000,0.000000,0.087
+benchmarks/ode.abc.blif,0,5219,1,0,-1,?,0.000,0.000000,0.000,1,5087,O2A1O1Ixp33_ASAP7_75t_L,1.000,0.000000,0.338
+benchmarks/ode.abc.blif,1,5229,1,1,5093,OAI211xp5_ASAP7_75t_L,1.000,0.000000,0.135,0,-1,?,0.000,0.000000,0.000
+benchmarks/or1200.abc.blif,0,11491,1,1,7027,OAI22x1_ASAP7_75t_L,1.000,0.000061,0.048,0,-1,?,0.000,0.000000,0.000
+benchmarks/or1200.abc.blif,1,13829,2,1,7949,INVxp33_ASAP7_75t_L,0.908,9.320374,0.084,1,7928,NOR2x1_ASAP7_75t_L,0.984,1.636658,0.027
+benchmarks/syn2.abc.blif,0,18002,1,0,-1,?,0.000,0.000000,0.000,1,11965,NOR2xp33_ASAP7_75t_L,1.000,0.000000,0.234
+benchmarks/syn2.abc.blif,1,18467,1,0,-1,?,0.000,0.000000,0.000,1,12170,AOI32xp33_ASAP7_75t_L,1.000,0.000000,0.121

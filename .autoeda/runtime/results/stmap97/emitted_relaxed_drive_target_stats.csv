@@ -1,0 +1,5 @@
+benchmark,target_aig,target_phase,rows,phase_hits,drive_hits,material_drive_hits,eligible,relaxed_eligible,overrides,already_selected,blocked_phase,blocked_mode,blocked_best,blocked_window,blocked_drive,sticky_enabled,sticky_skip_mode3,sticky_set,sticky_blocked,sticky_allowed_arrival,sticky_allowed_drive,sticky_arrival_allow_window,arrival_window,area_premium_window,exact_area_premium_window,area_ratio_window,load_drive_ratio_min_gain,load_drive_ratio_material_gain
+benchmarks/i10.aig,855,0,13,7,2,1,0,0,0,0,6,4,0,0,3,1,1,0,0,0,0,2.000,0.750,1.200,2.200,2.500,0.050,2.000
+benchmarks/ode.abc.blif,5219,1,28,6,1,1,0,0,0,0,22,3,0,0,3,1,1,0,0,0,0,2.000,0.750,1.200,2.200,2.500,0.050,2.000
+benchmarks/or1200.abc.blif,11491,0,46,22,7,6,3,1,1,2,24,3,0,6,10,1,1,1,1,0,0,2.000,0.750,1.200,2.200,2.500,0.050,2.000
+benchmarks/syn2.abc.blif,18002,1,52,26,1,1,0,0,0,0,26,1,0,20,5,1,1,0,0,0,0,2.000,0.750,1.200,2.200,2.500,0.050,2.000

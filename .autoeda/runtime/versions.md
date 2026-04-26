@@ -5521,3 +5521,49 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap96: soften emitted sticky release`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap97`, test whether the best result is achieved by disabling the emitted-drive sticky force in mode 3 entirely while keeping the diagnostics and mode-2 pressure. `stmap96` recovered part of the stmap95 regression by allowing the faster mode-3 `OAI22`, but it still underperforms stmap94; this suggests mode-3 phase-aware recovery should retain more freedom than a hard sticky target allows.
+
+
+## version97 / stmap97
+
+- hypothesis: The phase-aware mode-3 recovery pass should retain full freedom after mode-2 emitted-drive pressure. Skipping the emitted-drive sticky replacement veto only in mode 3 should show whether the sticky family can recover the `stmap94` timing while preserving earlier pressure.
+- motivation: `stmap96` improved over `stmap95` by allowing the faster mode-3 `OAI22` candidate, but still did not recover `stmap94`'s `or1200` delay. The next clean test is to disable the sticky veto during mode 3 entirely, rather than tuning its arrival threshold.
+- command name: `stmap97`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_97.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap97/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap97` adds `Map_Stmap93SetEmittedDriveTargetStickySkipMode3()` to the existing gated emitted-drive sticky infrastructure. When enabled by `stmap97`, the sticky replacement veto is skipped only while `p->fMappingMode == 3`; emitted-drive override eligibility, diagnostics, mode-2 sticky pressure, and cleanup remain active. The flag defaults to off and is cleared when the target is cleared and after the command run.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap97/build.log`.
+  - help: `./abc -c "stmap97 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap97/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap97; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap97/smoke_i10.log`.
+  - path-normalization and stale-state checks passed. Logs: `.autoeda/runtime/results/stmap97/path_norm_i10.log` and `.autoeda/runtime/results/stmap97/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap97/summary.json`, `metrics.csv`, `comparison.csv`, sticky/emitted-drive diagnostics, selected-match diagnostics, phase-survival diagnostics, reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `564.80 ps`, area `4858.76`; delay delta `-22.28 ps` (`-3.80%`), area delta `+60.42` (`+1.26%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- diagnostic results:
+  - `or1200` AIG `11491` phase `0` had `sticky-skip-mode3 = 1`, `1` sticky-set row, `1` sticky-blocked replacement in earlier recovery, and reconstructed as `OAI22xp33_ASAP7_75t_L`.
+  - Final QoR matched `stmap96`, not `stmap94`: mode-3 sticky freedom selected the same surviving `OAI22` gate and final `or1200` delay stayed `564.80 ps`.
+- correctness results:
+  - build, numbered implementation, command registration, command help, smoke, full benchmark metrics, and CEC passed for all four required designs.
+  - sticky/emitted-drive diagnostics, selected-match, phase-survival, parent/candidate/demand/reconstruction/final-critical diagnostics, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict.
+  - supported stdin review completed with exit `0`; accepted one P2 campaign-state finding that the stmap96 commit hash was incorrect. The hash was corrected to `532a6e8ab4ba18154f9c0bfe86e1f8c520b6e3cb`.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict.
+  - supported stdin review completed with exit `0`; no remaining actionable source, build integration, stale-state, older-command regression, or campaign-contract findings were reported.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, canonical version log, version-log check, artifact check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap97: skip sticky in mode three`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap98`, stop forcing the emitted-drive survivor and instead use the emitted-drive target as a diagnostic or mode-2-only probe that clears before mode 3. `stmap97` shows full mode-3 sticky-veto freedom is not enough to recover `stmap94`; the remaining difference is likely that the emitted-drive override itself still biases mode-3 candidate selection.

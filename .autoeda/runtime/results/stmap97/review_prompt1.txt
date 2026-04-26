@@ -1,0 +1,23 @@
+Review the uncommitted stmap97 implementation and artifacts.
+
+Project contract:
+- Iteration 97 in the `stmap` family.
+- Candidate command is `stmap97`; older `stmapN` commands must remain buildable and behavior-gated.
+- Required benchmarks are `benchmarks/i10.aig`, `benchmarks/ode.abc.blif`, `benchmarks/or1200.abc.blif`, and `benchmarks/syn2.abc.blif`.
+
+Hypothesis:
+- stmap96 recovered part of stmap95's regression by releasing sticky when mode-3 arrival improved by more than `0.50 ps`.
+- stmap97 instead keeps the default `2.00 ps` release window but disables the sticky replacement veto entirely during mapper mode 3, testing whether the phase-aware final pass needs full freedom after mode-2 emitted-drive pressure.
+
+Changes to review:
+- `src/base/abci/abcStmap_97.c` adds the `stmap97` command, enables the inherited emitted-drive sticky override, keeps the default `2.00 ps` sticky arrival window, and enables `sticky-skip-mode3` only for watched networks.
+- `src/map/mapper/mapperMatch.c` adds `Map_Stmap93SetEmittedDriveTargetStickySkipMode3()` and skips only the sticky veto condition when `p->fMappingMode == 3`; the emitted-drive override and diagnostics remain active.
+- `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp` wire in the new command/file.
+
+Validation already run:
+- Build, help, smoke, path-normalization, stale-state, and implementation checks passed.
+- Full benchmark evaluation and CEC passed via `.autoeda/runtime/results/stmap97/run_stmap97_eval.py`.
+- Metrics: `or1200` candidate delay `564.80 ps`, matching stmap96 and improving over stmap95, but still behind stmap94.
+- On `or1200`, stats show `sticky-skip-mode3 = 1`, `sticky-set = 1`, `sticky-blocked = 1`, and reconstruction emits `OAI22xp33_ASAP7_75t_L` for AIG `11491` phase `0`.
+
+Please check for correctness, build integration, stale-state, older-command regression, diagnostic accuracy, and campaign-contract issues. Findings should be concrete and tied to file/line references.

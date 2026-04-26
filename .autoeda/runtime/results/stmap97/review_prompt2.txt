@@ -1,0 +1,14 @@
+Review the final uncommitted stmap97 implementation after the accepted review-pass-1 campaign-state fix.
+
+stmap97 hypothesis:
+- Keep mode-2 emitted-drive sticky pressure but skip the sticky replacement veto during mode-3 phase-aware recovery.
+
+Accepted review-pass-1 finding already fixed:
+- P2: `campaign_state.json` recorded a non-resolvable stmap96 `last_successful_commit`.
+- Fix: `last_successful_commit` now records the actual pushed stmap96 commit `532a6e8ab4ba18154f9c0bfe86e1f8c520b6e3cb`.
+
+Validation:
+- Build, help, smoke, path-normalization, stale-state, implementation checks, full benchmark evaluation, and CEC all passed before the state-only fix.
+- Source was not changed after review pass 1.
+
+Please check for remaining source, build integration, stale-state, older-command regression, diagnostic, and campaign-contract issues. Findings should be concrete and tied to file/line references.
