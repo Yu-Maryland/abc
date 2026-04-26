@@ -1,0 +1,131 @@
+# stmap59 artifact check
+
+PASS - build exit: build.exit == 0
+PASS - help exit: help.exit == 0
+PASS - smoke exit: smoke_i10.exit == 0
+PASS - summary exists: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/summary.json
+PASS - summary command: 'stmap59'
+PASS - summary library: '7nm_lvt_ff.lib'
+PASS - summary benchmarks: ['benchmarks/i10.aig', 'benchmarks/ode.abc.blif', 'benchmarks/or1200.abc.blif', 'benchmarks/syn2.abc.blif']
+PASS - summary flow result count: 8
+PASS - baseline row for benchmarks/i10.aig: 1
+PASS - baseline returncode benchmarks/i10.aig: 0
+PASS - baseline delay metric benchmarks/i10.aig: 207.24
+PASS - baseline area metric benchmarks/i10.aig: 1263.44
+PASS - candidate row for benchmarks/i10.aig: 1
+PASS - candidate returncode benchmarks/i10.aig: 0
+PASS - candidate delay metric benchmarks/i10.aig: 198.64
+PASS - candidate area metric benchmarks/i10.aig: 1303.1
+PASS - baseline row for benchmarks/ode.abc.blif: 1
+PASS - baseline returncode benchmarks/ode.abc.blif: 0
+PASS - baseline delay metric benchmarks/ode.abc.blif: 531.32
+PASS - baseline area metric benchmarks/ode.abc.blif: 12491.21
+PASS - candidate row for benchmarks/ode.abc.blif: 1
+PASS - candidate returncode benchmarks/ode.abc.blif: 0
+PASS - candidate delay metric benchmarks/ode.abc.blif: 522.05
+PASS - candidate area metric benchmarks/ode.abc.blif: 11334.38
+PASS - baseline row for benchmarks/or1200.abc.blif: 1
+PASS - baseline returncode benchmarks/or1200.abc.blif: 0
+PASS - baseline delay metric benchmarks/or1200.abc.blif: 587.08
+PASS - baseline area metric benchmarks/or1200.abc.blif: 4798.34
+PASS - candidate row for benchmarks/or1200.abc.blif: 1
+PASS - candidate returncode benchmarks/or1200.abc.blif: 0
+PASS - candidate delay metric benchmarks/or1200.abc.blif: 561.55
+PASS - candidate area metric benchmarks/or1200.abc.blif: 4895.15
+PASS - baseline row for benchmarks/syn2.abc.blif: 1
+PASS - baseline returncode benchmarks/syn2.abc.blif: 0
+PASS - baseline delay metric benchmarks/syn2.abc.blif: 508.82
+PASS - baseline area metric benchmarks/syn2.abc.blif: 21296.6
+PASS - candidate row for benchmarks/syn2.abc.blif: 1
+PASS - candidate returncode benchmarks/syn2.abc.blif: 0
+PASS - candidate delay metric benchmarks/syn2.abc.blif: 479.78
+PASS - candidate area metric benchmarks/syn2.abc.blif: 22203.59
+PASS - comparison exists: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/comparison.csv
+PASS - comparison row count: 4
+PASS - comparison benchmarks: ['benchmarks/i10.aig', 'benchmarks/ode.abc.blif', 'benchmarks/or1200.abc.blif', 'benchmarks/syn2.abc.blif']
+PASS - comparison numeric baseline_delay_ps benchmarks/i10.aig: 207.24
+PASS - comparison numeric candidate_delay_ps benchmarks/i10.aig: 198.64
+PASS - comparison numeric delay_delta_ps benchmarks/i10.aig: -8.600000000000023
+PASS - comparison numeric baseline_area benchmarks/i10.aig: 1263.44
+PASS - comparison numeric candidate_area benchmarks/i10.aig: 1303.1
+PASS - comparison numeric area_delta benchmarks/i10.aig: 39.659999999999854
+PASS - comparison numeric baseline_delay_ps benchmarks/ode.abc.blif: 531.32
+PASS - comparison numeric candidate_delay_ps benchmarks/ode.abc.blif: 522.05
+PASS - comparison numeric delay_delta_ps benchmarks/ode.abc.blif: -9.270000000000095
+PASS - comparison numeric baseline_area benchmarks/ode.abc.blif: 12491.21
+PASS - comparison numeric candidate_area benchmarks/ode.abc.blif: 11334.38
+PASS - comparison numeric area_delta benchmarks/ode.abc.blif: -1156.83
+PASS - comparison numeric baseline_delay_ps benchmarks/or1200.abc.blif: 587.08
+PASS - comparison numeric candidate_delay_ps benchmarks/or1200.abc.blif: 561.55
+PASS - comparison numeric delay_delta_ps benchmarks/or1200.abc.blif: -25.530000000000086
+PASS - comparison numeric baseline_area benchmarks/or1200.abc.blif: 4798.34
+PASS - comparison numeric candidate_area benchmarks/or1200.abc.blif: 4895.15
+PASS - comparison numeric area_delta benchmarks/or1200.abc.blif: 96.80999999999949
+PASS - comparison numeric baseline_delay_ps benchmarks/syn2.abc.blif: 508.82
+PASS - comparison numeric candidate_delay_ps benchmarks/syn2.abc.blif: 479.78
+PASS - comparison numeric delay_delta_ps benchmarks/syn2.abc.blif: -29.04000000000002
+PASS - comparison numeric baseline_area benchmarks/syn2.abc.blif: 21296.6
+PASS - comparison numeric candidate_area benchmarks/syn2.abc.blif: 22203.59
+PASS - comparison numeric area_delta benchmarks/syn2.abc.blif: 906.9900000000016
+PASS - cec summary exists: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/cec_summary.json
+PASS - cec row count: 4
+PASS - cec benchmarks: ['benchmarks/i10.aig', 'benchmarks/ode.abc.blif', 'benchmarks/or1200.abc.blif', 'benchmarks/syn2.abc.blif']
+PASS - cec passed benchmarks/i10.aig: True
+PASS - cec returncode benchmarks/i10.aig: 0
+PASS - cec original exists benchmarks/i10.aig: .autoeda/runtime/results/stmap59/cec_benchmarks_i10_aig_orig.aig
+PASS - cec candidate exists benchmarks/i10.aig: .autoeda/runtime/results/stmap59/cec_benchmarks_i10_aig_stmap59.aig
+PASS - cec passed benchmarks/ode.abc.blif: True
+PASS - cec returncode benchmarks/ode.abc.blif: 0
+PASS - cec original exists benchmarks/ode.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_ode_abc_blif_orig.aig
+PASS - cec candidate exists benchmarks/ode.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_ode_abc_blif_stmap59.aig
+PASS - cec passed benchmarks/or1200.abc.blif: True
+PASS - cec returncode benchmarks/or1200.abc.blif: 0
+PASS - cec original exists benchmarks/or1200.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_or1200_abc_blif_orig.aig
+PASS - cec candidate exists benchmarks/or1200.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_or1200_abc_blif_stmap59.aig
+PASS - cec passed benchmarks/syn2.abc.blif: True
+PASS - cec returncode benchmarks/syn2.abc.blif: 0
+PASS - cec original exists benchmarks/syn2.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_syn2_abc_blif_orig.aig
+PASS - cec candidate exists benchmarks/syn2.abc.blif: .autoeda/runtime/results/stmap59/cec_benchmarks_syn2_abc_blif_stmap59.aig
+PASS - diagnostic exists feedback_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/feedback_stats.csv
+PASS - diagnostic nonempty feedback_stats.csv: 371
+PASS - diagnostic exists bounded_pressure_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/bounded_pressure_stats.csv
+PASS - diagnostic nonempty bounded_pressure_stats.csv: 496
+PASS - diagnostic exists blended_gain_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/blended_gain_stats.csv
+PASS - diagnostic nonempty blended_gain_stats.csv: 343
+PASS - diagnostic exists mapper_mode_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/mapper_mode_stats.csv
+PASS - diagnostic nonempty mapper_mode_stats.csv: 428
+PASS - diagnostic exists sink_pressure_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/sink_pressure_stats.csv
+PASS - diagnostic nonempty sink_pressure_stats.csv: 576
+PASS - diagnostic exists guard_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/guard_stats.csv
+PASS - diagnostic nonempty guard_stats.csv: 405
+PASS - diagnostic exists early_seed_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/early_seed_stats.csv
+PASS - diagnostic nonempty early_seed_stats.csv: 129
+PASS - diagnostic exists near_miss_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/near_miss_stats.csv
+PASS - diagnostic nonempty near_miss_stats.csv: 129
+PASS - diagnostic exists penalty_stats.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/penalty_stats.csv
+PASS - diagnostic nonempty penalty_stats.csv: 410
+PASS - diagnostic exists metrics.csv: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/metrics.csv
+PASS - diagnostic nonempty metrics.csv: 1004
+PASS - review artifact exists review_prompt1.txt: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_prompt1.txt
+PASS - review artifact exists review_prompt2.txt: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_prompt2.txt
+PASS - review artifact exists review_pass1.log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass1.log
+PASS - review artifact exists review_pass2.log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass2.log
+PASS - review artifact exists review_pass1.exit: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass1.exit
+PASS - review artifact exists review_pass2.exit: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass2.exit
+PASS - review artifact exists review_pass1_positional.log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass1_positional.log
+PASS - review artifact exists review_pass2_positional.log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_pass2_positional.log
+PASS - review artifact exists review_summary.md: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results/stmap59/review_summary.md
+PASS - review pass1 exit: review_pass1.exit == 0
+PASS - review pass2 exit: review_pass2.exit == 0
+PASS - review pass1 positional recorded rejection: exit=2
+PASS - review pass2 positional recorded rejection: exit=2
+PASS - source exists: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/src/base/abci/abcStmap_59.c
+PASS - source command symbol: Abc_CommandStmap59
+PASS - tracked aig id constant: ABC_STMAP59_TRACK_AIG_ID 27645
+PASS - tracked absent sentinel: TrackedNode = -1
+PASS - abc extern: extern present
+PASS - abc registration: command registered
+PASS - module make source: module.make
+PASS - dsp source: abclib.dsp
+
+RESULT: PASS (127 checks)

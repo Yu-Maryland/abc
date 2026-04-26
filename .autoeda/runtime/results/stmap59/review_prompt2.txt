@@ -1,0 +1,17 @@
+Second review pass for the final stmap59 uncommitted changes after addressing review pass 1.
+
+Pass 1 accepted finding:
+- `TrackedNode` used zero after `memset`, making absent tracked AIG diagnostics look like node 0.
+
+Fix applied:
+- `Abc_Stmap59LoadStatsClear()` now initializes `TrackedNode = -1`.
+
+Post-fix validation:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `./abc -c "stmap59 -h"` passed.
+- i10 smoke flow passed with parseable final stime metrics.
+- Full baseline/candidate benchmark evaluation passed for i10, ode, or1200, and syn2.
+- CEC passed for all four benchmarks.
+- Updated stmap59 diagnostics show `syn2` tracked AIG 27645 has `tracked-node = -1`, raw/sink/bounded ratios all 0.000, proving it is absent from the first-pass pressure table under the bounded-transfer handoff.
+
+Please review for any remaining correctness, build integration, evaluation artifact, or project-pack policy issues. Provide only actionable findings with file/line references; if none remain, say there are no actionable findings.

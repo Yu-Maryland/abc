@@ -3270,3 +3270,62 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap58: bound severe pressure transfer`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap58` proves that a simple final cap makes raw transfer safer, but the bounded table still does not recreate the useful cut-only evidence; it lands at a new area/timing point rather than recovering `stmap56`. For `stmap59`, either add a mapper-mode diagnostic that records the actual maximum leaf pressure for the formerly useful AIG ID/cut, or test a narrower severe transfer that only caps cut-side ratios while leaving node-side sink fallback unchanged, so the experiment can distinguish "cap too low" from "paired evidence blocks the exception."
+
+
+## version59 / stmap59
+
+- hypothesis: Keep the reviewed `stmap58` bounded-pressure handoff and mapper mode `57`, but retarget the tracked AIG diagnostic to the formerly useful `stmap56` cut-only AIG ID `27645`. This tests whether the bounded handoff misses the seed because that AIG is absent from the first-pass pressure table, capped too low, or converted into paired pressure evidence.
+- motivation: `stmap58` did not recreate the useful `stmap56` cut-only seed. The prior recommendation called for a diagnostic that records actual pressure for the formerly useful AIG/cut before changing the pressure-transfer rule again.
+- command name: `stmap59`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_59.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap59/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap59` clones the `stmap58` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap58`. It first maps with the established SCL load/max-cap collector, computes the same severe-feedback gain selector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. The intentional change is diagnostic: `ABC_STMAP59_TRACK_AIG_ID` is `27645`, the prior useful cut-only AIG ID. Review pass 1 changed absent tracked nodes to report `TrackedNode = -1`, so zero pressure ratios can be distinguished from a real mapped node ID.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap59/build.log`.
+  - help: `./abc -c "stmap59 -h"` printed command usage for the former-cut-only-AIG bounded-pressure diagnostic. Log: `.autoeda/runtime/results/stmap59/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap59; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap59/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap59/summary.json`, `metrics.csv`, `comparison.csv`, `feedback_stats.csv`, `bounded_pressure_stats.csv`, `blended_gain_stats.csv`, `mapper_mode_stats.csv`, `sink_pressure_stats.csv`, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- tracked-pressure diagnostics:
+  - mapper mode `57` was used for all candidate benchmark runs; non-severe designs used sink-fallback pressure and only `syn2` opened severe bounded-raw transfer.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, entries `262`; `ode` severity `0.627`, entries `4816`; `or1200` severity `0.733`, entries `4362`; `syn2` severity `0.884`, entries `8980`.
+  - AIG `27645` diagnostics: `i10` tracked node `-1`, raw/sink/bounded `0.000/0.000/0.000`; `ode` tracked node `13988`, raw/sink/bounded `6.473/2.915/2.915`; `or1200` tracked node `-1`, raw/sink/bounded `0.000/0.000/0.000`; `syn2` tracked node `-1`, raw/sink/bounded `0.000/0.000/0.000`.
+  - `syn2` inherited mode `57` diagnostics were unchanged from `stmap58`: pressure-near exception seeds/blocks `0/0`, cut-only exception seeds/blocks `0/0`, cut-only area-cap blocks `0`, moderate penalty seeds/blocks `0/1`, strong penalty seeds/blocks `0/2`, and near-miss count `18`.
+  - The hypothesis is resolved diagnostically: the formerly useful AIG ID `27645` is not present in the severe `syn2` first-pass pressure table under the command-level bounded handoff. The missing cut-only seed is therefore not due to the bounded ratio cap being too low for that AIG; the command-level first-pass mapping/reconstruction no longer maps the prior AIG ID into the pressure collector.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_59.c`.
+  - numbered command exists and is registered as `stmap59`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, and inherited penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap59/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap59/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap59/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap59/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap59/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap59/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap59/review_pass1.log`.
+  - accepted source finding: initialize the tracked-node diagnostic with an absent sentinel. `Abc_Stmap59LoadStatsClear()` now sets `TrackedNode = -1`. Revalidated with build, help, smoke, full metrics, tracked-pressure diagnostics, and CEC.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap59/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap59/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues in the final uncommitted changes.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap59: track former cut-only pressure id`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap59` shows the command-level first-pass pressure collector cannot see the prior useful `syn2` AIG ID `27645`, so another global pressure-table cap sweep is unlikely to answer the reconstruction question. For `stmap60`, add mapper-mode-side diagnostics for the cut leaves of near-miss node `23628` directly inside mode `57`, or preserve first-pass AIG identity through reconstruction before attempting another bounded transfer policy.

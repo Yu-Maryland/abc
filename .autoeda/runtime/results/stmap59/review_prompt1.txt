@@ -1,0 +1,10 @@
+Review the uncommitted stmap59 iteration for correctness and campaign-policy issues.
+
+Context:
+- Project pack requires numbered stmapN commands, preserved older commands, help text, build integration, full benchmark metrics, CEC, review, logging, and commit.
+- stmap59 intentionally clones stmap58's bounded pressure transfer and reviewed mapper mode 57, but changes the tracked AIG diagnostic to the formerly useful cut-only AIG ID 27645.
+- New source/build files: src/base/abci/abcStmap_59.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp.
+- Runtime driver/artifacts: .autoeda/runtime/results/stmap59/run_stmap59_eval.py and generated logs/CSV/JSON.
+- Validation already run: make ABC_USE_NO_READLINE=1; ./abc -c "stmap59 -h"; i10 smoke; full baseline/candidate evaluation for i10/ode/or1200/syn2; CEC for all four benchmarks.
+
+Please focus on bugs that would invalidate the iteration: missing registration/build integration, broken stmap59 help or behavior, accidental changes to map or older stmap commands, unsafe pressure-table lifetime/use, invalid evaluation parsing, missing required artifacts, or policy/logging gaps. Provide findings with file/line references and severity. If no blocking issues, say so explicitly.
