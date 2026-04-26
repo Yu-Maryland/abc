@@ -1,0 +1,5 @@
+Review the uncommitted stmap82 changes for correctness, build integration, diagnostic lifecycle, and unintended mapper regressions.
+
+Context: stmap82 adds a command wrapper over stmap65, reuses stmap81 child-phase-0 parent candidate bias, and adds a command-scoped same-parent/same-phase sticky guard in mapperMatch.c. The guard is active only for configured watched parent/child AIG pairs during final mapping modes 2 and 3. It blocks later child-missing replacements unless they improve timing by more than 3.0 ps. Validation passed: build, help, smoke, path-normalization, stale-state, full four-benchmark evaluation, and CEC.
+
+Please focus on discrete bugs: stale static state, null dereferences, wrong active reset, accidental effect on classic map or non-stmap82 commands, cut/reference accounting risks when a replacement is blocked, parser/artifact consistency, and whether the sticky guard can leave MatchBest/pCutBest inconsistent.

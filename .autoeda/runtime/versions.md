@@ -4697,3 +4697,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap81: probe parent phase retention`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap82`, test a stricter retention policy or diagnostic that makes a just-overridden watched child-phase-0 parent candidate sticky against later child-missing candidates in the same parent/phase pass, unless the later candidate improves timing by more than the measured window or violates required time. `stmap81` shows the local override fires, but final remap still selects a child-missing `ode` parent phase `1` cut.
+
+
+## version82 / stmap82
+
+- hypothesis: If the `stmap81` child-phase-0 parent candidate is made sticky within the same parent/phase recovery pass, then later child-missing candidates will no longer erase it unless they deliver a material timing improvement. If final QoR still does not move, then the hidden child-phase-0 parent alternative is not on the global limiting path, or the timing advantage of the child-missing replacement dominates the local polarity objective.
+- motivation: `stmap81` proved that the local watched-parent override fires, but a later child-missing parent candidate can still replace it. `stmap82` tests the narrower replacement mechanism directly.
+- command name: `stmap82`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_82.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap82/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap82` is a command-scoped policy probe over `Abc_CommandStmap65`. It reuses the `stmap81` watched-parent child-phase-0 bias under the `stmap82` label and adds a sticky parent-phase guard. During final mapping modes `2` and `3`, when the watched parent phase selects a candidate that consumes the watched child as phase `0`, the guard remembers that cut and blocks later child-missing replacements unless they improve arrival by more than `3.00 ps`. Review pass 1 found that the first implementation did not seed sticky state from an incoming `pCutBest`; the accepted fix initializes sticky state from `pCutBest`/`MatchBest` before scanning replacement cuts.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap82/build.log`.
+  - help: `./abc -c "stmap82 -h"` printed `stmap82` usage. Log: `.autoeda/runtime/results/stmap82/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap82; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and recorded sticky set evidence. Log: `.autoeda/runtime/results/stmap82/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap82` selected watch child AIG `855` and downstream parent AIG `861`, then reported zero diagnostics because no library was loaded for the direct-read flow. Log: `.autoeda/runtime/results/stmap82/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap81/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported watch IDs `-1` and zero selected-match, reconstruction, demand-path, parent-cut, candidate-cut, parent-phase-bias, and sticky-parent-phase diagnostics. Log: `.autoeda/runtime/results/stmap82/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap82/summary.json`, `metrics.csv`, `comparison.csv`, `candidate_cut.csv`, `candidate_cut_stats.csv`, `candidate_cut_summary.csv`, `parent_phase_bias.csv`, `parent_phase_bias_stats.csv`, `sticky_parent_phase.csv`, `sticky_parent_phase_stats.csv`, `parent_cut.csv`, `parent_cut_stats.csv`, `parent_cut_summary.csv`, `demand_path.csv`, `demand_leaf.csv`, `demand_path_stats.csv`, `reconstruct_stats.csv`, `reconstruct_request.csv`, `reconstruct_emit.csv`, `reconstruct_cache.csv`, `selected_match.csv`, `selected_match_stats.csv`, `phase_survival.csv`, `phase_survival_stats.csv`, `final_critical_lineage.csv`, `final_critical_stats.csv`, `cec_summary.json`, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- sticky-parent diagnostic results:
+  - `i10` parent AIG `861` / child AIG `855`: `6` sticky rows, `4` sticky-set events, no blocked replacements, and `2` child-phase-0 allows.
+  - `ode` parent AIG `5229` / child AIG `5219`: `10` sticky rows, `3` sticky-set events, `5` blocked child-missing replacements, `1` child-phase-0 allow, and `1` timing allow. The final timing allow is a child-missing `NOR3xp33_ASAP7_75t_L` candidate with `3.86 ps` timing gain over the sticky `AOI221xp5_ASAP7_75t_L` candidate, exceeding the `3.00 ps` hold window.
+  - `ode` final parent-cut tracing after the review fix ends with parent phase `1` as `NOR3xp33_ASAP7_75t_L` and child AIG `5219` missing. This confirms the sticky mechanism blocks near replacements but intentionally releases for a sufficiently faster child-missing cut.
+  - `or1200` parent AIG `13829` / child AIG `11491`: `7` sticky rows, `5` sticky-set events, no blocked replacements, and `2` child-phase-0 allows.
+  - `syn2` parent AIG `18467` / child AIG `18002`: no sticky rows because no candidate met the prior parent-phase-bias eligibility.
+- correctness results:
+  - build passed after the review fix.
+  - numbered implementation exists: `src/base/abci/abcStmap_82.c`.
+  - numbered command exists and is registered as `stmap82`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - sticky-parent-phase, parent-phase-bias, candidate-cut, parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, phase-survival, path-normalization, stale-state, and CEC diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap82/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap82/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap82/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap82/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap82/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap82/review_pass1.log`.
+  - accepted source finding: seed sticky state from the existing best cut when area recovery enters `Map_MatchNodePhase` with `pCutBest` already selecting the watched child in phase `0`. The fix was implemented and build, help, smoke, path-normalization, stale-state, implementation check, full benchmark evaluation, and CEC were rerun.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap82/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap82/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issue in the fixed changed and untracked files.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap82: add sticky parent phase retention`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap83`, either tighten the sticky release rule enough to force the `ode` child-phase-0 parent cut through final remap despite the `3.86 ps` local parent timing gain, or move the investigation outward to final critical-path impact. `stmap82` shows that local parent polarity can be controlled, but QoR does not move under a timing-respecting release rule.

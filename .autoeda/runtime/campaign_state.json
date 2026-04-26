@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 82,
-  "next_iteration": 82,
+  "completed_iterations": 83,
+  "next_iteration": 83,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 81,
-  "last_completed_version": "stmap81",
-  "last_successful_commit": "local commit to be created: stmap81: probe parent phase retention; see git history for hash",
+  "last_completed_iteration": 82,
+  "last_completed_version": "stmap82",
+  "last_successful_commit": "local commit to be created: stmap82: add sticky parent phase retention; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -524,8 +524,15 @@
     "stmap81 full benchmark metrics, parent-phase-bias diagnostic parsing, and CEC completed successfully; review loop started.",
     "stmap81 validation passed: build, help, smoke, full benchmark metrics, parent-phase-bias diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
     "stmap81 review completed with no findings across two supported review passes; no source changes were made after final review.",
-    "stmap81 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap81 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap82 active iteration prepared: sticky watched-parent child-phase-0 retention probe.",
+    "stmap82 implementation built successfully; help, smoke, path-normalization, stale-state, and implementation checks passed; full evaluation started.",
+    "stmap82 full benchmark metrics, sticky-parent-phase diagnostic parsing, and CEC completed successfully; review loop started.",
+    "stmap82 review pass 1 accepted sticky seed finding; source fix was applied and build/help/smoke/path/stale/implementation checks were rerun before full re-evaluation.",
+    "stmap82 validation passed: build, help, smoke, full benchmark metrics, sticky-parent-phase diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap82 review pass 2 completed with no findings after the sticky seed fix.",
+    "stmap82 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T16:23:11Z",
-  "updated_at_utc": "2026-04-26T17:54:03Z"
+  "updated_at": "2026-04-26T18:13:39Z",
+  "updated_at_utc": "2026-04-26T18:13:39Z"
 }

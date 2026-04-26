@@ -582,6 +582,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
     extern void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel );
     extern int Map_Stmap81ParentPhaseBiasConfigured( void );
     extern void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel );
+    extern int Map_Stmap82StickyParentPhaseConfigured( void );
+    extern void Map_Stmap82SetStickyParentPhaseActive( int fActive, const char * pPassLabel );
 
     pNtk = Abc_FrameReadNtk(pAbc);
     DelayTarget = -1;
@@ -750,6 +752,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap80SetCandidateCutActive( 0, "feedback" );
         if ( Map_Stmap81ParentPhaseBiasConfigured() )
             Map_Stmap81SetParentPhaseBiasActive( 0, "feedback" );
+        if ( Map_Stmap82StickyParentPhaseConfigured() )
+            Map_Stmap82SetStickyParentPhaseActive( 0, "feedback" );
         pNtkFirst = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 36, fUseProfile, fUseBuffs, fVerbose );
         if ( pNtkFirst == NULL )
         {
@@ -806,6 +810,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap80SetCandidateCutActive( 1, "final" );
         if ( Map_Stmap81ParentPhaseBiasConfigured() )
             Map_Stmap81SetParentPhaseBiasActive( 1, "final" );
+        if ( Map_Stmap82StickyParentPhaseConfigured() )
+            Map_Stmap82SetStickyParentPhaseActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 57, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
@@ -817,6 +823,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap80SetCandidateCutActive( 0, "final" );
         if ( Map_Stmap81ParentPhaseBiasConfigured() )
             Map_Stmap81SetParentPhaseBiasActive( 0, "final" );
+        if ( Map_Stmap82StickyParentPhaseConfigured() )
+            Map_Stmap82SetStickyParentPhaseActive( 0, "final" );
         Map_Stmap65SetStrongNodeLoadDropGuard( 0 );
         Map_Stmap62SetCutOnlyOrdering( 0 );
         Map_Stmap61SetCutOnlyGateDiag( 0, -1 );
@@ -844,6 +852,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap80SetCandidateCutActive( 1, "final" );
         if ( Map_Stmap81ParentPhaseBiasConfigured() )
             Map_Stmap81SetParentPhaseBiasActive( 1, "final" );
+        if ( Map_Stmap82StickyParentPhaseConfigured() )
+            Map_Stmap82SetStickyParentPhaseActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 0, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
@@ -855,6 +865,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap80SetCandidateCutActive( 0, "final" );
         if ( Map_Stmap81ParentPhaseBiasConfigured() )
             Map_Stmap81SetParentPhaseBiasActive( 0, "final" );
+        if ( Map_Stmap82StickyParentPhaseConfigured() )
+            Map_Stmap82SetStickyParentPhaseActive( 0, "final" );
         if ( pNtkRes == NULL )
         {
             if ( fTempMap )

@@ -1,0 +1,5 @@
+benchmark,parent_aig,child_aig,rows,child_phase0,eligible,overrides,already_selected,blocked_mode,blocked_best,blocked_window,blocked_child,arrival_window,area_premium_window,area_ratio_window
+benchmarks/i10.aig,861,855,15,5,2,2,0,3,0,0,10,0.750,0.750,2.000
+benchmarks/ode.abc.blif,5229,5219,28,7,2,2,0,1,0,4,21,0.750,0.750,2.000
+benchmarks/or1200.abc.blif,13829,11491,17,7,3,2,1,3,0,1,10,0.750,0.750,2.000
+benchmarks/syn2.abc.blif,18467,18002,24,2,0,0,0,1,0,1,22,0.750,0.750,2.000

@@ -1,0 +1,36 @@
+stmap82 version-log check
+OK pattern ## version82 / stmap82
+OK pattern hypothesis:
+OK pattern command name: `stmap82`
+OK pattern algorithm summary:
+OK pattern benchmark results:
+OK pattern sticky-parent diagnostic results:
+OK pattern correctness results:
+OK pattern review pass 1:
+OK pattern review pass 2:
+OK pattern next-step recommendation:
+OK artifact reference summary.json
+OK artifact exists summary.json
+OK artifact reference metrics.csv
+OK artifact exists metrics.csv
+OK artifact reference comparison.csv
+OK artifact exists comparison.csv
+OK artifact reference candidate_cut.csv
+OK artifact exists candidate_cut.csv
+OK artifact reference candidate_cut_summary.csv
+OK artifact exists candidate_cut_summary.csv
+OK artifact reference parent_phase_bias.csv
+OK artifact exists parent_phase_bias.csv
+OK artifact reference sticky_parent_phase.csv
+OK artifact exists sticky_parent_phase.csv
+OK artifact reference sticky_parent_phase_stats.csv
+OK artifact exists sticky_parent_phase_stats.csv
+OK artifact reference parent_cut_summary.csv
+OK artifact exists parent_cut_summary.csv
+OK artifact reference cec_summary.json
+OK artifact exists cec_summary.json
+OK artifact reference artifact_check.log
+OK artifact exists artifact_check.log
+OK artifact reference review_summary.md
+OK artifact exists review_summary.md
+version_log_check=pass

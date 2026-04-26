@@ -1,0 +1,3 @@
+Second-pass review for stmap82 after pass 1 found and the implementation addressed sticky-state seeding from the incoming best cut.
+
+Please re-check the fixed uncommitted changes with emphasis on the new initial call to seed sticky state from `pCutBest`/`MatchBest`, static lifecycle reset, interaction with `Map_MatchNodePhase` reference accounting, command registration/build metadata, and whether classic `map` or other stmap commands remain unaffected when stmap82 is not configured. Validation was rerun after the fix: build, help, smoke, path-normalization, stale-state, implementation check, full four-benchmark evaluation, and CEC all passed.

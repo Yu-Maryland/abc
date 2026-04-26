@@ -453,6 +453,148 @@ void Map_Stmap81PrintParentPhaseBiasSummary( void )
         s_nStmap81ParentPhaseBlockedChild, 0.75f, 0.75f, 2.00f );
 }
 
+static int s_fStmap82StickyParentPhase = 0;
+static int s_fStmap82StickyParentPhaseActive = 0;
+static const char * s_pStmap82StickyParentPhaseLabel = "stmap82";
+static int s_Stmap82ParentAigId = -1;
+static int s_Stmap82ChildAigId = -1;
+static int s_nStmap82StickyRows = 0;
+static int s_nStmap82StickySet = 0;
+static int s_nStmap82StickyBlocked = 0;
+static int s_nStmap82StickyAllowedTiming = 0;
+static int s_nStmap82StickyAllowedChild0 = 0;
+static int s_nStmap82StickyIgnored = 0;
+
+static void Map_Stmap82ResetStickyParentPhaseCounters( void )
+{
+    s_nStmap82StickyRows = 0;
+    s_nStmap82StickySet = 0;
+    s_nStmap82StickyBlocked = 0;
+    s_nStmap82StickyAllowedTiming = 0;
+    s_nStmap82StickyAllowedChild0 = 0;
+    s_nStmap82StickyIgnored = 0;
+}
+
+static void Map_Stmap82ClearStickyParentPhase( void )
+{
+    s_fStmap82StickyParentPhase = 0;
+    s_fStmap82StickyParentPhaseActive = 0;
+    s_pStmap82StickyParentPhaseLabel = "stmap82";
+    s_Stmap82ParentAigId = -1;
+    s_Stmap82ChildAigId = -1;
+    Map_Stmap82ResetStickyParentPhaseCounters();
+}
+
+void Map_Stmap82SetStickyParentPhase( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+{
+    Map_Stmap82ClearStickyParentPhase();
+    s_pStmap82StickyParentPhaseLabel = pLabel && pLabel[0] ? pLabel : "stmap82";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 )
+        return;
+    s_fStmap82StickyParentPhase = 1;
+    s_Stmap82ParentAigId = ParentAigId;
+    s_Stmap82ChildAigId = ChildAigId;
+}
+
+int Map_Stmap82StickyParentPhaseConfigured( void )
+{
+    return s_fStmap82StickyParentPhase;
+}
+
+void Map_Stmap82SetStickyParentPhaseActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap82StickyParentPhase )
+        return;
+    if ( fActive )
+        Map_Stmap82ResetStickyParentPhaseCounters();
+    s_fStmap82StickyParentPhaseActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Map_Stmap82StickyParentPhaseApplies( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
+{
+    Map_Node_t * pNodeRegular;
+    if ( !s_fStmap82StickyParentPhase || !s_fStmap82StickyParentPhaseActive || p == NULL || pNode == NULL )
+        return 0;
+    if ( p->fMappingMode != 2 && p->fMappingMode != 3 )
+        return 0;
+    pNodeRegular = Map_Regular( pNode );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return 0;
+    (void)fPhase;
+    return Map_NodeReadAigId( pNodeRegular ) == s_Stmap82ParentAigId;
+}
+
+static void Map_Stmap82RememberStickyParentPhase( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, int fAccepted, int * pfSticky, Map_Match_t * pStickyMatch, Map_Cut_t ** ppStickyCut, int * pStickyCutOrdinal )
+{
+    int ChildLeaf, ChildPhase;
+    if ( !fAccepted || !Map_Stmap82StickyParentPhaseApplies( p, pNode, fPhase ) )
+        return;
+    if ( !Map_Stmap81ReadChildPhase( pCut, pMatch, s_Stmap82ChildAigId, &ChildLeaf, &ChildPhase ) || ChildPhase != 0 )
+        return;
+    *pfSticky = 1;
+    *pStickyMatch = *pMatch;
+    *ppStickyCut = pCut;
+    *pStickyCutOrdinal = CutOrdinal;
+    s_nStmap82StickySet++;
+    printf( "%s sticky-parent-phase: index = %d  parent-aig = %d  child-aig = %d  mapper-mode = %d  phase = %d  action = set-sticky  cut-ordinal = %d  child-leaf-index = %d  child-requested-phase = %d  gate = %s  arrival = %.3f  area-flow = %.3f  sticky-cut-ordinal = %d  sticky-arrival = %.3f  sticky-area-flow = %.3f  timing-hold-window = %.3f\n",
+        s_pStmap82StickyParentPhaseLabel, ++s_nStmap82StickyRows,
+        s_Stmap82ParentAigId, s_Stmap82ChildAigId, p->fMappingMode, fPhase,
+        CutOrdinal, ChildLeaf, ChildPhase,
+        pMatch->pSuperBest ? Mio_GateReadName(pMatch->pSuperBest->pRoot) : "?",
+        pMatch->tArrive.Worst, pMatch->AreaFlow,
+        *pStickyCutOrdinal, pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, 3.00f );
+}
+
+static int Map_Stmap82MaybeBlockStickyReplacement( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, int fAccepted, int fSticky, Map_Match_t * pStickyMatch, Map_Cut_t * pStickyCut, int StickyCutOrdinal )
+{
+    int ChildLeaf, ChildPhase;
+    float TimingGain;
+    const char * pAction;
+    if ( !fAccepted || !fSticky || !Map_Stmap82StickyParentPhaseApplies( p, pNode, fPhase ) )
+        return fAccepted;
+    Map_Stmap81ReadChildPhase( pCut, pMatch, s_Stmap82ChildAigId, &ChildLeaf, &ChildPhase );
+    TimingGain = pStickyMatch->tArrive.Worst - pMatch->tArrive.Worst;
+    if ( ChildPhase == 0 )
+    {
+        s_nStmap82StickyAllowedChild0++;
+        pAction = "allow-child-phase0";
+    }
+    else if ( TimingGain > 3.00f + p->fEpsilon )
+    {
+        s_nStmap82StickyAllowedTiming++;
+        pAction = "allow-timing";
+    }
+    else
+    {
+        s_nStmap82StickyBlocked++;
+        pAction = "block-child-missing";
+        fAccepted = 0;
+    }
+    if ( pAction[0] == 'a' )
+        s_nStmap82StickyIgnored++;
+    printf( "%s sticky-parent-phase: index = %d  parent-aig = %d  child-aig = %d  mapper-mode = %d  phase = %d  action = %s  cut-ordinal = %d  child-leaf-index = %d  child-requested-phase = %d  gate = %s  arrival = %.3f  area-flow = %.3f  sticky-cut-ordinal = %d  sticky-gate = %s  sticky-arrival = %.3f  sticky-area-flow = %.3f  timing-gain = %.3f  timing-hold-window = %.3f\n",
+        s_pStmap82StickyParentPhaseLabel, ++s_nStmap82StickyRows,
+        s_Stmap82ParentAigId, s_Stmap82ChildAigId, p->fMappingMode, fPhase,
+        pAction, CutOrdinal, ChildLeaf, ChildPhase,
+        pMatch->pSuperBest ? Mio_GateReadName(pMatch->pSuperBest->pRoot) : "?",
+        pMatch->tArrive.Worst, pMatch->AreaFlow,
+        StickyCutOrdinal,
+        pStickyMatch->pSuperBest ? Mio_GateReadName(pStickyMatch->pSuperBest->pRoot) : "?",
+        pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, TimingGain, 3.00f );
+    (void)pStickyCut;
+    return fAccepted;
+}
+
+void Map_Stmap82PrintStickyParentPhaseSummary( void )
+{
+    printf( "%s sticky-parent-phase stats: parent-aig = %d  child-aig = %d  rows = %d  sticky-set = %d  blocked-replacements = %d  allowed-timing = %d  allowed-child-phase0 = %d  allowed-total = %d  timing-hold-window = %.3f\n",
+        s_pStmap82StickyParentPhaseLabel, s_Stmap82ParentAigId, s_Stmap82ChildAigId,
+        s_nStmap82StickyRows, s_nStmap82StickySet, s_nStmap82StickyBlocked,
+        s_nStmap82StickyAllowedTiming, s_nStmap82StickyAllowedChild0,
+        s_nStmap82StickyIgnored, 3.00f );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
@@ -5393,11 +5535,11 @@ int Map_MatchNodeCut( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int f
 ***********************************************************************/
 int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
 {
-    Map_Match_t MatchBest, * pMatch;
-    Map_Cut_t * pCut, * pCutBest;
+    Map_Match_t MatchBest, Stmap82StickyMatch, * pMatch;
+    Map_Cut_t * pCut, * pCutBest, * pStmap82StickyCut = NULL;
     float Area1 = 0.0; // Suppress "might be used uninitialized
     float Area2, fWorstLimit;
-    int CutOrdinal, fSkipFanout, fAreaSkip, fAccepted;
+    int CutOrdinal, fSkipFanout, fAreaSkip, fAccepted, fStmap82Sticky = 0, Stmap82StickyCutOrdinal = -1;
 
     // skip the cuts that have been unassigned during area recovery
     pCutBest = pNode->pCutBest[fPhase];
@@ -5442,6 +5584,8 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         MatchBest = pCutBest->M[fPhase];
     else
         Map_MatchClean( &MatchBest );
+    Map_MatchClean( &Stmap82StickyMatch );
+    Map_Stmap82RememberStickyParentPhase( p, pNode, pCutBest, fPhase, -1, &MatchBest, pCutBest != NULL, &fStmap82Sticky, &Stmap82StickyMatch, &pStmap82StickyCut, &Stmap82StickyCutOrdinal );
  
     // select the new best cut
     fWorstLimit = pNode->tRequired[fPhase].Worst;
@@ -5478,11 +5622,13 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         // if the cut can be matched compare the matchings
         fAccepted = Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode );
         fAccepted = Map_Stmap81MaybeBiasParentPhase( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
+        fAccepted = Map_Stmap82MaybeBlockStickyReplacement( p, pNode, pCut, fPhase, CutOrdinal, pMatch, fAccepted, fStmap82Sticky, &Stmap82StickyMatch, pStmap82StickyCut, Stmap82StickyCutOrdinal );
         Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
         if ( fAccepted )
         {
             pCutBest  =  pCut;
             MatchBest = *pMatch;
+            Map_Stmap82RememberStickyParentPhase( p, pNode, pCut, fPhase, CutOrdinal, pMatch, fAccepted, &fStmap82Sticky, &Stmap82StickyMatch, &pStmap82StickyCut, &Stmap82StickyCutOrdinal );
             // if we are mapping for delay, the worst-case limit should be tightened
             if ( p->fMappingMode == 0 )
                 fWorstLimit = MatchBest.tArrive.Worst;
