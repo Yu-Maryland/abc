@@ -1,0 +1,36 @@
+artifact check for stmap68
+present: build.log
+present: help.log
+present: smoke_i10.log
+present: eval.log
+present: summary.json
+present: metrics.csv
+present: comparison.csv
+present: cec_summary.json
+present: review_prompt1.txt
+present: review_pass1.log
+present: review_prompt2.txt
+present: review_pass2.log
+present: review_summary.md
+present: final_witness.csv
+present: final_witness_stats.csv
+present: final_witness_summary.csv
+present: blocked_strong_witness_source.csv
+present: penalty_stats.csv
+present: version_log_check.log
+present: baseline_benchmarks_i10_aig.log
+present: candidate_benchmarks_i10_aig.log
+present: cec_benchmarks_i10_aig.log
+present: baseline_benchmarks_ode_abc_blif.log
+present: candidate_benchmarks_ode_abc_blif.log
+present: cec_benchmarks_ode_abc_blif.log
+present: baseline_benchmarks_or1200_abc_blif.log
+present: candidate_benchmarks_or1200_abc_blif.log
+present: cec_benchmarks_or1200_abc_blif.log
+present: baseline_benchmarks_syn2_abc_blif.log
+present: candidate_benchmarks_syn2_abc_blif.log
+present: cec_benchmarks_syn2_abc_blif.log
+flow metrics parseable: 1
+cec passed: 1
+version log check passed: 1
+status: PASS

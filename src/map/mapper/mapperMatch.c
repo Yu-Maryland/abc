@@ -1421,6 +1421,8 @@ static int s_fStmap63CutOnlyLoadDropGuard = 0;
 static int s_fStmap65StrongNodeLoadDropGuard = 0;
 static int s_fStmap66NearStrongNodeLoadDropDiag = 0;
 static int s_fStmap67NearStrongNodeWitnessDiag = 0;
+static int s_fStmap68BlockedStrongWitnessDiag = 0;
+static int s_nStmap68BlockedStrongWitnessSources = 0;
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1512,6 +1514,16 @@ void Map_Stmap67SetNearStrongNodeWitnessDiag( int fEnable )
     if ( fEnable )
         s_nStmap64CutOnlyWitnesses = 0;
     s_fStmap67NearStrongNodeWitnessDiag = fEnable;
+}
+
+void Map_Stmap68SetBlockedStrongWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap68BlockedStrongWitnessSources = 0;
+    }
+    s_fStmap68BlockedStrongWitnessDiag = fEnable;
 }
 
 void Map_Stmap64ClearCutOnlyWitnesses( void )
@@ -1606,6 +1618,33 @@ static void Map_Stmap67RecordNearStrongNodeWitness( Map_Node_t * pNode, int AigI
     if ( !s_fStmap67NearStrongNodeWitnessDiag )
         return;
     Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+}
+
+static void Map_Stmap68RecordBlockedStrongWitness( Map_Node_t * pNode, Map_Cut_t * pCut, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float PenaltyFactor, float AreaMargin, float CutLeafLoadAvg, int FanLimit, float LoadDriveRatio )
+{
+    int i, Before, After, fDuplicate = 0;
+    if ( !s_fStmap68BlockedStrongWitnessDiag || pNode == NULL || AigId < 0 )
+        return;
+    fPhase = fPhase ? 1 : 0;
+    s_nStmap68BlockedStrongWitnessSources++;
+    for ( i = 0; i < s_nStmap64CutOnlyWitnesses; i++ )
+    {
+        if ( s_Stmap64WitnessAigIds[i] == AigId && s_Stmap64WitnessPhases[i] == fPhase )
+        {
+            fDuplicate = 1;
+            break;
+        }
+    }
+    Before = s_nStmap64CutOnlyWitnesses;
+    if ( !fDuplicate )
+        Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+    After = s_nStmap64CutOnlyWitnesses;
+    if ( s_nStmap68BlockedStrongWitnessSources <= 64 )
+        printf( "stmap68 blocked-strong witness source: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  stored = %d  duplicate = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+            s_nStmap68BlockedStrongWitnessSources, pNode->Num, AigId, pNode->Level, pNode->nRefs,
+            pCut ? (int)pCut->nLeaves : 0, fPhase, After > Before, fDuplicate, Slack, AreaSave,
+            ArrivalDelta, ArrivalGainMargin, PenaltyFactor, AreaMargin, CutLeafLoadAvg, FanLimit,
+            LoadDriveRatio, NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback );
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -4371,6 +4410,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 if ( p->fSkipFanout == 57 && fStmap56StrongPenaltyCandidate && Stmap56StrongPenaltyFactor > 0.0 )
                 {
                     p->nStmap56StrongPenaltyBlocked++;
+                    Map_Stmap68RecordBlockedStrongWitness( pNode, pCut, Stmap56NodeAigId, fPhase, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, Stmap56StrongPenaltyFactor, AreaMargin, Stmap56CutLeafLoadAvg, Stmap56FanLimit, Stmap56LoadDriveRatio );
                     printf( "stmap56 strong penalty block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
                         p->nStmap56StrongPenaltyBlocked, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,

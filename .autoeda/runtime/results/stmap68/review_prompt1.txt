@@ -1,0 +1,18 @@
+Review the uncommitted stmap68 iteration for correctness and campaign-policy issues.
+
+Context:
+- Project policy is .autoeda/project_pack/agent.md.
+- New command is stmap68.
+- The intended hypothesis is diagnostic only: preserve the reviewed stmap65 mapping policy while recording blocked stmap56 strong-pressure candidates as downstream stime witnesses.
+- The command should not change classic map or older stmap command behavior.
+- Changed source files include src/base/abci/abcStmap_68.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, and src/map/mapper/mapperMatch.c.
+- Runtime artifacts are under .autoeda/runtime/results/stmap68/.
+
+Please focus on:
+- command registration/help/build integration issues;
+- whether the mapper diagnostic flag is properly scoped and reset;
+- whether witness recording can contaminate stmap64/stmap67 or unrelated later stime calls;
+- whether the diagnostic changes mapping decisions;
+- CEC/evaluation/logging gaps that would make this iteration invalid.
+
+Return discrete findings with file/line references where applicable. If no blocking correctness issues are found, say so clearly.

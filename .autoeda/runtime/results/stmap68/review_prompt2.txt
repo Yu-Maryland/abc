@@ -1,0 +1,11 @@
+Second review pass for the uncommitted stmap68 iteration after pass 1 reported no discrete findings.
+
+Please re-check the current source and runtime artifacts for any remaining correctness or campaign-policy issue.
+
+Focus areas:
+- stmap68 command registration, help path, and build integration;
+- Map_Stmap68SetBlockedStrongWitnessDiag lifecycle and interaction with stmap64/stmap67 final-witness storage;
+- whether Map_Stmap68RecordBlockedStrongWitness is diagnostic-only and cannot alter match selection;
+- whether full benchmark metrics, CEC artifacts, and review logs are sufficient for counting the iteration.
+
+Return discrete findings with file/line references where applicable. If none remain, say so clearly.

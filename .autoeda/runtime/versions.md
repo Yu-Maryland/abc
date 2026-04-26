@@ -3831,3 +3831,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap67: trace near-threshold final witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap68`, keep the `1.25` strong-node threshold closed. The only near-band witness was present after downstream timing but had final load ratio `0.039` and final criticality `0.272`, so a threshold-lowering variant would be poorly supported. The next useful hypothesis is to search for final-criticality evidence on other pressure-transfer classes, or to require final-witness criticality at least `0.50` before reopening any one-sided cut-pressure admission.
+
+
+## version68 / stmap68
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and record the mode-57 blocked strong-pressure candidates as downstream `stime` witnesses. This tests whether area-margin-rejected strong-pressure choices, especially those with high load-drive ratio, are actually loaded or timing-critical after `topo`, `buffer`, `upsize`, and `dnsize`.
+- motivation: `stmap67` showed the only near-threshold load-drop witness remained low-criticality downstream, so lowering the strong-node cut-only threshold is unsupported. The next useful evidence source is another pressure-transfer class: strong-pressure candidates that are currently rejected by the area margin.
+- command name: `stmap68`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_68.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap68/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap68` is a diagnostic-only wrapper over `stmap65`. It enables `Map_Stmap68SetBlockedStrongWitnessDiag(1)` only while delegating to `Abc_CommandStmap65`, then resets the flag and scopes the existing final-witness printer to the resulting mapped network with label `stmap68`. The mapper policy is unchanged: final remap still uses mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new mapper hook records blocked `stmap56` strong-penalty events as witness candidates without changing their acceptance/rejection decision; duplicate AIG/phase sources are logged but only the first unique witness is stored.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`; log: `.autoeda/runtime/results/stmap68/build.log`.
+  - help: `./abc -c "stmap68 -h"` printed usage text; log: `.autoeda/runtime/results/stmap68/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap68; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`; log: `.autoeda/runtime/results/stmap68/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap68/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss leaf diagnostics, new `blocked_strong_witness_source.csv`, new `final_witness.csv`, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- blocked strong-pressure witness diagnostic results:
+  - `i10`, `ode`, and `or1200` had `0` blocked strong-pressure witness sources.
+  - `syn2` had `2` blocked strong-pressure source events on mapper node `2318`, AIG ID `5548`, phase `0`; the first stored event had load-drive ratio `6.750`, node pressure `1.911`, cut pressure `1.712`, area save `0.930000`, area margin `1.119019`, arrival delta `-16.480011`, and penalty factor `0.599`.
+  - The duplicate source for the same AIG/phase had load-drive ratio `5.500`, cut pressure `1.552`, area margin `0.999807`, and was logged as `duplicate = 1` without replacing the stored witness.
+  - The stored witness matched final node `5784` after downstream flow with gate `INVxp33_ASAP7_75t_L`, final fanouts `4`, final load `1.652`, final max cap `11.520`, final load ratio `0.143`, final criticality `0.285`, and final slack `61.763306`.
+  - Final-witness summary was `witnesses = 1`, `matched = 1`, `criticality-ge-0p50 = 0`; this does not support relaxing the strong-pressure area margin yet.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_68.c`.
+  - numbered command exists and is registered as `stmap68`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - blocked-strong witness diagnostics, final-witness diagnostics, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap68/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap68/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap68/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap68/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap68/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap68/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap68/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap68/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap68/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues and confirmed the diagnostic path is gated to `stmap68` without changing mapper behavior.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap68: trace blocked strong-pressure witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap69`, keep both the strong-node cut-only threshold and the strong-pressure area margin closed. The only blocked strong-pressure witness was visible after downstream timing but still had final load ratio `0.143` and final criticality `0.285`, so a margin-relaxation variant is not yet supported. Next, either trace pressure-near exception candidates or add a stricter diagnostic that only proposes mapper changes for witnesses with final criticality at least `0.50`.

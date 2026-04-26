@@ -1,0 +1,2 @@
+benchmark,index,aig_id,phase,seed_node,final_node,matched,final_gate,final_fanouts,final_load,final_max_cap,final_load_ratio,final_criticality,final_slack,seed_node_pressure_ratio,seed_cut_pressure_ratio,seed_slack,seed_area_save,seed_arrival_delta,seed_arrival_gain_margin,scl_feedback
+benchmarks/syn2.abc.blif,1,5548,0,2318,5784,1,INVxp33_ASAP7_75t_L,4,1.652,11.520,0.143,0.285,61.763306,1.911,1.712,6.809982,0.930000,-16.480011,1.510000,0.884
