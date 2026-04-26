@@ -2454,3 +2454,62 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap44: require agreement for moderate SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap44` shows that tightening the moderate penalty diagnostic does not recover the `syn2` QoR regression because the underlying area recovery can still occur without a positive moderate penalty factor. For `stmap45`, move the pressure agreement from the penalty-factor margin into the admission rule itself, or add a direct block for the recovered moderate seed when local pressure disagreement is observed, while preserving the AIG `5548` strong pressure protection.
+
+## version45 / stmap45
+
+- hypothesis: Move the node/cut SCL pressure-agreement test from the moderate penalty margin into the actual admission rule, so moderate deep soft seeds can use the lighter one-inverter area-recovery margin only when local mapped-node and cut-leaf pressure agree, while preserving the `stmap44` strong SCL pressure protection.
+- motivation: `stmap44` suppressed counted moderate penalty factors but did not prevent the underlying moderate area recovery from using the lighter admission rule, leaving `syn2` at the same `491.54 ps` / `21598.23` point as `stmap43`. `stmap45` tests whether enforcing pressure agreement at admission time changes the actual recovered choices.
+- command name: `stmap45`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_45.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap45/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap45` is a numbered two-pass `stmap` command. The first pass reuses the sink-critical SCL load/max-cap pressure collector from the recent variants and transfers a dense AIG-ID pressure vector into mapper mode `46`. Mode `46` preserves the strong pressure penalty path used by `stmap44`, but the moderate deep recovery path now distinguishes every moderate soft seed from the positive-penalty subset. A moderate soft seed can avoid strict fallback only when its mapped node pressure and selected cut-leaf pressure both exceed `1.75` and their spread is no greater than `1.25`; otherwise it falls back to the stricter two-inverter area margin. Existing `map` and `stmap0` through `stmap44` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap45/build.log`.
+  - help: `./abc -c "stmap45 -h"` printed command usage with agreement-admitted moderate recovery and strong SCL pressure feedback enabled. Log: `.autoeda/runtime/results/stmap45/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap45; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap45/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap45/summary.json`, `metrics.csv`, `comparison.csv`, guard/near-miss/early-seed diagnostics, sink-pressure and feedback diagnostics, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); sink-pressure entries `262`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); sink-pressure entries `4816`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); sink-pressure entries `4362`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `493.61 ps`, area `21539.91`; delay delta `-15.21 ps` (`-2.99%`), area delta `+243.31` (`+1.14%`); sink-pressure entries `8980`; penalty stats: moderate seed `0`, moderate blocked `6`, strong seed `0`, strong blocked `2`.
+- sink-pressure and penalty diagnostics:
+  - first-pass SCL load feedback is active on `ode`, `or1200`, and `syn2`: max load ratios are `8.715`, `10.805`, and `11.716`, with severity `0.627`, `0.733`, and `0.884` respectively. `i10` has over-cap roots but feedback severity remains `0.000`.
+  - `benchmarks/syn2.abc.blif`: tracked AIG `5548`, tracked mapped node `5656`, raw pressure ratio `2.265`, sink-pressure ratio `1.443`.
+  - `benchmarks/syn2.abc.blif`: strong pressure blocks remained active twice at mapper node `2318` / AIG `5548`, with penalty factors around `0.330` and `0.329`, area margins around `0.930935` and `0.930094`, node sink-pressure ratio `1.443`, cut sink-pressure ratios `1.346` and `1.268`, and SCL feedback `0.884`.
+  - `benchmarks/syn2.abc.blif`: the accepted review fix broadened moderate block accounting from positive-penalty candidates to all moderate soft seeds; the final diagnostic count is six moderate blocks and zero moderate seeds. This confirms the admission rule now blocks no-agreement moderate soft seeds rather than merely zeroing their extra margin.
+  - Compared with `stmap44`, `stmap45` improves `syn2` area from `21598.23` to `21539.91` but worsens delay from `491.54 ps` to `493.61 ps`. The stricter admission rule is behaviorally active, but over-blocks at least one timing-useful moderate soft seed.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_45.c`.
+  - numbered command exists and is registered as `stmap45`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - sink-pressure, feedback, guard, early-seed, near-miss, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap45/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap45/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap45/artifact_check.txt`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap45/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap45/review_pass1.log`.
+  - accepted source findings: one P2 finding. Mode `46` originally checked pressure only for positive moderate penalty candidates, so tight-critical moderate soft seeds could still use the one-inverter margin without pressure agreement.
+  - accepted fix: `mapperMatch.c` now tracks `fStmap45ModerateSoftSeed`, computes pressure agreement for all such seeds, and makes `fStrictFallback` require that agreement before any mode-46 moderate soft seed can use the lighter admission margin. The fix was fully revalidated.
+- review pass 2:
+  - supported configured-tool invocation completed against the patched implementation and refreshed artifacts; log: `.autoeda/runtime/results/stmap45/review_pass2.log`.
+  - accepted source findings: none.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: one accepted source fix was made after review pass 1 and fully revalidated; after review pass 2 only runtime review summary, artifact checks, canonical logging, version checks, and campaign-state finalization were added.
+- commit: local commit created with message `stmap45: require pressure agreement for moderate admission`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap45` proves that moving pressure agreement into the admission rule changes the final network and recovers some `syn2` area, but it also gives up delay relative to `stmap44`. For `stmap46`, split the moderate soft-seed diagnostics by tight-critical versus positive-penalty origin and test a narrower exception: keep the pressure-agreement requirement for broad moderate penalty candidates, but allow only very tight critical seeds that meet a stronger arrival-gain or area-save threshold, while preserving the AIG `5548` strong pressure blocks.

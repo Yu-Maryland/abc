@@ -1,0 +1,39 @@
+Review the uncommitted stmap45 implementation for the ABC AutoEDA campaign.
+
+Context:
+- Required project-pack behavior is additive numbered command `stmap45`.
+- The hypothesis is pressure-agreement admission for moderate deep recovery while preserving strong SCL pressure protection.
+- stmap45 is expected to preserve older stmap commands and baseline `map` behavior.
+
+Primary files to inspect:
+- `src/base/abci/abc.c`
+- `src/base/abci/abcStmap_45.c`
+- `src/base/abci/module.make`
+- `abclib.dsp`
+- `src/map/mapper/mapperInt.h`
+- `src/map/mapper/mapperCore.c`
+- `src/map/mapper/mapperMatch.c`
+- `.autoeda/runtime/results/stmap45/run_stmap45_eval.py`
+
+Validation already run:
+- `make ABC_USE_NO_READLINE=1`
+- `./abc -c "stmap45 -h"`
+- smoke flow on `benchmarks/i10.aig`
+- full required benchmark flow for i10/ode/or1200/syn2
+- CEC original-vs-postflow mapped design for all four required benchmarks
+
+Observed candidate metrics versus baseline:
+- i10: delay 198.64 ps vs 207.24 ps, area 1303.10 vs 1263.44
+- ode: delay 522.05 ps vs 531.32 ps, area 11334.38 vs 12491.21
+- or1200: delay 561.55 ps vs 587.08 ps, area 4895.15 vs 4798.34
+- syn2: delay 490.96 ps vs 508.82 ps, area 21541.78 vs 21296.60
+
+Please focus on correctness/regressions:
+- command registration, help behavior, and build integration
+- mode 46 gating so only stmap45 semantics change
+- preservation of older stmap modes and classic `map`
+- lifetime and indexing safety of SCL pressure feedback vectors
+- whether the moderate pressure-agreement admission fallback actually enforces the intended area margin
+- diagnostic counters and artifact completeness
+
+Report actionable findings with severity and exact file/line references. If there are no actionable findings, say so explicitly and mention residual risk.

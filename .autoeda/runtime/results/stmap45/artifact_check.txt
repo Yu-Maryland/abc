@@ -1,0 +1,43 @@
+stmap45 artifact check
+
+Required gates:
+- build.exit = 0
+- help.exit = 0
+- smoke_i10.exit = 0
+- eval_driver.exit = 0
+- all baseline and candidate benchmark exit files = 0
+- all CEC write and compare exit files = 0
+- review_pass1.exit = 0
+- review_pass2.exit = 0
+
+Expected nonzero artifact:
+- review_pass1_positional.exit = 2 because the installed Codex CLI rejects `--uncommitted` together with a positional prompt. The supported configured-tool stdin invocation completed in review_pass1.log.
+
+Required result files present and nonempty:
+- comparison.csv
+- metrics.csv
+- summary.json
+- cec_summary.json
+- guard_stats.csv
+- near_miss_stats.csv
+- early_seed_stats.csv
+- penalty_stats.csv
+- sink_pressure_stats.csv
+- feedback_stats.csv
+- review_prompt1.txt
+- review_pass1.log
+- review_prompt2.txt
+- review_pass2.log
+- review_summary.md
+
+Metric table shape:
+- comparison.csv has 5 lines: header plus four required benchmarks.
+- metrics.csv has 9 lines: header plus baseline/candidate rows for four required benchmarks.
+- penalty_stats.csv has 5 lines: header plus four required benchmarks.
+- sink_pressure_stats.csv has 5 lines: header plus four required benchmarks.
+
+CEC logs:
+- i10, ode, or1200, and syn2 logs all report `Networks are equivalent.`
+
+Status:
+- artifact check passed for stmap45 after the accepted review fix and revalidation.

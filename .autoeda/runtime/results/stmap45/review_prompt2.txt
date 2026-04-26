@@ -1,0 +1,31 @@
+Second review for the patched stmap45 implementation.
+
+The first review found:
+- [P2] Mode 46 could let tight-critical soft seeds use the lighter one-inverter margin without checking SCL pressure agreement.
+
+Accepted fix:
+- `src/map/mapper/mapperMatch.c` now tracks `fStmap45ModerateSoftSeed` separately from `fStmap45ModeratePenaltyCandidate`.
+- Mode 46 computes node/cut pressure for every moderate soft seed, not only the positive-penalty subset.
+- `fStrictFallback` now requires `fStmap45ModeratePressureAgreement` before any mode-46 moderate soft seed can use the lighter admission margin.
+- Moderate block diagnostics now count all mode-46 moderate soft seeds that fail the area gate.
+
+Revalidation after the fix:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `./abc -c "stmap45 -h"` passed.
+- smoke flow on `benchmarks/i10.aig` passed.
+- full required benchmark flow passed and produced parseable metrics.
+- CEC passed for i10/ode/or1200/syn2.
+
+Current candidate metrics versus baseline:
+- i10: delay 198.64 ps vs 207.24 ps, area 1303.10 vs 1263.44
+- ode: delay 522.05 ps vs 531.32 ps, area 11334.38 vs 12491.21
+- or1200: delay 561.55 ps vs 587.08 ps, area 4895.15 vs 4798.34
+- syn2: delay 493.61 ps vs 508.82 ps, area 21539.91 vs 21296.60
+
+Please review the patched uncommitted diff for remaining correctness problems, especially:
+- whether pressure agreement is now enforced for every mode-46 moderate soft seed
+- whether older stmap modes and `map` remain behaviorally isolated
+- whether the new helper has safe division/lifetime/indexing behavior
+- whether diagnostics and evaluation artifacts remain coherent
+
+Report actionable findings with severity and exact file/line references. If there are no actionable findings, say so explicitly and mention residual risk.

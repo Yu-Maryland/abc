@@ -1,0 +1,20 @@
+stmap45 version log check
+
+Canonical entry:
+- `.autoeda/runtime/versions.md` contains `## version45 / stmap45`.
+
+Required fields present:
+- hypothesis
+- motivation
+- files changed
+- command name
+- algorithm summary
+- validation run
+- benchmark results
+- correctness results
+- review findings accepted or rejected
+- commit
+- next-step recommendation
+
+Status:
+- version log check passed for stmap45.
