@@ -1,0 +1,770 @@
+8:- hypothesis: Aligning the mapper's SCL-derived genlib gain estimate with the downstream `buffer`/sizer default (`Gain=300` instead of classic `map`'s `Gain=250`) may reduce mismatch between mapper delay scoring and final post-flow `stime`.
+9:- motivation: This is the canary-grade diagnostic probe for the `stmap` family. It proves command registration, build integration, help text, benchmark parsing, CEC, review, logging, and commit mechanics while testing a single SCL timing-model parameter that directly relates to downstream buffering.
+10:- command name: `stmap0`
+11:- files changed:
+26:- algorithm summary: `stmap0` mirrors the classic `map` command line and mapping flow, preserving all toggles and shared mapper behavior, but changes the default SCL genlib derivation gain from `250` to `300`. Users may still override the gain with `-G`.
+27:- validation run:
+32:- benchmark results:
+37:- correctness results:
+45:- review pass 1:
+54:- review pass 2: skipped because accepted changes after pass 1 were mechanical build-list/logging/ignore updates; affected local behavior was revalidated instead.
+57:- next-step recommendation: `Gain=300` gives useful evidence but is not uniformly better: it improved `or1200` delay and reduced area on three larger designs, while delaying `i10`, `ode`, and `syn2`. For `stmap1`, move beyond a single gain probe toward a mapper-internal or SCL-aware load/fanout hypothesis, such as adding a critical fanout/load proxy or required-time bias only where downstream `stime` shows sensitivity.
+61:- hypothesis: A selective high-fanout wide-cut guard during mapper match selection can reduce downstream load/slew pressure and final `stime` delay while preserving more delay-oriented mapping freedom than the classic aggressive `map -f` guard.
+62:- motivation: `stmap0` showed that SCL genlib gain tuning alone was not uniformly better. This version moves into mapper match selection by adding a gated fanout/load proxy that rejects wider cuts only for nodes with higher estimated fanout.
+63:- command name: `stmap1`
+64:- files changed:
+75:- algorithm summary: `stmap1` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 2` into the mapper. `mapperMatch.c` interprets mode `2` as a version-gated selective guard: skip cuts with more than two leaves only when `nRefs > 6`, and skip cuts with more than three leaves when `nRefs > 3`. Existing `map`, `map -f`, and `stmap0` behavior are preserved because modes `0` and `1` retain their old meanings.
+76:- validation run:
+81:- benchmark results:
+86:- correctness results:
+94:- review pass 1:
+101:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after pass 1.
+104:- next-step recommendation: `stmap1` improves final delay on three of four benchmarks and reduces `ode` area, but it hurts both delay and area on `or1200` and increases area on `i10` and `syn2`. For `stmap2`, keep the fanout/load direction but make it more timing-aware, for example by applying the guard only during area-recovery modes or only when mapper slack is noncritical.
+108:- hypothesis: Applying the selective fanout/load wide-cut guard only during mapper area-recovery modes, and only when the current phase has local required-time slack, can preserve delay-oriented mapping freedom while still reducing noncritical downstream load/slew pressure.
+109:- motivation: `stmap1` improved final delay on three benchmarks but hurt `or1200`, suggesting that constraining the initial delay pass was too blunt. `stmap2` keeps the fanout/load direction but makes the intervention timing-aware inside the mapper recovery loop.
+110:- command name: `stmap2`
+111:- files changed:
+121:- algorithm summary: `stmap2` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 3` into the mapper. `mapperMatch.c` interprets mode `3` as a slack-aware recovery guard: it is inactive during delay matching and switching recovery, applies only during mapping modes `1..3`, requires the current best phase match to have more than one inverter-delay of slack, then uses the same high-fanout cut-width thresholds as `stmap1`. Existing `map`, `map -f`, `stmap0`, and `stmap1` behavior are preserved because modes `0`, `1`, and `2` retain their old meanings.
+122:- validation run:
+128:- benchmark results:
+133:- correctness results:
+142:- review pass 1:
+149:- review pass 2: skipped because the accepted post-review source change was a narrow one-line mode guard fix directly addressing the finding; all affected behavior and the full default evaluation were revalidated.
+152:- next-step recommendation: `stmap2` repairs the `or1200` regression seen in `stmap1` and improves `i10`, but it loses the strong `ode` and `syn2` gains and increases area on all four designs. For `stmap3`, keep recovery timing awareness but add a benchmark-shape discriminator, such as applying the guard only to nodes with both high fanout and shallow slack margin, or recording per-node guard-hit instrumentation to distinguish `ode`/`syn2` from `i10`/`or1200`.
+156:- hypothesis: Applying the high-fanout wide-cut guard only to area-recovery nodes with a shallow positive mapper slack window can protect near-critical fanout/load decisions while letting very noncritical nodes continue to use area-recovery freedom.
+157:- motivation: `stmap2` showed that guarding only clearly slack nodes improved `i10` and `or1200` but hurt `ode` and `syn2` and increased area on every benchmark. `stmap3` narrows the intervention to high-fanout nodes with positive slack no greater than two inverter delays to test whether the timing benefit comes from near-critical rather than broadly noncritical recovery choices.
+158:- command name: `stmap3`
+159:- files changed:
+169:- algorithm summary: `stmap3` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 4` into the mapper. `mapperMatch.c` interprets mode `4` as a shallow-slack recovery guard: it is inactive during delay matching and switching recovery, applies only during mapper modes `1..3`, requires an existing best match and positive slack no greater than `2 * tDelayInv.Worst`, then uses the same high-fanout cut-width thresholds as `stmap1` and `stmap2`. Existing `map`, `map -f`, `stmap0`, `stmap1`, and `stmap2` behavior are preserved because modes `0`, `1`, `2`, and `3` retain their old meanings.
+170:- validation run:
+175:- benchmark results:
+180:- correctness results:
+188:- review pass 1:
+195:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+198:- next-step recommendation: `stmap3` reduces the area penalty versus `stmap2` on `i10`, `ode`, and `or1200`, but it loses the `i10`/`or1200` delay gains and only improves `syn2` delay while increasing `syn2` area substantially. For `stmap4`, add instrumentation for guard hit counts and slack buckets, or shift to a two-pass/SCL-observed criticality signal, because the current mapper-slack-only discriminator is not reliable enough across benchmarks.
+202:- hypothesis: Keeping the `stmap1` high-fanout wide-cut guard during initial delay matching, but relaxing recovery to the `stmap2` slack-aware guard, can retain the broad delay-pass benefit while allowing area recovery to avoid unnecessary rigidity on noncritical nodes.
+203:- motivation: `stmap1` improved delay on three benchmarks but constrained every mapper phase, while `stmap2` helped `or1200` by moving the intervention into slack-aware recovery but lost `ode` and `syn2`. `stmap4` tests whether the useful signal is phase-specific: hard guard for initial delay selection, slack-aware guard for recovery.
+204:- command name: `stmap4`
+205:- files changed:
+215:- algorithm summary: `stmap4` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 5` into the mapper. `mapperMatch.c` interprets mode `5` as a split-phase guard: during delay matching (`fMappingMode == 0`) it uses the `stmap1` high-fanout cut-width thresholds; during area recovery modes `1..3` it uses the `stmap2` slack-aware guard requiring more than one inverter-delay of mapper slack before rejecting wider high-fanout cuts; switching recovery is left unguarded. Existing `map`, `map -f`, `stmap0`, `stmap1`, `stmap2`, and `stmap3` behavior are preserved because modes `0` through `4` retain their prior meanings.
+216:- validation run:
+221:- benchmark results:
+226:- correctness results:
+234:- review pass 1:
+241:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+244:- next-step recommendation: `stmap4` improves both delay and area on `ode` and `syn2`, but it regresses `i10` and `or1200`, so the global split-phase policy is still not robust. For `stmap5`, instrument guard hit counts and slack buckets per benchmark, or gate the delay-pass portion with a design-shape or SCL-observed criticality signal so `or1200` can avoid the `stmap1`-style delay-pass restriction.
+248:- hypothesis: Gating the delay-pass high-fanout wide-cut guard by mapper graph size can keep the `stmap4` delay benefit on very large designs while letting smaller or mid-sized/deeper designs use the safer `stmap2` recovery-only behavior.
+249:- motivation: `stmap4` improved `ode` and `syn2` but regressed `i10` and `or1200`, suggesting the delay-pass guard should not be applied globally. `stmap5` tests a simple design-shape discriminator using the mapper graph size available inside `Map_Man_t`.
+250:- command name: `stmap5`
+251:- files changed:
+262:- algorithm summary: `stmap5` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 6` into the mapper. `mapperMatch.c` interprets mode `6` as a shape-gated split-phase guard: during delay matching it uses the `stmap1` high-fanout cut-width thresholds only when `p->vMapObjs->nSize > 20000`; during area recovery modes `1..3` it uses the `stmap2` slack-aware guard requiring more than one inverter-delay of mapper slack before rejecting wider high-fanout cuts; switching recovery is left unguarded. Existing `map`, `map -f`, and `stmap0` through `stmap4` behavior are preserved because modes `0` through `5` retain their prior meanings.
+263:- validation run:
+268:- benchmark results:
+273:- correctness results:
+281:- review pass 1:
+288:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+291:- next-step recommendation: `stmap5` improves final delay on all four required benchmarks and reduces area on `ode` and `syn2`, but it still increases area on `i10` and `or1200`. For `stmap6`, keep the graph-size discriminator and add a secondary area guard for smaller/deeper designs, such as relaxing the recovery guard when the candidate cut would increase exact area beyond a small tolerance or adding instrumentation to measure guard hits per graph-size bucket.
+295:- hypothesis: A mapper-graph-size floor plus an area-sensitive exact-area recovery override can reduce the area penalties left by `stmap5` while preserving the delay gains on small designs that were sensitive to relaxing the fanout/load guard.
+296:- motivation: `stmap5` improved final delay on all four benchmarks but still increased area on `i10` and `or1200`. A preliminary `stmap6` smoke/probe showed that allowing area-saving wide cuts too broadly recovered area but harmed `i10` delay, so the final hypothesis keeps strict slack-aware recovery on small mapper graphs and applies the area override only to mid-sized and large graphs.
+297:- command name: `stmap6`
+298:- files changed:
+309:- algorithm summary: `stmap6` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 7` into the mapper. `mapperMatch.c` interprets mode `7` as an area-sensitive shape-gated guard: during delay matching it uses the `stmap5` graph-size gate and applies the high-fanout wide-cut guard only when `p->vMapObjs->nSize > 20000`; during recovery on small mapper graphs (`<= 8000`) it keeps the strict `stmap2` slack-aware guard; during area-flow recovery on larger graphs it also keeps the `stmap2` guard; during exact-area recovery on larger graphs it matches the candidate cut first and rejects a high-fanout wide cut only when the existing match has more than one inverter-delay of slack and the candidate does not save at least half an inverter area. Existing `map` and `stmap0` through `stmap5` behavior are preserved because modes `0` through `6` retain their prior meanings.
+310:- validation run:
+315:- benchmark results:
+320:- correctness results:
+328:- review pass 1:
+335:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+338:- next-step recommendation: `stmap6` improves final delay and area versus baseline on three benchmarks and keeps the `i10` delay win, but compared with `stmap5` it trades away some `ode`, `or1200`, and `syn2` delay to recover area. For `stmap7`, keep the small-graph floor and add a measured criticality constraint to the exact-area override, such as allowing the area-saving wide cut only when the mapper slack exceeds a larger multiple of inverter delay or when the node is outside the highest fanout bucket.
+342:- hypothesis: Keeping the `stmap6` small-graph floor and shape-gated delay-pass guard, but requiring deeper mapper slack and avoiding the highest fanout-risk bucket before accepting exact-area wide-cut overrides, can recover more timing on load-sensitive designs while still allowing area-saving recovery in clearly noncritical regions.
+343:- motivation: `stmap6` improved delay and area on three benchmarks but traded away some of the stronger `stmap5` delay gains. The next step recommendation was to add a measured criticality constraint to the exact-area override; `stmap7` tests that directly by requiring more than two inverter delays of mapper slack and excluding the highest fanout bucket from the area-saving override.
+344:- command name: `stmap7`
+345:- files changed:
+356:- algorithm summary: `stmap7` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 8` into the mapper. `mapperMatch.c` interprets mode `8` as a criticality-sensitive shape-gated guard: during delay matching it applies the high-fanout wide-cut guard only when `p->vMapObjs->nSize > 20000`; during recovery on small mapper graphs (`<= 8000`) it keeps the strict `stmap2` slack-aware guard; during area-flow recovery on larger graphs it also keeps the `stmap2` guard; during exact-area recovery on larger graphs it matches the candidate cut first and rejects a high-fanout wide cut unless the existing match has more than two inverter delays of slack, the candidate is outside the highest fanout-risk bucket (`nRefs > 6` with more than two leaves), and the candidate saves at least half an inverter area. Existing `map` and `stmap0` through `stmap6` behavior are preserved because modes `0` through `7` retain their prior meanings.
+357:- validation run:
+362:- benchmark results:
+367:- correctness results:
+375:- review pass 1:
+382:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+385:- next-step recommendation: `stmap7` strengthens `or1200` and `syn2` delay relative to `stmap6`, but it regresses `ode` delay and gives back area on `or1200` and `syn2`. For `stmap8`, add instrumentation or a refined graph-shape gate to distinguish `ode` from `syn2`, for example allowing the exact-area override in large designs only when fanout is moderate but also when the candidate cut does not worsen mapper arrival beyond a small fraction of inverter delay.
+389:- hypothesis: Keeping the `stmap7` graph-size, slack, and highest-fanout gates, but bounding exact-area wide-cut overrides by candidate mapper-arrival regression, can recover the `ode` timing loss while preserving broad downstream delay improvements.
+390:- motivation: `stmap7` improved `i10`, `or1200`, and `syn2` delay but regressed `ode` delay while allowing exact-area recovery to trade mapper slack for area. `stmap8` tests whether those area-saving wide cuts should also be rejected when their matched arrival is more than one quarter of an inverter delay slower than the existing match.
+391:- command name: `stmap8`
+392:- files changed:
+403:- algorithm summary: `stmap8` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 9` into the mapper. `mapperMatch.c` interprets mode `9` as an arrival-bounded criticality-sensitive guard: during delay matching it uses the same graph-size-gated high-fanout wide-cut guard as `stmap5` through `stmap7`; during recovery on small mapper graphs (`<= 8000`) and during area-flow recovery on larger graphs it keeps the `stmap2` slack-aware guard; during exact-area recovery on larger graphs it matches the candidate cut first and rejects a high-fanout wide cut unless the existing match has more than two inverter delays of slack, the candidate is outside the highest fanout-risk bucket, the candidate worsens mapper arrival by no more than one quarter of an inverter delay, and the candidate saves at least half an inverter area. Existing `map` and `stmap0` through `stmap7` behavior are preserved because modes `0` through `8` retain their prior meanings.
+404:- validation run:
+409:- benchmark results:
+414:- correctness results:
+422:- review pass 1:
+429:- review pass 2: skipped because the only accepted post-review change was this logging/audit entry; no source behavior changed after review pass 1.
+432:- next-step recommendation: `stmap8` restores an `ode` delay win and keeps delay improvements on all four benchmarks, but area still increases on `i10`, `or1200`, and `syn2`. For `stmap9`, keep the arrival-bounded timing guard and add a targeted area-control signal, such as tightening the delay-pass guard for small graphs only when downstream area grows or adding guard-hit instrumentation to separate area-costly high-fanout choices from timing-critical ones.
+436:- hypothesis: Keeping the `stmap8` arrival-bounded high-fanout guard, but allowing only arrival-neutral and materially area-saving wide cuts in the middle-slack exact-area recovery bucket, can recover downstream area without giving up the broad final `stime` delay gains.
+437:- motivation: `stmap8` improved final delay on all four required benchmarks but still increased area on `i10`, `or1200`, and `syn2`. The area increases suggested that rejecting every one-to-two inverter slack wide-cut candidate was too conservative when the candidate reduced mapper exact area and did not worsen mapper arrival.
+438:- command name: `stmap9`
+439:- files changed:
+450:- algorithm summary: `stmap9` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 10` into the mapper. `mapperMatch.c` interprets mode `10` as a middle-slack area-relief guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap8`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but a candidate in the one-to-two inverter slack bucket may bypass rejection when it is outside the highest fanout bucket, does not worsen mapper arrival, and saves at least one inverter area. Existing `map` and `stmap0` through `stmap8` behavior are preserved because modes `0` through `9` retain their prior meanings.
+451:- validation run:
+456:- benchmark results:
+461:- correctness results:
+469:- review pass 1:
+476:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+479:- next-step recommendation: `stmap9` improves final delay on all four required benchmarks and reduces the `stmap8` area cost on `ode` and `syn2`, but it increases `or1200` area while buying a much larger delay gain. For `stmap10`, instrument or gate the middle-slack relief by fanout bucket and structural depth so the `or1200` area tradeoff can be separated from the `ode` and `syn2` area wins.
+483:- hypothesis: Keeping the `stmap9` arrival-neutral middle-slack area-relief override, but allowing that override only for shallow and medium-depth mapper nodes, can reduce the `or1200` area cost without losing the broad final `stime` delay gains.
+484:- motivation: `stmap9` improved delay on all four benchmarks, but the area increase on `or1200` suggested that some middle-slack relief choices were spending area in deep reconvergent high-fanout regions. A structural depth gate tests whether those deep-node choices should fall back to the stricter `stmap8` arrival-bounded protection.
+485:- command name: `stmap10`
+486:- files changed:
+497:- algorithm summary: `stmap10` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 11` into the mapper. `mapperMatch.c` interprets mode `11` as a depth-qualified middle-slack area-relief guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap9`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but the `stmap9` one-to-two inverter slack area-relief bypass is allowed only when `pNode->Level <= 96`. Existing `map` and `stmap0` through `stmap9` behavior are preserved because modes `0` through `10` retain their prior meanings.
+498:- validation run:
+503:- benchmark results:
+508:- correctness results:
+516:- review pass 1:
+523:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+526:- next-step recommendation: `stmap10` keeps the `stmap9` delay profile and slightly reduces `or1200` area, but the effect is small because most benchmark outcomes match `stmap9`. For `stmap11`, add explicit guard-hit instrumentation or a stronger adaptive depth threshold so the campaign can distinguish whether remaining area growth is driven by deep middle-slack relief, highest-fanout cuts, or downstream sizing choices.
+530:- hypothesis: Keeping the `stmap10` middle-slack area-relief override, but tightening its mapper-depth window from `pNode->Level <= 96` to `pNode->Level <= 64`, can reduce area spent in medium and deep exact-area recovery choices while preserving the broad final `stime` delay gains.
+531:- motivation: `stmap10` retained `stmap9` delay wins and only slightly reduced the `or1200` area cost. The previous next-step recommendation was to use a stronger depth threshold or instrumentation to determine whether remaining area growth is driven by deeper middle-slack relief. `stmap11` tests the stronger threshold directly as a single mapper-internal change.
+532:- command name: `stmap11`
+533:- files changed:
+544:- algorithm summary: `stmap11` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 12` into the mapper. `mapperMatch.c` interprets mode `12` as a tight-depth middle-slack area-relief guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap10`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but the `stmap9` one-to-two inverter slack area-relief bypass is allowed only when `pNode->Level <= 64`. Existing `map` and `stmap0` through `stmap10` behavior are preserved because modes `0` through `11` retain their prior meanings.
+545:- validation run:
+550:- benchmark results:
+555:- correctness results:
+563:- review pass 1:
+570:- review pass 2: skipped because the only accepted post-review change was logging/audit state; no source behavior changed after review pass 1.
+573:- next-step recommendation: `stmap11` preserves final delay wins on all four benchmarks and improves `or1200` delay relative to `stmap10`, but the tighter depth threshold does not materially reduce the remaining `or1200` or `syn2` area cost. For `stmap12`, add explicit guard-hit counters or split the middle-slack relief by fanout bucket so the next version can distinguish area growth caused by guarded cut shape from downstream sizing effects.
+577:- hypothesis: Keeping the `stmap11` tight-depth middle-slack area-relief guard, but allowing the middle-slack area-saving bypass only in the lower moderate fanout bucket (`nRefs` 4 through 5 with cuts wider than three leaves), can preserve the broad final `stime` delay wins while reducing risk from upper-moderate and highest fanout wide cuts that may drive downstream sizing area.
+578:- motivation: `stmap11` preserved delay wins on all four benchmarks but did not materially reduce the `or1200` or `syn2` area costs. The previous next-step recommendation was to split middle-slack relief by fanout bucket; `stmap12` tests that directly as a single mapper-internal refinement.
+579:- command name: `stmap12`
+580:- files changed:
+591:- algorithm summary: `stmap12` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 13` into the mapper. `mapperMatch.c` interprets mode `13` as a fanout-bucket-split middle-slack guard: delay matching keeps the same graph-size-gated high-fanout wide-cut guard used by `stmap5` through `stmap11`; small mapper graphs (`<= 8000`) and area-flow recovery retain the `stmap2` slack-aware guard; exact-area recovery on larger graphs keeps the `stmap8` arrival-bounded and highest-fanout protections, but the `stmap11` one-to-two inverter slack area-relief bypass is now allowed only for lower moderate fanout-risk cuts where `nRefs > 3`, `nRefs <= 5`, and `nLeaves > 3`. Existing `map` and `stmap0` through `stmap11` behavior are preserved because modes `0` through `12` retain their prior meanings.
+592:- validation run:
+597:- benchmark results:
+602:- correctness results:
+610:- review pass 1:
+618:- review pass 2: skipped because the only accepted source change was a mechanical namespace close and it was fully revalidated; the remaining accepted finding was logging/audit state.
+621:- next-step recommendation: `stmap12` keeps final delay wins on all four benchmarks and improves `syn2` delay relative to `stmap11`, but it gives back `ode` delay and increases `syn2` area. For `stmap13`, add guard-hit counters or a lower-moderate bucket sub-split that distinguishes `syn2` timing-positive choices from area-expensive downstream sizing choices, preferably logging per-bucket hit counts before changing another threshold.
+625:- hypothesis: Keeping the `stmap12` fanout-bucket split middle-slack guard decisions unchanged, but adding exact-area guard-hit counters for highest, lower-moderate, and upper-moderate fanout buckets, will provide the evidence needed to separate `syn2` timing-positive lower-bucket choices from area-expensive downstream sizing choices before another threshold change.
+626:- motivation: `stmap12` preserved final delay wins on all four benchmarks, but it gave back `ode` delay and increased `syn2` area. The prior recommendation was to record guard-hit counters before tuning the lower-moderate bucket further. `stmap13` is an instrumentation-first version that keeps mapper behavior comparable to `stmap12`.
+627:- command name: `stmap13`
+628:- files changed:
+640:- algorithm summary: `stmap13` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 14` into the mapper. `mapperMatch.c` treats mode `14` as the same decision policy as `stmap12` mode `13`: delay matching and small-graph/area-flow behavior match the existing shape-gated fanout guard, and exact-area recovery on larger graphs allows the tight-depth one-to-two inverter slack area-relief bypass only in the lower moderate fanout bucket. Mode `14` additionally records exact-area risky-cut, fanout-bucket, middle-slack, relief, and rejection counters; `mapperCore.c` prints one `stmap13 guard stats` line after mapping. Existing `map` and `stmap0` through `stmap12` behavior are preserved because modes `0` through `13` retain their prior meanings.
+641:- validation run:
+646:- benchmark results:
+651:- correctness results:
+660:- review pass 1:
+666:- review pass 2: skipped because review pass 1 found no blocking issues and no source changes were made after review; only this logging/audit entry and final state update remained.
+669:- next-step recommendation: `stmap13` shows the lower-moderate bucket is heavily exercised on `ode` and `syn2`, but actual middle-slack relief is concentrated in `syn2` (`12`) and lightly in `or1200` (`2`) while `ode` has none. For `stmap14`, keep the counters and test a behavior change that admits lower-moderate middle-slack relief only when the candidate clears a stronger area-saving ratio or when the rejection is arrival-neutral and occurs in the `syn2`-like high lower-bucket/high middle-slack profile.
+673:- hypothesis: Keeping the `stmap13` guard counters and lower-moderate middle-slack bucket, but requiring middle-slack relief to save at least two inverter areas instead of one, can reduce downstream area risk from marginal lower-bucket exact-area choices while preserving final `stime` delay wins.
+674:- motivation: `stmap13` showed that middle-slack relief was concentrated in `syn2` (`12`) and lightly in `or1200` (`2`), while `ode` had no admitted relief. The next-step recommendation was to test a stronger area-saving ratio before tuning more shape gates. `stmap14` makes that single threshold change while preserving instrumentation.
+675:- command name: `stmap14`
+676:- files changed:
+688:- algorithm summary: `stmap14` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 15` into the mapper. Mode `15` preserves the `stmap13` guard-stat path and the `stmap12`/`stmap13` lower-moderate, tight-depth, arrival-neutral middle-slack window, but the candidate must now save more than `2.0 * AreaInv` in mapper area flow before the exact-area guard admits it. Modes `0` through `14` retain their previous behavior; `mapperCore.c` prints `stmap13 guard stats` for mode `14` and `stmap14 guard stats` for mode `15`.
+689:- validation run:
+694:- benchmark results:
+699:- correctness results:
+708:- review pass 1:
+711:- review pass 2:
+720:- next-step recommendation: `stmap14` reduces the `or1200` area cost relative to `stmap13`, but gives back much of the `or1200` delay gain and increases `syn2` area while admitting only one middle-slack relief. For `stmap15`, keep the counters and test an adaptive lower-moderate rule that restores relief only for high middle-slack/high lower-bucket profiles, or add a timing-quality discriminator to distinguish the `syn2` delay-positive relief from area-expensive downstream sizing effects.
+724:- hypothesis: Keeping the `stmap14` lower-moderate, tight-depth, arrival-neutral middle-slack guard as the fallback, but lowering the middle-slack relief area threshold from two inverter areas to one only after the mapper observes a high lower-moderate/middle-slack exact-area profile, can recover timing-positive `syn2`-like relief without reopening the low-profile `or1200` area risk.
+725:- motivation: `stmap14` reduced the `or1200` area cost relative to `stmap13`, but gave back much of the `or1200` delay gain and admitted only one `syn2` middle-slack relief. The `stmap13`/`stmap14` counters showed `syn2` has a high lower-moderate and middle-slack profile, while `or1200` has a much smaller middle-slack profile. `stmap15` tests that profile split directly.
+726:- command name: `stmap15`
+727:- files changed:
+739:- algorithm summary: `stmap15` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 16` into the mapper. Mode `16` preserves the `stmap13`/`stmap14` guard-stat path, the lower-moderate fanout bucket, the tight `pNode->Level <= 64` depth window, and the arrival-neutral one-to-two-inverter middle-slack window. Before the adaptive profile opens, mode `16` uses the same two-inverter area-saving threshold as `stmap14`; after the current exact-area pass has observed at least `20000` lower-moderate risk cuts and `128` middle-slack candidates, it lowers the middle-slack relief threshold to one inverter area. Modes `0` through `15` retain their previous behavior.
+740:- validation run:
+745:- benchmark results:
+750:- correctness results:
+760:- review pass 1:
+765:- review pass 2:
+772:- next-step recommendation: `stmap15` keeps the `stmap14` `i10`, `ode`, and `or1200` outcomes and reduces `syn2` area relative to `stmap14`, but it loses `syn2` delay despite admitting one additional middle-slack relief. For `stmap16`, keep the counters and add a per-relief diagnostic that records whether admitted middle-slack cuts occur before or after the profile opens, along with node level, slack, area saving, and arrival delta, then use that evidence to distinguish timing-positive relief from downstream-sizing area churn.
+776:- hypothesis: Keeping the `stmap15` adaptive lower-moderate middle-slack profile guard behavior unchanged, but logging each admitted middle-slack relief with profile-open status, node level, slack, area saving, and arrival delta, can identify whether the remaining timing-positive relief happens only after the adaptive profile opens or whether pre-profile relief is contributing downstream area churn.
+777:- motivation: `stmap15` preserved the `stmap14` outcomes on `i10`, `ode`, and `or1200` and reduced `syn2` area relative to `stmap14`, but it lost `syn2` delay despite admitting one additional middle-slack relief. The prior recommendation was to add per-relief diagnostics before changing another threshold.
+778:- command name: `stmap16`
+779:- files changed:
+791:- algorithm summary: `stmap16` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 17` into the mapper. Mode `17` preserves mode `16` / `stmap15` behavior: lower-moderate, tight-depth, arrival-neutral middle-slack relief uses the `stmap14` two-inverter area-saving threshold until the current exact-area pass has observed at least `20000` lower-moderate risk cuts and `128` middle-slack candidates, then lowers the area-saving threshold to one inverter area. Mode `17` additionally prints one `stmap16 relief diag` line for each admitted middle-slack relief, reporting profile-open status, node number, level, refs, leaves, phase, slack, area saving, arrival delta, and area margin. Modes `0` through `16` retain their previous behavior.
+792:- validation run:
+797:- benchmark results:
+805:- correctness results:
+815:- review pass 1:
+818:- review pass 2:
+827:- next-step recommendation: `stmap16` shows both admitted `syn2` middle-slack relief choices occur after the adaptive profile opens and both improve mapper arrival while saving modest area. For `stmap17`, use this evidence to test a timing-quality discriminator rather than a looser area threshold: for example, admit one-inverter lower-moderate relief only after profile open when arrival delta is materially negative, while keeping the two-inverter fallback for arrival-neutral choices.
+831:- hypothesis: Keeping the `stmap15`/`stmap16` adaptive lower-moderate middle-slack profile guard, but requiring a material mapper-arrival improvement before using the relaxed one-inverter post-profile area threshold, can preserve timing-positive `syn2` relief while preventing future arrival-neutral low-area choices from reopening downstream sizing area risk.
+832:- motivation: `stmap16` showed both admitted `syn2` relief choices happened after the adaptive profile opened and both improved mapper arrival. The next recommended discriminator was timing quality rather than a looser area threshold. `stmap17` tests that directly by keeping the two-inverter fallback unless the candidate improves arrival by at least one quarter inverter delay.
+833:- command name: `stmap17`
+834:- files changed:
+846:- algorithm summary: `stmap17` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 18` into the mapper. Mode `18` preserves the lower-moderate fanout bucket, tight-depth window, adaptive profile gate, guard-stat counters, and relief diagnostics from `stmap15`/`stmap16`. The change is that the one-inverter area-saving threshold after profile open is used only when the candidate match improves mapper arrival by at least `0.25 * tDelayInv`; otherwise the middle-slack relief candidate must satisfy the stricter two-inverter area-saving fallback. Modes `0` through `17` retain their previous behavior.
+847:- validation run:
+852:- benchmark results:
+860:- correctness results:
+870:- review pass 1:
+873:- review pass 2:
+882:- next-step recommendation: `stmap17` keeps the `stmap16` final QoR because both existing admitted `syn2` relief choices narrowly clear the timing-quality gate. For `stmap18`, add a diagnostic for near-miss middle-slack candidates that fail the timing-quality gate or the two-inverter fallback, so the next behavior change can target candidates that would actually diverge from `stmap16` rather than simply confirming the current two admitted choices.
+886:- hypothesis: Keeping the `stmap17` timing-quality adaptive lower-moderate middle-slack guard decisions unchanged, but adding bounded near-miss diagnostics for candidates that would clear a one-inverter area-saving threshold while failing the stricter timing-quality/profile fallback, can identify whether the next behavior change should target timing-gate rejects or early profile-closed candidates.
+887:- motivation: `stmap17` preserved the `stmap16` final QoR because the two admitted `syn2` relief choices both cleared the timing-quality gate. The prior recommendation was to log candidates that actually diverge from the relaxed one-inverter rule before changing another threshold. `stmap18` is therefore an instrumentation version that keeps mapping choices comparable to `stmap17`.
+888:- command name: `stmap18`
+889:- files changed:
+901:- algorithm summary: `stmap18` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 19` into the mapper. Mode `19` preserves the `stmap17` mode `18` lower-moderate fanout bucket, tight-depth window, adaptive profile gate, guard-stat counters, admitted-relief diagnostics, and timing-quality discriminator. The only source-level behavior change is diagnostic: when a middle-slack candidate is rejected because the stricter two-inverter fallback is active, but the candidate would have cleared the one-inverter area threshold, mode `19` increments a near-miss counter and prints up to 128 `stmap18 near-miss diag` lines. Existing `map` and `stmap0` through `stmap17` behavior are preserved because modes `0` through `18` retain their previous meanings.
+902:- validation run:
+907:- benchmark results:
+915:- correctness results:
+925:- review pass 1:
+928:- review pass 2:
+937:- next-step recommendation: `stmap18` shows the candidates that diverge from a looser one-inverter rule are not timing-gate failures after the profile opens; they are early profile-closed candidates, concentrated in `syn2` with a smaller `or1200` population. For `stmap19`, test a narrow early-profile seed rule that admits pre-profile near-misses only when the candidate has one-inverter-plus area saving and material mapper-arrival improvement, while keeping the existing two-inverter fallback for arrival-neutral pre-profile candidates.
+941:- hypothesis: A narrow early-profile seed rule can capture the high-quality pre-profile near misses seen by `stmap18`: before the adaptive profile opens, admit lower-moderate middle-slack one-inverter relief only when the candidate also has material mapper-arrival improvement, while keeping the two-inverter fallback for arrival-neutral pre-profile choices.
+942:- motivation: `stmap18` found `21` one-inverter-plus near misses, all rejected because the adaptive profile was still closed. Several had large negative mapper-arrival deltas, especially in `or1200` and `syn2`. `stmap19` tests whether those timing-positive early candidates are useful seeds rather than waiting for the profile gate.
+943:- command name: `stmap19`
+944:- files changed:
+956:- algorithm summary: `stmap19` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 20` into the mapper. Mode `20` preserves the `stmap18` lower-moderate fanout bucket, tight-depth window, guard-stat counters, relief diagnostics, and near-miss diagnostics. Its behavior change is confined to the middle-slack area-sensitive exact-area path: for `stmap17`/`stmap18`, one-inverter relief before profile-open is always blocked; for `stmap19`, pre-profile relief may use the one-inverter threshold only when `ArrivalDelta <= -0.25 * tDelayInv`. Pre-profile candidates without that material arrival gain continue to require the stricter two-inverter area saving. Existing `map` and `stmap0` through `stmap18` behavior remain on their previous mode numbers.
+957:- validation run:
+962:- benchmark results:
+971:- correctness results:
+981:- review pass 1:
+985:- review pass 2:
+994:- next-step recommendation: `stmap19` materially improves `or1200` delay versus `stmap18` (`578.80 ps` to `561.55 ps`) but gives back a small amount of `syn2` delay (`494.17 ps` to `495.30 ps`) while improving `syn2` area. For `stmap20`, test a shallower early-seed qualifier, for example allowing the pre-profile one-inverter timing-quality seed only at shallow levels such as `<= 24`, while preserving the post-profile `stmap17` timing-quality rule. This targets the two shallow `or1200` wins and blocks the deeper `syn2` pre-profile seeds for a cleaner delay/area split.
+998:- hypothesis: A shallower early-profile seed qualifier can keep the two shallow `or1200` timing-positive pre-profile relief choices from `stmap19` while blocking the deeper `syn2` pre-profile seeds that gave back delay.
+999:- motivation: `stmap19` improved `or1200` delay from `578.80 ps` to `561.55 ps` by admitting two early seeds at levels `14` and `17`, but it worsened `syn2` delay from the `stmap17`/`stmap18` value of `494.17 ps` to `495.30 ps` after admitting eight deeper pre-profile seeds at levels `29` through `49`. `stmap20` tests the prior recommendation directly by adding a shallow level gate to pre-profile one-inverter relief.
+1000:- command name: `stmap20`
+1001:- files changed:
+1013:- algorithm summary: `stmap20` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 21` into the mapper. Mode `21` preserves the `stmap19` lower-moderate fanout bucket, tight-depth middle-slack window, guard-stat counters, relief diagnostics, near-miss diagnostics, and early-seed counter. Its behavior change is confined to the middle-slack area-sensitive exact-area path: post-profile one-inverter relief still requires material mapper-arrival improvement as in `stmap17`, while pre-profile one-inverter relief now requires both material mapper-arrival improvement and `pNode->Level <= 24`. Deeper pre-profile candidates keep the stricter two-inverter fallback. Existing `map` and `stmap0` through `stmap19` behavior remain on their previous mode numbers.
+1014:- validation run:
+1019:- benchmark results:
+1028:- correctness results:
+1038:- review pass 1:
+1042:- review pass 2:
+1051:- next-step recommendation: `stmap20` keeps the `or1200` delay win from shallow early seeds and restores `syn2` delay to the better `stmap17`/`stmap18` result by blocking deeper pre-profile seeds. For `stmap21`, use the near-miss diagnostics to test a narrower deep-seed exception only for unusually large arrival gains, or add downstream-aware diagnostics that separate depth-gated `syn2` candidates by final `stime` sensitivity before relaxing the level gate.
+1055:- hypothesis: Keeping the `stmap20` shallow early-profile seed rule, a deeper pre-profile one-inverter relief exception is useful only when the candidate has an unusually large mapper-arrival gain, large enough to distinguish the strongest `syn2` depth-gated near misses from the weaker deep candidates that `stmap19` admitted too broadly.
+1056:- motivation: `stmap20` preserved the shallow `or1200` win and blocked all deeper `syn2` pre-profile seeds. Its near-miss diagnostics showed several blocked deep candidates with very large negative arrival deltas around `-8` to `-12 ps`, while the remaining deep candidates were much smaller around `-2` to `-4 ps`. `stmap21` tests whether admitting only the very large-gain deep candidates can improve `syn2` delay without reopening the broad `stmap19` seed population.
+1057:- command name: `stmap21`
+1058:- files changed:
+1070:- algorithm summary: `stmap21` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 22` into the mapper. Mode `22` preserves the `stmap20` lower-moderate fanout bucket, tight-depth middle-slack window, guard-stat counters, relief diagnostics, near-miss diagnostics, and early-seed counter. The behavior change is confined to the middle-slack area-sensitive exact-area path: post-profile one-inverter relief still requires material mapper-arrival improvement, pre-profile shallow relief still uses the `stmap20` `pNode->Level <= 24` gate, and deeper pre-profile one-inverter relief is admitted only when `ArrivalDelta <= -5.0 * ArrivalGainMargin`, where `ArrivalGainMargin` remains `0.25 * tDelayInv`. Existing `map` and `stmap0` through `stmap20` behavior remain on their previous mode numbers.
+1071:- validation run:
+1076:- benchmark results:
+1086:- correctness results:
+1096:- review pass 1:
+1100:- review pass 2:
+1109:- next-step recommendation: `stmap21` improves `syn2` delay from the `stmap20` value of `494.17 ps` to `490.96 ps` while keeping the `or1200` shallow-seed result and the `i10`/`ode` outcomes unchanged. For `stmap22`, test the next moderate deep-gain boundary explicitly, for example a threshold between the current `5.0 * ArrivalGainMargin` and the rejected `-3` to `-4 ps` cluster, or add downstream-sensitive diagnostics that distinguish which deep-gain seed moves final `stime` before relaxing the gate further.
+1113:- hypothesis: A `2.0 * ArrivalGainMargin` moderate deep early-profile seed boundary can admit the remaining deep `syn2` lower-moderate middle-slack candidates with roughly `-3 ps` to `-4 ps` mapper-arrival gain that `stmap21` rejected, while preserving the `stmap20` shallow seed rule and the `stmap21` high-gain deep seeds.
+1114:- motivation: `stmap21` improved `syn2` delay by admitting only very large deep pre-profile gains, but its near-miss diagnostics still showed a smaller deep arrival-gain cluster around `-3 ps` to `-4 ps`. A preliminary `3.0 * ArrivalGainMargin` boundary admitted no additional required-benchmark seeds, so the final `stmap22` validation uses `2.0 * ArrivalGainMargin` to test the next meaningful cluster.
+1115:- command name: `stmap22`
+1116:- files changed:
+1128:- algorithm summary: `stmap22` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 23` into the mapper. Mode `23` preserves the `stmap21` lower-moderate fanout bucket, tight-depth middle-slack window, guard-stat counters, relief diagnostics, near-miss diagnostics, and early-seed counter. The only mapping-decision change is in the pre-profile deep seed path: `stmap21` allows deeper one-inverter relief only when `ArrivalDelta <= -5.0 * ArrivalGainMargin`, while `stmap22` uses `ArrivalDelta <= -2.0 * ArrivalGainMargin`. Shallow pre-profile seeds still use the `stmap20` `pNode->Level <= 24` gate, post-profile one-inverter relief still requires material mapper-arrival improvement, and existing `map` plus `stmap0` through `stmap21` remain on their prior mode numbers.
+1129:- validation run:
+1134:- benchmark results:
+1145:- correctness results:
+1155:- review pass 1:
+1159:- review pass 2:
+1168:- next-step recommendation: `stmap22` admits the intended moderate deep `syn2` seeds, but final `syn2` delay worsens from the `stmap21` value of `490.96 ps` to `491.54 ps` and area rises from `21541.78` to `21598.23`. For `stmap23`, revert to the `stmap21` `5.0x` deep-seed threshold for mapping decisions and add downstream-sensitive diagnostics that isolate the marginal final-`stime` effect of each deep seed before admitting the `-3 ps` to `-4 ps` cluster again.
+1172:- hypothesis: A critical-slack qualifier for moderate deep early-profile seeds can keep the strongest `stmap21` deep timing-positive seeds while blocking the less critical half of the `stmap22` moderate deep cluster that raised `syn2` area and worsened delay versus `stmap21`.
+1173:- motivation: `stmap22` relaxed the deep pre-profile seed boundary to `2.0 * ArrivalGainMargin`, admitting two additional moderate `syn2` seeds at nodes `24798` and `37979`. That increased `syn2` area and produced `491.54 ps`, worse than `stmap21`'s `490.96 ps`. `stmap23` tests whether the moderate cluster should be split by existing mapper slack, admitting only the candidate nearer the critical side of the middle-slack window.
+1174:- command name: `stmap23`
+1175:- files changed:
+1187:- algorithm summary: `stmap23` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 24` into the mapper. Mode `24` preserves the `stmap22` lower-moderate bucket, tight-depth middle-slack window, guard counters, relief diagnostics, near-miss diagnostics, and early-seed counter. The mapping-decision change is confined to pre-profile deep seeds: shallow seeds still use the `stmap20` `pNode->Level <= 24` rule; strong deep seeds still use the `stmap21` `ArrivalDelta <= -5.0 * ArrivalGainMargin` rule; moderate deep seeds may use the `stmap22` `-2.0 * ArrivalGainMargin` boundary only when the existing mapper slack is `<= 1.2 * tDelayInv.Worst`. Existing `map` and `stmap0` through `stmap22` behavior remain on their previous mode numbers.
+1188:- validation run:
+1193:- benchmark results:
+1204:- correctness results:
+1214:- review pass 1:
+1218:- review pass 2:
+1227:- next-step recommendation: `stmap23` proves that rejecting only the less critical `24798` moderate seed does not change final `syn2` QoR from `stmap22`; the remaining moderate seed at node `37979` or an interaction with the high-gain seeds is sufficient to keep the `491.54 ps` outcome. For `stmap24`, either return to the `stmap21` high-gain-only deep-seed policy while preserving classified near-miss diagnostics, or add a seed-ablation mode that can admit each moderate candidate independently and measure the downstream `stime` effect.
+1231:- hypothesis: Tightening the moderate deep early-profile seed slack gate from the `stmap23` near-critical threshold to the lower edge of the middle-slack window can reject the remaining harmful moderate `syn2` seed while preserving the `stmap20` shallow seeds and `stmap21` strong deep seeds.
+1232:- motivation: `stmap23` rejected the less critical moderate seed at node `24798`, but still admitted node `37979` with slack `7.170013` and final `syn2` QoR stayed at the worse `stmap22` value of `491.54 ps`. `stmap24` tests whether moderate deep seeds should be admitted only when slack is at most `1.1 * tDelayInv.Worst`, leaving strong deep seeds controlled by the `stmap21` arrival-gain rule.
+1233:- command name: `stmap24`
+1234:- files changed:
+1246:- algorithm summary: `stmap24` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 25` into the mapper. Mode `25` preserves the `stmap23` lower-moderate fanout bucket, tight-depth middle-slack window, guard counters, relief diagnostics, near-miss diagnostics, and early-seed counter. The mapping-decision change is confined to pre-profile deep seeds: shallow seeds still use the `stmap20` `pNode->Level <= 24` rule; strong deep seeds still use the `stmap21` `ArrivalDelta <= -5.0 * ArrivalGainMargin` rule; moderate deep seeds may use the `stmap22` `-2.0 * ArrivalGainMargin` boundary only when existing mapper slack is `<= 1.1 * tDelayInv.Worst`. Existing `map` and `stmap0` through `stmap23` remain on their previous mode numbers.
+1247:- validation run:
+1252:- benchmark results:
+1262:- correctness results:
+1271:- review pass 1:
+1275:- review pass 2:
+1284:- next-step recommendation: `stmap24` restores the `stmap21` `syn2` delay and confirms that the admitted moderate deep seed at node `37979` was enough to keep the `stmap22`/`stmap23` regression. For `stmap25`, keep the tight or high-gain-only decision as the mainline and add a seed-ablation diagnostic mode that can isolate downstream `stime` effects of individual moderate deep candidates before reopening that cluster.
+1288:- hypothesis: A bounded single-seed ablation can admit only the first traversal-order moderate deep pre-profile seed just outside the `stmap24` tight slack gate, isolating whether that seed alone changes downstream `stime` before reopening the full moderate deep cluster.
+1289:- motivation: `stmap24` restored the `stmap21` `syn2` result by blocking both moderate deep seeds that `stmap22`/`stmap23` implicated. The next diagnostic question is whether the earlier moderate candidate at node `24798` is harmless by itself, while the remaining moderate candidate at node `37979` is the delay-sensitive one.
+1290:- command name: `stmap25`
+1291:- files changed:
+1303:- algorithm summary: `stmap25` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 26` into the mapper. Mode `26` preserves the `stmap24` lower-moderate bucket, tight-depth middle-slack window, strong deep-seed rule, tight moderate slack gate, guard counters, near-miss diagnostics, and early-seed counter. The only mapping-decision change is a one-shot ablation: before the adaptive profile opens, a deeper moderate seed that passes the `stmap22` arrival-gain gate but fails the `stmap24` `1.1 * tDelayInv.Worst` slack gate may be admitted only if it is still within `1.25 * tDelayInv.Worst` slack and no prior moderate-ablation seed has been admitted in the mapper run. Existing `map` and `stmap0` through `stmap24` remain on their previous mode numbers.
+1304:- validation run:
+1309:- benchmark results:
+1317:- correctness results:
+1327:- review pass 1:
+1331:- review pass 2:
+1340:- next-step recommendation: `stmap25` shows that admitting node `24798` alone leaves final `syn2` QoR equal to `stmap24`, while node `37979` remains blocked by the single-ablation gate. For `stmap26`, test the complementary ablation by skipping the first moderate candidate and admitting only the next qualifying moderate deep seed, or add a more explicit rank selector for moderate deep seed diagnostics before changing the mainline policy.
+1344:- hypothesis: A complementary rank-2 moderate deep early-profile seed ablation can isolate whether the second qualifying moderate seed, rather than the first, is sufficient to reproduce the `stmap22`/`stmap23` downstream `syn2` delay regression.
+1345:- motivation: `stmap25` admitted only the first moderate deep seed at node `24798` and left `syn2` QoR equal to the tighter `stmap24` result. The remaining question is whether node `37979`, which `stmap24` blocked and `stmap22`/`stmap23` admitted, is the harmful seed.
+1346:- command name: `stmap26`
+1347:- files changed:
+1359:- algorithm summary: `stmap26` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 27` into the mapper. Mode `27` preserves the `stmap24` tight moderate deep seed rule, strong deep-seed rule, lower-moderate bucket, tight-depth middle-slack window, guard counters, near-miss diagnostics, and early-seed counter. The only mapping-decision change is the complementary ablation: before the adaptive profile opens, a deeper moderate seed that passes the `stmap22` arrival-gain gate, fails the `stmap24` tight slack gate, and remains within `1.25 * tDelayInv.Worst` slack is counted; rank 1 is skipped and rank 2 is admitted once. Existing `map` and `stmap0` through `stmap25` remain on their previous mode numbers.
+1360:- validation run:
+1365:- benchmark results:
+1374:- correctness results:
+1384:- review pass 1:
+1388:- review pass 2:
+1397:- next-step recommendation: `stmap26` shows that node `37979` alone is sufficient to reproduce the `491.54 ps` `syn2` regression, while `stmap25` showed node `24798` alone is harmless. For `stmap27`, keep the `stmap24` tight/high-gain policy as the timing-safe mainline and add a rank or node-class diagnostic that blocks candidates matching the `37979` signature before reopening any moderate deep seed cluster.
+1401:- hypothesis: A signature blocker for the harmful moderate deep seed can reopen the next moderate deep pre-profile slack band while blocking the high-reference, lower-slack, stronger-moderate candidate that `stmap26` isolated as sufficient to reproduce the downstream `syn2` delay regression.
+1402:- motivation: `stmap25` admitted only the first moderate deep seed at node `24798` and kept `syn2` at the better `490.96 ps` result, while `stmap26` skipped that seed and admitted node `37979`, reproducing the worse `491.54 ps` result. `stmap27` tests whether the useful decision boundary is a local candidate signature rather than traversal rank.
+1403:- command name: `stmap27`
+1404:- files changed:
+1416:- algorithm summary: `stmap27` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 28` into the mapper. Mode `28` preserves the `stmap24` tight moderate deep seed rule, the `stmap21` strong deep-seed rule, the lower-moderate bucket, tight-depth middle-slack window, guard counters, near-miss diagnostics, and early-seed counter. The mapping-decision change is confined to the pre-profile moderate deep band outside the `stmap24` tight gate: a candidate may be admitted through the `stmap22` moderate-gain and `1.25 * tDelayInv.Worst` slack band only when it does not match the `stmap26` harmful signature of `refs >= 5`, `slack <= 1.15 * tDelayInv.Worst`, and `arrival delta <= -2.25 * ArrivalGainMargin`. Existing `map` and `stmap0` through `stmap26` remain on their previous mode numbers.
+1417:- validation run:
+1422:- benchmark results:
+1431:- correctness results:
+1441:- review pass 1:
+1446:- review pass 2:
+1455:- next-step recommendation: `stmap27` converts the rank ablation into a local candidate signature and preserves the better `syn2` timing while keeping the harmless node `24798`. For `stmap28`, test whether the signature can be generalized from hard thresholds into a smoother SCL/load proxy, for example by adding a high-reference moderate-seed penalty that depends on slack ratio and arrival-gain ratio rather than a hard blocker.
+1459:- hypothesis: A soft high-reference load-risk area penalty can replace `stmap27`'s hard moderate-seed signature blocker, preserving timing-safe moderate candidates while rejecting candidates whose reference count, slack ratio, and arrival-gain ratio imply poor downstream load behavior.
+1460:- motivation: `stmap27` showed that node `24798` is harmless while node `37979` is harmful, but encoded this as a hard local signature. `stmap28` tests a smoother decision surface: keep the next moderate slack band eligible, then increase the area-saving margin only for high-reference candidates with tighter slack and stronger moderate arrival gain.
+1461:- command name: `stmap28`
+1462:- files changed:
+1474:- algorithm summary: `stmap28` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 29` into the mapper. Mode 29 preserves the `stmap24` tight moderate deep seed rule, `stmap21` strong deep-seed rule, lower-moderate bucket, tight-depth middle-slack window, guard counters, near-miss diagnostics, and early-seed counter. The new decision is confined to pre-profile moderate deep seeds outside the `stmap24` tight gate: candidates in the next slack band remain eligible, but if `refs >= 5`, the area margin is raised by a penalty factor derived from reference count, slack at `<= 1.15 * tDelayInv.Worst`, and arrival delta at `<= -2.25 * ArrivalGainMargin`. Existing `map` and `stmap0` through `stmap27` remain on their prior mode numbers.
+1475:- validation run:
+1480:- benchmark results:
+1489:- correctness results:
+1498:- review pass 1:
+1503:- review pass 2:
+1512:- next-step recommendation: `stmap28` confirms that the harmful refs-5 moderate seed can be rejected by a load-risk area penalty instead of a hard blocker. For `stmap29`, test whether the penalty can be tuned more aggressively for accepted high-reference seeds, or bring in a direct SCL/load signal so the penalty is calibrated by downstream capacitance rather than mapper reference count alone.
+1516:- hypothesis: A continuous high-reference load-risk penalty over the `stmap28` moderate deep seed band can preserve the timing-safe rejection of the harmful refs-5 seed while reducing dependence on step thresholds for slack and arrival gain.
+1517:- motivation: `stmap28` replaced the `stmap27` hard signature blocker with a stepwise penalty and kept the better `syn2` timing. The next question is whether a smoother penalty based on slack ratio and arrival-gain ratio can make the same decision with less hand-coded thresholding.
+1518:- command name: `stmap29`
+1519:- files changed:
+1531:- algorithm summary: `stmap29` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 30` into the mapper. Mode 30 preserves the `stmap28` moderate deep seed eligibility band, guard counters, early-seed and near-miss diagnostics, and previous `stmap0` through `stmap28` behavior. The new mapping decision is limited to pre-profile, non-shallow, refs-5 moderate deep seeds outside the `stmap24` tight gate: the extra area margin becomes a continuous penalty using reference count, `Slack / SlackMargin`, and `-ArrivalDelta / ArrivalGainMargin`, capped at one inverter area.
+1532:- validation run:
+1537:- benchmark results:
+1545:- correctness results:
+1555:- review pass 1:
+1559:- review pass 2:
+1568:- next-step recommendation: `stmap29` preserves `stmap28` QoR while showing that a lower continuous penalty can still reject node `37979`. For `stmap30`, test whether this continuous surface can be extended to accepted high-reference strong deep seeds or use a downstream `stime`/SCL-derived capacitance diagnostic to replace reference count as the load-risk term.
+1572:- hypothesis: Extending the continuous load-risk area penalty to high-reference strong deep seeds can reject accepted mapper choices that look timing-attractive but may add downstream load risk, while preserving the `stmap29` moderate-seed protection.
+1573:- motivation: `stmap29` left a high-reference strong seed at `syn2` node `2318` admitted with only the one-inverter area margin. Its signature was refs `5`, leaves `4`, slack `7.430023`, area saving `0.93`, and arrival delta `-10.130005`, making it a natural probe for whether very strong mapper-arrival gains should still pay a load-risk premium.
+1574:- command name: `stmap30`
+1575:- files changed:
+1587:- algorithm summary: `stmap30` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 31` into the mapper. Mode 31 preserves the `stmap29` continuous moderate deep seed penalty and adds a smaller continuous penalty for non-shallow, pre-profile, refs-5-or-higher strong deep seeds with slack no more than `1.25 * tDelayInv.Worst`. The strong-seed penalty scales with reference count, slack ratio, and excess strong-arrival-gain ratio, capped at `0.75` inverter area. Existing `map` and `stmap0` through `stmap29` remain on their prior mode numbers.
+1588:- validation run:
+1593:- benchmark results:
+1602:- correctness results:
+1612:- review pass 1:
+1616:- review pass 2:
+1625:- next-step recommendation: `stmap30` shows that the refs-5 strong seed at node `2318` can be blocked without changing final required-benchmark QoR, so it is likely redundant rather than beneficial. For `stmap31`, either lower the strong-seed penalty to find the threshold where node `2318` re-enters, or replace the reference-count proxy with a direct SCL/load diagnostic so the penalty distinguishes redundant high-reference strong seeds from genuinely timing-critical ones.
+1629:- hypothesis: Damping the high-reference strong deep seed gain-slope penalty can find the acceptance threshold where `syn2` node `2318` re-enters, while preserving the `stmap30` moderate-seed penalty that blocks the harmful node `37979`.
+1630:- motivation: `stmap30` blocked the refs-5 strong seed at node `2318` with no final QoR change, indicating that the seed may be redundant. A threshold probe is useful before replacing the reference-count proxy with a richer downstream load signal: if node `2318` re-enters at a lower penalty and QoR remains unchanged, the strong-seed penalty can be treated as a diagnostic load-risk control rather than a timing-critical rule.
+1631:- command name: `stmap31`
+1632:- files changed:
+1644:- algorithm summary: `stmap31` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 32` into the mapper. Mode 32 preserves `stmap30`'s continuous moderate deep seed penalty and its high-reference strong seed eligibility shape, but changes only the strong-seed penalty factor by reducing the gain-ratio slope from `0.09` to `0.05`. The penalty keeps the `0.18 * (refs - 4)` reference term, the `0.16` tight-slack term, and the `0.75` cap. A preliminary `0.07` gain slope still blocked node `2318` with area margin `0.929144`, so the final validation used `0.05`, which admitted the seed with factor `0.300` and area margin `0.909667`. Existing `map` and `stmap0` through `stmap30` remain on their prior mode numbers.
+1645:- validation run:
+1650:- benchmark results:
+1659:- correctness results:
+1669:- review pass 1:
+1673:- review pass 2:
+1682:- next-step recommendation: `stmap31` confirms the strong node `2318` can re-enter without changing final QoR, while the moderate node `37979` remains the active blocker. For `stmap32`, move beyond reference count by adding a direct downstream-aware diagnostic or penalty input, such as SCL load, slew, or post-buffer capacitance correlation, so strong and moderate high-reference seeds can be separated by observed load behavior instead of mapper reference count alone.
+1686:- hypothesis: A candidate cut's average leaf reference count can act as a cut-local load proxy for high-reference strong deep seeds, separating load-risky strong seeds from benign ones while preserving the `stmap31` continuous moderate-seed blocker.
+1687:- motivation: `stmap31` allowed the strong `syn2` seed at node `2318` back into the mapping without changing final QoR, which showed that root reference count alone was too coarse. The next diagnostic step is to look at the fanout shape at the candidate cut leaves: high cut-leaf load should raise the area margin for strong seeds even when the root has the same reference count.
+1688:- command name: `stmap32`
+1689:- files changed:
+1701:- algorithm summary: `stmap32` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 33` into the mapper. Mode 33 preserves the `stmap31` moderate penalty and damped strong-seed shape, then adds `0.04 * (cut_leaf_load_avg - 1.0)` to the strong-seed penalty when the average reference count of the candidate cut leaves exceeds one. The strong penalty remains capped at `0.75` inverter area. The new diagnostics report `cut-leaf-load-avg` for strong penalty seed/block decisions. Existing `map` and `stmap0` through `stmap31` remain on their prior mode numbers.
+1702:- validation run:
+1707:- benchmark results:
+1716:- correctness results:
+1726:- review pass 1:
+1730:- review pass 2:
+1739:- next-step recommendation: `stmap32` confirms that cut-leaf fanout shape can distinguish the redundant strong seed at node `2318` while preserving final QoR. For `stmap33`, correlate this cut-leaf proxy with a more direct SCL/load signal, such as mapped net capacitance or post-buffer timing diagnostics, so the penalty can move from mapper reference counts toward observed downstream load.
+1743:- hypothesis: Normalizing the `stmap32` cut-leaf load proxy by the selected supergate fanout limit can move the strong deep seed area gate toward a library-derived drive/load signal, while preserving the continuous moderate-seed blocker.
+1744:- motivation: `stmap32` used raw average cut-leaf reference count to block the redundant `syn2` strong seed at node `2318`. The next step was to test whether the selected supergate's mapper fanout limit can explain that load risk more directly than raw references alone.
+1745:- command name: `stmap33`
+1746:- files changed:
+1758:- algorithm summary: `stmap33` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 34` into the mapper. Mode 34 preserves the `stmap32` moderate penalty and strong-seed eligibility shape, but replaces the raw `0.04 * (cut_leaf_load_avg - 1.0)` strong-seed cut-leaf term with a drive-normalized term: `0.18 * (cut_leaf_load_avg / fanout_limit - 1.0)` when the selected supergate fanout limit is positive and the ratio exceeds one. The strong penalty remains capped at `0.75` inverter area. Diagnostics now report `cut-leaf-load-avg`, `fanout-limit`, and `load-drive-ratio` for strong penalty decisions. Existing `map` and `stmap0` through `stmap32` remain on their prior modes.
+1759:- validation run:
+1764:- benchmark results:
+1773:- correctness results:
+1783:- review pass 1:
+1787:- review pass 2:
+1796:- next-step recommendation: `stmap33` confirms that the selected strong seed at node `2318` has a fanout-limit `1` cell driving a much larger cut-leaf load proxy. For `stmap34`, replace the saturating ratio-only term with a gentler load/drive curve or add a direct SCL capacitance diagnostic after mapping so high load/drive ratios can be distinguished from cases where downstream buffering repairs the load without QoR loss.
+1800:- hypothesis: A bounded sublinear drive-normalized load penalty can keep the selected-supergate drive/load diagnostic from `stmap33` without automatically saturating high-ratio strong deep seeds that downstream buffering may repair.
+1801:- motivation: `stmap33` showed that the `syn2` strong seed at node `2318` had fanout-limit `1` and cut-leaf load averages `6.75`/`5.50`, causing the linear ratio term to saturate the strong penalty at `0.750` and block the seed. Earlier `stmap31` admitted the same seed without changing final `stime`, so `stmap34` tests whether a bounded curve can retain the diagnostic signal while avoiding over-blocking.
+1802:- command name: `stmap34`
+1803:- files changed:
+1815:- algorithm summary: `stmap34` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 35` into the mapper. Mode 35 preserves the `stmap33` continuous moderate-seed penalty and strong-seed eligibility shape, but replaces the saturating linear load/drive term with `0.02 * (load_drive_ratio - 1.0) / load_drive_ratio` when the ratio exceeds one. The base strong-seed penalty remains the damped `stmap31` factor and the total strong penalty remains capped at `0.75` inverter area. Existing `map` and `stmap0` through `stmap33` remain on their prior modes.
+1816:- validation run:
+1821:- benchmark results:
+1830:- correctness results:
+1840:- review pass 1:
+1844:- review pass 2:
+1853:- next-step recommendation: `stmap34` shows that a bounded load/drive term can admit the redundant strong seed at node `2318` while retaining the moderate blocker at node `37979` and preserving final `syn2` QoR. For `stmap35`, move from mapper-reference load proxies toward a direct SCL/load diagnostic, such as mapped net capacitance or a post-buffer critical-load observation, so the penalty can distinguish repaired high ratios from ratios that actually harm final `stime`.
+1857:- hypothesis: Direct SCL mapped load and output-cap diagnostics can reveal which mapped nodes exceed Liberty output-cap limits after mapper selection, while preserving the bounded `stmap34` load/drive decisions.
+1858:- motivation: `stmap34` showed that a bounded load/drive curve admits the redundant `syn2` strong seed at node `2318`, but the mapper-side proxy still does not show actual mapped fanout capacitance. `stmap35` adds direct SCL load observation so later versions can connect high mapped load ratios to final `stime` behavior.
+1859:- command name: `stmap35`
+1860:- files changed:
+1873:- algorithm summary: `stmap35` keeps the classic `map` SCL genlib gain default of `250` and passes `fSkipFanout = 36` into the mapper. Mode 36 preserves the `stmap34` bounded drive-normalized strong-seed penalty and the continuous moderate-seed blocker, with its own counters and diagnostics. After mapping, the command-level SCL diagnostic traverses the mapped network, sums direct SCL input-pin capacitance for each node's fanout cells, divides by the driver's Liberty output `max_out_cap`, and prints aggregate load statistics plus the top five load-ratio nodes. The diagnostic is observational and does not alter the mapped network. Existing `map` and `stmap0` through `stmap34` remain on their prior modes.
+1874:- validation run:
+1879:- benchmark results:
+1891:- correctness results:
+1902:- review pass 1:
+1906:- review pass 2:
+1915:- next-step recommendation: `stmap35` shows that several mapped nodes substantially exceed Liberty output-cap limits even when final downstream `stime` remains improved against `map`. For `stmap36`, feed the direct SCL load/max-cap ratio back into mapper gate or area decisions, preferably constrained to timing-sensitive paths so raw high fanout does not block seeds that downstream buffering repairs.
+1919:- hypothesis: A two-pass mapper can use direct SCL mapped-load/max-cap pressure from the first mapped network as a bounded feedback scalar for the final mapper pass, blocking only high-reference strong seeds when measured downstream load pressure is severe.
+1920:- motivation: `stmap35` showed large Liberty output-cap violations on the larger designs, but that diagnostic was observational. `stmap36` tests whether feeding the aggregate over-cap severity back into the existing bounded load/drive strong-seed area margin can convert the SCL signal into a mapper decision without perturbing low-pressure designs.
+1921:- command name: `stmap36`
+1922:- files changed:
+1934:- algorithm summary: `stmap36` keeps the classic SCL-genlib gain default of `250`. The command first maps with the prior `stmap35` bounded load/drive surface, measures direct SCL fanout input-pin load divided by the driving cell's Liberty `max_out_cap`, and computes a severity from max load ratio and over-max fraction. It then remaps with mapper mode `37`, which preserves the `stmap35` moderate penalty and bounded strong-seed load/drive curve, then adds `0.03 * severity * (load_drive_ratio - 1) / load_drive_ratio` to the strong-seed penalty when the first pass showed SCL over-cap pressure. The feedback scalar is reset after the final map. Existing `map` and `stmap0` through `stmap35` remain on their prior command paths and mode numbers.
+1935:- validation run:
+1940:- benchmark results:
+1952:- correctness results:
+1962:- review pass 1:
+1966:- review pass 2:
+1975:- next-step recommendation: `stmap36` proves the direct SCL load diagnostic can alter mapper decisions in the intended direction, but the blocked `syn2` strong seed still leaves final downstream QoR unchanged. For `stmap37`, make the feedback more local by associating first-pass over-cap hotspots with mapper node IDs or fanout cones, so the penalty can target SCL-proven load offenders instead of applying an aggregate scalar across all strong seeds.
+1979:- hypothesis: First-pass direct SCL over-cap hotspots can be mapped back to original AIG IDs and used as a local feedback set, so the final mapper penalizes only high-reference strong seeds that are spatially near measured downstream load offenders.
+1980:- motivation: `stmap36` proved that direct SCL load feedback can alter mapper decisions, but its aggregate scalar blocked the known `syn2` strong seed globally without improving final downstream `stime`. `stmap37` tests whether localizing that feedback to first-pass over-cap roots and their immediate mapped fanin cone is a safer discriminator.
+1981:- command name: `stmap37`
+1982:- files changed:
+1994:- algorithm summary: `stmap37` keeps the classic SCL-genlib gain default of `250`. The command first maps with mapper mode `36`, preserving the observational direct SCL load surface from `stmap35`, then measures each mapped node's SCL fanout input-pin load divided by its Liberty `max_out_cap`. Over-cap mapped roots and their immediate mapped fanin cone are translated through `vOrigNodeIds` into original AIG IDs, sorted by local load ratio, and capped at `64` hotspots. The command then remaps with mapper mode `38`. Mode 38 keeps the continuous moderate-seed penalty and the bounded drive-normalized strong-seed penalty, but adds an extra SCL term only when the current mapper node's AIG ID appears in the first-pass hotspot set with ratio greater than `1.0`. The feedback globals are reset after the final map. Existing `map` and `stmap0` through `stmap36` remain on their prior command paths and mode numbers.
+1995:- validation run:
+2000:- benchmark results:
+2012:- correctness results:
+2023:- review pass 1:
+2027:- review pass 2:
+2036:- next-step recommendation: `stmap37` verifies that first-pass SCL hotspots can be captured and fed into mapper mode 38, but the `syn2` strong seed is not in the root/immediate-fanin hotspot set. For `stmap38`, broaden the local association to downstream fanout cones, timing-near endpoints, or mapped supergate leaves reachable from over-cap roots, and log whether the known `2318` strong-seed candidate is connected to those SCL offenders before increasing penalty strength.
+2040:- hypothesis: Broader first-pass SCL hotspot association that includes over-cap roots, immediate fanins, second-level fanins, and downstream fanouts can connect strong-seed mapper decisions to measured SCL load offenders that `stmap37` missed.
+2041:- motivation: `stmap37` localized aggregate SCL load feedback but left the known `syn2` refs-5 strong seed at mapper node `2318` with `hotspot-ratio = 0.000`. `stmap38` tests whether expanding the local feedback neighborhood and logging the tracked AIG ID makes the SCL offender association visible before increasing penalty strength.
+2042:- command name: `stmap38`
+2043:- files changed:
+2055:- algorithm summary: `stmap38` keeps the `stmap35` direct SCL load measurement surface by first mapping with mapper mode `36`, then measuring each mapped node's SCL fanout input-pin load divided by Liberty `max_out_cap`. It expands the local hotspot set to at most `128` original AIG IDs by adding over-cap roots, immediate fanins at `0.85x` root ratio, second-level fanins at `0.65x` root ratio, and immediate fanouts/downstream users at `0.70x` root ratio. The final remap uses mapper mode `39`, which keeps the bounded drive-normalized strong-seed penalty from `stmap34` and adds an SCL feedback term only when either the mapper node or a candidate cut leaf appears in the expanded hotspot table. The command logs selected hotspot counts, fanin/fanout expansion counts, and a tracked AIG ID `2318` so the `syn2` blocker can be checked directly. Existing `map` and `stmap0` through `stmap37` remain on their prior command paths and mode numbers.
+2056:- validation run:
+2061:- benchmark results:
+2073:- correctness results:
+2084:- review pass 1:
+2089:- review pass 2:
+2098:- next-step recommendation: `stmap38` shows that a wider first-pass root/fanin/fanout hotspot neighborhood still misses the tracked `syn2` strong-seed candidate at AIG ID `2318`, despite selecting the maximum `128` hotspots and seeing aggregate SCL feedback severity `0.884`. For `stmap39`, switch from static AIG-neighborhood matching to a reconstruction-aware association: map each final candidate cut or reconstructed supergate output to the first-pass mapped node IDs that consume its fanout, then penalize strong seeds by downstream consumers' measured SCL load ratio rather than by nearby original AIG IDs alone.
+2102:- hypothesis: A reconstruction-aware consumer-pressure table from first-pass SCL load offenders can bias final strong-seed mapper decisions more locally than root/fanin/fanout AIG-neighborhood hotspots.
+2103:- motivation: `stmap38` broadened static SCL hotspot association but still left the known `syn2` refs-5 strong seed at mapper node `2318` with zero local hotspot pressure. `stmap39` tests whether downstream consumers of measured over-cap nodes, plus those consumers' fanin cones, expose the reconstructed AIG ID that the final mapper sees for the same decision.
+2104:- command name: `stmap39`
+2105:- files changed:
+2118:- algorithm summary: `stmap39` first maps with mapper mode `36` to preserve the direct SCL load measurement surface, then measures each mapped node's fanout input-pin load divided by Liberty `max_out_cap`. It collects a consumer-pressure table of up to `4096` original AIG IDs from over-cap roots, downstream consumers, and the consumers' fanin cones, keyed by original AIG ID and ranked by measured consumer load ratio. The final remap uses mapper mode `40`, which keeps the bounded drive-normalized strong-seed logic and adds a pressure term only when `Map_NodeReadAigId` or a candidate cut leaf AIG ID appears in that table. After review, the mapper intentionally does not fall back to internal mapper node numbers for this AIG-keyed table. Existing `map` and `stmap0` through `stmap38` remain on their prior command paths and mode numbers.
+2119:- validation run:
+2124:- benchmark results:
+2135:- correctness results:
+2146:- review pass 1:
+2151:- review pass 2:
+2161:- next-step recommendation: `stmap39` confirms that reconstruction-aware consumer-pressure collection can observe the previously missing `syn2` AIG ID `5548`, but the capped sorted AIG table and final mapper lookup still fail to apply nonzero pressure to the admitted strong seed. For `stmap40`, use a denser direct association structure keyed by AIG ID, such as a sparse hash/table or threshold-preserving pressure map, or explicitly pass a separate mapped-node keyed relation, so medium-pressure reconstruction IDs are retained without reintroducing unsafe mapper-number fallback behavior.
+2165:- hypothesis: A dense AIG-ID pressure vector can carry first-pass SCL consumer-pressure ratios into the final mapper without dropping medium-pressure reconstruction IDs such as the `syn2` AIG ID `5548`.
+2166:- motivation: `stmap39` proved the consumer-pressure collector can observe AIG ID `5548` with ratio `2.265`, but its capped ranked table did not retain that ID for final mapper lookup. `stmap40` tests whether a threshold-preserving dense vector lets the measured downstream pressure affect the known strong-seed decision without reintroducing unsafe mapper-node fallback behavior.
+2167:- command name: `stmap40`
+2168:- files changed:
+2180:- algorithm summary: `stmap40` keeps the first-pass `stmap35` direct SCL load measurement surface, but replaces `stmap39`'s capped consumer-pressure transfer with a dynamically grown dense float vector indexed by original AIG ID. The command records all pressure ratios greater than `1.0` from over-cap roots, downstream consumers, and consumer fanin cones, passes the vector to mapper mode `41`, and resets the mapper static pointer before freeing the vector. Mode `41` keeps the bounded drive-normalized strong-seed area margin, looks up node and cut-leaf pressure directly by AIG ID, and applies a local SCL pressure term with coefficient `0.065`. Existing `map` and `stmap0` through `stmap39` remain on their prior command paths and mode numbers.
+2181:- validation run:
+2186:- benchmark results:
+2199:- correctness results:
+2208:- review pass 1:
+2213:- review pass 2:
+2223:- next-step recommendation: `stmap40` shows the dense AIG-ID transfer can deliver medium-pressure SCL feedback to the final mapper and block the tracked `syn2` strong seed, but final downstream QoR is unchanged. For `stmap41`, use the dense pressure vector to separate timing-useful from redundant pressure hits, for example by adding arrival-criticality or endpoint timing correlation before increasing the SCL pressure term broadly.
+2227:- hypothesis: First-pass SCL timing criticality can filter dense consumer-pressure feedback so the final mapper only increases strong-seed area margins around timing-relevant pressure, instead of reacting to every over-cap load hit.
+2228:- motivation: `stmap40` successfully delivered dense AIG-ID pressure to the known `syn2` strong-seed decision and blocked the mapper node `2318` / AIG `5548`, but final post-flow QoR did not move. `stmap41` tests whether weighting that dense pressure by first-pass SCL slack separates useful critical pressure from redundant non-critical pressure.
+2229:- command name: `stmap41`
+2230:- files changed:
+2242:- algorithm summary: `stmap41` keeps the two-pass `stmap40` structure. The first pass maps with mapper mode `36`, measures each mapped node's direct SCL fanout input-pin load divided by Liberty `max_out_cap`, and starts an SCL timing manager to compute node slack against the first-pass maximum delay. The command stores both raw dense pressure and critical-weighted dense pressure by original AIG ID, where critical pressure is `1.0 + (raw_ratio - 1.0) * criticality` and criticality is clipped from a `max(10 ps, 0.18 * max_delay)` slack window. The final remap uses mapper mode `42`, which keeps the bounded drive-normalized strong-seed area-margin logic but uses only the critical-weighted dense pressure vector for node/cut lookup. Existing `map` and `stmap0` through `stmap40` remain on their prior command paths and mode numbers.
+2243:- validation run:
+2248:- benchmark results:
+2260:- correctness results:
+2269:- review pass 1:
+2273:- review pass 2:
+2282:- next-step recommendation: `stmap41` shows the first-pass slack-derived criticality filter removes the raw pressure that blocked the known `syn2` AIG `5548` strong seed, while final QoR remains unchanged. For `stmap42`, use endpoint-aware or sink-aware timing correlation instead of node slack alone, such as propagating the over-cap consumer's criticality to its fanin pressure cone or combining raw pressure with downstream endpoint criticality, so high-load consumers on timing-relevant paths stay visible without reintroducing broad raw pressure everywhere.
+2286:- hypothesis: Over-cap SCL consumer criticality should be propagated back through the dense pressure cone so the final mapper penalizes high-load choices when the sink itself is timing-relevant, rather than relying only on the pressured fanin node's own first-pass slack.
+2287:- motivation: `stmap41` showed that node-local criticality filtered out the known `syn2` pressure at AIG `5548`, while final QoR stayed unchanged. `stmap42` tests a sink-aware variant: keep the same dense AIG-ID pressure transfer, but weight each over-cap consumer's fanin pressure by the consumer's first-pass SCL criticality before feeding mode `43`.
+2288:- command name: `stmap42`
+2289:- files changed:
+2301:- algorithm summary: `stmap42` is a numbered two-pass `stmap` command. The first pass maps with mapper mode `36`, measures direct SCL fanout-pin load against Liberty `max_out_cap`, computes SCL timing criticality, and builds a dense pressure vector keyed by original AIG ID. Unlike `stmap41`, each over-cap sink propagates pressure to its fanin cone with `sink_ratio = 1.0 + (raw_ratio - 1.0) * (0.35 + 0.65 * sink_criticality)`, preserving a bounded raw-load floor while emphasizing timing-relevant consumers. The final remap uses mapper mode `43`, which applies this sink-pressure ratio to the bounded drive-normalized moderate/strong area-margin penalty diagnostics. Existing `map` and `stmap0` through `stmap41` remain on their prior command paths and mode numbers.
+2302:- validation run:
+2307:- benchmark results:
+2319:- correctness results:
+2328:- review pass 1:
+2332:- review pass 2:
+2341:- next-step recommendation: `stmap42` proves that sink-critical pressure transfer can restore the expected AIG `5548` mapper pressure and block the targeted strong seed, but post-flow QoR still lands on the same required-benchmark point as `stmap40` and `stmap41`. For `stmap43`, move from seed blocking alone to either a narrower alternate-cell admission policy around the same sink-pressure sites or a post-map recovery step that uses the sink-pressure diagnostics to reduce the area cost on unaffected paths.
+2345:- hypothesis: Keep `stmap42`'s sink-critical strong-seed protection, but only apply the moderate deep area penalty when first-pass SCL sink pressure is material at the mapper node or its cut leaves. This should recover area on paths not implicated by SCL over-cap pressure while retaining the known `syn2` pressure-site protection.
+2346:- motivation: `stmap42` restored sink-weighted pressure at AIG `5548` and blocked the targeted strong seed, but it still applied the inherited moderate penalty at AIG `41286`. `stmap43` tests whether the moderate recovery penalty can be opened selectively by requiring direct node or cut-leaf sink-pressure evidence.
+2347:- command name: `stmap43`
+2348:- files changed:
+2360:- algorithm summary: `stmap43` is a numbered two-pass `stmap` command. The first pass maps with mapper mode `36`, measures direct SCL fanout-pin load against Liberty `max_out_cap`, computes sink-critical dense pressure keyed by original AIG ID, and transfers that pressure into the final mapper pass. The final remap uses mapper mode `44`: the strong pressure penalty follows the `stmap42` sink-pressure path, while the moderate deep penalty is suppressed unless the node or cut leaves have sink-pressure ratio above `1.50`. When active, the moderate penalty is scaled by first-pass feedback and the local pressure ratio. Existing `map` and `stmap0` through `stmap42` remain on their prior command paths and mode numbers.
+2361:- validation run:
+2366:- benchmark results:
+2377:- correctness results:
+2386:- review pass 1:
+2390:- review pass 2:
+2399:- next-step recommendation: `stmap43` shows that direct sink-pressure gating still admits the AIG `41286` moderate seed and slightly regresses `syn2` relative to `stmap42`. For `stmap44`, tighten moderate recovery by requiring node and cut pressure agreement, a higher sink-pressure threshold, or evidence that the candidate does not reduce the `stmap42` block margin before admitting a moderate seed.
+2403:- hypothesis: Keep `stmap43`'s strong sink-pressure protection, but require direct mapped-node pressure and cut-leaf pressure agreement before applying the moderate deep area-margin penalty. This should reject broad pressure-cone moderate candidates that are not locally consistent while retaining the known `syn2` strong pressure blocks.
+2404:- motivation: `stmap43` still admitted the AIG `41286` moderate penalty seed and worsened `syn2` relative to `stmap42`. The next diagnostic question is whether the moderate policy should respond only when the candidate node and selected cut leaves both carry similar first-pass SCL sink pressure, rather than when either side is high.
+2405:- command name: `stmap44`
+2406:- files changed:
+2418:- algorithm summary: `stmap44` is a numbered two-pass `stmap` command. The first pass reuses the `stmap43` SCL load/max-cap sink-pressure collector and transfers the dense AIG-ID sink-pressure vector into mapper mode `45`. Mode `45` preserves the `stmap43` strong-seed SCL pressure penalty, but the moderate deep penalty now requires node and cut pressure ratios both above `1.75` with pressure spread no greater than `1.25`; otherwise the moderate penalty factor is zero. Existing `map` and `stmap0` through `stmap43` remain on their prior command paths and mode numbers.
+2419:- validation run:
+2424:- benchmark results:
+2434:- correctness results:
+2443:- review pass 1:
+2447:- review pass 2:
+2456:- next-step recommendation: `stmap44` shows that tightening the moderate penalty diagnostic does not recover the `syn2` QoR regression because the underlying area recovery can still occur without a positive moderate penalty factor. For `stmap45`, move the pressure agreement from the penalty-factor margin into the admission rule itself, or add a direct block for the recovered moderate seed when local pressure disagreement is observed, while preserving the AIG `5548` strong pressure protection.
+2460:- hypothesis: Move the node/cut SCL pressure-agreement test from the moderate penalty margin into the actual admission rule, so moderate deep soft seeds can use the lighter one-inverter area-recovery margin only when local mapped-node and cut-leaf pressure agree, while preserving the `stmap44` strong SCL pressure protection.
+2461:- motivation: `stmap44` suppressed counted moderate penalty factors but did not prevent the underlying moderate area recovery from using the lighter admission rule, leaving `syn2` at the same `491.54 ps` / `21598.23` point as `stmap43`. `stmap45` tests whether enforcing pressure agreement at admission time changes the actual recovered choices.
+2462:- command name: `stmap45`
+2463:- files changed:
+2475:- algorithm summary: `stmap45` is a numbered two-pass `stmap` command. The first pass reuses the sink-critical SCL load/max-cap pressure collector from the recent variants and transfers a dense AIG-ID pressure vector into mapper mode `46`. Mode `46` preserves the strong pressure penalty path used by `stmap44`, but the moderate deep recovery path now distinguishes every moderate soft seed from the positive-penalty subset. A moderate soft seed can avoid strict fallback only when its mapped node pressure and selected cut-leaf pressure both exceed `1.75` and their spread is no greater than `1.25`; otherwise it falls back to the stricter two-inverter area margin. Existing `map` and `stmap0` through `stmap44` remain on their prior command paths and mode numbers.
+2476:- validation run:
+2481:- benchmark results:
+2492:- correctness results:
+2502:- review pass 1:
+2507:- review pass 2:
+2515:- next-step recommendation: `stmap45` proves that moving pressure agreement into the admission rule changes the final network and recovers some `syn2` area, but it also gives up delay relative to `stmap44`. For `stmap46`, split the moderate soft-seed diagnostics by tight-critical versus positive-penalty origin and test a narrower exception: keep the pressure-agreement requirement for broad moderate penalty candidates, but allow only very tight critical seeds that meet a stronger arrival-gain or area-save threshold, while preserving the AIG `5548` strong pressure blocks.
+2519:- hypothesis: Keep `stmap45`'s pressure-agreement requirement for broad moderate deep soft seeds, but allow a narrow high-gain, tight-critical exception to use the lighter one-inverter recovery margin without pressure agreement. This should recover some timing from the `stmap45` over-blocking while preserving the strong SCL pressure blocks at the known `syn2` pressure site.
+2520:- motivation: `stmap45` showed that enforcing pressure agreement in the admission rule changed final QoR and recovered some `syn2` area, but it also worsened delay relative to `stmap44`. The next diagnostic question was whether only the tightest, highest-gain moderate soft seeds should bypass the pressure-agreement gate while broad moderate penalty candidates stay protected.
+2521:- command name: `stmap46`
+2522:- files changed:
+2534:- algorithm summary: `stmap46` is a numbered two-pass `stmap` command. The first pass reuses the sink-critical SCL load/max-cap pressure collector and transfers the dense AIG-ID sink-pressure vector into mapper mode `47`. Mode `47` preserves the `stmap45` node/cut pressure-agreement requirement for moderate soft-seed admission, preserves the strong SCL pressure penalty path, and adds a separate tight-critical exception for non-penalty moderate soft seeds that have deep arrival gain and slack no larger than `1.10 * SlackMargin`. The accepted review fix added the slack bound to keep the exception narrower than the inherited middle-relief window. Existing `map` and `stmap0` through `stmap45` remain on their prior command paths and mode numbers.
+2535:- validation run:
+2540:- benchmark results:
+2551:- correctness results:
+2561:- review pass 1:
+2566:- review pass 2:
+2574:- next-step recommendation: `stmap46` shows that this tight-critical exception does not recover the `stmap45` timing loss on the required benchmark set and slightly worsens `syn2`. For `stmap47`, either return to the `stmap45` admission shape and tune only strong-pressure margins, or instrument the blocked moderate soft seeds by origin so the next exception targets a specific observed blocked seed instead of relying on a broad high-gain predicate.
+2578:- hypothesis: Reuse the validated `stmap45` pressure-agreement admission mapper mode, but reduce the SCL/genlib gain from `250` to `200` to test whether lower gain gives the pressure-feedback remap enough timing headroom to improve high-severity designs without changing mapper internals.
+2579:- motivation: `stmap46`'s tight-critical exception did not help the required benchmark set. The next low-risk probe was a command-level parameter change around the `stmap45` admission shape, especially because quick local probes showed `syn2` improving at `-G 200` while `-G 300` regressed timing.
+2580:- command name: `stmap47`
+2581:- files changed:
+2590:- algorithm summary: `stmap47` is a numbered two-pass `stmap` command. It copies the `stmap45` command-level SCL load/max-cap feedback collector and still remaps with mapper mode `46` through `Map_Stmap45SetSclLoadFeedback()`, so the mapper admission rule and pressure agreement behavior are unchanged from `stmap45`. The only intended algorithmic change is the default SCL/genlib gain parameter, reduced from `250` to `200`, with an explicit `stmap47 mapper-mode: reused-stmap45-mode = 46  reduced-gain = 200.00` diagnostic in candidate logs. Existing `map` and `stmap0` through `stmap46` remain on their prior command paths and mode numbers.
+2591:- validation run:
+2596:- benchmark results:
+2606:- correctness results:
+2616:- review pass 1:
+2620:- review pass 2:
+2629:- next-step recommendation: `stmap47` shows that lower gain is valuable on the most severe `syn2` pressure case but too expensive and too inconsistent as a global default. For `stmap48`, make gain adaptive from first-pass feedback severity: keep `Gain = 250` for low or moderate severity and use `Gain = 200` only for high-severity, large-design cases similar to `syn2`, with explicit diagnostics for the selected gain and its feedback threshold.
+2633:- hypothesis: Keep the `stmap45` pressure-agreement mapper mode and use `Gain = 250` for low/moderate first-pass SCL pressure, but switch the final feedback remap to `Gain = 200` only when the first-pass feedback severity and sink-pressure population identify a high-pressure large design. This should preserve the `stmap45` QoR on `i10`, `ode`, and `or1200` while retaining the `stmap47` timing win on severe `syn2`.
+2634:- motivation: `stmap47` showed that global `Gain = 200` improves `syn2` delay from the `stmap45` point but spends much more area and regresses the other required benchmarks. The next diagnostic question is whether the lower-gain setting should be activated by measured first-pass SCL pressure instead of used globally.
+2635:- command name: `stmap48`
+2636:- files changed:
+2645:- algorithm summary: `stmap48` is a numbered two-pass `stmap` command. It runs the first feedback-load map at the base gain, default `250`, computes the existing SCL load/max-cap feedback severity and dense sink-pressure vector, and then remaps through `Map_Stmap45SetSclLoadFeedback()` using mapper mode `46`. The final remap keeps `Gain = 250` unless `severity >= 0.850` and `sink-pressure-entries >= 8000`, in which case it uses `0.80 * base_gain`, default `200`. Candidate logs print `stmap48 adaptive-gain` and `stmap48 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap47` remain on their prior command paths and mode numbers.
+2646:- validation run:
+2651:- benchmark results:
+2661:- correctness results:
+2671:- review pass 1:
+2675:- review pass 2:
+2684:- next-step recommendation: `stmap48` confirms that a first-pass SCL pressure gate can avoid the broad `stmap47` regressions while keeping the severe `syn2` delay win. For `stmap49`, keep the adaptive selector but reduce the `syn2` area cost, for example by using an intermediate selected gain such as `225`, by adding an area-cap condition to the low-gain activation, or by blending gain with pressure severity rather than using a binary `250/200` switch.
+2688:- hypothesis: Keep the `stmap48` first-pass SCL pressure selector and the `stmap45` pressure-agreement mapper mode, but use an intermediate high-pressure final remap gain of `0.90 * base_gain` (`225` by default) instead of the `stmap48` `0.80 * base_gain` (`200`). This should reduce the severe `syn2` area cost while preserving or improving the high-pressure timing win, and leave low/moderate-pressure benchmarks on the validated `Gain = 250` path.
+2689:- motivation: `stmap48` solved the global-regression problem by selecting `Gain = 200` only for the severe `syn2` pressure case, but it still spent `+1942.29` area versus baseline on `syn2`. Preliminary `syn2` probes showed `stmap47 -G 225` at `479.50 ps` / `22232.05`, better than the `stmap48` selected-low-gain result of `484.80 ps` / `23238.89`; `-G 237.5` reduced area further but gave back timing, while `-G 212.5` regressed delay.
+2690:- command name: `stmap49`
+2691:- files changed:
+2700:- algorithm summary: `stmap49` is a numbered two-pass `stmap` command. It clones the `stmap48` SCL load/max-cap collection, dense sink-pressure feedback, and high-pressure selector, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the selected high-pressure gain: when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, `stmap49` uses `0.90 * base_gain`; otherwise it keeps `base_gain`. Candidate logs print `stmap49 blended-gain` and `stmap49 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap48` remain on their prior command paths and mode numbers.
+2701:- validation run:
+2706:- benchmark results:
+2716:- correctness results:
+2726:- review pass 1:
+2730:- review pass 2:
+2739:- next-step recommendation: `stmap49` shows that the severe-pressure branch benefits from an intermediate gain: it improves both `syn2` delay and area relative to `stmap48` while preserving other required benchmarks. For `stmap50`, keep the `225` high-pressure branch and investigate whether the remaining `syn2` area overhead can be reduced by adding an area-aware high-pressure admission cap or by testing a severity-continuous gain blend between `225` and `237.5` only when predicted delay slack allows it.
+2743:- hypothesis: Keep the `stmap49` first-pass SCL pressure selector and the `stmap45` pressure-agreement mapper mode, but split the high-pressure gain branch into two severity bands: use `0.95 * base_gain` (`237.50` by default) for high but sub-extreme pressure and reserve `0.90 * base_gain` (`225.00` by default) for extreme pressure. This should reduce the severe-pressure `syn2` area cost while preserving useful delay improvement versus baseline.
+2744:- motivation: `stmap49` improved `syn2` delay to `479.50 ps` but still spent `+935.45` area versus baseline. Its next-step recommendation called for a severity-continuous or area-aware gain between `225` and `237.5`. `stmap50` tests the simplest severity-banded form of that idea using the existing first-pass feedback severity and sink-pressure population.
+2745:- command name: `stmap50`
+2746:- files changed:
+2755:- algorithm summary: `stmap50` is a numbered two-pass `stmap` command. It clones the `stmap49` SCL load/max-cap collection, dense sink-pressure feedback, and high-pressure selector, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the high-pressure selected gain: below the high-pressure gate it keeps `base_gain`; when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, it selects `0.95 * base_gain`; when severity is at least `0.900` under the same pressure-entry gate, it selects `0.90 * base_gain`. Candidate logs print `stmap50 banded-gain` and `stmap50 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap49` remain on their prior command paths and mode numbers.
+2756:- validation run:
+2761:- benchmark results:
+2771:- correctness results:
+2781:- review pass 1:
+2785:- review pass 2:
+2794:- next-step recommendation: `stmap50` confirms that `237.50` gain meaningfully reduces `syn2` area but gives back too much timing versus `stmap49`. For `stmap51`, try a narrower selected gain such as `231.25`, or keep `225` but add a downstream area-pressure guard inside mapper mode `46` so only the expensive high-pressure choices are constrained rather than globally softening the remap gain.
+2799:- hypothesis: Keep the `stmap50` first-pass SCL pressure selector and the `stmap45` pressure-agreement mapper mode, but use a single midpoint high-pressure final remap gain of `0.925 * base_gain` (`231.25` by default). This tests whether the severe-pressure `syn2` point lies between the `stmap49` `225.00` timing-heavy branch and the `stmap50` `237.50` area-saving branch.
+2800:- motivation: `stmap50` reduced `syn2` area versus `stmap49` but gave back too much delay. The previous next-step recommendation called for a narrower selected gain such as `231.25`; `stmap51` isolates that gain choice while preserving the existing SCL feedback, sink-pressure collection, and mapper mode.
+2801:- command name: `stmap51`
+2802:- files changed:
+2811:- algorithm summary: `stmap51` is a numbered two-pass `stmap` command. It clones the `stmap50` SCL load/max-cap collection and dense sink-pressure feedback, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the high-pressure selected gain: when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, it selects `0.925 * base_gain`; otherwise it keeps `base_gain`. Candidate logs print `stmap51 midpoint-gain` and `stmap51 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap50` remain on their prior command paths and mode numbers.
+2812:- validation run:
+2817:- benchmark results:
+2827:- correctness results:
+2837:- review pass 1:
+2841:- review pass 2:
+2850:- next-step recommendation: `stmap51` shows the gain response is non-monotonic and that `231.25` is inferior to both neighboring tested severe-pressure settings on `syn2`. For `stmap52`, return to the `stmap49` `225.00` severe-pressure gain and reduce area inside mapper mode `46`, for example by adding a targeted downstream area-pressure guard for the expensive high-pressure choices instead of globally softening the remap gain.
+2855:- hypothesis: Return to the `stmap49` severe-pressure selected gain of `225.00`, but move the area experiment into a new versioned mapper mode `53`. The new mode preserves the stmap45 pressure-agreement rule and reduces the moderate pressure penalty by `0.65x` when local pressure is below the severe band or the area candidate remains arrival-neutral. This should preserve the useful `stmap49` timing point while reducing the remaining severe-pressure area overhead.
+2856:- motivation: `stmap51` falsified the midpoint-gain hypothesis: the `231.25` gain was slower and larger than `stmap49` on `syn2`. The previous recommendation was to stop globally softening gain and instead constrain expensive high-pressure choices inside the mapper. `stmap52` tests that targeted local area-cap idea.
+2857:- command name: `stmap52`
+2858:- files changed:
+2870:- algorithm summary: `stmap52` is a numbered two-pass `stmap` command. It clones the stmap49/stmap51 first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects `0.90 * base_gain` (`225.00` by default) only when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, and performs the final remap with mapper mode `53`. Mode `53` extends the existing fanout-risk diagnostic range, reuses the stmap45 pressure-agreement checks, adds stmap52 counters, and caps positive moderate pressure penalty factors by `0.65x` under the local area-cap conditions. Candidate logs print `stmap52 blended-gain`, `stmap52 mapper-mode`, sink-pressure, feedback, guard, near-miss, early-seed, and penalty diagnostics. Existing `map` and `stmap0` through `stmap51` remain on their prior command paths and mode numbers.
+2871:- validation run:
+2876:- benchmark results:
+2887:- correctness results:
+2897:- review pass 1:
+2901:- review pass 2:
+2910:- next-step recommendation: `stmap52` proves that simply capping the existing moderate pressure penalty path is too conservative on the required severe-pressure case: `syn2` still has eight moderate and two strong pressure blocks with no accepted pressure seeds, and QoR is identical to `stmap49`. For `stmap53`, keep the `225.00` severe-pressure gain, but open a deliberately bounded candidate class that can actually admit area-saving choices under pressure, such as a small arrival-neutral exception for the eight blocked moderate cases or a diagnostic-guided rule keyed to the `syn2` local pressure ratios.
+2915:- hypothesis: Keep the `stmap52` severe-pressure selected gain of `225.00`, but open a narrowly bounded pressure-near moderate exception in a new mapper mode `54`. The exception should admit area-saving, arrival-improving moderate candidates only when the first-pass feedback is in the same dense severe-pressure branch and both node and cut sink-pressure ratios are present, bounded, and close.
+2916:- motivation: `stmap52` preserved the good `225.00` severe-pressure timing point but its local area-cap path admitted no additional required-benchmark choices. Its next-step recommendation was to keep the severe gain and open a deliberately bounded class that can actually test the blocked moderate candidates without globally softening remap gain.
+2917:- command name: `stmap53`
+2918:- files changed:
+2930:- algorithm summary: `stmap53` is a numbered two-pass `stmap` command. It clones the `stmap52` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects `0.90 * base_gain` (`225.00` by default) only when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, and performs the final remap with mapper mode `54`. Mode `54` extends the existing fanout-risk diagnostic range, reuses the `stmap52` pressure-agreement and local area-cap behavior, adds stmap53 counters, and adds a pressure-near exception for moderate candidates. After review fixes, the exception is gated on measured sink-pressure entry count rather than vector capacity, requires feedback severity `>= 0.85`, and requires both node and cut sink-pressure ratios to be between `1.25` and `2.75` with spread at most `2.25`. Existing `map` and `stmap0` through `stmap52` remain on their prior command paths and mode numbers; the original `Map_Stmap45SetSclLoadFeedback()` is preserved as a wrapper while stmap53 uses `Map_Stmap45SetSclLoadFeedbackWithEntries()` to carry the measured pressure population.
+2931:- validation run:
+2936:- benchmark results:
+2947:- correctness results:
+2958:- review pass 1:
+2962:- review pass 2:
+2975:- next-step recommendation: `stmap53` shows the safe two-sided pressure-near rule is too strict for the promising `syn2` cases. For `stmap54`, keep the reviewed severe branch and either add reconstruction-consistent pressure transfer so both node and cut sides are populated for the one-sided candidates, or evaluate a separately guarded one-sided rule with explicit timing/load checks; do not treat a missing pressure side as agreement.
+2980:- hypothesis: Keep the reviewed `stmap53` severe-pressure branch and add one separately labelled cut-only one-sided pressure exception in mapper mode `55`. The new exception should fire only in dense severe-feedback runs when node sink pressure is absent, cut sink pressure is bounded, mapper arrival gain is strong, and existing slack is not tight.
+2981:- motivation: `stmap53` showed that the safe two-sided pressure-near exception was too strict for the promising `syn2` case because the useful candidate had cut pressure but no node pressure. The next-step recommendation explicitly called for evaluating a separately guarded one-sided rule without treating missing pressure as pressure agreement.
+2982:- command name: `stmap54`
+2983:- files changed:
+2995:- algorithm summary: `stmap54` is a numbered two-pass `stmap` command. It clones the `stmap53` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects `0.90 * base_gain` (`225.00` by default) only when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, and performs the final remap with mapper mode `55`. Mode `55` preserves the reviewed `stmap53` pressure-near branch by calling `Map_MatchStmap53ModeratePenaltyFactor()` first, then tests a new cut-only exception requiring no node sink pressure, cut sink-pressure ratio between `1.60` and `2.20`, at least a two-arrival-margin improvement, and slack above one inverter delay. Diagnostics separate inherited pressure-near exception counts from new cut-only exception counts. Existing `map` and `stmap0` through `stmap53` remain on their prior command paths and mode numbers.
+2996:- validation run:
+3001:- benchmark results:
+3012:- correctness results:
+3023:- review pass 1:
+3027:- review pass 2:
+3036:- next-step recommendation: `stmap54` recovers the one useful one-sided `syn2` candidate and improves delay by `0.36 ps` versus `stmap53`, but it costs `6.53` area and only fires once on the required set. For `stmap55`, keep the preserved `stmap53` branch and add a tiny area-ratio or area-save cap around cut-only exceptions, or test a reconstruction-consistent pressure transfer that can turn one-sided cut pressure into paired evidence without allowing missing pressure to masquerade as agreement.
+3041:- hypothesis: Keep the reviewed `stmap54` severe-feedback branch, but cap cut-only one-sided pressure exceptions to at most `1.25` inverter areas of local area-save. This tests whether the one accepted `stmap54` `syn2` exception was worth its area cost.
+3042:- motivation: `stmap54` improved `syn2` delay by `0.36 ps` versus `stmap53`, but cost `6.53` extra area and fired only once on the required set. The campaign recommendation was to preserve the reviewed severe branch while adding a small area-ratio or area-save cap around cut-only exceptions.
+3043:- command name: `stmap55`
+3044:- files changed:
+3056:- algorithm summary: `stmap55` is a numbered two-pass `stmap` command. It clones the `stmap54` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects the blended gain only under the same severe feedback conditions, and performs the final remap with mapper mode `56`. Mode `56` preserves the reviewed `stmap53` pressure-near branch through `Map_MatchStmap54ModeratePenaltyFactor()`, preserves the `stmap54` cut-only candidate test, then admits a cut-only exception only when `AreaSave <= 1.25 * inverter_area + epsilon`. Cap-blocked cut-only candidates are reported separately and fall back to the normal strict area gate. Existing `map` and `stmap0` through `stmap54` remain on their prior command paths and mode numbers.
+3057:- validation run:
+3062:- benchmark results:
+3073:- correctness results:
+3084:- review pass 1:
+3093:- next-step recommendation: The simple area-save cap confirms the `stmap54` one-sided seed was a delay/area tradeoff rather than free QoR. For `stmap56`, prefer a reconstruction-consistent pressure-transfer experiment that can turn cut-only pressure into paired evidence, or a very narrow cap sweep around `1.35x` inverter area to see whether the single `syn2` delay gain can be recovered with a bounded area budget.
+3098:- hypothesis: Keep the reviewed `stmap54`/`stmap55` severe-feedback cut-only pressure exception, but relax the cut-only local area-save cap from `1.25` to `1.35` inverter areas in a new mapper mode. This tests whether the single useful `syn2` timing gain can be recovered with a still explicit area budget.
+3099:- motivation: `stmap55` proved that the simple `1.25x` cap saved the `stmap54` area cost but also gave back the only extra `syn2` timing gain. The prior recommendation allowed a narrow cap sweep around `1.35x` inverter area as a controlled boundary experiment.
+3100:- command name: `stmap56`
+3101:- files changed:
+3113:- algorithm summary: `stmap56` is a numbered two-pass `stmap` command. It clones the `stmap55` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects the blended gain only under the same severe feedback conditions, and performs the final remap with mapper mode `57`. Mode `57` preserves the reviewed `stmap53` pressure-near branch through the `stmap54` helper, preserves the `stmap54` cut-only candidate test, then admits a cut-only exception only when `AreaSave <= 1.35 * inverter_area + epsilon`. Cap-blocked cut-only candidates remain separately reported and fall back to the normal strict area gate. Existing `map` and `stmap0` through `stmap55` remain on their prior command paths and mode numbers.
+3114:- validation run:
+3119:- benchmark results:
+3130:- correctness results:
+3141:- review pass 1:
+3145:- review pass 2:
+3154:- next-step recommendation: The `1.35x` cap confirms the useful one-sided `syn2` candidate sits exactly between the `stmap55` and `stmap56` cap thresholds; it is a clean timing/area tradeoff, not free improvement. For `stmap57`, prefer reconstruction-consistent pressure transfer that can populate paired pressure evidence for cut-only cases, or add a downstream area-budget/objective check before accepting the cut-only recovery instead of continuing a simple cap sweep.
+3159:- hypothesis: Keep the reviewed `stmap56` mapper mode `57`, but feed raw first-pass SCL load-pressure ratios into `Map_Stmap45SetSclLoadFeedbackWithEntries()` instead of sink-criticality-weighted ratios. This tests whether raw pressure can turn the prior cut-only severe-pressure case into paired mapper evidence without adding another cap sweep or changing older commands.
+3160:- motivation: `stmap56` recovered the single `syn2` timing gain by relaxing the local cut-only cap, but that gain was still a local timing/area tradeoff. The prior recommendation was to prefer reconstruction-consistent pressure transfer that can populate paired pressure evidence for cut-only cases.
+3161:- command name: `stmap57`
+3162:- files changed:
+3171:- algorithm summary: `stmap57` clones the `stmap56` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap56`. It performs a first mapping pass with the established feedback collection path, computes the same severe-feedback gain selector, and then remaps through the reviewed mapper mode `57`. The new behavior is the pressure handoff: the second pass receives `LoadStats.pAigPressureRatios` and `LoadStats.nPressureEntries` instead of `LoadStats.pAigSinkPressureRatios` and `LoadStats.nSinkPressureEntries`. Command diagnostics label this as `pressure-feed = raw-load`; inherited mapper-mode diagnostics still print as `stmap56` because the reviewed mode number is intentionally reused.
+3172:- validation run:
+3177:- benchmark results:
+3188:- correctness results:
+3200:- review pass 1:
+3204:- review pass 2:
+3213:- next-step recommendation: `stmap57` shows raw pressure is not reconstruction-consistent enough for the one useful cut-only severe-pressure candidate because it overstates the cut side rather than creating paired evidence. For `stmap58`, use a bounded transferred-pressure ratio instead of raw pressure directly, for example an attenuated cut-to-node surrogate that is capped near the reviewed `1.60` to `2.20` exception band and recorded as separate diagnostics before it is allowed to affect area recovery.
+3218:- hypothesis: Feed the reviewed mapper mode `57` a bounded transferred-pressure table instead of raw pressure. Severe-feedback designs lift sink-weighted pressure toward raw pressure with a `0.72` weight and cap the final selected ratio at `2.10`, while non-severe designs keep the sink-weighted handoff. This tests whether bounded raw transfer can avoid the `stmap57` over-amplification while preserving useful severe-pressure evidence.
+3219:- motivation: `stmap57` showed that direct raw pressure was too strong for the useful `syn2` cut-only case: it moved the cut pressure above the reviewed exception band and fell back to the lower-area, slower point. The prior recommendation was to use a bounded transferred-pressure ratio capped near the `1.60` to `2.20` band.
+3220:- command name: `stmap58`
+3221:- files changed:
+3230:- algorithm summary: `stmap58` clones the `stmap57` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap57`. It first maps with the established feedback collection path, computes the same severe-feedback gain selector, and then remaps through the reviewed mapper mode `57`. The new behavior is the second-pass pressure handoff: `Abc_Stmap58BuildBoundedPressures()` feeds sink-weighted pressure for non-severe cases, and for severe cases uses `max(capped_sink, min(1.0 + 0.72 * (raw - 1.0), 2.10))` for each AIG pressure entry. Pass-1 review tightened this so the final selected ratio is capped even when the selected value came from sink fallback. Existing `map` and older `stmap` commands remain on their prior paths and mode numbers.
+3231:- validation run:
+3236:- benchmark results:
+3247:- correctness results:
+3259:- review pass 1:
+3263:- review pass 2:
+3272:- next-step recommendation: `stmap58` proves that a simple final cap makes raw transfer safer, but the bounded table still does not recreate the useful cut-only evidence; it lands at a new area/timing point rather than recovering `stmap56`. For `stmap59`, either add a mapper-mode diagnostic that records the actual maximum leaf pressure for the formerly useful AIG ID/cut, or test a narrower severe transfer that only caps cut-side ratios while leaving node-side sink fallback unchanged, so the experiment can distinguish "cap too low" from "paired evidence blocks the exception."
+3277:- hypothesis: Keep the reviewed `stmap58` bounded-pressure handoff and mapper mode `57`, but retarget the tracked AIG diagnostic to the formerly useful `stmap56` cut-only AIG ID `27645`. This tests whether the bounded handoff misses the seed because that AIG is absent from the first-pass pressure table, capped too low, or converted into paired pressure evidence.
+3278:- motivation: `stmap58` did not recreate the useful `stmap56` cut-only seed. The prior recommendation called for a diagnostic that records actual pressure for the formerly useful AIG/cut before changing the pressure-transfer rule again.
+3279:- command name: `stmap59`
+3280:- files changed:
+3289:- algorithm summary: `stmap59` clones the `stmap58` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap58`. It first maps with the established SCL load/max-cap collector, computes the same severe-feedback gain selector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. The intentional change is diagnostic: `ABC_STMAP59_TRACK_AIG_ID` is `27645`, the prior useful cut-only AIG ID. Review pass 1 changed absent tracked nodes to report `TrackedNode = -1`, so zero pressure ratios can be distinguished from a real mapped node ID.
+3290:- validation run:
+3295:- benchmark results:
+3306:- correctness results:
+3318:- review pass 1:
+3322:- review pass 2:
+3331:- next-step recommendation: `stmap59` shows the command-level first-pass pressure collector cannot see the prior useful `syn2` AIG ID `27645`, so another global pressure-table cap sweep is unlikely to answer the reconstruction question. For `stmap60`, add mapper-mode-side diagnostics for the cut leaves of near-miss node `23628` directly inside mode `57`, or preserve first-pass AIG identity through reconstruction before attempting another bounded transfer policy.
+3336:- hypothesis: Keep the reviewed `stmap59` bounded-pressure handoff and inherited mapper mode `57`, but enable a mapper-side near-miss cut-leaf diagnostic for tracked mapper node `23628` during the final feedback remap. This tests whether the formerly useful `syn2` AIG ID `27645` is absent only from the command-layer first-pass collector, or whether mode `57` can still see the candidate and its pressure-bearing cut leaves.
+3337:- motivation: `stmap59` showed that command-level first-pass tracking did not see AIG `27645` on the severe `syn2` run. The prior recommendation was to instrument mode `57` at the near-miss decision point before changing another pressure-transfer policy.
+3338:- command name: `stmap60`
+3339:- files changed:
+3351:- algorithm summary: `stmap60` clones the `stmap59` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap59`. It first maps through the established SCL load/max-cap collector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. The only source-level mapper change is diagnostic and gated by `Map_Stmap60SetNearMissLeafDiag(1, 23628)` during the final `stmap60` remap; the flag is reset immediately after that remap. When enabled, mode `57` records the tracked node's AIG ID, cut leaf mapper IDs, cut leaf AIG IDs, and pressure ratios for near-miss candidates, plus a summary count and max leaf pressure. No mapper scoring, area gate, timing gate, or reconstruction behavior is changed.
+3352:- validation run:
+3357:- benchmark results:
+3369:- correctness results:
+3380:- review pass 1:
+3384:- review pass 2:
+3393:- next-step recommendation: For `stmap61`, keep the policy unchanged and add a narrow mapper-side gate diagnostic for tracked node `23628` that records why `fStmap56CutOnlyPressureRaw` remains false despite node pressure `0.000`, cut pressure `2.100`, strong arrival gain, and a local area-save value just under the `1.35x` cap. If that shows only the moderate-soft-seed ordering blocks the candidate, the next algorithmic version can move the cut-only exception test before that soft-seed gate for this severe-feedback class.
+3398:- hypothesis: Preserve the reviewed `stmap60` bounded-pressure transfer and inherited mapper mode `57`, but add a mapper-side cut-only gate diagnostic for tracked node `23628`. This tests whether the `syn2` candidate is blocked by primitive cut-only eligibility, bounded-pressure agreement, the area cap, or by the earlier moderate-candidate gate ordering.
+3399:- motivation: `stmap60` resolved the prior visibility question by showing that mode `57` still sees the former useful AIG ID `27645` as tracked mapper node `23628`, and that its near-miss cuts include pressure-bearing leaves. The remaining unknown was why the mode still classified the useful event as `cut-only-moderate-block`.
+3400:- command name: `stmap61`
+3401:- files changed:
+3413:- algorithm summary: `stmap61` clones the `stmap60` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap60`. It first maps through the established SCL load/max-cap collector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. During the final remap it enables the existing `stmap60` tracked-node cut-leaf diagnostic and a new `stmap61` cut-only gate diagnostic for mapper node `23628`, then resets both flags immediately after the remap. The new diagnostic records the first failed gate, primitive cut-only status, raw cut-only expectation, raw-pass status, bounded-pressure agreement, node and cut pressure ratios, severe-feedback state, area-cap state, timing/slack gates, and acceptance counters. No mapper scoring, area gate, timing gate, cut selection, or reconstruction behavior is changed.
+3414:- validation run:
+3419:- benchmark results:
+3430:- correctness results:
+3442:- review pass 1:
+3446:- review pass 2:
+3455:- next-step recommendation: For `stmap62`, make one narrow policy change that tests the cut-only exception before, or independently of, the moderate-candidate gate for severe-feedback, tight-critical events with node pressure `0.000`, cut pressure near the bounded cap, passing pressure entries, passing cut-band, passing arrival-strength, passing slack, primitive-pass `1`, and local area save under the inherited `1.35x` inverter cap. Keep the new `stmap61` gate diagnostic active for node `23628` to confirm whether the event moves from `cut-only-moderate-block` to accepted without broadening unrelated mapper behavior.
+3460:- hypothesis: Keep the reviewed `stmap61` bounded-pressure two-pass flow, but during the final feedback remap test the mode-57 cut-only pressure exception before the moderate-candidate gate. This tests whether the `stmap61`-diagnosed severe `syn2` node `23628` event can be admitted when primitive pressure, slack, arrival-strength, and local area-cap gates pass.
+3461:- motivation: `stmap61` showed the tracked `syn2` event was blocked by the moderate-candidate ordering rather than by primitive cut-only eligibility, pressure entries, pressure banding, local slack, arrival strength, or area cap. The prior recommendation was to make one narrow ordering change and keep the tracked diagnostic active.
+3462:- command name: `stmap62`
+3463:- files changed:
+3473:- algorithm summary: `stmap62` clones the `stmap61` command-level bounded-pressure handoff and preserves classic `map` plus `stmap0` through `stmap61`. It still performs a first pass through the established SCL load/max-cap collector, builds the same bounded pressure table, and remaps through reviewed mapper mode `57`. The intentional source change is command-scoped: `Map_Stmap62SetCutOnlyOrdering(1)` is enabled only around the final `stmap62` remap, allowing `Map_MatchStmap54ModeratePenaltyFactor()` to set the cut-only exception before `Map_MatchIsStmap28ModeratePenaltyCandidate()` rejects the candidate. The flag is initialized off before command execution and reset immediately after the final remap. Existing commands remain on their prior paths.
+3474:- validation run:
+3479:- benchmark results:
+3490:- correctness results:
+3502:- review pass 1:
+3506:- review pass 2:
+3516:- next-step recommendation: `stmap62` proves the tracked cut-only candidate can be admitted, but that admission is not downstream-beneficial after final sizing and buffering. For `stmap63`, keep the ordering closed and instead add a post-admission diagnostic that compares accepted cut-only seeds against final `stime` criticality/load movement, or test a stricter non-hardcoded guard that requires both cut-side pressure near the cap and a downstream load reduction signal before letting one-sided cut pressure override moderate-candidate ordering.
+3521:- hypothesis: Keep the reviewed `stmap61` bounded-pressure two-pass flow and keep the `stmap62` cut-only-before-moderate ordering closed, but add a command-scoped load-drop evidence guard that can admit one-sided cut-pressure candidates only when node pressure, cut pressure, slack, arrival-strength, feedback severity, and pressure-entry evidence all agree.
+3522:- motivation: `stmap62` admitted the tracked `syn2` cut-only event, but final `syn2` delay regressed from `479.78 ps` in `stmap61` to `482.04 ps`. `stmap63` tests whether a stricter non-hardcoded load-drop signature can keep the harmful tracked event blocked while still allowing better-evidenced pressure relief candidates.
+3523:- command name: `stmap63`
+3524:- files changed:
+3534:- algorithm summary: `stmap63` clones the `stmap62` command shell but disables `Map_Stmap62SetCutOnlyOrdering(1)` and keeps older commands unchanged. It performs the same first-pass SCL load collection, builds the same bounded pressure table, and remaps through mapper mode `57`. The intentional mapper change is command-scoped: `Map_Stmap63SetCutOnlyLoadDropGuard(1)` is enabled only around the final feedback remap and reset immediately afterward. The new cut-only path in `Map_MatchStmap54ModeratePenaltyFactor()` only fires when severe feedback is at least `0.85`, raw pressure entries are at least `8000`, pressure agreement is absent, the candidate has the moderate deep-seed timing profile, node pressure is in `[1.05, 1.55]`, cut pressure is in `[1.95, 2.20]`, arrival delta is at least `2.0x` the gain margin in the improving direction, and slack exceeds the slack margin. The inherited local area-save cap remains active after raw admission.
+3535:- validation run:
+3540:- benchmark results:
+3552:- correctness results:
+3564:- review pass 1:
+3568:- review pass 2:
+3577:- next-step recommendation: For `stmap64`, keep the load-drop guard closed unless a post-admission diagnostic shows the accepted seed affects final criticality or downstream load movement. The highest-value next test is to instrument accepted cut-only seeds after buffering/sizing and compare final critical-path membership and load ratios before widening the node-pressure window or adding more one-sided cut-pressure exceptions.
+3582:- hypothesis: Keep the reviewed `stmap63` load-drop guarded mapper policy unchanged, but add a downstream `stime` witness diagnostic for accepted load-drop cut-only seeds. This tests whether the one non-tracked accepted seed from `stmap63` survives buffering/sizing as a loaded or timing-critical mapped node before any wider policy change is attempted.
+3583:- motivation: `stmap63` restored the better `stmap61` QoR while admitting one stricter non-tracked load-drop seed on `syn2`. The prior recommendation was to inspect accepted seeds after the final `topo; buffer; upsize; dnsize; stime` path before widening the cut-only guard.
+3584:- command name: `stmap64`
+3585:- files changed:
+3597:- algorithm summary: `stmap64` clones the `stmap63` command-level policy and keeps mapper mode `57`, bounded-pressure transfer, selected gain, and the strict `Map_Stmap63SetCutOnlyLoadDropGuard(1)` behavior unchanged. The intentional change is diagnostic-only: during the final `stmap64` remap, mapper-side code records accepted cut-only load-drop witnesses with AIG ID, phase, seed node, pressure ratios, slack, area-save, arrival-delta, arrival-gain margin, and SCL feedback. The command scopes those witnesses to the mapped network lineage. `Abc_NtkDup`, `Abc_NtkDupDfs`, and `Abc_NtkDupDfsNoBarBufs` preserve `vOrigNodeIds` and update the scoped witness lineage as `topo` and buffering duplicate networks. The `stime` hook prints `stmap64 final-witness` rows only for that lineage and matches by exact original AIG literal/phase.
+3598:- validation run:
+3605:- benchmark results:
+3616:- correctness results:
+3629:- review pass 1:
+3633:- review pass 2:
+3650:- next-step recommendation: For `stmap65`, keep the load-drop guard at `stmap63/stmap64` strictness. The single accepted `syn2` seed is phase-correct and survives to final `stime`, but its final load ratio is only `0.039` and final criticality is only `0.272`; do not widen one-sided cut-pressure admission until a diagnostic finds accepted seeds with final criticality at least `0.50` or materially higher final load pressure.
+3655:- hypothesis: Keep the reviewed `stmap64` bounded-pressure two-pass flow, but tighten the command-scoped load-drop cut-only guard so a one-sided cut-pressure seed is admitted only when node-side bounded pressure is at least `1.25`. This tests whether the lone `stmap64` accepted `syn2` seed, which survived final `stime` with only final load ratio `0.039` and final criticality `0.272`, can be blocked without losing measured downstream QoR.
+3656:- motivation: `stmap64` showed the accepted load-drop witness was visible after buffering/sizing but was lightly loaded and not close to the final critical path. The next conservative policy test is to require stronger mapper-side node pressure before allowing one-sided cut pressure to bypass the moderate-candidate ordering.
+3657:- command name: `stmap65`
+3658:- files changed:
+3668:- algorithm summary: `stmap65` clones the `stmap63`/`stmap64` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap64`. It first maps with the existing SCL load collector, builds the bounded pressure table with raw weight `0.72` and cap `2.10`, selects the same reduced gain only for severe feedback, and remaps through inherited mapper mode `57`. The intentional mapper change is command-scoped: `Map_Stmap65SetStrongNodeLoadDropGuard(1)` is enabled only around the final remap and reset immediately afterward. The new guard admits cut-only load-drop exceptions only when severe feedback and pressure-entry gates pass, pressure agreement is absent, the moderate deep-seed gain predicate passes, node pressure is in `[1.25, 1.55]`, cut pressure is in `[1.95, 2.20]`, arrival improvement is at least `2.0x` the gain margin, and slack passes. The broader `stmap63` load-drop guard remains disabled for `stmap65`, and the inherited `1.35x` inverter area-save cap is unchanged.
+3669:- validation run:
+3676:- benchmark results:
+3687:- correctness results:
+3699:- review pass 1:
+3704:- review pass 2:
+3713:- next-step recommendation: For `stmap66`, keep the `1.25` node-pressure minimum and add a diagnostic for near-miss strong-node load-drop candidates with node pressure in `[1.15, 1.25)`. If any such candidate later shows final criticality at least `0.50` or materially higher final load pressure, test a narrow adaptive node-pressure threshold; otherwise continue tightening around final-criticality evidence instead of widening one-sided cut-pressure admission.
+3718:- hypothesis: Keep the reviewed `stmap65` strong-node load-drop guard unchanged and add a command-scoped diagnostic for near-threshold load-drop candidates with node pressure in `[1.15, 1.25)`. This tests whether any blocked candidate sits close enough to the `1.25` threshold to justify a future adaptive threshold experiment.
+3719:- motivation: `stmap65` blocked the prior low-final-criticality load-drop seed by requiring node pressure at least `1.25`. The next safe step is diagnostic only: identify near-threshold candidates without changing mapper admission or final QoR policy.
+3720:- command name: `stmap66`
+3721:- files changed:
+3733:- algorithm summary: `stmap66` preserves the `stmap65` mapping policy by enabling the existing strong-node load-drop guard and reusing mapper mode `57`, bounded SCL pressure transfer, selected gain policy, and inherited `1.35x` inverter area-save cap. The only new mapper behavior is diagnostic: while `stmap66` is active, `Map_Stmap66SetNearStrongNodeLoadDropDiag(1)` counts and prints candidates that satisfy the severe feedback, pressure-entry, no-pressure-agreement, moderate deep-seed gain, cut-pressure, arrival, and slack gates, but whose node pressure is in `[1.15, 1.25)` rather than the admitted `[1.25, 1.55]` band. The diagnostic flag is reset after the delegated `stmap65` command returns and does not alter match selection.
+3734:- validation run:
+3739:- benchmark results:
+3748:- correctness results:
+3760:- review pass 1:
+3764:- review pass 2:
+3773:- next-step recommendation: For `stmap67`, do not lower the strong-node threshold based on this diagnostic alone. The only near-band candidate is the already-observed low-final-criticality `syn2` seed, so the next useful step is either a downstream final-witness diagnostic for near-band candidates before admission or a stricter final-criticality/load-pressure filter, rather than widening one-sided cut-pressure admission.
+3778:- hypothesis: Keep the reviewed `stmap65` mapping policy and the `stmap66` near-threshold diagnostic unchanged, but record area-cap-passing near-band strong-node load-drop candidates as downstream `stime` witnesses. This tests whether blocked near-band candidates remain visible, highly loaded, or timing-critical after `topo`, `buffer`, `upsize`, and `dnsize`.
+3779:- motivation: `stmap66` found one `syn2` near-band candidate with node pressure `1.165`, cut pressure `2.100`, and area-cap pass, but it did not show whether that exact candidate survived to final timing context. A final-witness diagnostic provides direct evidence before any threshold-lowering experiment.
+3780:- command name: `stmap67`
+3781:- files changed:
+3792:- algorithm summary: `stmap67` is a diagnostic-only wrapper over the reviewed `stmap65` two-pass bounded-pressure flow. It enables the existing `stmap66` near-strong-node diagnostic while also enabling a new command-scoped witness recorder for near-band candidates that pass the inherited `1.35x` inverter area-save cap. The mapper policy is not changed: the strong-node load-drop guard still requires node pressure at least `1.25`, and the final remap still uses mapper mode `57`, severe-feedback bounded pressure transfer, selected-gain policy, and inherited area cap. The new witness entries reuse the existing `stmap64` final-witness machinery with a label hook so downstream `stime` prints `stmap67 final-witness` rows while older `stmap64` behavior keeps its default label.
+3793:- validation run:
+3798:- benchmark results:
+3808:- correctness results:
+3820:- review pass 1:
+3824:- review pass 2:
+3833:- next-step recommendation: For `stmap68`, keep the `1.25` strong-node threshold closed. The only near-band witness was present after downstream timing but had final load ratio `0.039` and final criticality `0.272`, so a threshold-lowering variant would be poorly supported. The next useful hypothesis is to search for final-criticality evidence on other pressure-transfer classes, or to require final-witness criticality at least `0.50` before reopening any one-sided cut-pressure admission.
+3838:- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and record the mode-57 blocked strong-pressure candidates as downstream `stime` witnesses. This tests whether area-margin-rejected strong-pressure choices, especially those with high load-drive ratio, are actually loaded or timing-critical after `topo`, `buffer`, `upsize`, and `dnsize`.
+3839:- motivation: `stmap67` showed the only near-threshold load-drop witness remained low-criticality downstream, so lowering the strong-node cut-only threshold is unsupported. The next useful evidence source is another pressure-transfer class: strong-pressure candidates that are currently rejected by the area margin.
+3840:- command name: `stmap68`
+3841:- files changed:
+3851:- algorithm summary: `stmap68` is a diagnostic-only wrapper over `stmap65`. It enables `Map_Stmap68SetBlockedStrongWitnessDiag(1)` only while delegating to `Abc_CommandStmap65`, then resets the flag and scopes the existing final-witness printer to the resulting mapped network with label `stmap68`. The mapper policy is unchanged: final remap still uses mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new mapper hook records blocked `stmap56` strong-penalty events as witness candidates without changing their acceptance/rejection decision; duplicate AIG/phase sources are logged but only the first unique witness is stored.
+3852:- validation run:
+3857:- benchmark results:
+3868:- correctness results:
+3880:- review pass 1:
+3884:- review pass 2:
+3893:- next-step recommendation: For `stmap69`, keep both the strong-node cut-only threshold and the strong-pressure area margin closed. The only blocked strong-pressure witness was visible after downstream timing but still had final load ratio `0.143` and final criticality `0.285`, so a margin-relaxation variant is not yet supported. Next, either trace pressure-near exception candidates or add a stricter diagnostic that only proposes mapper changes for witnesses with final criticality at least `0.50`.
+3896:## version69 / stmap69
+3898:- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and record mode-57 pressure-near exception candidates as downstream `stime` witnesses. This tests whether the pressure-near exception class has any final load or criticality evidence before reopening mapper admission rules.
+3899:- motivation: `stmap67` and `stmap68` showed the near-threshold load-drop and blocked strong-pressure witnesses that survived downstream were low-criticality. The next conservative diagnostic is to check whether the pressure-near class itself produces any candidates under the current bounded-pressure policy.
+3900:- command name: `stmap69`
+3901:- files changed:
+3911:- algorithm summary: `stmap69` is a diagnostic-only wrapper over `stmap65`. It enables `Map_Stmap69SetPressureNearWitnessDiag(1)` only while delegating to `Abc_CommandStmap65`, resets the flag immediately afterward, and scopes the existing final-witness printer to the resulting mapped network with label `stmap69` when mapping succeeds. The mapper policy is unchanged: final remap still uses mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new mapper hook records `stmap56` mode-57 pressure-near seed/block events as witness candidates without changing their acceptance decision; duplicate AIG/phase sources are logged but only the first unique witness is stored.
+3912:- validation run:
+3917:- benchmark results:
+3926:- correctness results:
+3938:- review pass 1:
+3942:- review pass 2:
+3951:- next-step recommendation: For `stmap70`, stop pursuing pressure-near reopening on the current benchmark set because it produces no pressure-near events. Keep the strong-node cut-only threshold and strong-pressure area margin closed, and add a stricter diagnostic that proposes mapper changes only for witness classes with final criticality at least `0.50`, or search a different pressure-transfer class with measurable final-criticality evidence.

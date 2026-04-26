@@ -1,0 +1,29 @@
+Review the uncommitted stmap69 AutoEDA iteration for correctness and campaign-policy issues.
+
+Context:
+- Project pack is binding: .autoeda/project_pack/agent.md.
+- New command: stmap69.
+- Hypothesis: keep the reviewed stmap65 mapping policy unchanged and trace mode-57 pressure-near exception candidates as downstream stime witnesses before reopening any mapper admission rule.
+- Intended behavior: stmap69 delegates to Abc_CommandStmap65, enables Map_Stmap69SetPressureNearWitnessDiag only around that delegated map, and enables the existing stmap64 final-witness scope with label "stmap69" if mapping succeeds.
+- Mapping policy should not change relative to stmap65; this is a diagnostic-only command.
+
+Files to inspect:
+- src/base/abci/abcStmap_69.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- src/map/mapper/mapperMatch.c
+- abclib.dsp
+- .autoeda/runtime/results/stmap69/run_stmap69_eval.py
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap69 -h"
+- smoke flow on benchmarks/i10.aig
+- full baseline/candidate flow on i10, ode, or1200, syn2
+- CEC for original versus stmap69 post-flow on all four benchmarks
+
+Key result:
+- Final stime metrics match the inherited stmap65/stmap68 policy.
+- pressure_near_witness_source.csv and final_witness.csv have headers only because all required benchmarks produced zero pressure-near witness sources.
+
+Please report discrete issues only, with severity and file/line references. Focus on correctness, command scoping, stale global state, witness lifecycle, parser/logging accuracy, build integration, and whether the iteration can be counted under the project pack. If there are no actionable findings, say so explicitly.

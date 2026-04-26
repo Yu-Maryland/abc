@@ -1423,6 +1423,8 @@ static int s_fStmap66NearStrongNodeLoadDropDiag = 0;
 static int s_fStmap67NearStrongNodeWitnessDiag = 0;
 static int s_fStmap68BlockedStrongWitnessDiag = 0;
 static int s_nStmap68BlockedStrongWitnessSources = 0;
+static int s_fStmap69PressureNearWitnessDiag = 0;
+static int s_nStmap69PressureNearWitnessSources = 0;
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1524,6 +1526,16 @@ void Map_Stmap68SetBlockedStrongWitnessDiag( int fEnable )
         s_nStmap68BlockedStrongWitnessSources = 0;
     }
     s_fStmap68BlockedStrongWitnessDiag = fEnable;
+}
+
+void Map_Stmap69SetPressureNearWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap69PressureNearWitnessSources = 0;
+    }
+    s_fStmap69PressureNearWitnessDiag = fEnable;
 }
 
 void Map_Stmap64ClearCutOnlyWitnesses( void )
@@ -1645,6 +1657,33 @@ static void Map_Stmap68RecordBlockedStrongWitness( Map_Node_t * pNode, Map_Cut_t
             pCut ? (int)pCut->nLeaves : 0, fPhase, After > Before, fDuplicate, Slack, AreaSave,
             ArrivalDelta, ArrivalGainMargin, PenaltyFactor, AreaMargin, CutLeafLoadAvg, FanLimit,
             LoadDriveRatio, NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback );
+}
+
+static void Map_Stmap69RecordPressureNearWitness( Map_Node_t * pNode, Map_Cut_t * pCut, int AigId, int fPhase, int fAccepted, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float AreaMargin )
+{
+    int i, Before, After, fDuplicate = 0;
+    if ( !s_fStmap69PressureNearWitnessDiag || pNode == NULL || AigId < 0 )
+        return;
+    fPhase = fPhase ? 1 : 0;
+    s_nStmap69PressureNearWitnessSources++;
+    for ( i = 0; i < s_nStmap64CutOnlyWitnesses; i++ )
+    {
+        if ( s_Stmap64WitnessAigIds[i] == AigId && s_Stmap64WitnessPhases[i] == fPhase )
+        {
+            fDuplicate = 1;
+            break;
+        }
+    }
+    Before = s_nStmap64CutOnlyWitnesses;
+    if ( !fDuplicate )
+        Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+    After = s_nStmap64CutOnlyWitnesses;
+    if ( s_nStmap69PressureNearWitnessSources <= 64 )
+        printf( "stmap69 pressure-near witness source: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  accepted = %d  stored = %d  duplicate = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+            s_nStmap69PressureNearWitnessSources, pNode->Num, AigId, pNode->Level, pNode->nRefs,
+            pCut ? (int)pCut->nLeaves : 0, fPhase, fAccepted, After > Before, fDuplicate, Slack,
+            AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, NodePressureRatio,
+            CutPressureRatio, s_Stmap45SclFeedback );
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -3804,6 +3843,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 if ( p->fSkipFanout == 57 && fStmap56ModeratePressureNear )
                 {
                     p->nStmap56PressureNearExceptionSeed++;
+                    Map_Stmap69RecordPressureNearWitness( pNode, pCut, Stmap56NodeAigId, fPhase, 1, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin );
                     printf( "stmap56 pressure-near exception seed diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
                         p->nStmap56PressureNearExceptionSeed, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
@@ -4377,6 +4417,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 if ( p->fSkipFanout == 57 && fStmap56ModeratePressureNear )
                 {
                     p->nStmap56PressureNearExceptionBlocked++;
+                    Map_Stmap69RecordPressureNearWitness( pNode, pCut, Stmap56NodeAigId, fPhase, 0, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin );
                     printf( "stmap56 pressure-near exception block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
                         p->nStmap56PressureNearExceptionBlocked, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,

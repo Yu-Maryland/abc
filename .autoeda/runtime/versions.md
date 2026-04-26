@@ -3891,3 +3891,61 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap68: trace blocked strong-pressure witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap69`, keep both the strong-node cut-only threshold and the strong-pressure area margin closed. The only blocked strong-pressure witness was visible after downstream timing but still had final load ratio `0.143` and final criticality `0.285`, so a margin-relaxation variant is not yet supported. Next, either trace pressure-near exception candidates or add a stricter diagnostic that only proposes mapper changes for witnesses with final criticality at least `0.50`.
+
+
+## version69 / stmap69
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and record mode-57 pressure-near exception candidates as downstream `stime` witnesses. This tests whether the pressure-near exception class has any final load or criticality evidence before reopening mapper admission rules.
+- motivation: `stmap67` and `stmap68` showed the near-threshold load-drop and blocked strong-pressure witnesses that survived downstream were low-criticality. The next conservative diagnostic is to check whether the pressure-near class itself produces any candidates under the current bounded-pressure policy.
+- command name: `stmap69`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_69.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap69/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap69` is a diagnostic-only wrapper over `stmap65`. It enables `Map_Stmap69SetPressureNearWitnessDiag(1)` only while delegating to `Abc_CommandStmap65`, resets the flag immediately afterward, and scopes the existing final-witness printer to the resulting mapped network with label `stmap69` when mapping succeeds. The mapper policy is unchanged: final remap still uses mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new mapper hook records `stmap56` mode-57 pressure-near seed/block events as witness candidates without changing their acceptance decision; duplicate AIG/phase sources are logged but only the first unique witness is stored.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`; log: `.autoeda/runtime/results/stmap69/build.log`.
+  - help: `./abc -c "stmap69 -h"` printed usage text; log: `.autoeda/runtime/results/stmap69/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap69; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`; log: `.autoeda/runtime/results/stmap69/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap69/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss leaf diagnostics, new `pressure_near_witness_source.csv`, new `final_witness.csv`, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- pressure-near witness diagnostic results:
+  - all four required benchmarks had `0` pressure-near witness source rows; `pressure_near_witness_source.csv`, `final_witness.csv`, `final_witness_stats.csv`, and `final_witness_summary.csv` intentionally contain headers only.
+  - inherited `stmap56` penalty stats recorded `0` pressure-near exception seeds and `0` pressure-near exception blocks on every required benchmark.
+  - `syn2` still showed `1` moderate-penalty block and `2` strong-penalty blocks under the inherited mode-57 policy, matching the prior pressure classes and confirming that pressure-near is not the active blocker for the current required-benchmark set.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_69.c`.
+  - numbered command exists and is registered as `stmap69`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - pressure-near witness diagnostics, final-witness header artifacts, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap69/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap69/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap69/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap69/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap69/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap69/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap69/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues in command registration, diagnostic scoping, witness recording, or build integration.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap69/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap69/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues and confirmed the command is scoped and does not change inherited `stmap65` mapping behavior.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap69: trace pressure-near witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap70`, stop pursuing pressure-near reopening on the current benchmark set because it produces no pressure-near events. Keep the strong-node cut-only threshold and strong-pressure area margin closed, and add a stricter diagnostic that proposes mapper changes only for witness classes with final criticality at least `0.50`, or search a different pressure-transfer class with measurable final-criticality evidence.

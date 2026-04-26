@@ -1,0 +1,20 @@
+Second review pass for the uncommitted stmap69 AutoEDA iteration.
+
+No source changes were made after review pass 1. Please review the final source state and the generated artifacts for any remaining correctness or campaign-policy issues.
+
+Focus areas:
+- stmap69 command registration and help behavior.
+- Command-scoped diagnostic state: Map_Stmap69SetPressureNearWitnessDiag should not affect map or older stmap commands.
+- Witness recording lifecycle and duplicate handling in mapperMatch.c.
+- The final-witness scope should only be enabled after a successful delegated stmap65 mapping.
+- Evaluation artifacts should accurately report that no pressure-near witness source rows were produced on the required benchmarks.
+- Build integration in module.make and abclib.dsp.
+
+Validation already rerun after the artifact parser update:
+- make ABC_USE_NO_READLINE=1
+- ./abc -c "stmap69 -h"
+- smoke on benchmarks/i10.aig
+- full baseline/candidate flow on all four required benchmarks
+- CEC on all four required benchmarks
+
+Please report discrete issues only with severity and file/line references. If no actionable findings remain, say so explicitly.
