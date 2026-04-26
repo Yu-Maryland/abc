@@ -123,7 +123,7 @@ struct Map_ManStruct_t_
     float               DelayTarget;   // the required times set by the user
     int                 nTravIds;      // the traversal counter
     int                 fSwitching;    // use switching activity
-    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32, 34 stmap33, 35 stmap34, 36 stmap35, 37 stmap36, 38 stmap37, 39 stmap38, 40 stmap39, 41 stmap40, 42 stmap41, 43 stmap42
+    int                 fSkipFanout;   // fanout cut guard mode; 2 stmap1, 3 stmap2, 4 stmap3, 5 stmap4, 6 stmap5, 7 stmap6, 8 stmap7, 9 stmap8, 10 stmap9, 11 stmap10, 12 stmap11, 13 stmap12, 14 stmap13, 15 stmap14, 16 stmap15, 17 stmap16, 18 stmap17, 19 stmap18, 20 stmap19, 21 stmap20, 22 stmap21, 23 stmap22, 24 stmap23, 25 stmap24, 26 stmap25, 27 stmap26, 28 stmap27, 29 stmap28, 30 stmap29, 31 stmap30, 32 stmap31, 33 stmap32, 34 stmap33, 35 stmap34, 36 stmap35, 37 stmap36, 38 stmap37, 39 stmap38, 40 stmap39, 41 stmap40, 42 stmap41, 43 stmap42, 44 stmap43
     int                 fUseProfile;   // use standard-cell profile
     int                 nStmap13ExactRisk;      // stmap13+ exact-area risky cuts
     int                 nStmap13HighestRisk;    // stmap13+ highest fanout bucket hits
@@ -198,6 +198,10 @@ struct Map_ManStruct_t_
     int                 nStmap42ModeratePenaltyBlocked; // stmap42 sink-pressure moderate deep penalty rejects
     int                 nStmap42StrongPenaltySeed; // stmap42 sink-pressure strong seed penalty choices
     int                 nStmap42StrongPenaltyBlocked; // stmap42 sink-pressure strong seed penalty rejects
+    int                 nStmap43ModeratePenaltySeed; // stmap43 sink-gated moderate deep penalty choices
+    int                 nStmap43ModeratePenaltyBlocked; // stmap43 sink-gated moderate deep penalty rejects
+    int                 nStmap43StrongPenaltySeed; // stmap43 sink-gated strong pressure choices
+    int                 nStmap43StrongPenaltyBlocked; // stmap43 sink-gated strong pressure rejects
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

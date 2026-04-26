@@ -1,0 +1,16 @@
+Second review pass for stmap43 after addressing the pass-1 finding.
+
+Accepted pass-1 finding:
+- `stmap43` counted zero-factor moderate candidates as penalty seeds.
+
+Fix applied:
+- `src/map/mapper/mapperMatch.c` now emits `stmap43 moderate penalty seed diag` and increments `nStmap43ModeratePenaltySeed` only when `Stmap43ModeratePenaltyFactor > 0.0`.
+
+Revalidation after the fix:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `./abc -c "stmap43 -h"` passed.
+- Smoke on `benchmarks/i10.aig` passed with parseable final `stime`.
+- Full required benchmark evaluation passed with parseable metrics.
+- CEC passed on all four required benchmarks.
+
+Please review the current uncommitted tree for any remaining correctness, bookkeeping, or diagnostic issues. Focus on the stmap43 source change and the regenerated runtime artifacts. Report concrete findings with file and line references, or state that there are no remaining blocking issues.

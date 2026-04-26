@@ -1,0 +1,2 @@
+benchmark,index,node,aig_id,level,refs,leaves,phase,slack,area_save,arrival_delta,arrival_gain_margin,penalty_factor,area_margin,node_sink_pressure_ratio,cut_sink_pressure_ratio,scl_feedback
+benchmarks/syn2.abc.blif,1,37979,41286,42,5,4,1,7.170013,0.930000,-3.699997,1.585000,0.308,0.915766,3.195,4.177,0.884

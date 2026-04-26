@@ -1,0 +1,17 @@
+Review the uncommitted stmap43 implementation for correctness risks.
+
+Context:
+- Project pack requires a numbered Berkeley ABC mapper command `stmap43`.
+- The hypothesis is sink-gated moderate recovery: preserve stmap42-style strong sink-pressure protection, but only apply the moderate deep area penalty when the first-pass SCL sink-pressure vector shows material pressure at the mapper node or cut leaves.
+- Primary files changed include `src/base/abci/abcStmap_43.c`, `src/base/abci/abc.c`, `src/base/abci/module.make`, `abclib.dsp`, `src/map/mapper/mapperInt.h`, `src/map/mapper/mapperCore.c`, and `src/map/mapper/mapperMatch.c`.
+- Required validation already passed before review: build, `stmap43 -h`, smoke on `benchmarks/i10.aig`, full four-benchmark evaluation, parseable final `stime` metrics, and CEC on all four required benchmarks.
+
+Please look for:
+- command registration/build integration mistakes;
+- stale stmap42 labels or wrong mapper mode numbers;
+- unsafe lifetime handling of the command-level pressure vector;
+- mode-range mistakes that would exclude or accidentally affect older stmap commands;
+- uninitialized counters or diagnostic fields;
+- correctness or reproducibility issues in the runtime evaluation artifacts.
+
+Report concrete findings with file and line references. If there are no blocking source findings, say that directly.
