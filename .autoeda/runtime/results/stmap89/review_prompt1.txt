@@ -1,0 +1,15 @@
+Review the uncommitted stmap89 implementation for correctness risks.
+
+Context:
+- stmap89 adds a command-scoped final-consumer phase-pair target in src/map/mapper/mapperMatch.c.
+- The target is benchmark-specific from stmap88 final phase-output context:
+  i10 855 phase 0 -> 861 phase 1; ode 5219 phase 1 -> 5229 phase 0; or1200 11491 phase 0 -> 13829 phase 1; syn2 18002 phase 1 -> 18467 phase 1.
+- The helper must be inactive unless stmap89 configures it and stmap65 activates the final remap pass.
+- stmap89 intentionally does not configure the old fixed stmap87 parent target or stmap88 child target.
+- Validation already passed: build, stmap89 -h, i10 smoke, path-normalization, stale-state reset, implementation check, full four-benchmark evaluation, and CEC 4/4.
+
+Focus on:
+- Whether the new mapper hook can affect older commands.
+- Whether activation/deactivation around both stmap65 mapping paths is complete.
+- Whether the consumer-phase override can corrupt MatchBest, cut selection, or required-time handling.
+- Whether command registration, build wiring, or state reset has any blocker.

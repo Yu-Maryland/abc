@@ -1,0 +1,10 @@
+`` Generating dependency: /src/map/mapper/mapperMatch.c
+`` Generating dependency: /src/base/abci/abcStmap_89.c
+`` Generating dependency: /src/base/abci/abcStmap_65.c
+`` Generating dependency: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abcStmap_65.c
+`` Compiling: /src/base/abci/abcStmap_89.c
+`` Compiling: /src/map/mapper/mapperMatch.c
+`` Building binary: abc
+ld: warning: reducing alignment of section __DATA,__common from 0x8000 to 0x4000 because it exceeds segment maximum alignment

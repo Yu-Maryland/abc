@@ -1,0 +1,5 @@
+benchmark,inherited_policy,mapper_selected_match_watch,network,child_aig,parent_aig,selected_watch_count,dual_phase_survival_watch_count,consumer_phase_target,target_parent_phase,target_child_phase,source,reconstruction_phase_trace,demand_path_trace,parent_cut_trace,candidate_cut_trace,final_phase_survival,mapping_policy_change
+benchmarks/i10.aig,stmap65,1,benchmarks/i10,855,861,2,2,1,1,0,stmap89-final-consumer-phase-pair-policy-probe,1,1,1,1,1,watched-final-consumer-phase-pair-target
+benchmarks/ode.abc.blif,stmap65,1,ode,5219,5229,2,2,1,0,1,stmap89-final-consumer-phase-pair-policy-probe,1,1,1,1,1,watched-final-consumer-phase-pair-target
+benchmarks/or1200.abc.blif,stmap65,1,or1200_flat,11491,13829,2,2,1,1,0,stmap89-final-consumer-phase-pair-policy-probe,1,1,1,1,1,watched-final-consumer-phase-pair-target
+benchmarks/syn2.abc.blif,stmap65,1,syn2,18002,18467,2,2,1,1,1,stmap89-final-consumer-phase-pair-policy-probe,1,1,1,1,1,watched-final-consumer-phase-pair-target

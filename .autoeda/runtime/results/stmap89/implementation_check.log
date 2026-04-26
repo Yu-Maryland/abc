@@ -1,0 +1,6 @@
+OK src/base/abci/abcStmap_89.c: stmap89-final-consumer-phase-pair-policy-probe
+OK src/base/abci/abc.c: stmap89
+OK src/base/abci/module.make: abcStmap_89.c
+OK abclib.dsp: abcStmap_89.c
+OK src/map/mapper/mapperMatch.c: Map_Stmap89SetConsumerPhaseTarget
+OK src/base/abci/abcStmap_65.c: Map_Stmap89SetConsumerPhaseTargetActive
