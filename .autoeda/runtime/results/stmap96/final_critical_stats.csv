@@ -1,0 +1,5 @@
+benchmark,nodes,final_delay,criticality_ge_0p50,criticality_ge_0p75,slack_le_5ps
+benchmarks/i10.aig,1583,198.640,456,239,118
+benchmarks/ode.abc.blif,12482,522.047,5301,4404,1055
+benchmarks/or1200.abc.blif,8629,564.801,523,324,198
+benchmarks/syn2.abc.blif,23350,479.776,12814,10110,1771

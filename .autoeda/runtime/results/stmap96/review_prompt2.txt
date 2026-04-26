@@ -1,0 +1,16 @@
+Review the final uncommitted stmap96 implementation after the accepted review-pass-1 diagnostic fix.
+
+stmap96 hypothesis:
+- Lower the stmap95 sticky emitted-drive timing-release threshold from `2.00 ps` to `0.50 ps`, allowing locally faster replacements to escape sticky while preserving the rest of stmap95's gated behavior.
+
+Accepted review-pass-1 finding already fixed:
+- P3: `abcStmap_96.c` printed `sticky-arrival-release-window = 0.50` even for unsupported networks where the configured window remained the default `2.00 ps`.
+- Fix: the command now computes `StickyArrivalWindow = ChildAigId >= 0 ? 0.50f : 2.00f`, prints that value, and passes the same value to `Map_Stmap93SetEmittedDriveTargetStickyArrivalWindow()`.
+
+Revalidation after fix:
+- Build passed.
+- Help, smoke, path-normalization, stale-state, and implementation checks passed.
+- Full four-benchmark evaluation and CEC passed.
+- Metrics remained stable: `or1200` candidate delay `564.80 ps`; all other candidate delays unchanged from stmap95 family baseline.
+
+Please check for remaining source, build integration, stale-state, older-command regression, diagnostic-counter, and campaign-contract issues. Findings should be concrete and tied to file/line references.

@@ -1734,6 +1734,7 @@ static int s_Stmap93EmittedStickyMode = -1;
 static int s_Stmap93EmittedStickyFanLimit = 0;
 static float s_Stmap93EmittedStickyArrival = 0.0f;
 static float s_Stmap93EmittedStickyLoadDriveRatio = 0.0f;
+static float s_Stmap93EmittedStickyArrivalAllowWindow = 2.00f;
 static int s_nStmap93EmittedRows = 0;
 static int s_nStmap93EmittedPhaseHits = 0;
 static int s_nStmap93EmittedDriveHits = 0;
@@ -1784,6 +1785,7 @@ static void Map_Stmap93ClearEmittedDriveTarget( void )
     s_fStmap93EmittedDriveTargetActive = 0;
     s_fStmap93EmittedDriveTargetPostSticky = 0;
     s_fStmap93EmittedDriveTargetStickyOverride = 0;
+    s_Stmap93EmittedStickyArrivalAllowWindow = 2.00f;
     s_pStmap93EmittedDriveTargetLabel = "stmap93";
     s_Stmap93AigId = -1;
     s_Stmap93Phase = 0;
@@ -1831,6 +1833,11 @@ void Map_Stmap93SetEmittedDriveTargetStickyOverride( int fEnable )
     s_fStmap93EmittedDriveTargetStickyOverride = fEnable;
 }
 
+void Map_Stmap93SetEmittedDriveTargetStickyArrivalWindow( float WindowPs )
+{
+    s_Stmap93EmittedStickyArrivalAllowWindow = WindowPs > 0.0f ? WindowPs : 2.00f;
+}
+
 static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, Map_Cut_t * pBestCutBefore, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
 {
     Map_Node_t * pNodeRegular;
@@ -1858,7 +1865,7 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
     AreaRatioWindow = 2.50f;
     LoadDriveRatioMinGain = 0.05f;
     LoadDriveRatioMaterialGain = 2.00f;
-    StickyArrivalAllowWindow = 2.00f;
+    StickyArrivalAllowWindow = s_Stmap93EmittedStickyArrivalAllowWindow;
     StickyArrivalGain = 0.0f;
     fStickyReplacementBlock = 0;
     fStickyReplacementAllowArrival = 0;
@@ -2013,7 +2020,7 @@ void Map_Stmap93PrintEmittedDriveTargetSummary( void )
         s_nStmap93EmittedBlockedWindow, s_nStmap93EmittedBlockedDrive,
         s_fStmap93EmittedDriveTargetStickyOverride, s_nStmap93EmittedStickySet,
         s_nStmap93EmittedStickyBlocked, s_nStmap93EmittedStickyAllowedArrival,
-        s_nStmap93EmittedStickyAllowedDrive, 2.00f, 0.75f, 1.20f, 2.20f,
+        s_nStmap93EmittedStickyAllowedDrive, s_Stmap93EmittedStickyArrivalAllowWindow, 0.75f, 1.20f, 2.20f,
         2.50f, 0.05f, 2.00f );
 }
 

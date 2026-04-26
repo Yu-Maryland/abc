@@ -1,0 +1,26 @@
+Review the uncommitted stmap96 implementation and artifacts.
+
+Project contract:
+- Iteration 96 in the `stmap` family.
+- Baseline flow: `read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime`.
+- Candidate flow replaces `map` with `stmap96`.
+- Required benchmarks are `benchmarks/i10.aig`, `benchmarks/ode.abc.blif`, `benchmarks/or1200.abc.blif`, and `benchmarks/syn2.abc.blif`.
+- Older `stmapN` commands must remain buildable and behavior-gated.
+
+Hypothesis:
+- stmap95 proved the emitted-drive override can be made to survive reconstruction, but forcing the sticky `OAI21` target worsened `or1200` final delay.
+- stmap96 lowers only the sticky arrival-release threshold from `2.00 ps` to `0.50 ps` for the watched final-critical target, allowing a locally faster replacement to escape sticky while preserving the rest of stmap95's gating.
+
+Changes to review:
+- `src/base/abci/abcStmap_96.c` adds the `stmap96` command and sets the sticky emitted-drive arrival release window to `0.50 ps` around the inherited stmap95/stmap65 path, then resets it to `2.00 ps`.
+- `src/map/mapper/mapperMatch.c` adds `Map_Stmap93SetEmittedDriveTargetStickyArrivalWindow()` and replaces the hardcoded `2.00 ps` sticky release threshold with a gated configurable value that defaults to `2.00 ps` and is reset on clear.
+- `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp` wire in the new command/file.
+
+Validation already run:
+- Build passed: `.autoeda/runtime/results/stmap96/build.log`.
+- Help, smoke, path-normalization, stale-state, and implementation checks passed.
+- Full benchmark evaluation and CEC passed via `.autoeda/runtime/results/stmap96/run_stmap96_eval.py`.
+- Metrics: `or1200` improves over stmap95 from `567.55 ps` to `564.80 ps`, but remains slower than stmap94 `561.55 ps`.
+- On `or1200`, sticky stats show `sticky-set = 1`, `sticky-blocked = 1`, `sticky-allowed-arrival = 1`, and reconstructed AIG `11491` phase `0` emits `OAI22xp33_ASAP7_75t_L`.
+
+Please check for correctness, build integration, stale-state, older-command regression, diagnostic accuracy, and campaign-contract issues. Findings should be concrete and tied to file/line references.
