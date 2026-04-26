@@ -2159,3 +2159,65 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap39: add consumer-pressure SCL feedback`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap39` confirms that reconstruction-aware consumer-pressure collection can observe the previously missing `syn2` AIG ID `5548`, but the capped sorted AIG table and final mapper lookup still fail to apply nonzero pressure to the admitted strong seed. For `stmap40`, use a denser direct association structure keyed by AIG ID, such as a sparse hash/table or threshold-preserving pressure map, or explicitly pass a separate mapped-node keyed relation, so medium-pressure reconstruction IDs are retained without reintroducing unsafe mapper-number fallback behavior.
+
+## version40 / stmap40
+
+- hypothesis: A dense AIG-ID pressure vector can carry first-pass SCL consumer-pressure ratios into the final mapper without dropping medium-pressure reconstruction IDs such as the `syn2` AIG ID `5548`.
+- motivation: `stmap39` proved the consumer-pressure collector can observe AIG ID `5548` with ratio `2.265`, but its capped ranked table did not retain that ID for final mapper lookup. `stmap40` tests whether a threshold-preserving dense vector lets the measured downstream pressure affect the known strong-seed decision without reintroducing unsafe mapper-node fallback behavior.
+- command name: `stmap40`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_40.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap40/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap40` keeps the first-pass `stmap35` direct SCL load measurement surface, but replaces `stmap39`'s capped consumer-pressure transfer with a dynamically grown dense float vector indexed by original AIG ID. The command records all pressure ratios greater than `1.0` from over-cap roots, downstream consumers, and consumer fanin cones, passes the vector to mapper mode `41`, and resets the mapper static pointer before freeing the vector. Mode `41` keeps the bounded drive-normalized strong-seed area margin, looks up node and cut-leaf pressure directly by AIG ID, and applies a local SCL pressure term with coefficient `0.065`. Existing `map` and `stmap0` through `stmap39` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap40/build.log`.
+  - help: `./abc -c "stmap40 -h"` printed usage text with default `-G 250.00` and dense SCL consumer-pressure feedback enabled. Log: `.autoeda/runtime/results/stmap40/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap40; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap40/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap40/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `scl_load_stats.csv`, `feedback_load_stats.csv`, `dense_pressure_stats.csv`, `dense_pressure_top.csv`, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); dense-pressure entries `262` of capacity `4096`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); dense-pressure entries `4816` of capacity `32768`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); dense-pressure entries `4362` of capacity `32768`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); dense-pressure entries `8980` of capacity `65536`; penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `0`, strong blocked `2`.
+- dense-pressure diagnostics:
+  - `benchmarks/i10.aig`: pressure roots `3`, consumer fanin entries `651`, consumer fanout entries `252`, dense entries `262`, updates `6`, missed `0`, capacity `4096`, tracked AIG `5548`, tracked node `0`, tracked ratio `0.000`.
+  - `benchmarks/ode.abc.blif`: pressure roots `71`, consumer fanin entries `90011`, consumer fanout entries `16227`, dense entries `4816`, updates `3007`, missed `0`, capacity `32768`, tracked AIG `5548`, tracked node `0`, tracked ratio `0.000`.
+  - `benchmarks/or1200.abc.blif`: pressure roots `41`, consumer fanin entries `29938`, consumer fanout entries `6010`, dense entries `4362`, updates `1390`, missed `0`, capacity `32768`, tracked AIG `5548`, tracked node `0`, tracked ratio `0.000`.
+  - `benchmarks/syn2.abc.blif`: pressure roots `133`, consumer fanin entries `319126`, consumer fanout entries `35406`, dense entries `8980`, updates `7261`, missed `0`, capacity `65536`, tracked AIG `5548`, tracked node `5656`, tracked ratio `2.265`.
+  - `benchmarks/syn2.abc.blif`: strong seed at mapper node `2318` / AIG `5548` was blocked with penalty factor `0.332`, area margin `0.932436` over area save `0.930000`, node pressure `2.265`, cut pressure `1.989`, load/drive ratio `6.750`, and SCL feedback `0.884`.
+  - `benchmarks/syn2.abc.blif`: strong seed at mapper node `2318` / AIG `5548` was blocked with penalty factor `0.331`, area margin `0.931536` over area save `0.930000`, node pressure `2.265`, cut pressure `1.767`, load/drive ratio `5.500`, and SCL feedback `0.884`.
+  - Final required-benchmark QoR matches `stmap39`, but the previously admitted `syn2` strong seed is now blocked through nonzero dense SCL pressure, making this version a live command-to-mapper feedback discriminator.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_40.c`.
+  - numbered command exists and is registered as `stmap40`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - dense-pressure, SCL-load, feedback-load, guard, early-seed, near-miss, penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap40/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap40/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap40/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap40/review_pass1_supported.log`.
+  - accepted findings: runtime finalization/version-log finding; the canonical `stmap40` version entry is added now and campaign-state finalization will be completed after review pass 2 and final artifact checks.
+  - accepted source findings: none.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap40/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap40/review_pass2_supported.log`.
+  - accepted source findings: none.
+  - accepted runtime findings: transient `campaign_state.json` finalization remained pending during review and is addressed by the final iteration state update.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: none; only runtime review summary, canonical logging, artifact/version checks, and campaign-state finalization were added after review.
+- commit: local commit created with message `stmap40: retain dense SCL pressure feedback`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap40` shows the dense AIG-ID transfer can deliver medium-pressure SCL feedback to the final mapper and block the tracked `syn2` strong seed, but final downstream QoR is unchanged. For `stmap41`, use the dense pressure vector to separate timing-useful from redundant pressure hits, for example by adding arrival-criticality or endpoint timing correlation before increasing the SCL pressure term broadly.

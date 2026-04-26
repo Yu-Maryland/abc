@@ -1,0 +1,20 @@
+Review the uncommitted stmap40 AutoEDA iteration in this ABC repository.
+
+Scope:
+- New command implementation: src/base/abci/abcStmap_40.c
+- Command/build wiring: src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp
+- Mapper mode/counters: src/map/mapper/mapperInt.h, src/map/mapper/mapperCore.c, src/map/mapper/mapperMatch.c
+- Runtime artifacts under .autoeda/runtime/results/stmap40 and campaign_state.json
+
+Hypothesis:
+stmap40 should preserve first-pass SCL consumer-pressure ratios in a dense AIG-ID vector so medium-pressure reconstruction IDs, especially syn2 AIG ID 5548, are not lost by the capped stmap39 pressure table. Mapper mode 41 should use that dense lookup for local strong-seed pressure while preserving stmap0-stmap39 behavior.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap40 -h" passed.
+- Smoke flow on benchmarks/i10.aig passed with parseable final stime.
+- Full baseline/candidate evaluation passed on i10, ode, or1200, syn2 with parseable final stime metrics.
+- ABC cec passed for original strashed designs versus post-flow stmap40 strashed designs for all four benchmarks.
+- Diagnostic result: syn2 tracked AIG 5548 has dense pressure 2.265 and stmap40 blocks the node 2318 strong seed twice; final stime QoR matches stmap39.
+
+Please review for correctness bugs, memory lifetime issues around the dense pressure vector and mapper static pointer, command/mode range mistakes, old-version behavioral regressions, missing build integration, incomplete artifacts, and evaluation/logging problems. Prioritize actionable findings with file/line references.

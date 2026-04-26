@@ -1,0 +1,5 @@
+benchmark,roots,consumer_fanin,consumer_fanout,pressure_entries,pressure_updates,pressure_missed,pressure_capacity,tracked_aig,tracked_node,tracked_ratio
+benchmarks/i10.aig,3,651,252,262,6,0,4096,5548,0,0.000
+benchmarks/ode.abc.blif,71,90011,16227,4816,3007,0,32768,5548,0,0.000
+benchmarks/or1200.abc.blif,41,29938,6010,4362,1390,0,32768,5548,0,0.000
+benchmarks/syn2.abc.blif,133,319126,35406,8980,7261,0,65536,5548,5656,2.265

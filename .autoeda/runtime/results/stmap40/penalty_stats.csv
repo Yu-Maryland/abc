@@ -1,0 +1,5 @@
+benchmark,moderate_penalty_seed,moderate_penalty_blocked,strong_penalty_seed,strong_penalty_blocked
+benchmarks/i10.aig,0,0,0,0
+benchmarks/ode.abc.blif,0,0,0,0
+benchmarks/or1200.abc.blif,0,0,0,0
+benchmarks/syn2.abc.blif,0,2,0,2

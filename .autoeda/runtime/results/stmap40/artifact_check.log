@@ -1,0 +1,5 @@
+missing_artifacts: PASS
+metrics_parseable: PASS
+cec_passed: PASS
+version_log_entry: PASS
+review_pass2_logged: PASS

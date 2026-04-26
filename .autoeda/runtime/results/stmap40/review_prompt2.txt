@@ -1,0 +1,8 @@
+Second review pass for stmap40 after review pass 1.
+
+Context:
+- Review pass 1 found no source issues and accepted one runtime finding: stmap40 needed a canonical versions.md entry and final campaign-state update before commit.
+- The stmap40 versions.md entry has now been added with benchmark results, dense-pressure diagnostics, correctness results, review pass 1 outcome, and next-step recommendation.
+- Final campaign_state.json counters will be advanced after this second review, artifact checks, and commit preparation, as in prior iterations.
+
+Please review the current uncommitted changes for any remaining source-level correctness issues, old-version regressions, missing build/command wiring, dense pressure vector lifetime bugs, review/logging gaps, or artifact completeness issues. If the only issue is that campaign_state.json is still transiently active before finalization, state that explicitly as a runtime-finalization item rather than a source blocker.
