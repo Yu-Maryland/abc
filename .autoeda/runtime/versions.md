@@ -4758,3 +4758,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap82: add sticky parent phase retention`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap83`, either tighten the sticky release rule enough to force the `ode` child-phase-0 parent cut through final remap despite the `3.86 ps` local parent timing gain, or move the investigation outward to final critical-path impact. `stmap82` shows that local parent polarity can be controlled, but QoR does not move under a timing-respecting release rule.
+
+
+## version83 / stmap83
+
+- hypothesis: A strict sticky watched-parent child-phase-0 retention policy can force the `ode` downstream parent phase to keep the child-phase-0 cut by blocking all watched child-missing replacements, including the `3.86 ps` local parent timing improvement that `stmap82` allowed. If final QoR still does not move, then this local parent-polarity mismatch is not controlling the benchmark-level post-sizing delay or area.
+- motivation: `stmap82` showed that the local sticky mechanism worked but released the final `ode` child-missing `NOR3xp33_ASAP7_75t_L` candidate because it improved local parent arrival by `3.86 ps` over the sticky child-phase-0 cut. `stmap83` removes that release path by raising the timing hold window to `100000.00 ps`.
+- command name: `stmap83`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_83.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap83/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap83` is a command-scoped strict configuration of the `stmap82` sticky parent-phase probe. `mapperMatch.c` now stores the sticky timing hold window in `s_Stmap82StickyTimingHoldWindow`, defaults it to `3.00 ps` on clear, and exposes `Map_Stmap82SetStickyParentPhaseTimingWindow`. The `stmap82` command remains unchanged and uses the default `3.00 ps` release window. The new `stmap83` command configures the same watched parent/child AIG pairs and sets the hold window to `100000.00 ps`, so watched child-missing replacements are blocked in final mapping modes `2` and `3` unless they exceed an intentionally unreachable timing gain.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap83/build.log`.
+  - help: `./abc -c "stmap83 -h"` printed `stmap83` usage. Log: `.autoeda/runtime/results/stmap83/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap83; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, and strict sticky hold-window diagnostics. Log: `.autoeda/runtime/results/stmap83/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap83` selected watch child AIG `855` and downstream parent AIG `861`, then reported zero sticky rows because no library was loaded for the direct-read flow. Log: `.autoeda/runtime/results/stmap83/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap82/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported watch IDs `-1` and zero diagnostics. Log: `.autoeda/runtime/results/stmap83/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap83/summary.json`, `metrics.csv`, `comparison.csv`, `sticky_parent_phase.csv`, `sticky_parent_phase_stats.csv`, `parent_phase_bias.csv`, `parent_phase_bias_stats.csv`, `candidate_cut.csv`, `candidate_cut_stats.csv`, `candidate_cut_summary.csv`, `parent_cut.csv`, `parent_cut_stats.csv`, `parent_cut_summary.csv`, demand/reconstruction/selected/final-critical/phase-survival diagnostics, `cec_summary.json`, raw benchmark logs, CEC temporaries/logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- strict-sticky diagnostic results:
+  - `i10` parent AIG `861` / child AIG `855`: `6` sticky rows, `4` sticky-set events, no blocked replacements, `2` child-phase-0 allows, and hold window `100000.000 ps`.
+  - `ode` parent AIG `5229` / child AIG `5219`: `17` sticky rows, `5` sticky-set events, `9` blocked child-missing replacements, `0` timing allows, `3` child-phase-0 allows, and hold window `100000.000 ps`.
+  - `ode` final parent-cut tracing changed versus `stmap82`: parent phase `1` now ends as `AOI221xp5_ASAP7_75t_L` and consumes child AIG `5219` in phase `0`; `child_missing` is `0`.
+  - Final benchmark QoR is still identical to `stmap82`, confirming that forcing this local parent polarity through final remap does not change the measured post-sizing delay or area for the required flow.
+  - `or1200` parent AIG `13829` / child AIG `11491`: `7` sticky rows, `5` sticky-set events, no blocked replacements, and `2` child-phase-0 allows.
+  - `syn2` parent AIG `18467` / child AIG `18002`: no sticky rows, matching `stmap82`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_83.c`.
+  - numbered command exists and is registered as `stmap83`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - strict sticky-parent-phase, parent-phase-bias, candidate-cut, parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, phase-survival, path-normalization, stale-state, and CEC diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap83/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap83/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap83/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap83/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap83/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap83/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap83/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap83/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues and specifically noted that `stmap82` keeps the default `3.00 ps` window while `stmap83` overrides it only for its scoped run.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap83: force strict sticky parent phase`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap84`, move the investigation outward from the local parent cut to final critical-path impact. `stmap83` proves the watched `ode` local polarity can be forced all the way to the final parent cut without changing benchmark QoR, so the next hypothesis should inspect or target whether this node is off the measured final critical path after topo/buffer/upsize/dnsize.

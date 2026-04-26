@@ -464,6 +464,7 @@ static int s_nStmap82StickyBlocked = 0;
 static int s_nStmap82StickyAllowedTiming = 0;
 static int s_nStmap82StickyAllowedChild0 = 0;
 static int s_nStmap82StickyIgnored = 0;
+static float s_Stmap82StickyTimingHoldWindow = 3.00f;
 
 static void Map_Stmap82ResetStickyParentPhaseCounters( void )
 {
@@ -482,6 +483,7 @@ static void Map_Stmap82ClearStickyParentPhase( void )
     s_pStmap82StickyParentPhaseLabel = "stmap82";
     s_Stmap82ParentAigId = -1;
     s_Stmap82ChildAigId = -1;
+    s_Stmap82StickyTimingHoldWindow = 3.00f;
     Map_Stmap82ResetStickyParentPhaseCounters();
 }
 
@@ -494,6 +496,11 @@ void Map_Stmap82SetStickyParentPhase( int fEnable, const char * pLabel, int Pare
     s_fStmap82StickyParentPhase = 1;
     s_Stmap82ParentAigId = ParentAigId;
     s_Stmap82ChildAigId = ChildAigId;
+}
+
+void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow )
+{
+    s_Stmap82StickyTimingHoldWindow = TimingHoldWindow > 0.0f ? TimingHoldWindow : 3.00f;
 }
 
 int Map_Stmap82StickyParentPhaseConfigured( void )
@@ -543,7 +550,7 @@ static void Map_Stmap82RememberStickyParentPhase( Map_Man_t * p, Map_Node_t * pN
         CutOrdinal, ChildLeaf, ChildPhase,
         pMatch->pSuperBest ? Mio_GateReadName(pMatch->pSuperBest->pRoot) : "?",
         pMatch->tArrive.Worst, pMatch->AreaFlow,
-        *pStickyCutOrdinal, pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, 3.00f );
+        *pStickyCutOrdinal, pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, s_Stmap82StickyTimingHoldWindow );
 }
 
 static int Map_Stmap82MaybeBlockStickyReplacement( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, int fAccepted, int fSticky, Map_Match_t * pStickyMatch, Map_Cut_t * pStickyCut, int StickyCutOrdinal )
@@ -560,7 +567,7 @@ static int Map_Stmap82MaybeBlockStickyReplacement( Map_Man_t * p, Map_Node_t * p
         s_nStmap82StickyAllowedChild0++;
         pAction = "allow-child-phase0";
     }
-    else if ( TimingGain > 3.00f + p->fEpsilon )
+    else if ( TimingGain > s_Stmap82StickyTimingHoldWindow + p->fEpsilon )
     {
         s_nStmap82StickyAllowedTiming++;
         pAction = "allow-timing";
@@ -581,7 +588,7 @@ static int Map_Stmap82MaybeBlockStickyReplacement( Map_Man_t * p, Map_Node_t * p
         pMatch->tArrive.Worst, pMatch->AreaFlow,
         StickyCutOrdinal,
         pStickyMatch->pSuperBest ? Mio_GateReadName(pStickyMatch->pSuperBest->pRoot) : "?",
-        pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, TimingGain, 3.00f );
+        pStickyMatch->tArrive.Worst, pStickyMatch->AreaFlow, TimingGain, s_Stmap82StickyTimingHoldWindow );
     (void)pStickyCut;
     return fAccepted;
 }
@@ -592,7 +599,7 @@ void Map_Stmap82PrintStickyParentPhaseSummary( void )
         s_pStmap82StickyParentPhaseLabel, s_Stmap82ParentAigId, s_Stmap82ChildAigId,
         s_nStmap82StickyRows, s_nStmap82StickySet, s_nStmap82StickyBlocked,
         s_nStmap82StickyAllowedTiming, s_nStmap82StickyAllowedChild0,
-        s_nStmap82StickyIgnored, 3.00f );
+        s_nStmap82StickyIgnored, s_Stmap82StickyTimingHoldWindow );
 }
 
 /**Function*************************************************************

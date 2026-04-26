@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 83,
-  "next_iteration": 83,
+  "completed_iterations": 84,
+  "next_iteration": 84,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 82,
-  "last_completed_version": "stmap82",
-  "last_successful_commit": "local commit to be created: stmap82: add sticky parent phase retention; see git history for hash",
+  "last_completed_iteration": 83,
+  "last_completed_version": "stmap83",
+  "last_successful_commit": "local commit to be created: stmap83: force strict sticky parent phase; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -531,8 +531,15 @@
     "stmap82 review pass 1 accepted sticky seed finding; source fix was applied and build/help/smoke/path/stale/implementation checks were rerun before full re-evaluation.",
     "stmap82 validation passed: build, help, smoke, full benchmark metrics, sticky-parent-phase diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
     "stmap82 review pass 2 completed with no findings after the sticky seed fix.",
-    "stmap82 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap82 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap83 active iteration prepared: strict sticky watched-parent child-phase-0 retention without timing-release.",
+    "stmap83 implementation built successfully; help, smoke, path-normalization, stale-state, and implementation checks passed; full evaluation started.",
+    "stmap83 full benchmark metrics, strict sticky-parent-phase diagnostic parsing, and CEC completed successfully; review loop started.",
+    "stmap83 validation passed: build, help, smoke, full benchmark metrics, strict sticky-parent-phase diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap83 review completed with no findings across two supported review passes; no source changes were made after final review.",
+    "stmap83 diagnostic result: strict sticky retention forced ode parent AIG 5229 phase 1 to consume child AIG 5219 phase 0, but final benchmark QoR stayed identical to stmap82.",
+    "stmap83 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T18:13:39Z",
-  "updated_at_utc": "2026-04-26T18:13:39Z"
+  "updated_at": "2026-04-26T18:28:22Z",
+  "updated_at_utc": "2026-04-26T18:28:22Z"
 }

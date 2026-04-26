@@ -1,0 +1,9 @@
+Review the uncommitted stmap83 changes for correctness, build integration, stale global state, and diagnostic/evaluation soundness.
+
+Project constraints:
+- This is iteration stmap83 in the stmap family.
+- The command must be isolated from classic map and earlier stmap commands unless explicitly configured.
+- The new hypothesis is a strict version of stmap82 sticky watched-parent child-phase-0 retention: stmap82 keeps its 3.00 ps timing release, while stmap83 uses a 100000.00 ps hold window to effectively block watched child-missing replacements.
+- Required benchmark flow and CEC have passed under .autoeda/runtime/results/stmap83.
+
+Focus on changed/untracked files only. Report concrete P0/P1/P2 findings with file/line references. If there are no correctness issues, say so.

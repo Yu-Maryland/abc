@@ -1,0 +1,5 @@
+benchmark,parent_aig,child_aig,rows,sticky_set,blocked_replacements,allowed_timing,allowed_child_phase0,allowed_total,timing_hold_window
+benchmarks/i10.aig,861,855,6,4,0,0,2,2,100000.000
+benchmarks/ode.abc.blif,5229,5219,17,5,9,0,3,3,100000.000
+benchmarks/or1200.abc.blif,13829,11491,7,5,0,0,2,2,100000.000
+benchmarks/syn2.abc.blif,18467,18002,0,0,0,0,0,0,100000.000
