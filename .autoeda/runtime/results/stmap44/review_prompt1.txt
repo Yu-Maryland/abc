@@ -1,0 +1,16 @@
+Review the uncommitted stmap44 iteration for correctness, regressions, and missing validation.
+
+Context:
+- Project pack requires numbered stmap variants, full benchmark metrics, CEC, review, logging, and a coherent commit.
+- stmap44 adds src/base/abci/abcStmap_44.c, registers stmap44, wires the file into module.make and abclib.dsp, and adds mapper mode 45.
+- Hypothesis: keep stmap43/stmap42 strong sink-pressure protection, but require node pressure and cut-leaf pressure agreement before moderate deep penalty margin is applied.
+- Implementation detail: mode 45 uses Map_Stmap44SetSclLoadFeedback and the dense sink-pressure vector. Strong penalty logic mirrors stmap43; moderate penalty requires node and cut pressure both above 1.75 and spread <= 1.25.
+- Validation already run before this review: make ABC_USE_NO_READLINE=1, stmap44 -h, smoke on benchmarks/i10.aig, full baseline/candidate metrics on all four required benchmarks, and CEC on all four required benchmarks.
+
+Please focus on:
+- Whether stmap44 preserves older stmap commands and classic map behavior.
+- Whether the new mode-45 range and counters are consistently wired.
+- Whether the node/cut agreement logic has any uninitialized values, stale static feedback, or division hazards.
+- Whether validation artifacts are sufficient under the project pack.
+
+Return findings ordered by severity with file/line references. If no actionable findings remain, say so explicitly.

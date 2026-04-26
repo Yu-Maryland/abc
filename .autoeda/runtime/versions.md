@@ -2397,3 +2397,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap43: gate moderate recovery by SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap43` shows that direct sink-pressure gating still admits the AIG `41286` moderate seed and slightly regresses `syn2` relative to `stmap42`. For `stmap44`, tighten moderate recovery by requiring node and cut pressure agreement, a higher sink-pressure threshold, or evidence that the candidate does not reduce the `stmap42` block margin before admitting a moderate seed.
+
+## version44 / stmap44
+
+- hypothesis: Keep `stmap43`'s strong sink-pressure protection, but require direct mapped-node pressure and cut-leaf pressure agreement before applying the moderate deep area-margin penalty. This should reject broad pressure-cone moderate candidates that are not locally consistent while retaining the known `syn2` strong pressure blocks.
+- motivation: `stmap43` still admitted the AIG `41286` moderate penalty seed and worsened `syn2` relative to `stmap42`. The next diagnostic question is whether the moderate policy should respond only when the candidate node and selected cut leaves both carry similar first-pass SCL sink pressure, rather than when either side is high.
+- command name: `stmap44`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_44.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap44/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap44` is a numbered two-pass `stmap` command. The first pass reuses the `stmap43` SCL load/max-cap sink-pressure collector and transfers the dense AIG-ID sink-pressure vector into mapper mode `45`. Mode `45` preserves the `stmap43` strong-seed SCL pressure penalty, but the moderate deep penalty now requires node and cut pressure ratios both above `1.75` with pressure spread no greater than `1.25`; otherwise the moderate penalty factor is zero. Existing `map` and `stmap0` through `stmap43` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap44/build.log`.
+  - help: `./abc -c "stmap44 -h"` printed command usage with node/cut-agreement moderate recovery and default `-G 250.00`. Log: `.autoeda/runtime/results/stmap44/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap44; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap44/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap44/summary.json`, `metrics.csv`, `comparison.csv`, guard/near-miss/early-seed diagnostics, SCL load and criticality diagnostics, sink-pressure diagnostics, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); sink-pressure entries `262`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); sink-pressure entries `4816`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); sink-pressure entries `4362`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `491.54 ps`, area `21598.23`; delay delta `-17.28 ps` (`-3.40%`), area delta `+301.63` (`+1.42%`); sink-pressure entries `8980`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `2`.
+- sink-pressure and penalty diagnostics:
+  - first-pass SCL load stats match the sink-pressure source: `i10` over-max `3`, max load ratio `1.544`; `ode` over-max `71`, max load ratio `8.715`; `or1200` over-max `41`, max load ratio `10.805`; `syn2` over-max `133`, max load ratio `11.716`.
+  - `benchmarks/syn2.abc.blif`: tracked AIG `5548`, tracked mapped node `5656`, raw pressure ratio `2.265`, sink-pressure ratio `1.443`.
+  - `benchmarks/syn2.abc.blif`: strong pressure blocks remained active twice at mapper node `2318` / AIG `5548`, with penalty factors `0.330` and `0.329`, area margins `0.930935` and `0.930094`, load/drive ratios `6.750` and `5.500`, node sink-pressure ratio `1.443`, cut sink-pressure ratios `1.346` and `1.268`, and SCL feedback `0.884`.
+  - The agreement gate suppresses counted moderate penalty seeds on all required benchmarks, including the `stmap43` AIG `41286` penalty diagnostic. Final required-benchmark QoR is unchanged from `stmap43`, which shows that removing the moderate penalty factor alone does not undo the downstream `syn2` regression.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_44.c`.
+  - numbered command exists and is registered as `stmap44`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - sink-pressure, SCL-load, SCL-criticality, guard, early-seed, near-miss, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap44/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap44/`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap44/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap44/review_pass1_supported.log`.
+  - accepted source findings: none.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap44/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap44/review_pass2_supported.log`.
+  - accepted source findings: none.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: none; only review summary, artifact checks, canonical logging, version checks, and campaign-state finalization were added after review.
+- commit: local commit created with message `stmap44: require agreement for moderate SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap44` shows that tightening the moderate penalty diagnostic does not recover the `syn2` QoR regression because the underlying area recovery can still occur without a positive moderate penalty factor. For `stmap45`, move the pressure agreement from the penalty-factor margin into the admission rule itself, or add a direct block for the recovered moderate seed when local pressure disagreement is observed, while preserving the AIG `5548` strong pressure protection.
