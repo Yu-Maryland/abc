@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 81,
-  "next_iteration": 81,
+  "completed_iterations": 82,
+  "next_iteration": 82,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 80,
-  "last_completed_version": "stmap80",
-  "last_successful_commit": "local commit to be created: stmap80: trace parent candidate cuts; see git history for hash",
+  "last_completed_iteration": 81,
+  "last_completed_version": "stmap81",
+  "last_successful_commit": "local commit to be created: stmap81: probe parent phase retention; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -518,8 +518,14 @@
     "stmap80 full benchmark metrics, candidate-cut diagnostic parsing, and CEC completed successfully; review loop started.",
     "stmap80 validation passed: build, help, smoke, full benchmark metrics, candidate-cut diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
     "stmap80 review completed with no findings across two supported review passes; no source changes were made after final review.",
-    "stmap80 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap80 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap81 active iteration prepared: watched-parent child-phase-0 retention policy probe.",
+    "stmap81 implementation built successfully; help, smoke, path-normalization, stale-state, and implementation checks passed; full evaluation started.",
+    "stmap81 full benchmark metrics, parent-phase-bias diagnostic parsing, and CEC completed successfully; review loop started.",
+    "stmap81 validation passed: build, help, smoke, full benchmark metrics, parent-phase-bias diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap81 review completed with no findings across two supported review passes; no source changes were made after final review.",
+    "stmap81 local commit is planned with push enabled by full-campaign git.yaml."
   ],
   "updated_at": "2026-04-26T16:23:11Z",
-  "updated_at_utc": "2026-04-26T17:33:28Z"
+  "updated_at_utc": "2026-04-26T17:54:03Z"
 }

@@ -4633,3 +4633,67 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap80: trace parent candidate cuts`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap81`, implement a narrow policy probe for exact or phase-aware area recovery that preserves or slightly biases the delay-pass child-phase-0 parent candidate only when final-demand child polarity mismatch is known. The gate should be limited to final-critical parent contexts with a small local area premium cap and strong diagnostics, because `stmap80` shows the hidden `ode` candidates exist but are usually rejected by area recovery for a smaller parent cut.
+
+
+## version81 / stmap81
+
+- hypothesis: A narrow final-pass policy probe can retain the watched downstream parent candidate that consumes the watched child in phase `0` when that candidate is within a small timing and area-premium window of the current best. If this changes the final parent cut or QoR for `ode`, then the phase mismatch is addressable by local parent candidate scoring; if not, a later replacement or phase-dropping step is still overriding the retained candidate.
+- motivation: `stmap80` showed viable `ode` parent AIG `5229` candidates that request child AIG `5219` phase `0`, including an `AOI211xp5_ASAP7_75t_L` candidate that was close enough in final mode (`+0.54 ps`, `+0.47` area-flow premium versus the smaller best cut). `stmap81` tests whether accepting that candidate in exact or phase-aware area recovery is sufficient to survive final remap.
+- command name: `stmap81`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_81.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap81/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap81` is a command-scoped policy probe over `Abc_CommandStmap65`. It reuses the `stmap80` candidate-cut diagnostics under the `stmap81` label and adds `Map_Stmap81MaybeBiasParentPhase` inside `Map_MatchNodePhase`. The hook is active only while `stmap81` has configured a benchmark-specific watched parent/child AIG pair and `abcStmap_65.c` has enabled final-pass diagnostics. It only considers mapper modes `2` and `3`, only candidates whose cut consumes the watched child as requested phase `0`, and only candidates with arrival delta at most `0.75 ps`, area-flow premium at most `0.75`, and area ratio at most `2.00` versus the current best. Classic `map`, non-`stmap81` commands, and unconfigured networks are intentionally unchanged.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap81/build.log`.
+  - help: `./abc -c "stmap81 -h"` printed `stmap81` usage. Log: `.autoeda/runtime/results/stmap81/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap81; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and recorded `2` parent-phase-bias overrides. Log: `.autoeda/runtime/results/stmap81/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap81` selected watch child AIG `855` and downstream parent AIG `861`, then reported zero diagnostics because no library was loaded for the direct-read flow. Log: `.autoeda/runtime/results/stmap81/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap80/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported watch IDs `-1` and zero selected-match, reconstruction, demand-path, parent-cut, candidate-cut, and parent-phase-bias diagnostics. Log: `.autoeda/runtime/results/stmap81/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap81/summary.json`, `metrics.csv`, `comparison.csv`, `candidate_cut.csv`, `candidate_cut_stats.csv`, `candidate_cut_summary.csv`, `parent_phase_bias.csv`, `parent_phase_bias_stats.csv`, `parent_cut.csv`, `parent_cut_stats.csv`, `parent_cut_summary.csv`, `demand_path.csv`, `demand_leaf.csv`, `demand_path_stats.csv`, `reconstruct_stats.csv`, `reconstruct_request.csv`, `reconstruct_emit.csv`, `reconstruct_cache.csv`, `selected_match.csv`, `selected_match_stats.csv`, `phase_survival.csv`, `phase_survival_stats.csv`, `final_critical_lineage.csv`, `final_critical_stats.csv`, `cec_summary.json`, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- parent-phase-bias diagnostic results:
+  - `i10` parent AIG `861` / child AIG `855`: `15` watched parent rows, `5` child-phase-0 rows, `2` eligible rows, and `2` overrides. Final QoR was unchanged.
+  - `ode` parent AIG `5229` / child AIG `5219`: `28` watched parent rows, `7` child-phase-0 rows, `2` eligible rows, and `2` overrides. The key final-mode override accepted `AOI211xp5_ASAP7_75t_L` for parent phase `1`, child phase `0`, with arrival `183.98 ps`, best arrival `183.44 ps`, area-flow `1.40`, and best area-flow `0.93`.
+  - `ode` final parent-cut tracing still ended with parent phase `1` as `NOR4xp25_ASAP7_75t_L` with child AIG `5219` missing. This means the local child-phase-0 acceptance fires but is later displaced by another child-missing candidate in the same parent/phase selection pass.
+  - `or1200` parent AIG `13829` / child AIG `11491`: `17` watched parent rows, `7` child-phase-0 rows, `3` eligible rows, and `2` overrides plus `1` already-selected row. Final QoR was unchanged.
+  - `syn2` parent AIG `18467` / child AIG `18002`: `24` watched parent rows, `2` child-phase-0 rows, and no eligible overrides due to the policy windows.
+- candidate-cut diagnostic results:
+  - Candidate accepted updates increased versus `stmap80` for the watched parent cases with overrides: `i10` from `11` to `13`, `ode` from `8` to `15`, and `or1200` from `6` to `8`; `syn2` remained `12`.
+  - `ode` accepted child-phase-0 candidate updates increased from `1` in `stmap80` to `3` in `stmap81`, but non-selected child-phase-0 rows remained `4` because later child-missing alternatives still win.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_81.c`.
+  - numbered command exists and is registered as `stmap81`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - parent-phase-bias, candidate-cut, parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, phase-survival, path-normalization, stale-state, and CEC diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap81/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap81/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap81/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap81/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap81/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap81/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issue in the changed or untracked files.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap81/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap81/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issue and found the command, build wiring, and gated mapper bias consistent with the existing stmap pattern.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap81: probe parent phase retention`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap82`, test a stricter retention policy or diagnostic that makes a just-overridden watched child-phase-0 parent candidate sticky against later child-missing candidates in the same parent/phase pass, unless the later candidate improves timing by more than the measured window or violates required time. `stmap81` shows the local override fires, but final remap still selects a child-missing `ode` parent phase `1` cut.

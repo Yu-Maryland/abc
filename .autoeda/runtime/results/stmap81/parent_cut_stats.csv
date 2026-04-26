@@ -1,0 +1,5 @@
+benchmark,child_aig,parent_aig,requests,rows,phase0_has_cut,phase1_has_cut,child_phase0,child_phase1,child_missing
+benchmarks/i10.aig,855,861,9,2,1,1,1,1,0
+benchmarks/ode.abc.blif,5219,5229,5,2,1,1,0,1,1
+benchmarks/or1200.abc.blif,11491,13829,4,2,0,1,1,0,0
+benchmarks/syn2.abc.blif,18002,18467,3,2,1,1,0,1,1

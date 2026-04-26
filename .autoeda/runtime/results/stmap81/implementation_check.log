@@ -1,0 +1,16 @@
+stmap81 implementation check
+OK exists src/base/abci/abcStmap_81.c
+OK exists src/base/abci/abc.c
+OK exists src/base/abci/abcStmap_65.c
+OK exists src/base/abci/module.make
+OK exists src/map/mapper/mapperMatch.c
+OK exists abclib.dsp
+OK exists .autoeda/runtime/results/stmap81/run_stmap81_eval.py
+OK pattern Abc_CommandStmap81
+OK pattern "stmap81"
+OK pattern abcStmap_81.c
+OK pattern Map_Stmap81SetParentPhaseBias
+OK pattern parent-phase-bias stats
+OK pattern Map_Stmap81MaybeBiasParentPhase
+OK smoke recorded policy override evidence
+implementation_check=pass

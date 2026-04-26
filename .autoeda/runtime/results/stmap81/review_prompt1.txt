@@ -1,0 +1,5 @@
+Review the uncommitted stmap81 changes for correctness, build integration, diagnostic lifecycle, and unintended mapper regressions.
+
+Context: stmap81 adds a command wrapper over stmap65, reuses stmap80 diagnostics, and enables a command-scoped final-pass policy probe in mapperMatch.c. The probe may accept a watched downstream-parent candidate that consumes the watched child as phase 0 only in mapping modes 2 or 3, only within arrival/area windows, and only while stmap81 is active.
+
+Validation already run: build, stmap81 -h, i10 smoke, path-normalization check, stale-state check, full four-benchmark evaluation, and CEC all passed. Please focus on discrete bugs, stale global state, null dereferences, incorrect mapping-mode gating, CEC risk, parser/artifact issues, and whether classic map or other stmap commands can be affected when stmap81 is not configured.
