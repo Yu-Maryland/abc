@@ -1,0 +1,5 @@
+benchmark,capacity,fanin,fanout,roots,selected,tracked_aig,tracked_node,tracked_ratio
+benchmarks/i10.aig,128,36,102,3,60,2318,0,0.0
+benchmarks/ode.abc.blif,128,526,4704,71,128,2318,0,0.0
+benchmarks/or1200.abc.blif,128,172,2696,41,128,2318,0,0.0
+benchmarks/syn2.abc.blif,128,1087,11562,133,128,2318,0,0.0

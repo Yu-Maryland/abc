@@ -1,0 +1,25 @@
+Review the uncommitted stmap38 implementation for correctness risks.
+
+Context:
+- Project policy requires numbered STMAP variants; this is stmap38.
+- stmap38 adds src/base/abci/abcStmap_38.c and mapper mode 39.
+- The hypothesis is to broaden first-pass SCL over-cap hotspot association beyond stmap37's root/immediate-fanin set by adding nearby fanins, downstream fanout users, and candidate cut-leaf hotspot checks before applying local SCL feedback.
+- Existing map and stmap0 through stmap37 behavior should remain buildable and comparable.
+
+Focus:
+- command registration and build integration
+- fSkipFanout mode-range plumbing
+- mapper counter isolation for mode 39
+- lifetime and reset of Map_Stmap38SetSclLoadFeedback pointers
+- whether mode 39 can affect non-stmap38 commands
+- diagnostic accuracy and any memory/lifetime hazards
+- any missed correctness or reproducibility issue in the runtime artifacts
+
+Validation already run before review:
+- make ABC_USE_NO_READLINE=1 passed
+- ./abc -c "stmap38 -h" passed
+- smoke flow on benchmarks/i10.aig passed with parseable stime
+- all four required benchmark baseline/candidate flows passed with parseable final stime
+- CEC passed on all four required benchmarks using strashed AIG temporaries
+
+Return findings first, with severity and file/line references. If no actionable issues are found, say so explicitly.

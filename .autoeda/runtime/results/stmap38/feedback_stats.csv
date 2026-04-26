@@ -1,0 +1,5 @@
+benchmark,remap,active,max_load_ratio,over_max_frac,severity,hotspots
+benchmarks/i10.aig,1,0,1.544,0.001948,0.0,60
+benchmarks/ode.abc.blif,1,1,8.715,0.006186,0.627,128
+benchmarks/or1200.abc.blif,1,1,10.805,0.005085,0.733,128
+benchmarks/syn2.abc.blif,1,1,11.716,0.006413,0.884,128

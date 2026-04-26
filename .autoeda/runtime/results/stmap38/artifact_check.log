@@ -1,0 +1,8 @@
+metrics_ok=True
+cec_ok=True
+missing=[]
+diagnostics={'guard_stats_rows': 4, 'near_miss_stats_rows': 4, 'early_seed_stats_rows': 4, 'penalty_stats_rows': 4, 'feedback_load_stats_rows': 4, 'feedback_load_top_rows': 20, 'hotspot_stats_rows': 4, 'hotspot_top_rows': 40, 'scl_load_stats_rows': 4, 'scl_load_top_rows': 20, 'moderate_penalty_seed_diag_rows': 0, 'moderate_penalty_block_diag_rows': 2, 'strong_penalty_seed_diag_rows': 1, 'strong_penalty_block_diag_rows': 0}
+artifact_ok=True
+feedback_stats_rows=4
+review_summary=True
+version_log_check=True

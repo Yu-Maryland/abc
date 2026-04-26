@@ -1,0 +1,14 @@
+entry_found=True
+hypothesis=True
+motivation=True
+files_changed=True
+command_name=True
+algorithm_summary=True
+validation_run=True
+benchmark_results=True
+correctness_results=True
+review_findings=True
+commit=True
+next_step=True
+missing=[]
+version_log_ok=True

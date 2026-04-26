@@ -1,0 +1,17 @@
+Review the finalized stmap38 source changes for remaining correctness risks.
+
+Context:
+- Review pass 1 reported no source-level correctness issue.
+- The only accepted pass-1 finding was runtime campaign_state finalization; that will be addressed in the canonical version-log and campaign-state finalization step after review.
+- No source changes were made after review pass 1.
+
+Focus on source and integration only:
+- src/base/abci/abcStmap_38.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperInt.h
+- src/map/mapper/mapperMatch.c
+
+Check for missed mode-range bugs, counter isolation problems, command registration/build issues, feedback pointer lifetime or reset hazards, and unintended behavior changes to map or stmap0 through stmap37. Return findings first with severity and file/line references. If no actionable issues remain, say so explicitly.

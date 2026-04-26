@@ -1,0 +1,2 @@
+benchmark,diag
+benchmarks/syn2.abc.blif,index = 1  node = 2318  level = 29  refs = 5  leaves = 4  phase = 0  slack = 7.430023  area-save = 0.930000  arrival-delta = -10.130005  arrival-gain-margin = 1.585000  penalty-factor = 0.317  area-margin = 0.921593  cut-leaf-load-avg = 6.750  fanout-limit = 1  load-drive-ratio = 6.750  node-hotspot-ratio = 0.000  cut-hotspot-ratio = 0.000  scl-feedback = 0.884

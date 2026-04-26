@@ -1,0 +1,5 @@
+benchmark,avg_load_ratio,fanout_pins,matched,max_load_ratio,nodes,over_max
+benchmarks/i10.aig,0.068,3650,1540,1.544,1540,3
+benchmarks/ode.abc.blif,0.074,27977,11478,8.715,11544,71
+benchmarks/or1200.abc.blif,0.067,19375,8063,10.805,8077,41
+benchmarks/syn2.abc.blif,0.083,54992,20740,11.716,20805,133
