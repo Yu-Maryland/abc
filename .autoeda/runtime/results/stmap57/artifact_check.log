@@ -1,0 +1,29 @@
+stmap57 artifact check: passed
+
+Required source/build artifacts:
+- src/base/abci/abcStmap_57.c exists.
+- src/base/abci/abc.c registers stmap57.
+- src/base/abci/module.make includes src/base/abci/abcStmap_57.c.
+- abclib.dsp includes src\base\abci\abcStmap_57.c.
+- ./abc was rebuilt with make ABC_USE_NO_READLINE=1.
+
+Required validation artifacts:
+- build.log/build.exit: present, exit 0.
+- help.log/help.exit: present, exit 0, usage text printed for stmap57.
+- smoke_i10.log/smoke_i10.exit: present, exit 0, final stime delay 198.64 ps and area 1303.10.
+- metrics.csv: present, baseline and candidate rows for all four required benchmarks.
+- comparison.csv: present, parseable delay and area deltas for all four required benchmarks.
+- summary.json: present.
+- cec_summary.json: present, all four required benchmarks passed CEC.
+- raw baseline/candidate logs: present for i10, ode, or1200, and syn2.
+- CEC AIG temporaries and logs: present for i10, ode, or1200, and syn2.
+- review prompts and logs: present for two supported review passes plus positional-command failure logs.
+- review_summary.md: present.
+- version_log_check.log/version_log_check.exit: present, exit 0.
+
+Diagnostic artifacts:
+- feedback_stats.csv: present.
+- blended_gain_stats.csv: present.
+- mapper_mode_stats.csv: present.
+- sink_pressure_stats.csv: present.
+- guard_stats.csv, near_miss_stats.csv, early_seed_stats.csv, and penalty_stats.csv: present from inherited reviewed mapper mode 57 diagnostics.

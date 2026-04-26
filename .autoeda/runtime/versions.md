@@ -3152,3 +3152,62 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap56: relax cut-only pressure cap`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: The `1.35x` cap confirms the useful one-sided `syn2` candidate sits exactly between the `stmap55` and `stmap56` cap thresholds; it is a clean timing/area tradeoff, not free improvement. For `stmap57`, prefer reconstruction-consistent pressure transfer that can populate paired pressure evidence for cut-only cases, or add a downstream area-budget/objective check before accepting the cut-only recovery instead of continuing a simple cap sweep.
+
+
+## version57 / stmap57
+
+- hypothesis: Keep the reviewed `stmap56` mapper mode `57`, but feed raw first-pass SCL load-pressure ratios into `Map_Stmap45SetSclLoadFeedbackWithEntries()` instead of sink-criticality-weighted ratios. This tests whether raw pressure can turn the prior cut-only severe-pressure case into paired mapper evidence without adding another cap sweep or changing older commands.
+- motivation: `stmap56` recovered the single `syn2` timing gain by relaxing the local cut-only cap, but that gain was still a local timing/area tradeoff. The prior recommendation was to prefer reconstruction-consistent pressure transfer that can populate paired pressure evidence for cut-only cases.
+- command name: `stmap57`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_57.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap57/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap57` clones the `stmap56` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap56`. It performs a first mapping pass with the established feedback collection path, computes the same severe-feedback gain selector, and then remaps through the reviewed mapper mode `57`. The new behavior is the pressure handoff: the second pass receives `LoadStats.pAigPressureRatios` and `LoadStats.nPressureEntries` instead of `LoadStats.pAigSinkPressureRatios` and `LoadStats.nSinkPressureEntries`. Command diagnostics label this as `pressure-feed = raw-load`; inherited mapper-mode diagnostics still print as `stmap56` because the reviewed mode number is intentionally reused.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap57/build.log`.
+  - help: `./abc -c "stmap57 -h"` printed command usage for the raw-pressure-transfer two-pass mode. Log: `.autoeda/runtime/results/stmap57/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap57; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap57/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap57/summary.json`, `metrics.csv`, `comparison.csv`, `feedback_stats.csv`, `blended_gain_stats.csv`, `mapper_mode_stats.csv`, `sink_pressure_stats.csv`, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; raw pressure entries `262`; sink-pressure entries `262`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; raw pressure entries `4816`; sink-pressure entries `4816`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; raw pressure entries `4362`; sink-pressure entries `4362`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.50 ps`, area `22232.05`; delay delta `-29.32 ps` (`-5.76%`), area delta `+935.45` (`+4.39%`); selected gain `225.00`; raw pressure entries `8980`; sink-pressure entries `8980`.
+- raw-pressure-transfer diagnostics:
+  - `stmap57` used inherited mapper mode `57` on all candidate runs and fed `raw-load` pressure into that mode.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, raw/sink entries `262/262`; `ode` severity `0.627`, raw/sink entries `4816/4816`; `or1200` severity `0.733`, raw/sink entries `4362/4362`; `syn2` severity `0.884`, raw/sink entries `8980/8980`.
+  - `syn2` inherited mapper diagnostics reported `pressure-near-exception-seed = 0`, `cut-only-exception-seed = 0`, `cut-only-area-cap-blocked = 0`, `moderate-penalty-blocked = 2`, and `strong-penalty-blocked = 2`.
+  - The prior `stmap56` one-sided seed at AIG ID `27645` did not fire under raw-pressure transfer because the cut pressure seen by the inherited mode became `3.270`, above the reviewed cut-only exception band. The result matches the lower-area `stmap55`/`stmap53` QoR point on `syn2`: it saves `6.53` area versus `stmap56` but gives back `0.36 ps` delay.
+  - The hypothesis is falsified for the required set: raw pressure does not create paired pressure agreement for the useful severe-pressure candidate; it over-amplifies the cut side and blocks the exception.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_57.c`.
+  - numbered command exists and is registered as `stmap57`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, and inherited penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap57/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap57/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap57/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap57/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap57/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap57/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap57/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no actionable correctness issues in the current source changes.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap57/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap57/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues in the final uncommitted source changes.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap57: feed raw pressure into severe remap`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap57` shows raw pressure is not reconstruction-consistent enough for the one useful cut-only severe-pressure candidate because it overstates the cut side rather than creating paired evidence. For `stmap58`, use a bounded transferred-pressure ratio instead of raw pressure directly, for example an attenuated cut-to-node surrogate that is capped near the reviewed `1.60` to `2.20` exception band and recorded as separate diagnostics before it is allowed to affect area recovery.

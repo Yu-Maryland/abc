@@ -1,0 +1,11 @@
+Review the uncommitted stmap57 AutoEDA iteration.
+
+Scope:
+- New command file src/base/abci/abcStmap_57.c.
+- Command registration/build integration in src/base/abci/abc.c, src/base/abci/module.make, and abclib.dsp.
+- Runtime artifacts under .autoeda/runtime/results/stmap57 and campaign state updates.
+
+Hypothesis:
+stmap57 reuses the reviewed stmap56 mapper mode 57, but the command feeds raw first-pass SCL load-pressure ratios into Map_Stmap45SetSclLoadFeedbackWithEntries instead of sink-criticality-weighted pressure ratios. This tests whether candidates that previously looked cut-only can be evaluated with paired raw pressure evidence while preserving older stmap commands and classic map behavior.
+
+Please focus on correctness risks, build/registration mistakes, stale help text or diagnostics, artifact/logging problems, and any way this could silently affect map or older stmap commands. Treat the current benchmark and CEC artifacts as evidence, but flag missing or inconsistent validation if present.
