@@ -1,0 +1,22 @@
+artifact check for stmap70
+ok: build.log
+ok: build.exit
+ok: help.log
+ok: help.exit
+ok: smoke_i10.log
+ok: smoke_i10.exit
+ok: eval.exit
+ok: summary.json
+ok: metrics.csv
+ok: comparison.csv
+ok: cec_summary.json
+ok: final_witness.csv
+ok: final_witness_summary.csv
+ok: near_strong_node_diag.csv
+ok: blocked_strong_witness_source.csv
+ok: pressure_near_witness_source.csv
+ok: review_pass1.log
+ok: review_pass2.log
+ok: review_summary.md
+ok: run_stmap70_eval.py
+artifact check passed

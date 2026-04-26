@@ -1,0 +1,20 @@
+Review the uncommitted stmap70 AutoEDA iteration in this ABC repository.
+
+Project-pack constraints:
+- New command is stmap70 and must preserve all older stmapN commands.
+- Evaluation uses read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap70; topo; buffer; upsize -v; dnsize -v; stime.
+- stmap70 is intended as a diagnostic-only wrapper over stmap65. It must not change mapper selection policy.
+- Correctness gates require build, help, smoke, four benchmark metrics, CEC, artifact logging, review, and version-log updates.
+
+Hypothesis:
+stmap70 combines the closed pressure-transfer witness classes from stmap67, stmap68, and stmap69 and asks whether any blocked or near-band source has downstream final criticality >= 0.50 before reopening a mapper admission rule.
+
+Please review:
+- command registration and build integration in src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp
+- implementation in src/base/abci/abcStmap_70.c
+- evaluation parser/artifacts under .autoeda/runtime/results/stmap70/
+- whether diagnostic flags are scoped and reset correctly on all successful and failed command paths
+- whether older stmap commands remain buildable and comparable
+- whether the evaluation and CEC artifacts are adequate for the project-pack contract
+
+Focus on correctness bugs, regression risks, incomplete validation, and missing required artifacts. Return concrete findings with file/line references where possible.

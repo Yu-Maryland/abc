@@ -1,0 +1,5 @@
+benchmark,tracked_node,hits,leaf_rows,max_leaf_node,max_leaf_aig_id,max_leaf_pressure_ratio
+benchmarks/i10.aig,23628,0,0,-1,-1,0.000
+benchmarks/ode.abc.blif,23628,0,0,-1,-1,0.000
+benchmarks/or1200.abc.blif,23628,0,0,-1,-1,0.000
+benchmarks/syn2.abc.blif,23628,2,8,23506,26909,2.100

@@ -1,0 +1,9 @@
+benchmark,index,near_miss_index,tracked_node,node_aig_id,phase,leaf_index,leaf_node,leaf_aig_id,leaf_pressure_ratio,node_sink_pressure_ratio,cut_sink_pressure_ratio,reason
+benchmarks/syn2.abc.blif,1,13,23628,27645,0,0,23506,26909,2.100,0.000,0.000,moderate-gain-gate
+benchmarks/syn2.abc.blif,1,13,23628,27645,0,1,23582,27022,1.712,0.000,0.000,moderate-gain-gate
+benchmarks/syn2.abc.blif,1,13,23628,27645,0,2,23616,26972,2.100,0.000,0.000,moderate-gain-gate
+benchmarks/syn2.abc.blif,1,13,23628,27645,0,3,23626,27065,2.100,0.000,0.000,moderate-gain-gate
+benchmarks/syn2.abc.blif,2,14,23628,27645,0,0,23582,27022,1.712,0.000,2.100,cut-only-moderate-block
+benchmarks/syn2.abc.blif,2,14,23628,27645,0,1,23617,27058,2.100,0.000,2.100,cut-only-moderate-block
+benchmarks/syn2.abc.blif,2,14,23628,27645,0,2,23619,27011,2.100,0.000,2.100,cut-only-moderate-block
+benchmarks/syn2.abc.blif,2,14,23628,27645,0,3,23625,27064,0.000,0.000,2.100,cut-only-moderate-block
