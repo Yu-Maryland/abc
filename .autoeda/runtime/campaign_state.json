@@ -6,23 +6,23 @@
   "target_iterations": 100,
   "completed_iterations": 100,
   "next_iteration": 100,
-  "status": "report-pending",
+  "status": "complete",
   "active_iteration": null,
   "active_version": null,
   "last_completed_iteration": 99,
   "last_completed_version": "stmap99",
-  "last_successful_commit": "pending-stmap99-local-commit",
+  "last_successful_commit": "af838335a780743e7d71bc6b2e9308c6a3c21a44",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T22:51:41Z",
   "launcher_pid": 60423,
   "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260426T153752Z.log",
   "selected_backend": "codex",
   "report_required": true,
-  "report_generated": false,
-  "report_status": "pending",
+  "report_generated": true,
+  "report_status": "report-complete",
   "final_report_path": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md",
   "plots_dir": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots",
-  "last_report_time": null,
+  "last_report_time": "2026-04-26T22:56:25Z",
   "notes": [
     "Warning: launch uses dangerously-bypass-approvals-and-sandbox",
     "stmap48 active iteration prepared: adaptive SCL/genlib gain from first-pass feedback severity.",
@@ -634,8 +634,11 @@
     "stmap99 active iteration prepared: controlled rollback to stmap94 post-sticky emitted-drive behavior.",
     "stmap99 validation passed: build, help, smoke, path-normalization, stale-state, implementation check, full benchmark metrics, CEC, artifact check, version-log check, and two supported review passes.",
     "stmap99 diagnostic result: controlled rollback reproduced stmap94 with or1200 delay 561.55 ps.",
-    "stmap99 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap99 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap99 local commit af838335a780743e7d71bc6b2e9308c6a3c21a44 was pushed to origin/master.",
+    "Final report generated at /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md with plots under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots.",
+    "Campaign reached target_iterations=100; no stmap100 iteration was started."
   ],
-  "updated_at": "2026-04-26T22:52:27+00:00",
-  "updated_at_utc": "2026-04-26T22:51:41Z"
+  "updated_at": "2026-04-26T22:56:28+00:00",
+  "updated_at_utc": "2026-04-26T22:56:25Z"
 }
