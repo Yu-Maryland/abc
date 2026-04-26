@@ -252,6 +252,11 @@ struct Map_ManStruct_t_
     int                 nStmap56ModeratePenaltyBlocked; // stmap56 inherited pressure moderate rejects
     int                 nStmap56StrongPenaltySeed; // stmap56 inherited strong pressure choices
     int                 nStmap56StrongPenaltyBlocked; // stmap56 inherited strong pressure rejects
+    int                 nStmap60NearMissLeafDiag; // stmap60 tracked near-miss node diagnostics
+    int                 nStmap60NearMissLeafDiagLeaves; // stmap60 tracked near-miss leaf rows
+    int                 Stmap60NearMissMaxLeafAigId; // stmap60 max-pressure leaf AIG ID
+    int                 Stmap60NearMissMaxLeafNode; // stmap60 max-pressure leaf mapper node
+    float               Stmap60NearMissMaxLeafRatio; // stmap60 max leaf pressure ratio
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

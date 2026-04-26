@@ -1,0 +1,5 @@
+benchmark,bounded_pressure_transfer_mode,blended_gain,pressure_feed,raw_weight,bounded_ratio_cap,inherited_cut_only_area_save_cap,tracked_near_miss_node
+benchmarks/i10.aig,57,250.00,sink-fallback,0.72,2.100,1.35x-inverter,23628
+benchmarks/ode.abc.blif,57,250.00,sink-fallback,0.72,2.100,1.35x-inverter,23628
+benchmarks/or1200.abc.blif,57,250.00,sink-fallback,0.72,2.100,1.35x-inverter,23628
+benchmarks/syn2.abc.blif,57,225.00,bounded-raw,0.72,2.100,1.35x-inverter,23628

@@ -1,0 +1,14 @@
+missing_required = []
+build.exit = 0
+help.exit = 0
+smoke_i10.exit = 0
+eval_driver.exit = 0
+review_pass1.exit = 0
+review_pass2.exit = 0
+review_pass1_positional.exit = 2 (expected local CLI positional-prompt rejection)
+review_pass2_positional.exit = 2 (expected local CLI positional-prompt rejection)
+comparison_rows = 4
+near_miss_leaf_stats_rows = 4
+syn2_leaf_hits = 2 leaf_rows = 8 max_leaf_pressure = 2.100
+cec_rows = 4 all_passed = True
+artifact_check = pass

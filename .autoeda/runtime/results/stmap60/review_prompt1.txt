@@ -1,0 +1,29 @@
+Review the uncommitted stmap60 implementation for correctness, build integration, and campaign-contract issues.
+
+Context:
+- Project pack requires additive numbered stmap variants, command help, build, full benchmark metrics, CEC, review, logging, and commit.
+- stmap60 clones the stmap59 bounded-pressure command path and keeps inherited mapper mode 57 behavior.
+- New source behavior should be diagnostic only: stmap60 enables mapper-side near-miss cut-leaf pressure diagnostics for tracked mapper node 23628 during the final feedback remap, then disables the diagnostic.
+- Older stmap commands and classic map should remain behaviorally unchanged.
+
+Files of interest:
+- src/base/abci/abcStmap_60.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperMatch.c
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperInt.h
+- .autoeda/runtime/results/stmap60/run_stmap60_eval.py
+
+Validation already run before review:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap60 -h" printed usage.
+- smoke flow on benchmarks/i10.aig passed with parseable stime.
+- full baseline/candidate evaluation and CEC passed for all four required benchmarks.
+
+Please focus on:
+- Any chance stmap60 diagnostics alter mapper decisions or leak into older commands.
+- Whether diagnostic enable/disable lifetime is safe on failures.
+- Registration/build integration completeness.
+- Parser/artifact problems that could make the iteration invalid.

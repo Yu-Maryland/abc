@@ -1,0 +1,9 @@
+Second review pass for the final uncommitted stmap60 state.
+
+Review pass 1 reported no blocking correctness issues. No source changes were made after pass 1; only review artifacts may have been added.
+
+Please verify:
+- stmap60 remains a diagnostics-only extension over the stmap59 bounded-pressure command path and inherited mapper mode 57.
+- The Map_Stmap60SetNearMissLeafDiag enable/disable path cannot affect older stmap commands or classic map.
+- The command, build files, evaluator, and runtime artifacts are sufficient for the AutoEDA iteration contract.
+- There are no new blockers that require source changes before final logging and commit.

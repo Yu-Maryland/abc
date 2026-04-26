@@ -3329,3 +3329,65 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap59: track former cut-only pressure id`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap59` shows the command-level first-pass pressure collector cannot see the prior useful `syn2` AIG ID `27645`, so another global pressure-table cap sweep is unlikely to answer the reconstruction question. For `stmap60`, add mapper-mode-side diagnostics for the cut leaves of near-miss node `23628` directly inside mode `57`, or preserve first-pass AIG identity through reconstruction before attempting another bounded transfer policy.
+
+
+## version60 / stmap60
+
+- hypothesis: Keep the reviewed `stmap59` bounded-pressure handoff and inherited mapper mode `57`, but enable a mapper-side near-miss cut-leaf diagnostic for tracked mapper node `23628` during the final feedback remap. This tests whether the formerly useful `syn2` AIG ID `27645` is absent only from the command-layer first-pass collector, or whether mode `57` can still see the candidate and its pressure-bearing cut leaves.
+- motivation: `stmap59` showed that command-level first-pass tracking did not see AIG `27645` on the severe `syn2` run. The prior recommendation was to instrument mode `57` at the near-miss decision point before changing another pressure-transfer policy.
+- command name: `stmap60`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_60.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperInt.h`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap60/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap60` clones the `stmap59` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap59`. It first maps through the established SCL load/max-cap collector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. The only source-level mapper change is diagnostic and gated by `Map_Stmap60SetNearMissLeafDiag(1, 23628)` during the final `stmap60` remap; the flag is reset immediately after that remap. When enabled, mode `57` records the tracked node's AIG ID, cut leaf mapper IDs, cut leaf AIG IDs, and pressure ratios for near-miss candidates, plus a summary count and max leaf pressure. No mapper scoring, area gate, timing gate, or reconstruction behavior is changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap60/build.log`.
+  - help: `./abc -c "stmap60 -h"` printed command usage for bounded-pressure transfer with node-23628 cut-leaf diagnostics. Log: `.autoeda/runtime/results/stmap60/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap60; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap60/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap60/summary.json`, `metrics.csv`, `comparison.csv`, inherited guard/near-miss/early-seed/penalty diagnostics, feedback/bounded-pressure/mapper-mode/sink-pressure diagnostics, `near_miss_leaf_stats.csv`, `near_miss_leaf_diag.csv`, `near_miss_leaf_summary.csv`, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`; tracked node hits `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`; tracked node hits `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`; tracked node hits `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`; tracked node hits `2`.
+- mapper-side cut-leaf diagnostics:
+  - `stmap60` used inherited mapper mode `57` on all candidate benchmark runs; only `syn2` opened severe bounded-raw transfer.
+  - tracked node `23628` appeared inside mode `57` on `syn2` as node AIG ID `27645`, resolving the command-layer visibility question from `stmap59`.
+  - `near_miss_leaf_stats.csv`: `syn2` had `2` tracked-node near-miss hits, `8` leaf rows, and max leaf pressure ratio `2.100`; all other required benchmarks had zero tracked-node hits.
+  - `near_miss_leaf_diag.csv`: the first `syn2` event was `moderate-gain-gate` with leaf AIG IDs `26909`, `27022`, `26972`, and `27065`; their pressure ratios were `2.100`, `1.712`, `2.100`, and `2.100`.
+  - `near_miss_leaf_diag.csv`: the second `syn2` event was `cut-only-moderate-block` with leaf AIG IDs `27022`, `27058`, `27011`, and `27064`; their pressure ratios were `1.712`, `2.100`, `2.100`, and `0.000`. The node pressure ratio was `0.000`, cut pressure ratio was `2.100`, slack was `6.719986`, area save was `0.930000`, arrival delta was `-12.100006`, and area margin was `1.400000`.
+  - The diagnostic hypothesis is resolved: mode `57` does see the former AIG ID and pressure-bearing cut leaves. The remaining miss is not caused by absence from the final mapper-side pressure lookup; it is caused by the current mode-57 gating path still classifying the candidate as `cut-only-moderate-block`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_60.c`.
+  - numbered command exists and is registered as `stmap60`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, bounded-pressure, mapper-mode, sink-pressure, inherited guard, inherited near-miss, inherited early-seed, inherited penalty, and new near-miss cut-leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap60/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap60/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap60/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap60/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap60/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap60/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no actionable correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap60/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap60/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues in the final uncommitted changes.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap60: trace near-miss cut leaf pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap61`, keep the policy unchanged and add a narrow mapper-side gate diagnostic for tracked node `23628` that records why `fStmap56CutOnlyPressureRaw` remains false despite node pressure `0.000`, cut pressure `2.100`, strong arrival gain, and a local area-save value just under the `1.35x` cap. If that shows only the moderate-soft-seed ordering blocks the candidate, the next algorithmic version can move the cut-only exception test before that soft-seed gate for this severe-feedback class.

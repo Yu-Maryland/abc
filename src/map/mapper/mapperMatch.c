@@ -1412,6 +1412,8 @@ static float s_Stmap45SclFeedback = 0.0;
 static float * s_pStmap45SclPressureRatios = NULL;
 static int s_nStmap45SclPressureRatios = 0;
 static int s_nStmap45SclPressureEntries = 0;
+static int s_fStmap60NearMissLeafDiag = 0;
+static int s_Stmap60NearMissLeafDiagTarget = -1;
 
 void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
 {
@@ -1426,6 +1428,22 @@ void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFra
 void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
 {
     Map_Stmap45SetSclLoadFeedbackWithEntries( MaxLoadRatio, OverFrac, Severity, pAigPressureRatios, nAigPressureRatios, 0 );
+}
+
+void Map_Stmap60SetNearMissLeafDiag( int fEnable, int TrackNode )
+{
+    s_fStmap60NearMissLeafDiag = fEnable;
+    s_Stmap60NearMissLeafDiagTarget = fEnable ? TrackNode : -1;
+}
+
+int Map_Stmap60NearMissLeafDiagEnabled( void )
+{
+    return s_fStmap60NearMissLeafDiag;
+}
+
+int Map_Stmap60NearMissLeafDiagTarget( void )
+{
+    return s_Stmap60NearMissLeafDiagTarget;
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -1465,6 +1483,47 @@ static float Map_MatchStmap45CutPressureRatio( Map_Cut_t * pCut )
             RatioMax = Ratio;
     }
     return RatioMax;
+}
+
+static void Map_MatchStmap60PrintNearMissLeafDiag( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int NearMissIndex, const char * pReason, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float AreaMargin, float NodePressureRatio, float CutPressureRatio )
+{
+    Map_Node_t * pLeaf;
+    float LeafRatio, MaxLeafRatio = 0.0;
+    int i, NodeAigId, LeafAigId, LeafNode, MaxLeafAigId = -1, MaxLeafNode = -1, nLeaves = 0;
+    if ( !s_fStmap60NearMissLeafDiag || p == NULL || pNode == NULL || pCut == NULL || pNode->Num != s_Stmap60NearMissLeafDiagTarget )
+        return;
+    p->nStmap60NearMissLeafDiag++;
+    NodeAigId = Map_NodeReadAigId( pNode );
+    for ( i = 0; i < (int)pCut->nLeaves; i++ )
+    {
+        pLeaf = Map_Regular( pCut->ppLeaves[i] );
+        if ( pLeaf == NULL )
+            continue;
+        LeafAigId = Map_NodeReadAigId( pLeaf );
+        LeafNode = pLeaf->Num;
+        LeafRatio = Map_MatchStmap45PressureLookup( LeafAigId );
+        if ( nLeaves == 0 || LeafRatio > MaxLeafRatio )
+        {
+            MaxLeafRatio = LeafRatio;
+            MaxLeafAigId = LeafAigId;
+            MaxLeafNode = LeafNode;
+        }
+        nLeaves++;
+        printf( "stmap60 near-miss leaf diag: index = %d  near-miss-index = %d  tracked-node = %d  node-aig-id = %d  phase = %d  leaf-index = %d  leaf-node = %d  leaf-aig-id = %d  leaf-pressure-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  reason = %s\n",
+            p->nStmap60NearMissLeafDiag, NearMissIndex, pNode->Num, NodeAigId, fPhase, i,
+            LeafNode, LeafAigId, LeafRatio, NodePressureRatio, CutPressureRatio, pReason );
+    }
+    p->nStmap60NearMissLeafDiagLeaves += nLeaves;
+    if ( p->nStmap60NearMissLeafDiag == 1 || MaxLeafRatio > p->Stmap60NearMissMaxLeafRatio )
+    {
+        p->Stmap60NearMissMaxLeafRatio = MaxLeafRatio;
+        p->Stmap60NearMissMaxLeafAigId = MaxLeafAigId;
+        p->Stmap60NearMissMaxLeafNode = MaxLeafNode;
+    }
+    printf( "stmap60 near-miss leaf summary: index = %d  near-miss-index = %d  tracked-node = %d  node-aig-id = %d  phase = %d  leaves = %d  max-leaf-node = %d  max-leaf-aig-id = %d  max-leaf-pressure-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  scl-feedback = %.3f\n",
+        p->nStmap60NearMissLeafDiag, NearMissIndex, pNode->Num, NodeAigId, fPhase, nLeaves,
+        MaxLeafNode, MaxLeafAigId, MaxLeafRatio, NodePressureRatio, CutPressureRatio, Slack,
+        AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, s_Stmap45SclFeedback );
 }
 
 static int Map_MatchStmap45HasPressureAgreement( float NodePressureRatio, float CutPressureRatio )
@@ -3954,6 +4013,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         Stmap56CutPressureRatio, s_Stmap45SclFeedback );
                 }
                 p->nStmap18NearMiss++;
+                if ( p->fSkipFanout == 57 )
+                    Map_MatchStmap60PrintNearMissLeafDiag( p, pNode, pCut, fPhase, p->nStmap18NearMiss, pReason, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, Stmap56NodePressureRatio, Stmap56CutPressureRatio );
                 if ( p->nStmap18NearMiss <= 128 )
                     printf( "stmap%d near-miss diag: index = %d  reason = %s  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f\n",
                         p->fSkipFanout - 1, p->nStmap18NearMiss, pReason,

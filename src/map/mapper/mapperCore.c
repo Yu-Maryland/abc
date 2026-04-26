@@ -26,6 +26,9 @@ ABC_NAMESPACE_IMPL_START
 ///                        DECLARATIONS                              ///
 ////////////////////////////////////////////////////////////////////////
 
+extern int Map_Stmap60NearMissLeafDiagEnabled( void );
+extern int Map_Stmap60NearMissLeafDiagTarget( void );
+
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
@@ -341,6 +344,13 @@ ABC_PRT( "Time", Abc_Clock() - clk );
             p->nStmap56CutOnlyAreaCapBlocked,
             p->nStmap56ModeratePenaltySeed, p->nStmap56ModeratePenaltyBlocked,
             p->nStmap56StrongPenaltySeed, p->nStmap56StrongPenaltyBlocked );
+    if ( Map_Stmap60NearMissLeafDiagEnabled() )
+        printf( "stmap60 near-miss leaf stats: tracked-node = %d  hits = %d  leaf-rows = %d  max-leaf-node = %d  max-leaf-aig-id = %d  max-leaf-pressure-ratio = %.3f\n",
+            Map_Stmap60NearMissLeafDiagTarget(), p->nStmap60NearMissLeafDiag,
+            p->nStmap60NearMissLeafDiagLeaves,
+            p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafNode : -1,
+            p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafAigId : -1,
+            p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafRatio : 0.0 );
 
     // print the arrival times of the latest outputs
     if ( p->fVerbose )
