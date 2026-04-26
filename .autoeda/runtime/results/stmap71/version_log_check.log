@@ -1,0 +1,16 @@
+stmap71 version log check
+## version71 / stmap71: PASS
+hypothesis:: PASS
+motivation:: PASS
+files changed:: PASS
+command name: `stmap71`: PASS
+algorithm summary:: PASS
+validation run:: PASS
+benchmark results:: PASS
+correctness results:: PASS
+review pass 1:: PASS
+review pass 2:: PASS
+accepted source findings: none: PASS
+next-step recommendation:: PASS
+stmap71: trace moderate-penalty witnesses: PASS
+overall: PASS

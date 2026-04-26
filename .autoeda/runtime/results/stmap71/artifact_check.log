@@ -1,0 +1,11 @@
+stmap71 artifact check
+required_files_present: PASS
+metrics_complete: PASS
+cec_passed: PASS
+summary_command_and_benchmarks: PASS
+moderate_witness_parsed: PASS
+final_witness_parsed: PASS
+final_witness_summary_gate: PASS
+gate_exit_codes_zero: PASS
+positional_review_failures_logged: PASS
+overall: PASS

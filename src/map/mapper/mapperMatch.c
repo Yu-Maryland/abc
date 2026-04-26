@@ -1425,6 +1425,8 @@ static int s_fStmap68BlockedStrongWitnessDiag = 0;
 static int s_nStmap68BlockedStrongWitnessSources = 0;
 static int s_fStmap69PressureNearWitnessDiag = 0;
 static int s_nStmap69PressureNearWitnessSources = 0;
+static int s_fStmap71ModeratePenaltyWitnessDiag = 0;
+static int s_nStmap71ModeratePenaltyWitnessSources = 0;
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1536,6 +1538,16 @@ void Map_Stmap69SetPressureNearWitnessDiag( int fEnable )
         s_nStmap69PressureNearWitnessSources = 0;
     }
     s_fStmap69PressureNearWitnessDiag = fEnable;
+}
+
+void Map_Stmap71SetModeratePenaltyWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap71ModeratePenaltyWitnessSources = 0;
+    }
+    s_fStmap71ModeratePenaltyWitnessDiag = fEnable;
 }
 
 void Map_Stmap64ClearCutOnlyWitnesses( void )
@@ -1684,6 +1696,33 @@ static void Map_Stmap69RecordPressureNearWitness( Map_Node_t * pNode, Map_Cut_t 
             pCut ? (int)pCut->nLeaves : 0, fPhase, fAccepted, After > Before, fDuplicate, Slack,
             AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, NodePressureRatio,
             CutPressureRatio, s_Stmap45SclFeedback );
+}
+
+static void Map_Stmap71RecordModeratePenaltyWitness( Map_Node_t * pNode, Map_Cut_t * pCut, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float PenaltyFactor, float AreaMargin, int fAreaCap )
+{
+    int i, Before, After, fDuplicate = 0;
+    if ( !s_fStmap71ModeratePenaltyWitnessDiag || pNode == NULL || AigId < 0 )
+        return;
+    fPhase = fPhase ? 1 : 0;
+    s_nStmap71ModeratePenaltyWitnessSources++;
+    for ( i = 0; i < s_nStmap64CutOnlyWitnesses; i++ )
+    {
+        if ( s_Stmap64WitnessAigIds[i] == AigId && s_Stmap64WitnessPhases[i] == fPhase )
+        {
+            fDuplicate = 1;
+            break;
+        }
+    }
+    Before = s_nStmap64CutOnlyWitnesses;
+    if ( !fDuplicate )
+        Map_Stmap64RecordCutOnlyWitnessRaw( pNode, AigId, fPhase, NodePressureRatio, CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
+    After = s_nStmap64CutOnlyWitnesses;
+    if ( s_nStmap71ModeratePenaltyWitnessSources <= 64 )
+        printf( "stmap71 moderate-penalty witness source: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  stored = %d  duplicate = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  area-cap = %d  scl-feedback = %.3f\n",
+            s_nStmap71ModeratePenaltyWitnessSources, pNode->Num, AigId, pNode->Level, pNode->nRefs,
+            pCut ? (int)pCut->nLeaves : 0, fPhase, After > Before, fDuplicate, Slack, AreaSave,
+            ArrivalDelta, ArrivalGainMargin, PenaltyFactor, AreaMargin, NodePressureRatio,
+            CutPressureRatio, fAreaCap, s_Stmap45SclFeedback );
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -4442,6 +4481,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 if ( p->fSkipFanout == 57 && fStmap56ModeratePenaltyCandidate && !fStmap56ModeratePressureNear && !fStmap56CutOnlyPressureRaw )
                 {
                     p->nStmap56ModeratePenaltyBlocked++;
+                    Map_Stmap71RecordModeratePenaltyWitness( pNode, pCut, Stmap56NodeAigId, fPhase, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, Stmap56ModeratePenaltyFactor, AreaMargin, fStmap56ModerateAreaCap );
                     printf( "stmap56 moderate penalty block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  area-cap = %d  scl-feedback = %.3f\n",
                         p->nStmap56ModeratePenaltyBlocked, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
