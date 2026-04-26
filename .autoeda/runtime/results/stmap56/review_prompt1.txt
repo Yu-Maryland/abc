@@ -1,0 +1,13 @@
+Review the uncommitted AutoEDA stmap56 iteration in this ABC repository.
+
+Binding context:
+- Project pack requires numbered stmap variants, all previous stmap commands preserved, stmap56 help text, full four-benchmark evaluation, CEC, runtime artifacts, and version logging.
+- stmap56 hypothesis: keep the reviewed stmap54/stmap55 severe-feedback cut-only pressure exception, but relax only the local cut-only area-save cap from 1.25x to 1.35x inverter area in new mapper mode 57.
+
+Please review for correctness and campaign-policy issues, especially:
+- command registration and build integration for src/base/abci/abcStmap_56.c, abc.c, module.make, and abclib.dsp;
+- mapper mode 57 gating in src/map/mapper/mapperMatch.c, mapperCore.c, and mapperInt.h;
+- preservation of stmap55 and older behavior;
+- diagnostic counters/log labels and whether stmap56 metrics/CEC artifacts are complete enough for the project pack.
+
+Return findings with severity and file/line references. If there are no actionable findings, say so explicitly.

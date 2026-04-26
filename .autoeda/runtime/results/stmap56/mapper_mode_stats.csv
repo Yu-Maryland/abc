@@ -1,0 +1,5 @@
+benchmark,area_capped_cut_only_mode,blended_gain,cut_only_area_save_cap
+benchmarks/i10.aig,57,250.00,1.35x-inverter
+benchmarks/ode.abc.blif,57,250.00,1.35x-inverter
+benchmarks/or1200.abc.blif,57,250.00,1.35x-inverter
+benchmarks/syn2.abc.blif,57,225.00,1.35x-inverter
