@@ -1418,6 +1418,19 @@ static int s_fStmap61CutOnlyGateDiag = 0;
 static int s_Stmap61CutOnlyGateDiagTarget = -1;
 static int s_fStmap62CutOnlyBeforeModerate = 0;
 static int s_fStmap63CutOnlyLoadDropGuard = 0;
+#define MAP_STMAP64_MAX_WITNESSES 16
+static int s_fStmap64CutOnlyWitnessDiag = 0;
+static int s_nStmap64CutOnlyWitnesses = 0;
+static int s_Stmap64WitnessAigIds[MAP_STMAP64_MAX_WITNESSES];
+static int s_Stmap64WitnessPhases[MAP_STMAP64_MAX_WITNESSES];
+static int s_Stmap64WitnessNodes[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessNodePressureRatios[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessCutPressureRatios[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessSlacks[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessAreaSaves[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessArrivalDeltas[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessArrivalGainMargins[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessFeedbacks[MAP_STMAP64_MAX_WITNESSES];
 
 void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
 {
@@ -1474,6 +1487,86 @@ void Map_Stmap62SetCutOnlyOrdering( int fEnable )
 void Map_Stmap63SetCutOnlyLoadDropGuard( int fEnable )
 {
     s_fStmap63CutOnlyLoadDropGuard = fEnable;
+}
+
+void Map_Stmap64ClearCutOnlyWitnesses( void )
+{
+    s_fStmap64CutOnlyWitnessDiag = 0;
+    s_nStmap64CutOnlyWitnesses = 0;
+}
+
+void Map_Stmap64SetCutOnlyWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+        Map_Stmap64ClearCutOnlyWitnesses();
+    s_fStmap64CutOnlyWitnessDiag = fEnable;
+}
+
+int Map_Stmap64CutOnlyWitnessCount( void )
+{
+    return s_nStmap64CutOnlyWitnesses;
+}
+
+int Map_Stmap64ReadCutOnlyWitness( int i, int * pAigId, int * pPhase, int * pNode, float * pNodePressureRatio, float * pCutPressureRatio, float * pSlack, float * pAreaSave, float * pArrivalDelta, float * pArrivalGainMargin, float * pFeedback )
+{
+    if ( i < 0 || i >= s_nStmap64CutOnlyWitnesses )
+        return 0;
+    if ( pAigId )
+        *pAigId = s_Stmap64WitnessAigIds[i];
+    if ( pPhase )
+        *pPhase = s_Stmap64WitnessPhases[i];
+    if ( pNode )
+        *pNode = s_Stmap64WitnessNodes[i];
+    if ( pNodePressureRatio )
+        *pNodePressureRatio = s_Stmap64WitnessNodePressureRatios[i];
+    if ( pCutPressureRatio )
+        *pCutPressureRatio = s_Stmap64WitnessCutPressureRatios[i];
+    if ( pSlack )
+        *pSlack = s_Stmap64WitnessSlacks[i];
+    if ( pAreaSave )
+        *pAreaSave = s_Stmap64WitnessAreaSaves[i];
+    if ( pArrivalDelta )
+        *pArrivalDelta = s_Stmap64WitnessArrivalDeltas[i];
+    if ( pArrivalGainMargin )
+        *pArrivalGainMargin = s_Stmap64WitnessArrivalGainMargins[i];
+    if ( pFeedback )
+        *pFeedback = s_Stmap64WitnessFeedbacks[i];
+    return 1;
+}
+
+static void Map_Stmap64RecordCutOnlyWitness( Map_Node_t * pNode, int AigId, int fPhase, float NodePressureRatio, float CutPressureRatio, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin )
+{
+    int i;
+    if ( !s_fStmap64CutOnlyWitnessDiag || pNode == NULL || AigId < 0 )
+        return;
+    fPhase = fPhase ? 1 : 0;
+    for ( i = 0; i < s_nStmap64CutOnlyWitnesses; i++ )
+    {
+        if ( s_Stmap64WitnessAigIds[i] != AigId || s_Stmap64WitnessPhases[i] != fPhase )
+            continue;
+        s_Stmap64WitnessNodes[i] = pNode->Num;
+        s_Stmap64WitnessNodePressureRatios[i] = NodePressureRatio;
+        s_Stmap64WitnessCutPressureRatios[i] = CutPressureRatio;
+        s_Stmap64WitnessSlacks[i] = Slack;
+        s_Stmap64WitnessAreaSaves[i] = AreaSave;
+        s_Stmap64WitnessArrivalDeltas[i] = ArrivalDelta;
+        s_Stmap64WitnessArrivalGainMargins[i] = ArrivalGainMargin;
+        s_Stmap64WitnessFeedbacks[i] = s_Stmap45SclFeedback;
+        return;
+    }
+    if ( s_nStmap64CutOnlyWitnesses >= MAP_STMAP64_MAX_WITNESSES )
+        return;
+    i = s_nStmap64CutOnlyWitnesses++;
+    s_Stmap64WitnessAigIds[i] = AigId;
+    s_Stmap64WitnessPhases[i] = fPhase;
+    s_Stmap64WitnessNodes[i] = pNode->Num;
+    s_Stmap64WitnessNodePressureRatios[i] = NodePressureRatio;
+    s_Stmap64WitnessCutPressureRatios[i] = CutPressureRatio;
+    s_Stmap64WitnessSlacks[i] = Slack;
+    s_Stmap64WitnessAreaSaves[i] = AreaSave;
+    s_Stmap64WitnessArrivalDeltas[i] = ArrivalDelta;
+    s_Stmap64WitnessArrivalGainMargins[i] = ArrivalGainMargin;
+    s_Stmap64WitnessFeedbacks[i] = s_Stmap45SclFeedback;
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -3571,6 +3664,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 if ( p->fSkipFanout == 57 && fStmap56CutOnlyPressure )
                 {
                     p->nStmap56CutOnlyExceptionSeed++;
+                    Map_Stmap64RecordCutOnlyWitness( pNode, Stmap56NodeAigId, fPhase, Stmap56NodePressureRatio, Stmap56CutPressureRatio, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin );
                     printf( "stmap56 cut-only exception seed diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  area-save-cap = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
                         p->nStmap56CutOnlyExceptionSeed, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, AreaSave, 1.35 * OneInvArea, ArrivalDelta, ArrivalGainMargin,

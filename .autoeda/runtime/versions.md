@@ -3575,3 +3575,76 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap63: require load-drop evidence for cut-only pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap64`, keep the load-drop guard closed unless a post-admission diagnostic shows the accepted seed affects final criticality or downstream load movement. The highest-value next test is to instrument accepted cut-only seeds after buffering/sizing and compare final critical-path membership and load ratios before widening the node-pressure window or adding more one-sided cut-pressure exceptions.
+
+
+## version64 / stmap64
+
+- hypothesis: Keep the reviewed `stmap63` load-drop guarded mapper policy unchanged, but add a downstream `stime` witness diagnostic for accepted load-drop cut-only seeds. This tests whether the one non-tracked accepted seed from `stmap63` survives buffering/sizing as a loaded or timing-critical mapped node before any wider policy change is attempted.
+- motivation: `stmap63` restored the better `stmap61` QoR while admitting one stricter non-tracked load-drop seed on `syn2`. The prior recommendation was to inspect accepted seeds after the final `topo; buffer; upsize; dnsize; stime` path before widening the cut-only guard.
+- command name: `stmap64`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_64.c`
+  - `src/base/abci/module.make`
+  - `src/base/abc/abcNtk.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `src/map/scl/sclSize.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap64/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap64` clones the `stmap63` command-level policy and keeps mapper mode `57`, bounded-pressure transfer, selected gain, and the strict `Map_Stmap63SetCutOnlyLoadDropGuard(1)` behavior unchanged. The intentional change is diagnostic-only: during the final `stmap64` remap, mapper-side code records accepted cut-only load-drop witnesses with AIG ID, phase, seed node, pressure ratios, slack, area-save, arrival-delta, arrival-gain margin, and SCL feedback. The command scopes those witnesses to the mapped network lineage. `Abc_NtkDup`, `Abc_NtkDupDfs`, and `Abc_NtkDupDfsNoBarBufs` preserve `vOrigNodeIds` and update the scoped witness lineage as `topo` and buffering duplicate networks. The `stime` hook prints `stmap64 final-witness` rows only for that lineage and matches by exact original AIG literal/phase.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Final log: `.autoeda/runtime/results/stmap64/build_after_review3.log`.
+  - help: `./abc -c "stmap64 -h"` printed command usage. Final log: `.autoeda/runtime/results/stmap64/help_after_review3.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap64; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Final log: `.autoeda/runtime/results/stmap64/smoke_i10_after_review3.log`.
+  - targeted witness check: `syn2_witness_after_review3.log` reports one matched phase-aware final witness.
+  - stale lifecycle check: `stale_witness_after_review3.log` exits `0` and prints no `stmap64 final-witness` rows after switching to an unrelated design before `stime`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap64/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss cut-leaf diagnostics, final-witness diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- final-witness diagnostics:
+  - mapper mode `57` was used for all candidate benchmark runs with `cut-only-before-moderate = 0`, `load-drop-cut-only-guard = 1`, and `final-stime-witness = 1`; only `syn2` opened severe bounded-raw transfer.
+  - `syn2` first-pass feedback severity was `0.884` with `8980` raw pressure entries and bounded transfer active.
+  - `syn2` recorded one final witness: AIG ID `13915`, phase `1`, seed node `12167`, final node `11282`, matched `1`, final gate `O2A1O1Ixp33_ASAP7_75t_L`, final fanouts `1`, final load `0.446`, max cap `11.520`, final load ratio `0.039`, final criticality `0.272`, final slack `62.842468`, seed node pressure `1.165`, seed cut pressure `2.100`, seed slack `6.739990`, seed area-save `0.930000`, seed arrival delta `-4.720001`, seed arrival-gain margin `1.510000`, and SCL feedback `0.884`.
+  - final-witness summary: witnesses `1`, matched `1`, criticality at least `0.50` count `0`.
+  - conclusion: the admitted load-drop seed survives the downstream mapped-network lineage, but after final buffering/sizing it is lightly loaded and not close to the critical path. This argues against widening the load-drop guard based on this seed alone.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_64.c`.
+  - numbered command exists and is registered as `stmap64`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - final-witness, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss cut-leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap64/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap64/`.
+  - stale-witness lifecycle test passed: witness state did not print for an unrelated network.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap64/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap64/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap64/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap64/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap64/review_pass1.log`.
+  - accepted source finding: final-witness matching needed original AIG IDs preserved through DFS network duplication. `Abc_NtkDupOrigNodeIds()` was added and revalidated.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; log: `.autoeda/runtime/results/stmap64/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap64/review_pass2.log`.
+  - accepted source finding: global final-witness state needed network-lineage scoping to avoid stale output on unrelated later `stime` calls. The final-witness scope was added and revalidated with a stale-network test.
+- review pass 3:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; log: `.autoeda/runtime/results/stmap64/review_pass3_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap64/review_pass3.log`.
+  - accepted source finding: witness identity needed phase/literal preservation. Mapper witnesses now carry phase and final matching uses exact original AIG literal; the parser and CSV include `phase`.
+- review pass 4:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; log: `.autoeda/runtime/results/stmap64/review_pass4_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap64/review_pass4.log`.
+  - accepted source findings: none. Pass 4 reported no discrete correctness findings in the final source state.
+- rejected findings: none.
+- open findings: none after pass 4.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap64: trace downstream load-drop witness`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap65`, keep the load-drop guard at `stmap63/stmap64` strictness. The single accepted `syn2` seed is phase-correct and survives to final `stime`, but its final load ratio is only `0.039` and final criticality is only `0.272`; do not widen one-sided cut-pressure admission until a diagnostic finds accepted seeds with final criticality at least `0.50` or materially higher final load pressure.

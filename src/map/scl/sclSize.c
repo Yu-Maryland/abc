@@ -34,6 +34,8 @@ ABC_NAMESPACE_IMPL_START
 ///                        DECLARATIONS                              ///
 ////////////////////////////////////////////////////////////////////////
 
+extern void Abc_Stmap64PrintFinalWitness( SC_Man * p );
+
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
@@ -688,6 +690,7 @@ void Abc_SclTimePerformInt( SC_Lib * pLib, Abc_Ntk_t * pNtk, int nTreeCRatio, in
     SC_Man * p;
     p = Abc_SclManStart( pLib, pNtk, fUseWireLoads, 1, 0, nTreeCRatio );
     Abc_SclTimeNtkPrint( p, fShowAll, fPrintPath );
+    Abc_Stmap64PrintFinalWitness( p );
     if ( fDumpStats )
         Abc_SclDumpStats( p, "stats.txt", 0 );
     Abc_SclManFree( p );
@@ -927,5 +930,4 @@ void Abc_SclPrintBuffers( SC_Lib * pLib, Abc_Ntk_t * pNtk, int fVerbose )
 
 
 ABC_NAMESPACE_IMPL_END
-
 

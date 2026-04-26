@@ -35,6 +35,8 @@ ABC_NAMESPACE_IMPL_START
 ///                        DECLARATIONS                              ///
 ////////////////////////////////////////////////////////////////////////
 
+extern void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOldOrigNodeIds, Abc_Ntk_t * pNewNtk, Vec_Int_t * pNewOrigNodeIds );
+
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
 ////////////////////////////////////////////////////////////////////////
@@ -458,6 +460,26 @@ void Abc_NtkFinalizeRead( Abc_Ntk_t * pNtk )
     Abc_NtkOrderCisCos( pNtk );
 }
 
+static void Abc_NtkDupOrigNodeIds( Abc_Ntk_t * pNtkNew, Abc_Ntk_t * pNtk )
+{
+    Abc_Obj_t * pObj;
+    int i, Lit;
+    if ( pNtk == NULL || pNtkNew == NULL || pNtk->vOrigNodeIds == NULL )
+        return;
+    if ( pNtkNew->vOrigNodeIds )
+        Vec_IntFree( pNtkNew->vOrigNodeIds );
+    pNtkNew->vOrigNodeIds = Vec_IntStartFull( Abc_NtkObjNumMax(pNtkNew) );
+    Abc_NtkForEachObj( pNtk, pObj, i )
+    {
+        if ( pObj->pCopy == NULL || pObj->Id >= Vec_IntSize(pNtk->vOrigNodeIds) )
+            continue;
+        Lit = Vec_IntEntry( pNtk->vOrigNodeIds, pObj->Id );
+        if ( Lit >= 0 )
+            Vec_IntWriteEntry( pNtkNew->vOrigNodeIds, pObj->pCopy->Id, Lit );
+    }
+    Abc_Stmap64UpdateFinalWitnessOrigIds( pNtk, pNtk->vOrigNodeIds, pNtkNew, pNtkNew->vOrigNodeIds );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Duplicate the network.]
@@ -507,15 +529,7 @@ Abc_Ntk_t * Abc_NtkDup( Abc_Ntk_t * pNtk )
             if ( !Abc_ObjIsBox(pObj) && !Abc_ObjIsBo(pObj) )
                 Abc_ObjForEachFanin( pObj, pFanin, k )
                     Abc_ObjAddFanin( pObj->pCopy, pFanin->pCopy );
-        // move object IDs
-        if ( pNtk->vOrigNodeIds ) 
-        {
-            pNtkNew->vOrigNodeIds = Vec_IntStartFull( Abc_NtkObjNumMax(pNtkNew) );
-            Abc_NtkForEachObj( pNtk, pObj, i )
-                if ( pObj->pCopy && Vec_IntEntry(pNtk->vOrigNodeIds, pObj->Id) > 0 )
-                    Vec_IntWriteEntry( pNtkNew->vOrigNodeIds, pObj->pCopy->Id, Vec_IntEntry(pNtk->vOrigNodeIds, pObj->Id) );
-        }
-        
+        Abc_NtkDupOrigNodeIds( pNtkNew, pNtk );
     }
     // duplicate the EXDC Ntk
     if ( pNtk->pExdc )
@@ -557,6 +571,7 @@ Abc_Ntk_t * Abc_NtkDupDfs( Abc_Ntk_t * pNtk )
             Abc_ObjForEachFanin( pObj, pFanin, k )
                 if ( pObj->pCopy && pFanin->pCopy )
                     Abc_ObjAddFanin( pObj->pCopy, pFanin->pCopy );
+    Abc_NtkDupOrigNodeIds( pNtkNew, pNtk );
     // duplicate the EXDC Ntk
     if ( pNtk->pExdc )
         pNtkNew->pExdc = Abc_NtkDup( pNtk->pExdc );
@@ -601,6 +616,7 @@ Abc_Ntk_t * Abc_NtkDupDfsNoBarBufs( Abc_Ntk_t * pNtk )
             Abc_ObjForEachFanin( pObj, pFanin, k )
                 if ( pObj->pCopy && pFanin->pCopy )
                     Abc_ObjAddFanin( pObj->pCopy, pFanin->pCopy );
+    Abc_NtkDupOrigNodeIds( pNtkNew, pNtk );
     // duplicate the EXDC Ntk
     if ( pNtk->pExdc )
         pNtkNew->pExdc = Abc_NtkDup( pNtk->pExdc );
@@ -2621,4 +2637,3 @@ Abc_Ntk_t * Abc_NtkCreateFromGias( char * pName, Vec_Ptr_t * vGias, Gia_Man_t * 
 
 
 ABC_NAMESPACE_IMPL_END
-
