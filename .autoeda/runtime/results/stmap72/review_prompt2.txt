@@ -1,0 +1,20 @@
+Second review pass for stmap72.
+
+Review the final uncommitted state after review pass 1 reported no discrete correctness issues.
+
+Confirm whether any source or evaluation issue remains in:
+- src/base/abci/abcStmap_72.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperMatch.c
+- .autoeda/runtime/results/stmap72/run_stmap72_eval.py
+
+The intended behavior remains:
+- stmap72 delegates mapping to Abc_CommandStmap65.
+- stmap72 enables path-proximity witness diagnostics only during the delegated command.
+- the diagnostic flag should not change mapping choices for stmap65 or prior stmap commands;
+- older stmap68/stmap69/stmap71 source labels should remain unchanged when their own commands run;
+- full evaluation and CEC artifacts for all four required benchmarks are present and parseable.
+
+Return concrete findings with file/line references when possible. If there are no issues, state that clearly.

@@ -1,0 +1,30 @@
+Review the uncommitted stmap72 implementation for correctness risks.
+
+Context:
+- Project pack requires numbered stmapN variants, command help, build integration, full benchmark evaluation, CEC, review, logging, commit, and push.
+- stmap72 should preserve the reviewed stmap65 mapping policy and add only a diagnostic path.
+- The hypothesis is to combine closed pressure-transfer blocker witnesses and rank matched downstream final stime path proximity before any mapper admission rule is reopened.
+
+Changed source areas:
+- src/base/abci/abcStmap_72.c adds command glue around Abc_CommandStmap65.
+- src/base/abci/abc.c registers stmap72.
+- src/base/abci/module.make and abclib.dsp include abcStmap_72.c.
+- src/map/mapper/mapperMatch.c adds a gated stmap72 path-proximity witness flag and allows existing witness recorders to emit stmap72-labeled source rows while the flag is active.
+- .autoeda/runtime/results/stmap72/run_stmap72_eval.py runs the required evaluation and writes path_proximity_ranking.csv and path_proximity_summary.csv.
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap72 -h" printed usage.
+- smoke flow on benchmarks/i10.aig passed with parseable stime.
+- full baseline/candidate evaluation passed for all four required benchmarks.
+- CEC passed for all four required benchmarks.
+- artifact check passed.
+
+Please focus on:
+- whether stmap72 can affect any non-stmap72 command or change inherited stmap65 mapping behavior;
+- whether the diagnostic flag is always reset on success/failure paths;
+- whether source-label changes can break older stmap68/stmap69/stmap71 diagnostics;
+- whether command registration/build integration is complete;
+- whether the evaluation parser correctly captures stmap72 witness rows and path-proximity ranking.
+
+Return concrete findings with file/line references when possible.

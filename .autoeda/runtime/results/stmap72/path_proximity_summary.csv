@@ -1,0 +1,5 @@
+benchmark,witnesses,matched,criticality_ge_0p25,criticality_ge_0p35,criticality_ge_0p50,best_final_criticality,best_final_slack,best_source_classes
+benchmarks/i10.aig,0,0,0,0,0,,,
+benchmarks/ode.abc.blif,0,0,0,0,0,,,
+benchmarks/or1200.abc.blif,0,0,0,0,0,,,
+benchmarks/syn2.abc.blif,2,2,2,0,0,0.285,61.763306,blocked-strong-pressure
