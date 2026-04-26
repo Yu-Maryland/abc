@@ -1,0 +1,1 @@
+benchmark,index,node,aig_id,level,refs,leaves,phase,accepted,stored,duplicate,slack,area_save,arrival_delta,arrival_gain_margin,area_margin,node_sink_pressure_ratio,cut_sink_pressure_ratio,scl_feedback

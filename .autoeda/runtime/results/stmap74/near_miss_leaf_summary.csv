@@ -1,0 +1,2 @@
+benchmark,index,near_miss_index,tracked_node,node_aig_id,phase,leaves,max_leaf_node,max_leaf_aig_id,max_leaf_pressure_ratio,node_sink_pressure_ratio,cut_sink_pressure_ratio,slack,area_save,arrival_delta,arrival_gain_margin,area_margin,scl_feedback
+benchmarks/syn2.abc.blif,2,14,23628,27645,0,4,23617,27058,2.100,0.000,2.100,6.719986,0.930000,-12.100006,1.510000,1.400000,0.884

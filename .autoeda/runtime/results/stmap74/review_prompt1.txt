@@ -1,0 +1,18 @@
+Review the uncommitted stmap74 AutoEDA iteration.
+
+Context:
+- Project pack requires numbered stmap variants, preserving older commands.
+- stmap74 should keep reviewed stmap65 mapping behavior unchanged.
+- The only intended source behavior is diagnostic: after stmap74 maps, the downstream stime hook prints final-critical lineage rows for top timing-critical final nodes, including final node, mapper-origin AIG id/phase when available, final gate, criticality, slack, arrival/departure/slew, load, max cap, and load ratio.
+- Changed source/build files include src/base/abci/abcStmap_74.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, and src/base/abci/abcStmap_64.c.
+- Runtime artifacts under .autoeda/runtime/results/stmap74 include build/help/smoke/full evaluation/CEC outputs and parser CSVs.
+
+Please focus on correctness risks:
+- command registration or build integration mistakes
+- accidental changes to older stmap commands or map behavior
+- lifetime/scope issues around the final-critical diagnostic and vOrigNodeIds tracking through downstream network duplication
+- invalid assumptions in SC_Man timing/load/slack access
+- missing reset paths or stale diagnostic state
+- parser/artifact issues that would make the iteration invalid under the project pack
+
+Return only actionable findings, with file and line references where possible. If there are no findings, say so explicitly.

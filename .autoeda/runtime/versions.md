@@ -4191,3 +4191,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap73: trace accepted pressure witnesses`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap74`, keep pressure-class reopening closed on the current evidence because both closed classes and the accepted pressure-agreement witness remain below final criticality `0.35`. The next useful hypothesis should inspect first-pass SCL critical cones or final `stime` critical-path lineage directly, then connect those final-critical nodes back to mapper choices before proposing another policy change.
+
+
+## version74 / stmap74
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace final downstream `stime` critical-lineage nodes back to mapper-origin AIG literals. If the final critical nodes identify recurring mapper-origin choices, they are a stronger target for `stmap75` than the low-criticality pressure-class witnesses observed in `stmap67` through `stmap73`.
+- motivation: `stmap73` found one accepted `syn2` pressure-agreement witness, but it survived downstream with final criticality only `0.246`. The next useful evidence is not another pressure-class reopening; it is a direct final-critical path inventory that connects post-buffer/post-size timing-critical nodes to original mapper AIG IDs and phases.
+- command name: `stmap74`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_64.c`
+  - `src/base/abci/abcStmap_74.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap74/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap74` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It delegates mapping to the reviewed `stmap65` path, so final remap still uses mapper mode `57`, bounded SCL pressure transfer, selected-gain policy, the `1.25` strong-node load-drop guard, and the inherited `1.35x` inverter area-save cap. The new source behavior is command-scoped: after a successful `stmap74` map, `Abc_Stmap74EnableFinalCriticalScope()` marks the mapped network for the downstream `stime` call. `Abc_Stmap64PrintFinalWitness()` now first checks this independent scope and prints the top 12 final-critical mapped nodes with final node ID, mapper-origin AIG ID/phase when available, final gate, fanout count, final criticality/slack/arrival/departure/slew, load, max cap, and load ratio. The scope follows `vOrigNodeIds` through `Abc_NtkDupOrigNodeIds()` and clears after printing or on mismatch. No mapper scoring, acceptance gate, area recovery, reconstruction rule, or older `stmap` command behavior is intentionally changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap74/build.log`.
+  - help: `./abc -c "stmap74 -h"` printed `stmap74` usage. Log: `.autoeda/runtime/results/stmap74/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap74; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and printed the final-critical lineage table. Log: `.autoeda/runtime/results/stmap74/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap74/summary.json`, `metrics.csv`, `comparison.csv`, `final_critical_stats.csv`, `final_critical_lineage.csv`, `final_critical_summary.csv`, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- final-critical lineage diagnostic results:
+  - `i10`: `1583` final nodes; `456` nodes at final criticality `>= 0.50`, `239` at `>= 0.75`, and `118` with slack `<= 5 ps`. The top lineage row is final node `732`, AIG `855`, phase `0`, gate `NAND5xp2_ASAP7_75t_L`, final criticality `1.000`, slack `0.000000`, and load ratio `0.313`. One top-12 critical row is an inserted buffer with no mapper-origin AIG ID (`-1`), which suggests downstream buffer-tree context should be kept in the next diagnostic.
+  - `ode`: `12482` final nodes; `5301` nodes at final criticality `>= 0.50`, `4404` at `>= 0.75`, and `1055` with slack `<= 5 ps`. The top lineage row is final node `5087`, AIG `5219`, phase `1`, gate `O2A1O1Ixp33_ASAP7_75t_L`, final criticality `1.000`, slack `0.000000`, and load ratio `0.338`.
+  - `or1200`: `8624` final nodes; `549` nodes at final criticality `>= 0.50`, `334` at `>= 0.75`, and `266` with slack `<= 5 ps`. The top lineage row is final node `7025`, AIG `11491`, phase `0`, gate `A2O1A1Ixp33_ASAP7_75t_L`, final criticality `1.000`, slack `0.000000`, and load ratio `0.187`.
+  - `syn2`: `23350` final nodes; `12814` nodes at final criticality `>= 0.50`, `10110` at `>= 0.75`, and `1771` with slack `<= 5 ps`. The top lineage row is final node `11965`, AIG `18002`, phase `1`, gate `NOR2xp33_ASAP7_75t_L`, final criticality `1.000`, slack `0.000000`, and load ratio `0.234`.
+  - All four required benchmarks produced 12 parseable final-critical lineage rows. The top critical nodes are concentrated on direct mapped logic AIG IDs rather than the previously observed pressure-class witness IDs, so the next algorithmic step should correlate final-critical AIG IDs with the mapper match decision that created them.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_74.c`.
+  - numbered command exists and is registered as `stmap74`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - final-critical stats, final-critical lineage, final-critical summary, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap74/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap74/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap74/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap74/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap74/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap74/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap74/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap74/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap74/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues in the staged, unstaged, or untracked changes.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap74: trace final critical lineage`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap75`, instrument the mapper-side selected match records for the final-critical AIG IDs reported by `stmap74`, including top `i10` AIG `855`, `ode` AIG `5219`, `or1200` AIG `11491`, and `syn2` AIG `18002`. The goal should be to correlate final-critical lineage rows with cut leaves, selected supergate, arrival/slack, and pressure-feedback context before changing any admission rule. Also preserve downstream buffer-origin rows because `i10` exposed a top critical buffer with no direct mapper AIG ID.

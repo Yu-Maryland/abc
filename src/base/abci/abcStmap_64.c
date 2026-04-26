@@ -594,6 +594,18 @@ static int s_fStmap64FinalWitnessScope = 0;
 static Abc_Ntk_t * s_pStmap64FinalWitnessNtk = NULL;
 static Vec_Int_t * s_pStmap64FinalWitnessOrigIds = NULL;
 static const char * s_pStmap64FinalWitnessLabel = "stmap64";
+static int s_fStmap74FinalCriticalScope = 0;
+static Abc_Ntk_t * s_pStmap74FinalCriticalNtk = NULL;
+static Vec_Int_t * s_pStmap74FinalCriticalOrigIds = NULL;
+static const char * s_pStmap74FinalCriticalLabel = "stmap74";
+
+static void Abc_Stmap74ClearFinalCriticalScope( void )
+{
+    s_fStmap74FinalCriticalScope = 0;
+    s_pStmap74FinalCriticalNtk = NULL;
+    s_pStmap74FinalCriticalOrigIds = NULL;
+    s_pStmap74FinalCriticalLabel = "stmap74";
+}
 
 void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOldOrigNodeIds, Abc_Ntk_t * pNewNtk, Vec_Int_t * pNewOrigNodeIds )
 {
@@ -603,6 +615,13 @@ void Abc_Stmap64UpdateFinalWitnessOrigIds( Abc_Ntk_t * pOldNtk, Vec_Int_t * pOld
     {
         s_pStmap64FinalWitnessNtk = pNewNtk;
         s_pStmap64FinalWitnessOrigIds = pNewOrigNodeIds;
+    }
+    if ( s_fStmap74FinalCriticalScope &&
+         s_pStmap74FinalCriticalNtk == pOldNtk &&
+         s_pStmap74FinalCriticalOrigIds == pOldOrigNodeIds )
+    {
+        s_pStmap74FinalCriticalNtk = pNewNtk;
+        s_pStmap74FinalCriticalOrigIds = pNewOrigNodeIds;
     }
 }
 
@@ -632,6 +651,122 @@ void Abc_Stmap64EnableFinalWitnessScope( Abc_Ntk_t * pNtk, const char * pLabel )
         s_pStmap64FinalWitnessLabel = "stmap64";
 }
 
+void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel )
+{
+    s_fStmap74FinalCriticalScope = pNtk != NULL && pNtk->vOrigNodeIds != NULL;
+    s_pStmap74FinalCriticalNtk = s_fStmap74FinalCriticalScope ? pNtk : NULL;
+    s_pStmap74FinalCriticalOrigIds = s_fStmap74FinalCriticalScope ? pNtk->vOrigNodeIds : NULL;
+    s_pStmap74FinalCriticalLabel = pLabel && pLabel[0] ? pLabel : "stmap74";
+    if ( !s_fStmap74FinalCriticalScope )
+        s_pStmap74FinalCriticalLabel = "stmap74";
+}
+
+static void Abc_Stmap74PrintFinalCriticalLineage( SC_Man * pTime )
+{
+    enum { ABC_STMAP74_TOP = 12 };
+    Abc_Ntk_t * pNtk;
+    Abc_Obj_t * pObj;
+    Mio_Gate_t * pGate;
+    float TopCriticality[ABC_STMAP74_TOP], TopSlack[ABC_STMAP74_TOP], TopLoad[ABC_STMAP74_TOP];
+    float TopMaxCap[ABC_STMAP74_TOP], TopLoadRatio[ABC_STMAP74_TOP], TopArrival[ABC_STMAP74_TOP];
+    float TopDeparture[ABC_STMAP74_TOP], TopSlew[ABC_STMAP74_TOP];
+    int TopObjs[ABC_STMAP74_TOP], TopAigIds[ABC_STMAP74_TOP], TopPhases[ABC_STMAP74_TOP];
+    int i, k, nNodes = 0, nGe050 = 0, nGe075 = 0, nSlack5 = 0;
+    int ObjId, Lit, AigId, Phase, Fanouts, Slot;
+    float Slack, Criticality, Load, MaxCap, LoadRatio, Arrival, Departure, Slew;
+
+    if ( !s_fStmap74FinalCriticalScope )
+        return;
+    if ( pTime == NULL || pTime->pNtk == NULL ||
+         pTime->pNtk != s_pStmap74FinalCriticalNtk ||
+         pTime->pNtk->vOrigNodeIds == NULL ||
+         pTime->pNtk->vOrigNodeIds != s_pStmap74FinalCriticalOrigIds )
+    {
+        Abc_Stmap74ClearFinalCriticalScope();
+        return;
+    }
+    pNtk = pTime->pNtk;
+    for ( i = 0; i < ABC_STMAP74_TOP; i++ )
+    {
+        TopObjs[i] = -1;
+        TopAigIds[i] = -1;
+        TopPhases[i] = -1;
+        TopCriticality[i] = TopLoadRatio[i] = TopLoad[i] = TopMaxCap[i] = 0.0;
+        TopSlack[i] = TopArrival[i] = TopDeparture[i] = TopSlew[i] = 0.0;
+    }
+    Abc_NtkForEachNode( pNtk, pObj, i )
+    {
+        nNodes++;
+        Criticality = Abc_Stmap64FinalCriticality( pTime, pObj, &Slack );
+        if ( Criticality >= 0.50 )
+            nGe050++;
+        if ( Criticality >= 0.75 )
+            nGe075++;
+        if ( Slack <= 5.0 )
+            nSlack5++;
+        LoadRatio = Abc_Stmap64FinalLoadRatio( pTime, pObj, &Load, &MaxCap );
+        Arrival = Abc_SclObjTimeMax( pTime, pObj );
+        Departure = Abc_MaxFloat( Abc_SclObjDept( pTime, pObj )->rise, Abc_SclObjDept( pTime, pObj )->fall );
+        Slew = (float)Abc_SclObjSlewMax( pTime, pObj );
+        Slot = -1;
+        for ( k = 0; k < ABC_STMAP74_TOP; k++ )
+        {
+            if ( TopObjs[k] < 0 || Criticality > TopCriticality[k] ||
+                 (Criticality == TopCriticality[k] && Slack < TopSlack[k]) ||
+                 (Criticality == TopCriticality[k] && Slack == TopSlack[k] && LoadRatio > TopLoadRatio[k]) )
+            {
+                Slot = k;
+                break;
+            }
+        }
+        if ( Slot < 0 )
+            continue;
+        for ( k = ABC_STMAP74_TOP - 1; k > Slot; k-- )
+        {
+            TopObjs[k] = TopObjs[k-1];
+            TopAigIds[k] = TopAigIds[k-1];
+            TopPhases[k] = TopPhases[k-1];
+            TopCriticality[k] = TopCriticality[k-1];
+            TopSlack[k] = TopSlack[k-1];
+            TopLoad[k] = TopLoad[k-1];
+            TopMaxCap[k] = TopMaxCap[k-1];
+            TopLoadRatio[k] = TopLoadRatio[k-1];
+            TopArrival[k] = TopArrival[k-1];
+            TopDeparture[k] = TopDeparture[k-1];
+            TopSlew[k] = TopSlew[k-1];
+        }
+        ObjId = Abc_ObjId(pObj);
+        Lit = ObjId < Vec_IntSize(pNtk->vOrigNodeIds) ? Vec_IntEntry( pNtk->vOrigNodeIds, ObjId ) : -1;
+        AigId = Lit >= 0 ? Abc_Lit2Var(Lit) : -1;
+        Phase = Lit >= 0 ? Abc_LitIsCompl(Lit) : -1;
+        TopObjs[Slot] = ObjId;
+        TopAigIds[Slot] = AigId;
+        TopPhases[Slot] = Phase;
+        TopCriticality[Slot] = Criticality;
+        TopSlack[Slot] = Slack;
+        TopLoad[Slot] = Load;
+        TopMaxCap[Slot] = MaxCap;
+        TopLoadRatio[Slot] = LoadRatio;
+        TopArrival[Slot] = Arrival;
+        TopDeparture[Slot] = Departure;
+        TopSlew[Slot] = Slew;
+    }
+    printf( "%s final-critical stats: nodes = %d  final-delay = %.3f  criticality-ge-0p50 = %d  criticality-ge-0p75 = %d  slack-le-5ps = %d\n",
+        s_pStmap74FinalCriticalLabel, nNodes, pTime->MaxDelay, nGe050, nGe075, nSlack5 );
+    for ( i = 0; i < ABC_STMAP74_TOP && TopObjs[i] >= 0; i++ )
+    {
+        pObj = Abc_NtkObj( pNtk, TopObjs[i] );
+        pGate = pObj ? (Mio_Gate_t *)pObj->pData : NULL;
+        Fanouts = pObj ? Abc_ObjFanoutNum(pObj) : 0;
+        printf( "%s final-critical lineage: rank = %d  final-node = %d  aig-id = %d  phase = %d  final-gate = %s  final-fanouts = %d  final-criticality = %.3f  final-slack = %.6f  final-arrival = %.6f  final-departure = %.6f  final-slew = %.6f  final-load = %.3f  final-max-cap = %.3f  final-load-ratio = %.3f\n",
+            s_pStmap74FinalCriticalLabel, i + 1, TopObjs[i], TopAigIds[i], TopPhases[i],
+            pGate ? Mio_GateReadName(pGate) : "?", Fanouts, TopCriticality[i], TopSlack[i],
+            TopArrival[i], TopDeparture[i], TopSlew[i], TopLoad[i], TopMaxCap[i],
+            TopLoadRatio[i] );
+    }
+    Abc_Stmap74ClearFinalCriticalScope();
+}
+
 void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
 {
     Abc_Ntk_t * pNtk;
@@ -646,6 +781,7 @@ void Abc_Stmap64PrintFinalWitness( SC_Man * pTime )
     extern int Map_Stmap64CutOnlyWitnessCount( void );
     extern int Map_Stmap64ReadCutOnlyWitness( int i, int * pAigId, int * pPhase, int * pNode, float * pNodePressureRatio, float * pCutPressureRatio, float * pSlack, float * pAreaSave, float * pArrivalDelta, float * pArrivalGainMargin, float * pFeedback );
 
+    Abc_Stmap74PrintFinalCriticalLineage( pTime );
     nWitnesses = Map_Stmap64CutOnlyWitnessCount();
     if ( nWitnesses <= 0 )
     {

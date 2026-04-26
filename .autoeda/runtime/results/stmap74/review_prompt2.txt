@@ -1,0 +1,9 @@
+Second review pass for the uncommitted stmap74 iteration after pass 1 reported no correctness issues.
+
+Please independently review the same stmap74 changes with emphasis on:
+- any remaining shared-infrastructure risk in src/base/abci/abcStmap_64.c
+- whether Abc_Stmap74PrintFinalCriticalLineage can dereference invalid SC_Man, Abc_Obj_t, pData, vOrigNodeIds, timing arrays, or gate data after downstream topo/buffer/upsize/dnsize
+- whether the scope tracking through Abc_Stmap64UpdateFinalWitnessOrigIds can leak, print for non-stmap74 commands, or fail to clear on mismatch
+- whether the parser/runtime artifacts are sufficient and robust enough for the project-pack evaluation contract
+
+Return only actionable findings with file/line references where possible. If there are no findings, say so explicitly.
