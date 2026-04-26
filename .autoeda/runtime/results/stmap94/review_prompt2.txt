@@ -1,0 +1,5 @@
+Review the fixed uncommitted stmap94 iteration after pass-1 feedback.
+
+Accepted pass-1 finding: stmap94 moved the emitted-drive target after the sticky blocker but did not configure the sticky parent-phase policy. The fix adds Map_Stmap82SetStickyParentPhase(), sets the strict timing window, prints sticky diagnostics, clears the sticky policy after the run, and reran build/help/smoke/path-normalization/stale-state/full benchmark metrics/CEC.
+
+Please check for remaining correctness bugs, stale global state, build/registration issues, or missing validation. Focus on actionable findings only.

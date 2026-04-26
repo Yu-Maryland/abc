@@ -1,0 +1,5 @@
+benchmark,watched_aigs,rows,watch0_aig_id,watch0_rows,watch1_aig_id,watch1_rows,watch2_aig_id,watch2_rows,watch3_aig_id,watch3_rows
+benchmarks/i10.aig,2,32,855,16,861,16,-1,0,-1,0
+benchmarks/ode.abc.blif,2,32,5219,16,5229,16,-1,0,-1,0
+benchmarks/or1200.abc.blif,2,24,11491,12,13829,12,-1,0,-1,0
+benchmarks/syn2.abc.blif,2,30,18002,14,18467,16,-1,0,-1,0

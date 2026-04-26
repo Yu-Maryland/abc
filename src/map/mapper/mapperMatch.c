@@ -1724,6 +1724,7 @@ void Map_Stmap92PrintEmittedDriveTargetSummary( void )
 
 static int s_fStmap93EmittedDriveTarget = 0;
 static int s_fStmap93EmittedDriveTargetActive = 0;
+static int s_fStmap93EmittedDriveTargetPostSticky = 0;
 static const char * s_pStmap93EmittedDriveTargetLabel = "stmap93";
 static int s_Stmap93AigId = -1;
 static int s_Stmap93Phase = 0;
@@ -1762,6 +1763,7 @@ static void Map_Stmap93ClearEmittedDriveTarget( void )
 {
     s_fStmap93EmittedDriveTarget = 0;
     s_fStmap93EmittedDriveTargetActive = 0;
+    s_fStmap93EmittedDriveTargetPostSticky = 0;
     s_pStmap93EmittedDriveTargetLabel = "stmap93";
     s_Stmap93AigId = -1;
     s_Stmap93Phase = 0;
@@ -1792,6 +1794,16 @@ void Map_Stmap93SetEmittedDriveTargetActive( int fActive, const char * pPassLabe
         Map_Stmap93ResetEmittedDriveTargetCounters();
     s_fStmap93EmittedDriveTargetActive = fActive;
     (void)pPassLabel;
+}
+
+void Map_Stmap93SetEmittedDriveTargetPostSticky( int fEnable )
+{
+    s_fStmap93EmittedDriveTargetPostSticky = fEnable;
+}
+
+static int Map_Stmap93EmittedDriveTargetPostSticky( void )
+{
+    return s_fStmap93EmittedDriveTargetPostSticky;
 }
 
 static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, Map_Cut_t * pBestCutBefore, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
@@ -6988,8 +7000,11 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         fAccepted = Map_Stmap90MaybeTargetConsumerDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap91MaybeTargetConsumerDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap92MaybeTargetEmittedDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
-        fAccepted = Map_Stmap93MaybeTargetEmittedDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
+        if ( !Map_Stmap93EmittedDriveTargetPostSticky() )
+            fAccepted = Map_Stmap93MaybeTargetEmittedDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap82MaybeBlockStickyReplacement( p, pNode, pCut, fPhase, CutOrdinal, pMatch, fAccepted, fStmap82Sticky, &Stmap82StickyMatch, pStmap82StickyCut, Stmap82StickyCutOrdinal );
+        if ( Map_Stmap93EmittedDriveTargetPostSticky() )
+            fAccepted = Map_Stmap93MaybeTargetEmittedDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
         if ( fAccepted )
         {
