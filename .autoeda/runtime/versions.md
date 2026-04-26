@@ -1913,3 +1913,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap35: add SCL load diagnostics`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap35` shows that several mapped nodes substantially exceed Liberty output-cap limits even when final downstream `stime` remains improved against `map`. For `stmap36`, feed the direct SCL load/max-cap ratio back into mapper gate or area decisions, preferably constrained to timing-sensitive paths so raw high fanout does not block seeds that downstream buffering repairs.
+
+## version36 / stmap36
+
+- hypothesis: A two-pass mapper can use direct SCL mapped-load/max-cap pressure from the first mapped network as a bounded feedback scalar for the final mapper pass, blocking only high-reference strong seeds when measured downstream load pressure is severe.
+- motivation: `stmap35` showed large Liberty output-cap violations on the larger designs, but that diagnostic was observational. `stmap36` tests whether feeding the aggregate over-cap severity back into the existing bounded load/drive strong-seed area margin can convert the SCL signal into a mapper decision without perturbing low-pressure designs.
+- command name: `stmap36`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_36.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap36/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap36` keeps the classic SCL-genlib gain default of `250`. The command first maps with the prior `stmap35` bounded load/drive surface, measures direct SCL fanout input-pin load divided by the driving cell's Liberty `max_out_cap`, and computes a severity from max load ratio and over-max fraction. It then remaps with mapper mode `37`, which preserves the `stmap35` moderate penalty and bounded strong-seed load/drive curve, then adds `0.03 * severity * (load_drive_ratio - 1) / load_drive_ratio` to the strong-seed penalty when the first pass showed SCL over-cap pressure. The feedback scalar is reset after the final map. Existing `map` and `stmap0` through `stmap35` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap36/build.log`.
+  - help: `./abc -c "stmap36 -h"` printed usage text with default `-G 250.00` and the SCL load feedback mapper mode enabled. Log: `.autoeda/runtime/results/stmap36/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap36; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, and inactive feedback severity `0.000` because `i10` max load ratio was only `1.544`. Log: `.autoeda/runtime/results/stmap36/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap36/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `scl_load_stats.csv`, `feedback_load_stats.csv`, `feedback_stats.csv`, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); feedback active `0`, severity `0.000`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); feedback active `1`, severity `0.627`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); feedback active `1`, severity `0.733`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); feedback active `1`, severity `0.884`; penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `0`, strong blocked `2`.
+- SCL feedback diagnostics:
+  - `benchmarks/i10.aig`: final mapped nodes `1540`, matched `1540`, over-max nodes `3`, average load ratio `0.068`, max load ratio `1.544`; feedback inactive.
+  - `benchmarks/ode.abc.blif`: final mapped nodes `11544`, matched `11478`, over-max nodes `71`, average load ratio `0.074`, max load ratio `8.715`; feedback severity `0.627`.
+  - `benchmarks/or1200.abc.blif`: final mapped nodes `8077`, matched `8063`, over-max nodes `41`, average load ratio `0.067`, max load ratio `10.805`; feedback severity `0.733`.
+  - `benchmarks/syn2.abc.blif`: final mapped nodes `20805`, matched `20740`, over-max nodes `133`, average load ratio `0.083`, max load ratio `11.716`; feedback severity `0.884`.
+  - `benchmarks/syn2.abc.blif`: the direct feedback blocks the refs-5 strong seed at node `2318` twice. The first candidate has load/drive ratio `6.750`, penalty factor `0.339`, and area margin `0.937413` above the `0.930000` area saving; the second has load/drive ratio `5.500`, penalty factor `0.338`, and area margin `0.936316`.
+  - Final required-benchmark QoR matches `stmap35`, while the strong-seed decision moves from admitted to blocked on `syn2`, making this version a live SCL feedback discriminator rather than a final-timing improvement.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_36.c`.
+  - numbered command exists and is registered as `stmap36`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, SCL-load-stat, feedback-stat, moderate-penalty-block, and strong-penalty-block diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap36/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap36/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap36/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap36/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap36/review_pass1_supported.log`.
+  - accepted findings: none; the reviewer reported no actionable source-level correctness issue in the command wiring, mapper mode ranges, or diagnostics.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap36/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap36/review_pass2_supported.log`.
+  - accepted findings: none; the reviewer reported no actionable source-level correctness issue in the final source changes.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none; only runtime review summary, canonical logging, and campaign-state finalization were added after review.
+- commit: local commit created with message `stmap36: feed SCL load feedback into mapper`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap36` proves the direct SCL load diagnostic can alter mapper decisions in the intended direction, but the blocked `syn2` strong seed still leaves final downstream QoR unchanged. For `stmap37`, make the feedback more local by associating first-pass over-cap hotspots with mapper node IDs or fanout cones, so the penalty can target SCL-proven load offenders instead of applying an aggregate scalar across all strong seeds.

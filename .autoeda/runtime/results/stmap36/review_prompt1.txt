@@ -1,0 +1,3 @@
+Review the uncommitted stmap36 AutoEDA iteration in this ABC repository.
+
+Project context: stmap36 adds a two-pass SCL load feedback standard-cell mapper command. The first pass maps with the prior bounded load surface, measures direct SCL load/max-cap pressure, and the final pass maps with mode 37 using a feedback scalar. Please focus on correctness, command registration/help, preservation of map and prior stmap commands, memory/lifetime safety in abcStmap_36.c, mapper mode isolation in mapperMatch.c/mapperCore.c/mapperInt.h, and whether required runtime artifacts appear consistent. Report actionable bugs or missing validation only; if no issues, say so clearly.

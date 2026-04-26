@@ -1,0 +1,7 @@
+missing: []
+metrics_ok: True
+cec_ok: True
+metric_rows: 8
+comparison_rows: 4
+cec_rows: 4
+artifact_check: pass

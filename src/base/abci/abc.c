@@ -333,6 +333,7 @@ extern int Abc_CommandStmap32                ( Abc_Frame_t * pAbc, int argc, cha
 extern int Abc_CommandStmap33                ( Abc_Frame_t * pAbc, int argc, char ** argv );
 extern int Abc_CommandStmap34                ( Abc_Frame_t * pAbc, int argc, char ** argv );
 extern int Abc_CommandStmap35                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+extern int Abc_CommandStmap36                ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
 static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
@@ -1215,6 +1216,7 @@ void Abc_Init( Abc_Frame_t * pAbc )
     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap33",       Abc_CommandStmap33,          1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap34",       Abc_CommandStmap34,          1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap35",       Abc_CommandStmap35,          1 );
+    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap36",       Abc_CommandStmap36,          1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
     Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );
