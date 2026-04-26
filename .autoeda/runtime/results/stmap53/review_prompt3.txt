@@ -1,0 +1,20 @@
+Review the current uncommitted stmap53 changes after two accepted fixes.
+
+Context:
+- This is AutoEDA iteration stmap53 in the stmap family.
+- The new command is stmap53 and the candidate flow is:
+  read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; stmap53; topo; buffer; upsize -v; dnsize -v; stime
+- The intended hypothesis is a bounded severe-pressure pressure-near exception over stmap52, while preserving older stmap variants and map behavior.
+
+Accepted findings already fixed and revalidated:
+- Pass 1: stmap53 treated one missing pressure side as pressure-near. Fixed by requiring both node and cut pressure ratios to be present, bounded, and close.
+- Pass 2: stmap53 gated the exception on pressure-vector capacity rather than measured sink-pressure population. Fixed by passing measured sink-pressure entry count through a new extended feedback setter and gating the exception on feedback >= 0.85 and sink-pressure entries >= 8000.
+
+Current validation after the second fix:
+- make ABC_USE_NO_READLINE=1 passed.
+- stmap53 -h passed.
+- i10 smoke flow passed.
+- Full four-benchmark metric evaluation passed.
+- CEC passed for i10, ode, or1200, and syn2.
+
+Please review only the current uncommitted changes for correctness risks, regressions to older stmap variants or map, missing build integration, missing diagnostics, or logging/evaluation issues that would invalidate this iteration.

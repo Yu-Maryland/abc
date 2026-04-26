@@ -1,0 +1,17 @@
+all required artifacts are present
+build.exit: 0
+help.exit: 0
+smoke_i10.exit: 0
+evaluation.exit: 0
+review_pass1.exit: 0
+review_pass2.exit: 0
+review_pass3.exit: 0
+version_log_check.exit: 0
+review_pass1_positional.exit: 2 (expected local CLI rejection for positional prompt with --uncommitted)
+review_pass2_positional.exit: 2 (expected local CLI rejection for positional prompt with --uncommitted)
+review_pass3_positional.exit: 2 (expected local CLI rejection for positional prompt with --uncommitted)
+metrics rows: 8
+comparison rows: 4
+cec passed: benchmarks/i10.aig=True, benchmarks/ode.abc.blif=True, benchmarks/or1200.abc.blif=True, benchmarks/syn2.abc.blif=True
+summary command: stmap53
+artifact check: PASS

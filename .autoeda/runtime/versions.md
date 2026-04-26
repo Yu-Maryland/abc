@@ -2908,3 +2908,68 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap52: cap pressure-area guard at severe gain`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap52` proves that simply capping the existing moderate pressure penalty path is too conservative on the required severe-pressure case: `syn2` still has eight moderate and two strong pressure blocks with no accepted pressure seeds, and QoR is identical to `stmap49`. For `stmap53`, keep the `225.00` severe-pressure gain, but open a deliberately bounded candidate class that can actually admit area-saving choices under pressure, such as a small arrival-neutral exception for the eight blocked moderate cases or a diagnostic-guided rule keyed to the `syn2` local pressure ratios.
+
+
+## version53 / stmap53
+
+- hypothesis: Keep the `stmap52` severe-pressure selected gain of `225.00`, but open a narrowly bounded pressure-near moderate exception in a new mapper mode `54`. The exception should admit area-saving, arrival-improving moderate candidates only when the first-pass feedback is in the same dense severe-pressure branch and both node and cut sink-pressure ratios are present, bounded, and close.
+- motivation: `stmap52` preserved the good `225.00` severe-pressure timing point but its local area-cap path admitted no additional required-benchmark choices. Its next-step recommendation was to keep the severe gain and open a deliberately bounded class that can actually test the blocked moderate candidates without globally softening remap gain.
+- command name: `stmap53`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_53.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperInt.h`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap53/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap53` is a numbered two-pass `stmap` command. It clones the `stmap52` first-pass SCL load/max-cap collection and dense sink-pressure feedback, selects `0.90 * base_gain` (`225.00` by default) only when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, and performs the final remap with mapper mode `54`. Mode `54` extends the existing fanout-risk diagnostic range, reuses the `stmap52` pressure-agreement and local area-cap behavior, adds stmap53 counters, and adds a pressure-near exception for moderate candidates. After review fixes, the exception is gated on measured sink-pressure entry count rather than vector capacity, requires feedback severity `>= 0.85`, and requires both node and cut sink-pressure ratios to be between `1.25` and `2.75` with spread at most `2.25`. Existing `map` and `stmap0` through `stmap52` remain on their prior command paths and mode numbers; the original `Map_Stmap45SetSclLoadFeedback()` is preserved as a wrapper while stmap53 uses `Map_Stmap45SetSclLoadFeedbackWithEntries()` to carry the measured pressure population.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap53/build.log`.
+  - help: `./abc -c "stmap53 -h"` printed command usage with the pressure-near moderate exception mode. Log: `.autoeda/runtime/results/stmap53/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap53; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap53/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap53/summary.json`, `metrics.csv`, `comparison.csv`, `blended_gain_stats.csv`, `mapper_mode_stats.csv`, guard/near-miss/early-seed diagnostics, sink-pressure and feedback diagnostics, penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; feedback severity `0.000`; sink-pressure entries `262`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; feedback severity `0.627`; sink-pressure entries `4816`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; feedback severity `0.733`; sink-pressure entries `4362`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.50 ps`, area `22232.05`; delay delta `-29.32 ps` (`-5.76%`), area delta `+935.45` (`+4.39%`); selected gain `225.00`; feedback severity `0.884`; sink-pressure entries `8980`.
+- pressure-near and severe-pressure diagnostics:
+  - mapper mode `54` was used for all candidate benchmark runs; final blended gain was `225.00` only on `syn2`.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, entries `262`; `ode` severity `0.627`, entries `4816`; `or1200` severity `0.733`, entries `4362`; `syn2` severity `0.884`, entries `8980`.
+  - `benchmarks/syn2.abc.blif`: guard exact-risk `98110`, near-miss count `19`, moderate exception seeds `0`, moderate exception blocks `0`, moderate pressure blocks `2`, strong pressure blocks `2`, and no accepted moderate/strong pressure seeds.
+  - An initial one-sided pressure-near rule admitted one `syn2` exception seed and changed QoR to delay `479.14 ps` and area `22238.58`, but review correctly rejected that as unsafe because one pressure side could be missing. The final reviewed rule admits no pressure-near choices on the required set, so final QoR is intentionally identical to `stmap52`.
+  - The final hypothesis is neutral/falsified on required QoR: the safer bounded exception preserves the prior timing point but does not open a useful area-recovery class because the promising cases lack paired node/cut pressure evidence.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_53.c`.
+  - numbered command exists and is registered as `stmap53`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - blended-gain, mapper-mode, sink-pressure, feedback, guard, early-seed, near-miss, moderate-exception, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap53/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap53/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap53/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap53/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap53/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap53/review_pass1.log`.
+  - accepted source finding: `[P2] Reject zero-pressure sides in stmap53 exception`. The pressure-near exception now requires both pressure sides to be present and bounded. Revalidated with build, help, smoke, full metrics, and CEC.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap53/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap53/review_pass2.log`.
+  - accepted source finding: `[P2] Gate the exception on pressure entries`. The pressure-near exception now uses measured sink-pressure entries passed through `Map_Stmap45SetSclLoadFeedbackWithEntries()` and is gated on the same severe branch as the selected-gain decision. Revalidated with build, help, smoke, full metrics, and CEC.
+- review pass 3:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap53/review_pass3_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap53/review_pass3.log`.
+  - accepted source findings: none. Pass 3 reported no actionable correctness issues in the final uncommitted changes.
+- rejected findings: none.
+- open findings: none after pass 3 and revalidation.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap53: bound pressure-near severe recovery`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap53` shows the safe two-sided pressure-near rule is too strict for the promising `syn2` cases. For `stmap54`, keep the reviewed severe branch and either add reconstruction-consistent pressure transfer so both node and cut sides are populated for the one-sided candidates, or evaluate a separately guarded one-sided rule with explicit timing/load checks; do not treat a missing pressure side as agreement.

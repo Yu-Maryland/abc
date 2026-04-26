@@ -1,0 +1,10 @@
+Review the uncommitted stmap53 AutoEDA iteration as a strict code review. Focus on correctness risks, build integration, command registration/help behavior, preservation of existing stmap0-stmap52 behavior, mapper-mode gating, diagnostic/logging accuracy, evaluation artifact completeness, and any issue that could invalidate the iteration.
+
+Context:
+- Project pack requires one numbered stmap variant per iteration, full build/help/smoke/evaluation/CEC, review, version logging, and commit.
+- New command: stmap53.
+- Main hypothesis: keep stmap52/stmap49 severe-pressure selected gain behavior, but add mapper mode 54 with a bounded severe-feedback-only pressure-near moderate exception for one-inverter area-saving candidates that stmap52 logged as pressure-near misses.
+- Source changes include src/base/abci/abcStmap_53.c, command registration/build wiring, mapperCore.c, mapperInt.h, and mapperMatch.c.
+- Full evaluation already passed on all required benchmarks; CEC passed for all four. Please still verify whether the implementation is logically sound and whether any missing registration, mode-range, or diagnostic issue remains.
+
+Do not suggest broad refactors. Return findings ordered by severity with file/line references where possible. If no actionable findings, say so clearly.

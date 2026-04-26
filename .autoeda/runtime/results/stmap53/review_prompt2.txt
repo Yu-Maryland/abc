@@ -1,0 +1,14 @@
+Second review for the final stmap53 AutoEDA iteration after addressing review pass 1.
+
+Accepted pass-1 finding addressed:
+- P2: stmap53 pressure-near exception treated missing pressure on one side as valid. The code now requires PressureMin >= 1.25 and applies the pressure-spread check unconditionally, so both node and cut pressure must be present and close enough.
+
+Revalidation after the fix:
+- make ABC_USE_NO_READLINE=1 passed.
+- stmap53 -h passed.
+- smoke_i10 passed.
+- full required benchmark evaluation passed on i10, ode, or1200, and syn2.
+- CEC passed for all four required benchmarks.
+- Final diagnostics show no moderate exception seeds on the required set after the stricter pressure-near rule; QoR matches stmap52 while preserving the safer bounded rule.
+
+Please review the uncommitted final changes for any remaining correctness, registration, mode-range, old-command preservation, or artifact/logging issues that could invalidate the iteration. Return only actionable findings, ordered by severity with file/line references where possible; if none, say no actionable findings remain.

@@ -140,7 +140,7 @@ static int Map_MatchCutHasStmapUpperModerateFanoutRisk( Map_Node_t * pNode, Map_
 ***********************************************************************/
 static void Map_MatchStmap13CountRisk( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut )
 {
-    if ( p->fSkipFanout < 14 || p->fSkipFanout > 53 )
+    if ( p->fSkipFanout < 14 || p->fSkipFanout > 54 )
         return;
     p->nStmap13ExactRisk++;
     if ( Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) )
@@ -202,7 +202,7 @@ static int Map_MatchNodeHasStmapMiddleSlackRelief( int Mode, Map_Node_t * pNode 
         return Map_MatchNodeHasStmapReliefDepth( pNode );
     if ( Mode == 12 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
-    if ( Mode >= 13 && Mode <= 53 )
+    if ( Mode >= 13 && Mode <= 54 )
         return Map_MatchNodeHasStmapTightReliefDepth( pNode );
     return 0;
 }
@@ -1411,14 +1411,21 @@ static float s_Stmap45SclOverFrac = 0.0;
 static float s_Stmap45SclFeedback = 0.0;
 static float * s_pStmap45SclPressureRatios = NULL;
 static int s_nStmap45SclPressureRatios = 0;
+static int s_nStmap45SclPressureEntries = 0;
 
-void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
 {
     s_Stmap45SclMaxLoadRatio = MaxLoadRatio;
     s_Stmap45SclOverFrac = OverFrac;
     s_Stmap45SclFeedback = Severity;
     s_pStmap45SclPressureRatios = pAigPressureRatios;
     s_nStmap45SclPressureRatios = nAigPressureRatios;
+    s_nStmap45SclPressureEntries = nPressureEntries;
+}
+
+void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+{
+    Map_Stmap45SetSclLoadFeedbackWithEntries( MaxLoadRatio, OverFrac, Severity, pAigPressureRatios, nAigPressureRatios, 0 );
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -1529,6 +1536,43 @@ static float Map_MatchStmap52ModeratePenaltyFactor( Map_Node_t * pNode, Map_Cut_
         Penalty *= 0.65;
     }
     return Penalty;
+}
+
+static int Map_MatchStmap53HasPressureNearException( float NodePressureRatio, float CutPressureRatio, float ArrivalDelta, float ArrivalGainMargin, float Epsilon )
+{
+    float PressureMax, PressureMin, PressureSpread;
+    if ( s_Stmap45SclFeedback < 0.85 || s_nStmap45SclPressureEntries < 8000 )
+        return 0;
+    if ( Map_MatchStmap45HasPressureAgreement( NodePressureRatio, CutPressureRatio ) )
+        return 0;
+    if ( !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+        return 0;
+    PressureMax = NodePressureRatio > CutPressureRatio ? NodePressureRatio : CutPressureRatio;
+    PressureMin = NodePressureRatio < CutPressureRatio ? NodePressureRatio : CutPressureRatio;
+    if ( PressureMin < 1.25 || PressureMax > 2.75 )
+        return 0;
+    PressureSpread = PressureMax / PressureMin;
+    if ( PressureSpread > 2.25 )
+        return 0;
+    return 1;
+}
+
+static float Map_MatchStmap53ModeratePenaltyFactor( Map_Node_t * pNode, Map_Cut_t * pCut, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon, float * pNodePressureRatio, float * pCutPressureRatio, int * pNodeAigId, int * pAreaCap, int * pPressureNear )
+{
+    float Penalty;
+    if ( pPressureNear )
+        *pPressureNear = 0;
+    Penalty = Map_MatchStmap52ModeratePenaltyFactor( pNode, pCut, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon, pNodePressureRatio, pCutPressureRatio, pNodeAigId, pAreaCap );
+    if ( Penalty > 0.0 )
+        return Penalty;
+    if ( !Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+        return 0.0;
+    if ( Map_MatchStmap53HasPressureNearException( pNodePressureRatio ? *pNodePressureRatio : 0.0, pCutPressureRatio ? *pCutPressureRatio : 0.0, ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+    {
+        if ( pPressureNear )
+            *pPressureNear = 1;
+    }
+    return 0.0;
 }
 
 static float s_Stmap46SclMaxLoadRatio = 0.0;
@@ -1735,7 +1779,9 @@ static float Map_MatchStmap46StrongPenaltyFactor( Map_Node_t * pNode, Map_Cut_t 
   candidates but admits high-arrival-gain tight-class seeds through a narrow
   exception. Mode 53 is stmap52, which returns to the stmap45
   pressure-agreement rule but caps the moderate pressure penalty for
-  area-saving candidates that still have local pressure agreement.]
+  area-saving candidates that still have local pressure agreement. Mode 54 is
+  stmap53, which keeps the stmap52 shape and adds a severe-feedback-only
+  pressure-near moderate exception.]
 
   SideEffects []
 
@@ -1863,7 +1909,7 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
         }
         return 0;
     }
-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 53 )
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 54 )
     {
         if ( p->fMappingMode == 0 )
         {
@@ -1981,7 +2027,8 @@ static int Map_MatchSkipCutForFanout( Map_Man_t * p, Map_Node_t * pNode, Map_Cut
   candidates through a separate exception. Stmap52 returns to the stmap45
   pressure-agreement rule but caps pressure-agreed moderate penalties when the
   local pressure is below the severe band or the area candidate remains
-  arrival-neutral.]
+  arrival-neutral. Stmap53 keeps that path and adds a bounded pressure-near
+  exception for severe-feedback runs.]
 
   SideEffects []
 
@@ -2009,6 +2056,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     float Stmap45ModeratePenaltyFactor, Stmap45StrongPenaltyFactor, Stmap45PenaltyFactor, Stmap45CutLeafLoadAvg, Stmap45LoadDriveRatio, Stmap45NodePressureRatio, Stmap45CutPressureRatio;
     float Stmap46ModeratePenaltyFactor, Stmap46StrongPenaltyFactor, Stmap46PenaltyFactor, Stmap46CutLeafLoadAvg, Stmap46LoadDriveRatio, Stmap46NodePressureRatio, Stmap46CutPressureRatio;
     float Stmap52ModeratePenaltyFactor, Stmap52StrongPenaltyFactor, Stmap52PenaltyFactor, Stmap52CutLeafLoadAvg, Stmap52LoadDriveRatio, Stmap52NodePressureRatio, Stmap52CutPressureRatio;
+    float Stmap53ModeratePenaltyFactor, Stmap53StrongPenaltyFactor, Stmap53PenaltyFactor, Stmap53CutLeafLoadAvg, Stmap53LoadDriveRatio, Stmap53NodePressureRatio, Stmap53CutPressureRatio;
     const char * pReason;
     int fMiddleReliefWindow, fStmap13, fProfileOpen, fArrivalQuality, fStrictFallback;
     int fStmap25ModerateAblation, fStmap26ModerateAblationCandidate, fStmap26ModerateAblation;
@@ -2032,8 +2080,9 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     int fStmap45ModerateSoftSeed, fStmap45ModeratePenaltyCandidate, fStmap45ModeratePressureAgreement, fStmap45StrongPenaltyCandidate, Stmap45FanLimit, Stmap45NodeAigId;
     int fStmap46ModerateSoftSeed, fStmap46ModeratePenaltyCandidate, fStmap46ModeratePressureAgreement, fStmap46TightException, fStmap46StrongPenaltyCandidate, Stmap46FanLimit, Stmap46NodeAigId;
     int fStmap52ModerateSoftSeed, fStmap52ModeratePenaltyCandidate, fStmap52ModeratePressureAgreement, fStmap52ModerateAreaCap, fStmap52StrongPenaltyCandidate, Stmap52FanLimit, Stmap52NodeAigId;
+    int fStmap53ModerateSoftSeed, fStmap53ModeratePenaltyCandidate, fStmap53ModeratePressureAgreement, fStmap53ModerateAreaCap, fStmap53ModeratePressureNear, fStmap53StrongPenaltyCandidate, Stmap53FanLimit, Stmap53NodeAigId;
 
-    if ( p->fSkipFanout < 7 || p->fSkipFanout > 53 )
+    if ( p->fSkipFanout < 7 || p->fSkipFanout > 54 )
         return 0;
     if ( p->fMappingMode < 2 || p->fMappingMode > 3 )
         return 0;
@@ -2041,7 +2090,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
         return 0;
     if ( !Map_MatchCutHasStmapFanoutRisk( pNode, pCut ) )
         return 0;
-    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 53);
+    fStmap13 = (p->fSkipFanout >= 14 && p->fSkipFanout <= 54);
     Map_MatchStmap13CountRisk( p, pNode, pCut );
     if ( pMatchBest == NULL || pMatchBest->pSuperBest == NULL || pMatch == NULL || pMatch->pSuperBest == NULL )
         return 0;
@@ -2050,11 +2099,11 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     ArrivalDelta = pMatch->tArrive.Worst - pMatchBest->tArrive.Worst;
     ArrivalGainMargin = 0.25 * SlackMargin;
     fArrivalQuality = ArrivalDelta <= -ArrivalGainMargin - p->fEpsilon;
-    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 53 )
+    if ( p->fSkipFanout >= 8 && p->fSkipFanout <= 54 )
     {
         SlackGate = 2.0 * SlackMargin;
         fMiddleReliefWindow =
-             (p->fSkipFanout >= 10 && p->fSkipFanout <= 53) &&
+             (p->fSkipFanout >= 10 && p->fSkipFanout <= 54) &&
              Slack > SlackMargin + p->fEpsilon &&
              Slack <= SlackGate + p->fEpsilon &&
              !Map_MatchCutHasStmapHighestFanoutRisk( pNode, pCut ) &&
@@ -2490,6 +2539,37 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
             Stmap52StrongPenaltyFactor = fStmap52StrongPenaltyCandidate ?
                 Map_MatchStmap45StrongPenaltyFactor( pNode, pCut, pMatch, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon, &Stmap52CutLeafLoadAvg, &Stmap52LoadDriveRatio, &Stmap52FanLimit, &Stmap52NodePressureRatio, &Stmap52CutPressureRatio, &Stmap52NodeAigId ) : 0.0;
             Stmap52PenaltyFactor = Stmap52ModeratePenaltyFactor > Stmap52StrongPenaltyFactor ? Stmap52ModeratePenaltyFactor : Stmap52StrongPenaltyFactor;
+            fStmap53ModerateSoftSeed =
+                p->fSkipFanout == 54 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchHasStmap28SoftPenaltyModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            fStmap53ModeratePenaltyCandidate =
+                fStmap53ModerateSoftSeed &&
+                Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            Stmap53NodePressureRatio = 0.0;
+            Stmap53CutPressureRatio = 0.0;
+            Stmap53NodeAigId = -1;
+            fStmap53ModerateAreaCap = 0;
+            fStmap53ModeratePressureNear = 0;
+            if ( pNode && pNode->Num >= 0 )
+                Stmap53NodeAigId = Map_NodeReadAigId( pNode );
+            Stmap53ModeratePenaltyFactor = fStmap53ModerateSoftSeed ?
+                Map_MatchStmap53ModeratePenaltyFactor( pNode, pCut, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon, &Stmap53NodePressureRatio, &Stmap53CutPressureRatio, &Stmap53NodeAigId, &fStmap53ModerateAreaCap, &fStmap53ModeratePressureNear ) : 0.0;
+            fStmap53ModeratePressureAgreement =
+                fStmap53ModerateSoftSeed &&
+                Map_MatchStmap45HasPressureAgreement( Stmap53NodePressureRatio, Stmap53CutPressureRatio );
+            fStmap53StrongPenaltyCandidate =
+                p->fSkipFanout == 54 &&
+                !fProfileOpen &&
+                !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                Map_MatchIsStmap30StrongPenaltyCandidate( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            Stmap53CutLeafLoadAvg = 0.0;
+            Stmap53LoadDriveRatio = 0.0;
+            Stmap53FanLimit = 0;
+            Stmap53StrongPenaltyFactor = fStmap53StrongPenaltyCandidate ?
+                Map_MatchStmap45StrongPenaltyFactor( pNode, pCut, pMatch, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon, &Stmap53CutLeafLoadAvg, &Stmap53LoadDriveRatio, &Stmap53FanLimit, &Stmap53NodePressureRatio, &Stmap53CutPressureRatio, &Stmap53NodeAigId ) : 0.0;
+            Stmap53PenaltyFactor = Stmap53ModeratePenaltyFactor > Stmap53StrongPenaltyFactor ? Stmap53ModeratePenaltyFactor : Stmap53StrongPenaltyFactor;
             fStrictFallback =
                 p->fSkipFanout == 15 ||
                 ((p->fSkipFanout == 16 || p->fSkipFanout == 17) && !fProfileOpen) ||
@@ -2528,7 +2608,10 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     (!fStmap46ModerateSoftSeed || (!fStmap46ModeratePressureAgreement && !fStmap46TightException))))) ||
                 ((p->fSkipFanout == 53) &&
                     (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
-                    (!fStmap52ModerateSoftSeed || !fStmap52ModeratePressureAgreement))));
+                    (!fStmap52ModerateSoftSeed || !fStmap52ModeratePressureAgreement)))) ||
+                ((p->fSkipFanout == 54) &&
+                    (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+                    (!fStmap53ModerateSoftSeed || (!fStmap53ModeratePressureAgreement && !fStmap53ModeratePressureNear)))));
             AreaMargin = p->pSuperLib ? (fStrictFallback ? 2.0 : 1.0) * p->pSuperLib->AreaInv : 0.0;
             if ( p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0 && p->pSuperLib )
                 AreaMargin = (1.0 + Stmap28PenaltyFactor) * p->pSuperLib->AreaInv;
@@ -2570,6 +2653,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                 AreaMargin = (1.0 + Stmap46PenaltyFactor) * p->pSuperLib->AreaInv;
             if ( p->fSkipFanout == 53 && Stmap52PenaltyFactor > 0.0 && p->pSuperLib )
                 AreaMargin = (1.0 + Stmap52PenaltyFactor) * p->pSuperLib->AreaInv;
+            if ( p->fSkipFanout == 54 && Stmap53PenaltyFactor > 0.0 && p->pSuperLib )
+                AreaMargin = (1.0 + Stmap53PenaltyFactor) * p->pSuperLib->AreaInv;
             AreaSave = pMatchBest->AreaFlow - pMatch->AreaFlow;
             OneInvArea = p->pSuperLib ? p->pSuperLib->AreaInv : 0.0;
             if ( AreaSave > AreaMargin + p->fEpsilon )
@@ -2581,7 +2666,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
                         pMatch->tArrive.Worst - pMatchBest->tArrive.Worst, AreaMargin );
-                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 53 )
+                if ( p->fSkipFanout >= 18 && p->fSkipFanout <= 54 )
                     printf( "stmap%d relief diag: index = %d  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f\n",
                         p->fSkipFanout - 1, p->nStmap13MiddleRelief, fProfileOpen, pNode->Num, pNode->Level, pNode->nRefs,
                         pCut->nLeaves, fPhase, Slack, pMatchBest->AreaFlow - pMatch->AreaFlow,
@@ -2950,12 +3035,39 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         Stmap52FanLimit, Stmap52LoadDriveRatio, Stmap52NodePressureRatio,
                         Stmap52CutPressureRatio, s_Stmap45SclFeedback );
                 }
-                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 53 && !fProfileOpen && !fStrictFallback )
+                if ( p->fSkipFanout == 54 && fStmap53ModeratePressureNear )
+                {
+                    p->nStmap53ModerateExceptionSeed++;
+                    printf( "stmap53 moderate exception seed diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+                        p->nStmap53ModerateExceptionSeed, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        AreaMargin, Stmap53NodePressureRatio, Stmap53CutPressureRatio, s_Stmap45SclFeedback );
+                }
+                if ( p->fSkipFanout == 54 && fStmap53ModeratePenaltyCandidate && Stmap53ModeratePenaltyFactor > 0.0 )
+                {
+                    p->nStmap53ModeratePenaltySeed++;
+                    printf( "stmap53 moderate penalty seed diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  area-cap = %d  scl-feedback = %.3f\n",
+                        p->nStmap53ModeratePenaltySeed, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap53ModeratePenaltyFactor, AreaMargin, Stmap53NodePressureRatio,
+                        Stmap53CutPressureRatio, fStmap53ModerateAreaCap, s_Stmap45SclFeedback );
+                }
+                if ( p->fSkipFanout == 54 && fStmap53StrongPenaltyCandidate && Stmap53StrongPenaltyFactor > 0.0 )
+                {
+                    p->nStmap53StrongPenaltySeed++;
+                    printf( "stmap53 strong penalty seed diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+                        p->nStmap53StrongPenaltySeed, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap53StrongPenaltyFactor, AreaMargin, Stmap53CutLeafLoadAvg,
+                        Stmap53FanLimit, Stmap53LoadDriveRatio, Stmap53NodePressureRatio,
+                        Stmap53CutPressureRatio, s_Stmap45SclFeedback );
+                }
+                if ( p->fSkipFanout >= 20 && p->fSkipFanout <= 54 && !fProfileOpen && !fStrictFallback )
                     p->nStmap19EarlySeed++;
                 return 0;
             }
-            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 53 &&
-                 (fStrictFallback || (p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0) || (p->fSkipFanout == 30 && fStmap29ModeratePenaltyCandidate && Stmap29PenaltyFactor > 0.0) || (p->fSkipFanout == 31 && Stmap30PenaltyFactor > 0.0) || (p->fSkipFanout == 32 && Stmap31PenaltyFactor > 0.0) || (p->fSkipFanout == 33 && Stmap32PenaltyFactor > 0.0) || (p->fSkipFanout == 34 && Stmap33PenaltyFactor > 0.0) || (p->fSkipFanout == 35 && Stmap34PenaltyFactor > 0.0) || (p->fSkipFanout == 36 && Stmap35PenaltyFactor > 0.0) || (p->fSkipFanout == 37 && Stmap36PenaltyFactor > 0.0) || (p->fSkipFanout == 38 && Stmap37PenaltyFactor > 0.0) || (p->fSkipFanout == 39 && Stmap38PenaltyFactor > 0.0) || (p->fSkipFanout == 40 && Stmap39PenaltyFactor > 0.0) || (p->fSkipFanout == 41 && Stmap40PenaltyFactor > 0.0) || (p->fSkipFanout == 42 && Stmap41PenaltyFactor > 0.0) || (p->fSkipFanout == 43 && Stmap42PenaltyFactor > 0.0) || (p->fSkipFanout == 44 && Stmap43PenaltyFactor > 0.0) || (p->fSkipFanout == 45 && Stmap44PenaltyFactor > 0.0) || (p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0) || (p->fSkipFanout == 47 && Stmap46PenaltyFactor > 0.0) || (p->fSkipFanout == 53 && Stmap52PenaltyFactor > 0.0)) &&
+            if ( p->fSkipFanout >= 19 && p->fSkipFanout <= 54 &&
+                 (fStrictFallback || (p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0) || (p->fSkipFanout == 30 && fStmap29ModeratePenaltyCandidate && Stmap29PenaltyFactor > 0.0) || (p->fSkipFanout == 31 && Stmap30PenaltyFactor > 0.0) || (p->fSkipFanout == 32 && Stmap31PenaltyFactor > 0.0) || (p->fSkipFanout == 33 && Stmap32PenaltyFactor > 0.0) || (p->fSkipFanout == 34 && Stmap33PenaltyFactor > 0.0) || (p->fSkipFanout == 35 && Stmap34PenaltyFactor > 0.0) || (p->fSkipFanout == 36 && Stmap35PenaltyFactor > 0.0) || (p->fSkipFanout == 37 && Stmap36PenaltyFactor > 0.0) || (p->fSkipFanout == 38 && Stmap37PenaltyFactor > 0.0) || (p->fSkipFanout == 39 && Stmap38PenaltyFactor > 0.0) || (p->fSkipFanout == 40 && Stmap39PenaltyFactor > 0.0) || (p->fSkipFanout == 41 && Stmap40PenaltyFactor > 0.0) || (p->fSkipFanout == 42 && Stmap41PenaltyFactor > 0.0) || (p->fSkipFanout == 43 && Stmap42PenaltyFactor > 0.0) || (p->fSkipFanout == 44 && Stmap43PenaltyFactor > 0.0) || (p->fSkipFanout == 45 && Stmap44PenaltyFactor > 0.0) || (p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0) || (p->fSkipFanout == 47 && Stmap46PenaltyFactor > 0.0) || (p->fSkipFanout == 53 && Stmap52PenaltyFactor > 0.0) || (p->fSkipFanout == 54 && (Stmap53PenaltyFactor > 0.0 || fStmap53ModeratePressureNear))) &&
                  AreaSave > OneInvArea + p->fEpsilon )
             {
                 if ( p->fSkipFanout == 19 )
@@ -3016,6 +3128,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     pReason = fArrivalQuality ? (fStmap46StrongPenaltyCandidate && Stmap46StrongPenaltyFactor > 0.0 ? "tight-exception-strong-penalty-area-gate" : (fStmap46TightException ? "tight-exception-area-gate" : (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap46ModeratePenaltyCandidate && Stmap46ModeratePenaltyFactor > 0.0 ? "pressure-agreed-moderate-area-gate" : "pressure-agreed-moderate-block") : "moderate-gain-gate"))) : "arrival-gate";
                 else if ( p->fSkipFanout == 53 )
                     pReason = fArrivalQuality ? (fStmap52StrongPenaltyCandidate && Stmap52StrongPenaltyFactor > 0.0 ? "area-cap-strong-penalty-gate" : (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap52ModeratePenaltyCandidate && Stmap52ModeratePenaltyFactor > 0.0 ? (fStmap52ModerateAreaCap ? "area-cap-moderate-gate" : "pressure-agreed-moderate-area-gate") : "pressure-agreed-moderate-block") : "moderate-gain-gate")) : "arrival-gate";
+                else if ( p->fSkipFanout == 54 )
+                    pReason = fArrivalQuality ? (fStmap53StrongPenaltyCandidate && Stmap53StrongPenaltyFactor > 0.0 ? "pressure-exception-strong-penalty-gate" : (Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon ) ? (fStmap53ModeratePressureNear ? "pressure-near-exception-area-gate" : (fStmap53ModeratePenaltyCandidate && Stmap53ModeratePenaltyFactor > 0.0 ? (fStmap53ModerateAreaCap ? "area-cap-moderate-gate" : "pressure-agreed-moderate-area-gate") : "pressure-near-moderate-block")) : "moderate-gain-gate")) : "arrival-gate";
                 else
                     pReason = fArrivalQuality ? "depth-gate" : "arrival-gate";
                 if ( p->fSkipFanout == 27 && fStmap26ModerateAblationCandidate && p->nStmap26ModerateAblationSeen == 0 )
@@ -3374,6 +3488,33 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         Stmap52FanLimit, Stmap52LoadDriveRatio, Stmap52NodePressureRatio,
                         Stmap52CutPressureRatio, s_Stmap45SclFeedback );
                 }
+                if ( p->fSkipFanout == 54 && fStmap53ModeratePressureNear )
+                {
+                    p->nStmap53ModerateExceptionBlocked++;
+                    printf( "stmap53 moderate exception block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+                        p->nStmap53ModerateExceptionBlocked, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        AreaMargin, Stmap53NodePressureRatio, Stmap53CutPressureRatio, s_Stmap45SclFeedback );
+                }
+                if ( p->fSkipFanout == 54 && fStmap53ModeratePenaltyCandidate && !fStmap53ModeratePressureNear )
+                {
+                    p->nStmap53ModeratePenaltyBlocked++;
+                    printf( "stmap53 moderate penalty block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  area-cap = %d  scl-feedback = %.3f\n",
+                        p->nStmap53ModeratePenaltyBlocked, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap53ModeratePenaltyFactor, AreaMargin, Stmap53NodePressureRatio,
+                        Stmap53CutPressureRatio, fStmap53ModerateAreaCap, s_Stmap45SclFeedback );
+                }
+                if ( p->fSkipFanout == 54 && fStmap53StrongPenaltyCandidate && Stmap53StrongPenaltyFactor > 0.0 )
+                {
+                    p->nStmap53StrongPenaltyBlocked++;
+                    printf( "stmap53 strong penalty block diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  penalty-factor = %.3f  area-margin = %.6f  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f\n",
+                        p->nStmap53StrongPenaltyBlocked, pNode->Num, Stmap53NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin,
+                        Stmap53StrongPenaltyFactor, AreaMargin, Stmap53CutLeafLoadAvg,
+                        Stmap53FanLimit, Stmap53LoadDriveRatio, Stmap53NodePressureRatio,
+                        Stmap53CutPressureRatio, s_Stmap45SclFeedback );
+                }
                 p->nStmap18NearMiss++;
                 if ( p->nStmap18NearMiss <= 128 )
                     printf( "stmap%d near-miss diag: index = %d  reason = %s  profile-open = %d  node = %d  level = %u  refs = %d  leaves = %d  phase = %d  slack = %.6f  area-save = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f\n",
@@ -3400,7 +3541,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     }
     if ( Slack <= SlackMargin + p->fEpsilon )
         return 0;
-    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 53 )
+    if ( p->fSkipFanout >= 9 && p->fSkipFanout <= 54 )
     {
         ArrivalMargin = 0.25 * SlackMargin;
         if ( pMatch->tArrive.Worst > pMatchBest->tArrive.Worst + ArrivalMargin + p->fEpsilon )
