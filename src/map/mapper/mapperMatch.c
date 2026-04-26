@@ -2150,6 +2150,22 @@ void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId )
     s_fStmap75FinalCriticalAigDiag = fEnable;
 }
 
+void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Map_Stmap75ResetFinalCriticalAigDiagState();
+    if ( !fEnable )
+    {
+        s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
+        s_fStmap75FinalCriticalAigDiag = 0;
+        return;
+    }
+    for ( i = 0; i < nWatchAigs && s_nStmap75ActiveWatchAigs < MAP_STMAP75_WATCH_AIGS; i++ )
+        if ( pWatchAigIds != NULL && pWatchAigIds[i] >= 0 )
+            s_Stmap75WatchAigIds[s_nStmap75ActiveWatchAigs++] = pWatchAigIds[i];
+    s_fStmap75FinalCriticalAigDiag = s_nStmap75ActiveWatchAigs > 0;
+}
+
 void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel )
 {
     s_pStmap75FinalCriticalAigDiagLabel = pLabel && pLabel[0] ? pLabel : "stmap75";

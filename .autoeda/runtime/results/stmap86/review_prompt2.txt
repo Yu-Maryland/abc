@@ -1,0 +1,20 @@
+Review stmap86 after the first review and completed validation.
+
+Scope:
+- Uncommitted changes for stmap86 only.
+- New command file: src/base/abci/abcStmap_86.c.
+- Shared helper change: src/map/mapper/mapperMatch.c adds Map_Stmap75SetFinalCriticalAigDiagArray.
+- Command registration/build integration: src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp.
+- Runtime artifacts under .autoeda/runtime/results/stmap86 and campaign bookkeeping.
+
+Implementation intent:
+- stmap86 extends stmap85 diagnostics by watching both the child and downstream parent AIGs in selected-match diagnostics.
+- Existing single-watch selected-match API and older stmap commands must remain buildable and behavior-compatible.
+- The array API should be scoped, reset state correctly, ignore invalid watch IDs, and enable diagnostics only when at least one active watch exists.
+- Strict sticky parent phase policy and dual phase-survival diagnostics remain inherited from stmap85/stmap84.
+
+Validation already run:
+- build, command help, smoke, path-normalization, stale-state, implementation check, full benchmark evaluation, parseable metrics, and CEC passed.
+- Review pass 1 found no discrete correctness issues.
+
+Please focus on correctness risks, stale global diagnostic state, command wiring, compatibility with older stmap commands, logging/artifact sufficiency, and whether any accepted findings require source changes or revalidation. If there are no issues, say so explicitly.

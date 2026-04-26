@@ -1,0 +1,10 @@
+Review the uncommitted stmap86 changes for correctness, build integration, stale global state, and diagnostic/evaluation soundness.
+
+Project constraints:
+- This is iteration stmap86 in the stmap family.
+- The new mapper API `Map_Stmap75SetFinalCriticalAigDiagArray` should preserve the old single-watch behavior and only enable multiple selected-match watches when explicitly used by stmap86.
+- stmap86 keeps the strict sticky policy and dual final phase-survival watch, and now emits selected-match diagnostics for both child and downstream parent AIGs.
+- Classic map and earlier stmap commands must remain unchanged unless explicitly configured.
+- Required benchmark flow and CEC have passed under .autoeda/runtime/results/stmap86.
+
+Focus on changed/untracked files only. Report concrete P0/P1/P2 findings with file/line references. If there are no correctness issues, say so.

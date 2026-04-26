@@ -1,0 +1,2728 @@
+OpenAI Codex v0.124.0 (research preview)
+--------
+workdir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019dcb28-66d6-7d31-a907-c15b8a41011e
+--------
+user
+current changes
+exec
+/bin/zsh -lc "git status --short && echo '---STAGED---' && git diff --staged --stat && echo '---UNSTAGED---' && git diff --stat && echo '---UNTRACKED---' && git ls-files --others --exclude-standard" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 161ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+ .autoeda/runtime/campaign_state.json | 17 ++++++++++-------
+ abclib.dsp                           |  4 ++++
+ src/base/abci/abc.c                  |  2 ++
+ src/base/abci/module.make            |  1 +
+ src/map/mapper/mapperMatch.c         | 16 ++++++++++++++++
+ 5 files changed, 33 insertions(+), 7 deletions(-)
+---UNTRACKED---
+.autoeda/runtime/results/stmap86/baseline_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap86/baseline_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap86/baseline_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap86/baseline_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap86/baseline_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap86/baseline_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap86/baseline_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap86/baseline_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap86/build.exit
+.autoeda/runtime/results/stmap86/build.log
+.autoeda/runtime/results/stmap86/candidate_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap86/candidate_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap86/candidate_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap86/candidate_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap86/candidate_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap86/candidate_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap86/candidate_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap86/candidate_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap86/candidate_cut.csv
+.autoeda/runtime/results/stmap86/candidate_cut_stats.csv
+.autoeda/runtime/results/stmap86/candidate_cut_summary.csv
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_orig.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_orig_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_orig_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_stmap86.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_stmap86_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_i10_aig_stmap86_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_orig.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_stmap86.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_stmap86_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_ode_abc_blif_stmap86_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_orig.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_stmap86.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_stmap86_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_or1200_abc_blif_stmap86_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_orig.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_orig_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_stmap86.aig
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_stmap86_write.exit
+.autoeda/runtime/results/stmap86/cec_benchmarks_syn2_abc_blif_stmap86_write.log
+.autoeda/runtime/results/stmap86/cec_summary.json
+.autoeda/runtime/results/stmap86/comparison.csv
+.autoeda/runtime/results/stmap86/demand_leaf.csv
+.autoeda/runtime/results/stmap86/demand_path.csv
+.autoeda/runtime/results/stmap86/demand_path_stats.csv
+.autoeda/runtime/results/stmap86/diagnostic.csv
+.autoeda/runtime/results/stmap86/eval.exit
+.autoeda/runtime/results/stmap86/eval.log
+.autoeda/runtime/results/stmap86/final_critical_lineage.csv
+.autoeda/runtime/results/stmap86/final_critical_stats.csv
+.autoeda/runtime/results/stmap86/help.exit
+.autoeda/runtime/results/stmap86/help.log
+.autoeda/runtime/results/stmap86/implementation_check.exit
+.autoeda/runtime/results/stmap86/implementation_check.log
+.autoeda/runtime/results/stmap86/metrics.csv
+.autoeda/runtime/results/stmap86/parent_cut.csv
+.autoeda/runtime/results/stmap86/parent_cut_stats.csv
+.autoeda/runtime/results/stmap86/parent_cut_summary.csv
+.autoeda/runtime/results/stmap86/parent_phase_bias.csv
+.autoeda/runtime/results/stmap86/parent_phase_bias_stats.csv
+.autoeda/runtime/results/stmap86/path_norm_i10.exit
+.autoeda/runtime/results/stmap86/path_norm_i10.log
+.autoeda/runtime/results/stmap86/phase_output_context.csv
+.autoeda/runtime/results/stmap86/phase_survival.csv
+.autoeda/runtime/results/stmap86/phase_survival_stats.csv
+.autoeda/runtime/results/stmap86/reconstruct_cache.csv
+.autoeda/runtime/results/stmap86/reconstruct_demand.csv
+.autoeda/runtime/results/stmap86/reconstruct_emit.csv
+.autoeda/runtime/results/stmap86/reconstruct_inverter.csv
+.autoeda/runtime/results/stmap86/reconstruct_request.csv
+.autoeda/runtime/results/stmap86/reconstruct_stats.csv
+.autoeda/runtime/results/stmap86/review_pass1.log
+.autoeda/runtime/results/stmap86/review_pass1_positional.exit
+.autoeda/runtime/results/stmap86/review_pass1_positional.log
+.autoeda/runtime/results/stmap86/review_prompt1.txt
+.autoeda/runtime/results/stmap86/run_stmap86_eval.py
+.autoeda/runtime/results/stmap86/selected_match.csv
+.autoeda/runtime/results/stmap86/selected_match_stats.csv
+.autoeda/runtime/results/stmap86/smoke_i10.exit
+.autoeda/runtime/results/stmap86/smoke_i10.log
+.autoeda/runtime/results/stmap86/sticky_parent_phase.csv
+.autoeda/runtime/results/stmap86/sticky_parent_phase_stats.csv
+.autoeda/runtime/results/stmap86/summary.json
+.autoeda/runtime/results/stmap86/unknown_aig_stale_check.exit
+.autoeda/runtime/results/stmap86/unknown_aig_stale_check.log
+src/base/abci/abcStmap_86.c
+
+exec
+/bin/zsh -lc "git diff -- .autoeda/runtime/campaign_state.json abclib.dsp src/base/abci/abc.c src/base/abci/module.make src/map/mapper/mapperMatch.c && echo '--- abcStmap_86.c ---' && sed -n '1,240p' src/base/abci/abcStmap_86.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+diff --git a/.autoeda/runtime/campaign_state.json b/.autoeda/runtime/campaign_state.json
+index 2d8862d28..264d201f8 100644
+--- a/.autoeda/runtime/campaign_state.json
++++ b/.autoeda/runtime/campaign_state.json
+@@ -6,12 +6,12 @@
+   "target_iterations": 100,
+   "completed_iterations": 86,
+   "next_iteration": 86,
+-  "status": "iteration-complete",
+-  "active_iteration": null,
+-  "active_version": null,
++  "status": "review-running",
++  "active_iteration": 86,
++  "active_version": "stmap86",
+   "last_completed_iteration": 85,
+   "last_completed_version": "stmap85",
+-  "last_successful_commit": "local commit to be created: stmap85: trace parent selected matches; see git history for hash",
++  "last_successful_commit": "b12ff8302",
+   "last_launch_time": "2026-04-26T15:37:52+00:00",
+   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
+   "launcher_pid": 60423,
+@@ -552,8 +552,11 @@
+     "stmap85 validation passed: build, help, smoke, full benchmark metrics, downstream-parent selected-match diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+     "stmap85 review completed with no findings across two supported review passes; no source changes were made after final review.",
+     "stmap85 diagnostic result: ode parent AIG 5229 phase 0 selected OAI211xp5 with about 0.08 ps mapper slack in mode 3.",
+-    "stmap85 local commit is planned with push enabled by full-campaign git.yaml."
++    "stmap85 local commit is planned with push enabled by full-campaign git.yaml.",
++    "stmap86 active iteration prepared: dual child/parent selected-match tracing via selected-watch array.",
++    "stmap86 implementation built successfully; help, smoke, path-normalization, stale-state, and implementation checks passed; full evaluation started.",
++    "stmap86 full benchmark metrics, dual child/parent selected-match diagnostic parsing, and CEC completed successfully; review loop started."
+   ],
+-  "updated_at": "2026-04-26T18:53:31Z",
+-  "updated_at_utc": "2026-04-26T18:53:31Z"
++  "updated_at": "2026-04-26T18:58:06Z",
++  "updated_at_utc": "2026-04-26T18:58:06Z"
+ }
+diff --git a/abclib.dsp b/abclib.dsp
+index 118829e0a..d05322558 100644
+--- a/abclib.dsp
++++ b/abclib.dsp
+@@ -823,6 +823,10 @@ SOURCE=.\src\base\abci\abcStmap_85.c
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\src\base\abci\abcStmap_86.c
++# End Source File
++# Begin Source File
++
+ SOURCE=.\src\base\abci\abcStrash.c
+ # End Source File
+ # Begin Source File
+diff --git a/src/base/abci/abc.c b/src/base/abci/abc.c
+index b4a07a48d..0abd41c4f 100644
+--- a/src/base/abci/abc.c
++++ b/src/base/abci/abc.c
+@@ -383,6 +383,7 @@ extern int Abc_CommandStmap82                ( Abc_Frame_t * pAbc, int argc, cha
+ extern int Abc_CommandStmap83                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ extern int Abc_CommandStmap84                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ extern int Abc_CommandStmap85                ( Abc_Frame_t * pAbc, int argc, char ** argv );
++extern int Abc_CommandStmap86                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandAmap                   ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandPhaseMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+ static int Abc_CommandStochMap               ( Abc_Frame_t * pAbc, int argc, char ** argv );
+@@ -1315,6 +1316,7 @@ void Abc_Init( Abc_Frame_t * pAbc )
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap83",       Abc_CommandStmap83,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap84",       Abc_CommandStmap84,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stmap85",       Abc_CommandStmap85,          1 );
++    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap86",       Abc_CommandStmap86,          1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "amap",          Abc_CommandAmap,             1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "phase_map",     Abc_CommandPhaseMap,         1 );
+     Cmd_CommandAdd( pAbc, "SC mapping",   "stochmap",      Abc_CommandStochMap,         1 );
+diff --git a/src/base/abci/module.make b/src/base/abci/module.make
+index 4d65ae112..e38a037a1 100644
+--- a/src/base/abci/module.make
++++ b/src/base/abci/module.make
+@@ -152,6 +152,7 @@ SRC +=    src/base/abci/abc.c \
+     src/base/abci/abcStmap_83.c \
+     src/base/abci/abcStmap_84.c \
+     src/base/abci/abcStmap_85.c \
++    src/base/abci/abcStmap_86.c \
+     src/base/abci/abcStrash.c \
+     src/base/abci/abcSweep.c \
+     src/base/abci/abcSymm.c \
+diff --git a/src/map/mapper/mapperMatch.c b/src/map/mapper/mapperMatch.c
+index e74b2b504..126f1da8f 100644
+--- a/src/map/mapper/mapperMatch.c
++++ b/src/map/mapper/mapperMatch.c
+@@ -2150,6 +2150,22 @@ void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId )
+     s_fStmap75FinalCriticalAigDiag = fEnable;
+ }
+ 
++void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs )
++{
++    int i;
++    Map_Stmap75ResetFinalCriticalAigDiagState();
++    if ( !fEnable )
++    {
++        s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
++        s_fStmap75FinalCriticalAigDiag = 0;
++        return;
++    }
++    for ( i = 0; i < nWatchAigs && s_nStmap75ActiveWatchAigs < MAP_STMAP75_WATCH_AIGS; i++ )
++        if ( pWatchAigIds != NULL && pWatchAigIds[i] >= 0 )
++            s_Stmap75WatchAigIds[s_nStmap75ActiveWatchAigs++] = pWatchAigIds[i];
++    s_fStmap75FinalCriticalAigDiag = s_nStmap75ActiveWatchAigs > 0;
++}
++
+ void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel )
+ {
+     s_pStmap75FinalCriticalAigDiagLabel = pLabel && pLabel[0] ? pLabel : "stmap75";
+--- abcStmap_86.c ---
+/**CFile****************************************************************
+
+  FileName    [abcStmap_86.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap86 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "misc/extra/extra.h"
+#include <string.h>
+
+ABC_NAMESPACE_IMPL_START
+
+static int Abc_Stmap86WatchAigsForNetwork( Abc_Ntk_t * pNtk, int * pChildAig, int * pParentAig )
+{
+    char * pName = pNtk ? Abc_NtkName(pNtk) : NULL;
+    char * pBase, * pSlash, * pBackslash;
+    *pChildAig = -1;
+    *pParentAig = -1;
+    if ( pName == NULL )
+        return 0;
+    pSlash = strrchr( pName, '/' );
+    pBackslash = strrchr( pName, '\\' );
+    if ( pSlash && (!pBackslash || pSlash > pBackslash) )
+        pBase = pSlash + 1;
+    else if ( pBackslash )
+        pBase = pBackslash + 1;
+    else
+        pBase = pName;
+    if ( !strcmp( pBase, "i10" ) )
+    {
+        *pChildAig = 855;
+        *pParentAig = 861;
+        return 1;
+    }
+    if ( !strcmp( pBase, "ode" ) )
+    {
+        *pChildAig = 5219;
+        *pParentAig = 5229;
+        return 1;
+    }
+    if ( !strcmp( pBase, "or1200_flat" ) || !strcmp( pBase, "or1200" ) )
+    {
+        *pChildAig = 11491;
+        *pParentAig = 13829;
+        return 1;
+    }
+    if ( !strcmp( pBase, "syn2" ) )
+    {
+        *pChildAig = 18002;
+        *pParentAig = 18467;
+        return 1;
+    }
+    return 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap86 dual selected-match probe.]
+
+  Description [stmap86 reuses the stmap81 child-phase-0 parent candidate
+  bias and the stmap82 same-node/same-phase sticky guard, but raises the
+  timing-release window high enough that watched child-missing replacements
+  are effectively blocked. It watches both the child and downstream parent
+  AIG IDs in final phase-survival/reconstruction diagnostics and in mapper
+  selected-match diagnostics.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap86( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    int i, RetValue, ChildAigId, ParentAigId, WatchAigs[2], nWatchAigs = 0;
+    extern int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv );
+    extern void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId );
+    extern void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs );
+    extern void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel );
+    extern void Map_Stmap75PrintFinalCriticalAigSummary( void );
+    extern void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel );
+    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+    extern void Abc_Stmap77PrintReconstructionSummary( void );
+    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+    extern void Abc_Stmap78PrintDemandPathSummary( void );
+    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+    extern void Abc_Stmap79PrintParentCutSummary( void );
+    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap80PrintCandidateCutSummary( void );
+    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap81PrintParentPhaseBiasSummary( void );
+    extern void Map_Stmap82SetStickyParentPhase( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+    extern void Map_Stmap82PrintStickyParentPhaseSummary( void );
+
+    for ( i = 1; i < argc; i++ )
+    {
+        if ( !strcmp( argv[i], "-h" ) )
+            goto usage;
+    }
+
+    pNtk = Abc_FrameReadNtk( pAbc );
+    Abc_Stmap86WatchAigsForNetwork( pNtk, &ChildAigId, &ParentAigId );
+    if ( ChildAigId >= 0 )
+        WatchAigs[nWatchAigs++] = ChildAigId;
+    if ( ParentAigId >= 0 )
+        WatchAigs[nWatchAigs++] = ParentAigId;
+    printf( "stmap86 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  selected-watch-count = %d  dual-phase-survival-watch-count = %d  source = stmap85-dual-selected-match-probe  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  candidate-cut-trace = 1  parent-phase-bias = 1  sticky-parent-phase = 1  final-phase-survival = 1  mapping-policy-change = watched-parent-child-phase0-strict-sticky\n",
+        nWatchAigs > 0, pNtk && Abc_NtkName(pNtk) ? Abc_NtkName(pNtk) : "?",
+        ChildAigId, ParentAigId, nWatchAigs, nWatchAigs );
+    Map_Stmap75SetFinalCriticalAigDiagArray( nWatchAigs > 0, WatchAigs, nWatchAigs );
+    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap86" );
+    Abc_Stmap77SetReconstructionDiag( nWatchAigs > 0, "stmap86", WatchAigs, nWatchAigs );
+    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap86", ChildAigId, ParentAigId );
+    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap86", ChildAigId, ParentAigId );
+    Map_Stmap80SetCandidateCutDiag( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
+    Map_Stmap81SetParentPhaseBias( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
+    Map_Stmap82SetStickyParentPhase( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
+    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+    RetValue = Abc_CommandStmap65( pAbc, argc, argv );
+    Abc_Stmap77PrintReconstructionSummary();
+    Abc_Stmap78PrintDemandPathSummary();
+    Abc_Stmap79PrintParentCutSummary();
+    Map_Stmap80PrintCandidateCutSummary();
+    Map_Stmap81PrintParentPhaseBiasSummary();
+    Map_Stmap82PrintStickyParentPhaseSummary();
+    Map_Stmap82SetStickyParentPhase( 0, "stmap86", -1, -1 );
+    Map_Stmap81SetParentPhaseBias( 0, "stmap86", -1, -1 );
+    Map_Stmap80SetCandidateCutDiag( 0, "stmap86", -1, -1 );
+    Abc_Stmap79SetParentCutDiag( 0, "stmap86", -1, -1 );
+    Abc_Stmap78SetDemandPathDiag( 0, "stmap86", -1, -1 );
+    Abc_Stmap77SetReconstructionDiag( 0, "stmap86", NULL, 0 );
+    Map_Stmap75PrintFinalCriticalAigSummary();
+    Map_Stmap75SetFinalCriticalAigDiag( 0, -1 );
+    if ( RetValue == 0 )
+    {
+        pNtkRes = Abc_FrameReadNtk( pAbc );
+        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap86" );
+        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap86", WatchAigs, nWatchAigs );
+    }
+    return RetValue;
+
+usage:
+    Abc_Print( -2, "usage: stmap86 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap86 bounded-pressure mapping with strict sticky retention plus dual child/parent selected-match and phase-survival diagnostics\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = not used]\n" );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = 0.00]\n" );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = 0.00]\n" );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = 0.00]\n" );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = 0.00]\n" );
+    Abc_Print( -2, "\t-G float : the SCL/genlib gain parameter used to generate the library [default = 250.00]\n" );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = 0]\n" );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = no]\n" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = yes]\n" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = no]\n" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = no]\n" );
+    Abc_Print( -2, "\t-f       : disables the bounded-pressure SCL feedback mapper mode [default = yes]\n" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = no]\n" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = no]\n" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = no]\n" );
+    Abc_Print( -2, "\t-h       : print the command usage\n" );
+    return 1;
+}
+
+ABC_NAMESPACE_IMPL_END
+
+exec
+/bin/zsh -lc "grep -R \"Stmap75SetFinalCriticalAigDiagArray\\|s_nStmap75ActiveWatchAigs\\|MAP_STMAP75_WATCH_AIGS\\|Stmap82SetStickyParentPhaseTimingWindow\" -n src | head -80 && sed -n '1,220p' src/base/abci/abcStmap_85.c && sed -n '2080,2220p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 7783ms:
+src/map/mapper/mapperMatch.c:501:void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow )
+src/map/mapper/mapperMatch.c:1972:#define MAP_STMAP75_WATCH_AIGS 4
+src/map/mapper/mapperMatch.c:1974:static int s_nStmap75ActiveWatchAigs = 0;
+src/map/mapper/mapperMatch.c:1976:static int s_Stmap75WatchAigIds[MAP_STMAP75_WATCH_AIGS] = { -1, -1, -1, -1 };
+src/map/mapper/mapperMatch.c:1977:static int s_Stmap75WatchHitCounts[MAP_STMAP75_WATCH_AIGS];
+src/map/mapper/mapperMatch.c:2127:    s_nStmap75ActiveWatchAigs = 0;
+src/map/mapper/mapperMatch.c:2129:    for ( i = 0; i < MAP_STMAP75_WATCH_AIGS; i++ )
+src/map/mapper/mapperMatch.c:2141:        s_nStmap75ActiveWatchAigs = WatchAigId >= 0 ? 1 : 0;
+src/map/mapper/mapperMatch.c:2153:void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs )
+src/map/mapper/mapperMatch.c:2163:    for ( i = 0; i < nWatchAigs && s_nStmap75ActiveWatchAigs < MAP_STMAP75_WATCH_AIGS; i++ )
+src/map/mapper/mapperMatch.c:2165:            s_Stmap75WatchAigIds[s_nStmap75ActiveWatchAigs++] = pWatchAigIds[i];
+src/map/mapper/mapperMatch.c:2166:    s_fStmap75FinalCriticalAigDiag = s_nStmap75ActiveWatchAigs > 0;
+src/map/mapper/mapperMatch.c:2177:        s_pStmap75FinalCriticalAigDiagLabel, s_nStmap75ActiveWatchAigs, s_nStmap75SelectedMatchRows,
+src/map/mapper/mapperMatch.c:2490:    for ( i = 0; i < s_nStmap75ActiveWatchAigs; i++ )
+Binary file src/map/mapper/mapperMatch.o matches
+Binary file src/base/abci/abcStmap_84.o matches
+src/base/abci/abcStmap_86.c:85:    extern void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_86.c:101:    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+src/base/abci/abcStmap_86.c:119:    Map_Stmap75SetFinalCriticalAigDiagArray( nWatchAigs > 0, WatchAigs, nWatchAigs );
+src/base/abci/abcStmap_86.c:127:    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+src/base/abci/abcStmap_85.c:100:    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+src/base/abci/abcStmap_85.c:126:    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+Binary file src/base/abci/abcStmap_83.o matches
+Binary file src/base/abci/abcStmap_86.o matches
+src/base/abci/abcStmap_84.c:99:    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+src/base/abci/abcStmap_84.c:125:    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+src/base/abci/abcStmap_83.c:98:    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+src/base/abci/abcStmap_83.c:121:    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+Binary file src/base/abci/abcStmap_85.o matches
+/**CFile****************************************************************
+
+  FileName    [abcStmap_85.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap85 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "misc/extra/extra.h"
+#include <string.h>
+
+ABC_NAMESPACE_IMPL_START
+
+static int Abc_Stmap85WatchAigsForNetwork( Abc_Ntk_t * pNtk, int * pChildAig, int * pParentAig )
+{
+    char * pName = pNtk ? Abc_NtkName(pNtk) : NULL;
+    char * pBase, * pSlash, * pBackslash;
+    *pChildAig = -1;
+    *pParentAig = -1;
+    if ( pName == NULL )
+        return 0;
+    pSlash = strrchr( pName, '/' );
+    pBackslash = strrchr( pName, '\\' );
+    if ( pSlash && (!pBackslash || pSlash > pBackslash) )
+        pBase = pSlash + 1;
+    else if ( pBackslash )
+        pBase = pBackslash + 1;
+    else
+        pBase = pName;
+    if ( !strcmp( pBase, "i10" ) )
+    {
+        *pChildAig = 855;
+        *pParentAig = 861;
+        return 1;
+    }
+    if ( !strcmp( pBase, "ode" ) )
+    {
+        *pChildAig = 5219;
+        *pParentAig = 5229;
+        return 1;
+    }
+    if ( !strcmp( pBase, "or1200_flat" ) || !strcmp( pBase, "or1200" ) )
+    {
+        *pChildAig = 11491;
+        *pParentAig = 13829;
+        return 1;
+    }
+    if ( !strcmp( pBase, "syn2" ) )
+    {
+        *pChildAig = 18002;
+        *pParentAig = 18467;
+        return 1;
+    }
+    return 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap85 parent selected-match probe.]
+
+  Description [stmap85 reuses the stmap81 child-phase-0 parent candidate
+  bias and the stmap82 same-node/same-phase sticky guard, but raises the
+  timing-release window high enough that watched child-missing replacements
+  are effectively blocked. It watches both the child and downstream parent
+  AIG IDs in final phase-survival/reconstruction diagnostics, and moves the
+  mapper selected-match watch to the downstream parent AIG.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap85( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkRes;
+    int i, RetValue, ChildAigId, ParentAigId, WatchAigs[2], nWatchAigs = 0;
+    extern int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv );
+    extern void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId );
+    extern void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel );
+    extern void Map_Stmap75PrintFinalCriticalAigSummary( void );
+    extern void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel );
+    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+    extern void Abc_Stmap77PrintReconstructionSummary( void );
+    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+    extern void Abc_Stmap78PrintDemandPathSummary( void );
+    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+    extern void Abc_Stmap79PrintParentCutSummary( void );
+    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap80PrintCandidateCutSummary( void );
+    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap81PrintParentPhaseBiasSummary( void );
+    extern void Map_Stmap82SetStickyParentPhase( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+    extern void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow );
+    extern void Map_Stmap82PrintStickyParentPhaseSummary( void );
+
+    for ( i = 1; i < argc; i++ )
+    {
+        if ( !strcmp( argv[i], "-h" ) )
+            goto usage;
+    }
+
+    pNtk = Abc_FrameReadNtk( pAbc );
+    Abc_Stmap85WatchAigsForNetwork( pNtk, &ChildAigId, &ParentAigId );
+    if ( ChildAigId >= 0 )
+        WatchAigs[nWatchAigs++] = ChildAigId;
+    if ( ParentAigId >= 0 )
+        WatchAigs[nWatchAigs++] = ParentAigId;
+    printf( "stmap85 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  selected-watch-aig = %d  dual-phase-survival-watch-count = %d  source = stmap84-parent-selected-match-probe  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  candidate-cut-trace = 1  parent-phase-bias = 1  sticky-parent-phase = 1  final-phase-survival = 1  mapping-policy-change = watched-parent-child-phase0-strict-sticky\n",
+        ParentAigId >= 0, pNtk && Abc_NtkName(pNtk) ? Abc_NtkName(pNtk) : "?",
+        ChildAigId, ParentAigId, ParentAigId, nWatchAigs );
+    Map_Stmap75SetFinalCriticalAigDiag( ParentAigId >= 0, ParentAigId );
+    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap85" );
+    Abc_Stmap77SetReconstructionDiag( nWatchAigs > 0, "stmap85", WatchAigs, nWatchAigs );
+    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap85", ChildAigId, ParentAigId );
+    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap85", ChildAigId, ParentAigId );
+    Map_Stmap80SetCandidateCutDiag( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
+    Map_Stmap81SetParentPhaseBias( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
+    Map_Stmap82SetStickyParentPhase( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
+    Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+    RetValue = Abc_CommandStmap65( pAbc, argc, argv );
+    Abc_Stmap77PrintReconstructionSummary();
+    Abc_Stmap78PrintDemandPathSummary();
+    Abc_Stmap79PrintParentCutSummary();
+    Map_Stmap80PrintCandidateCutSummary();
+    Map_Stmap81PrintParentPhaseBiasSummary();
+    Map_Stmap82PrintStickyParentPhaseSummary();
+    Map_Stmap82SetStickyParentPhase( 0, "stmap85", -1, -1 );
+    Map_Stmap81SetParentPhaseBias( 0, "stmap85", -1, -1 );
+    Map_Stmap80SetCandidateCutDiag( 0, "stmap85", -1, -1 );
+    Abc_Stmap79SetParentCutDiag( 0, "stmap85", -1, -1 );
+    Abc_Stmap78SetDemandPathDiag( 0, "stmap85", -1, -1 );
+    Abc_Stmap77SetReconstructionDiag( 0, "stmap85", NULL, 0 );
+    Map_Stmap75PrintFinalCriticalAigSummary();
+    Map_Stmap75SetFinalCriticalAigDiag( 0, -1 );
+    if ( RetValue == 0 )
+    {
+        pNtkRes = Abc_FrameReadNtk( pAbc );
+        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap85" );
+        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap85", WatchAigs, nWatchAigs );
+    }
+    return RetValue;
+
+usage:
+    Abc_Print( -2, "usage: stmap85 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap85 bounded-pressure mapping with strict sticky retention, dual phase-survival diagnostics, and parent selected-match tracing\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = not used]\n" );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = 0.00]\n" );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = 0.00]\n" );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = 0.00]\n" );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = 0.00]\n" );
+    Abc_Print( -2, "\t-G float : the SCL/genlib gain parameter used to generate the library [default = 250.00]\n" );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = 0]\n" );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = no]\n" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = yes]\n" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = no]\n" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = no]\n" );
+    Abc_Print( -2, "\t-f       : disables the bounded-pressure SCL feedback mapper mode [default = yes]\n" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = no]\n" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = no]\n" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = no]\n" );
+    Abc_Print( -2, "\t-h       : print the command usage\n" );
+    return 1;
+}
+
+ABC_NAMESPACE_IMPL_END
+}
+
+void Map_Stmap69SetPressureNearWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap69PressureNearWitnessSources = 0;
+    }
+    s_fStmap69PressureNearWitnessDiag = fEnable;
+}
+
+void Map_Stmap71SetModeratePenaltyWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap71ModeratePenaltyWitnessSources = 0;
+    }
+    s_fStmap71ModeratePenaltyWitnessDiag = fEnable;
+}
+
+void Map_Stmap72SetPathProximityWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap68BlockedStrongWitnessSources = 0;
+        s_nStmap69PressureNearWitnessSources = 0;
+        s_nStmap71ModeratePenaltyWitnessSources = 0;
+    }
+    s_fStmap72PathProximityWitnessDiag = fEnable;
+}
+
+void Map_Stmap73SetAcceptedPressureWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+    {
+        s_nStmap64CutOnlyWitnesses = 0;
+        s_nStmap73AcceptedPressureWitnessSources = 0;
+    }
+    s_fStmap73AcceptedPressureWitnessDiag = fEnable;
+}
+
+static void Map_Stmap75ResetFinalCriticalAigDiagState( void )
+{
+    int i;
+    s_nStmap75ActiveWatchAigs = 0;
+    s_nStmap75SelectedMatchRows = 0;
+    for ( i = 0; i < MAP_STMAP75_WATCH_AIGS; i++ )
+    {
+        s_Stmap75WatchAigIds[i] = -1;
+        s_Stmap75WatchHitCounts[i] = 0;
+    }
+}
+
+void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId )
+{
+    if ( fEnable )
+    {
+        Map_Stmap75ResetFinalCriticalAigDiagState();
+        s_nStmap75ActiveWatchAigs = WatchAigId >= 0 ? 1 : 0;
+        if ( WatchAigId >= 0 )
+            s_Stmap75WatchAigIds[0] = WatchAigId;
+    }
+    else
+    {
+        Map_Stmap75ResetFinalCriticalAigDiagState();
+        s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
+    }
+    s_fStmap75FinalCriticalAigDiag = fEnable;
+}
+
+void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Map_Stmap75ResetFinalCriticalAigDiagState();
+    if ( !fEnable )
+    {
+        s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
+        s_fStmap75FinalCriticalAigDiag = 0;
+        return;
+    }
+    for ( i = 0; i < nWatchAigs && s_nStmap75ActiveWatchAigs < MAP_STMAP75_WATCH_AIGS; i++ )
+        if ( pWatchAigIds != NULL && pWatchAigIds[i] >= 0 )
+            s_Stmap75WatchAigIds[s_nStmap75ActiveWatchAigs++] = pWatchAigIds[i];
+    s_fStmap75FinalCriticalAigDiag = s_nStmap75ActiveWatchAigs > 0;
+}
+
+void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel )
+{
+    s_pStmap75FinalCriticalAigDiagLabel = pLabel && pLabel[0] ? pLabel : "stmap75";
+}
+
+void Map_Stmap75PrintFinalCriticalAigSummary( void )
+{
+    printf( "%s selected-match stats: watched-aigs = %d  rows = %d  watch0-aig-id = %d  watch0-rows = %d  watch1-aig-id = %d  watch1-rows = %d  watch2-aig-id = %d  watch2-rows = %d  watch3-aig-id = %d  watch3-rows = %d\n",
+        s_pStmap75FinalCriticalAigDiagLabel, s_nStmap75ActiveWatchAigs, s_nStmap75SelectedMatchRows,
+        s_Stmap75WatchAigIds[0], s_Stmap75WatchHitCounts[0],
+        s_Stmap75WatchAigIds[1], s_Stmap75WatchHitCounts[1],
+        s_Stmap75WatchAigIds[2], s_Stmap75WatchHitCounts[2],
+        s_Stmap75WatchAigIds[3], s_Stmap75WatchHitCounts[3] );
+}
+
+void Map_Stmap64ClearCutOnlyWitnesses( void )
+{
+    s_fStmap64CutOnlyWitnessDiag = 0;
+    s_nStmap64CutOnlyWitnesses = 0;
+}
+
+void Map_Stmap64SetCutOnlyWitnessDiag( int fEnable )
+{
+    if ( fEnable )
+        Map_Stmap64ClearCutOnlyWitnesses();
+    s_fStmap64CutOnlyWitnessDiag = fEnable;
+}
+
+int Map_Stmap64CutOnlyWitnessCount( void )
+{
+    return s_nStmap64CutOnlyWitnesses;
+}
+
+int Map_Stmap64ReadCutOnlyWitness( int i, int * pAigId, int * pPhase, int * pNode, float * pNodePressureRatio, float * pCutPressureRatio, float * pSlack, float * pAreaSave, float * pArrivalDelta, float * pArrivalGainMargin, float * pFeedback )
+{
+    if ( i < 0 || i >= s_nStmap64CutOnlyWitnesses )
+        return 0;
+    if ( pAigId )
+        *pAigId = s_Stmap64WitnessAigIds[i];
+    if ( pPhase )
+        *pPhase = s_Stmap64WitnessPhases[i];
+    if ( pNode )
+        *pNode = s_Stmap64WitnessNodes[i];
+    if ( pNodePressureRatio )
+        *pNodePressureRatio = s_Stmap64WitnessNodePressureRatios[i];
+    if ( pCutPressureRatio )
+        *pCutPressureRatio = s_Stmap64WitnessCutPressureRatios[i];
+    if ( pSlack )
+        *pSlack = s_Stmap64WitnessSlacks[i];
+    if ( pAreaSave )
+        *pAreaSave = s_Stmap64WitnessAreaSaves[i];
+    if ( pArrivalDelta )
+
+exec
+/bin/zsh -lc "sed -n '430,540p' src/map/mapper/mapperMatch.c && sed -n '1940,2010p' src/map/mapper/mapperMatch.c && sed -n '2440,2535p' src/map/mapper/mapperMatch.c && sed -n '2535,2595p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+        pGate = pMatch && pMatch->pSuperBest ? pMatch->pSuperBest->pRoot : NULL;
+        pGateBefore = pBestBefore && pBestBefore->pSuperBest ? pBestBefore->pSuperBest->pRoot : NULL;
+        printf( "%s parent-phase-bias: index = %d  parent-aig = %d  child-aig = %d  mapper-mode = %d  phase = %d  cut-ordinal = %d  action = %s  eligible = %d  override = %d  accepted-before = %d  child-leaf-index = %d  child-requested-phase = %d  gate = %s  best-gate = %s  arrival = %.3f  best-arrival = %.3f  arrival-delta = %.3f  area-flow = %.3f  best-area-flow = %.3f  area-premium = %.3f  area-ratio = %.3f  arrival-window = %.3f  area-premium-window = %.3f\n",
+            s_pStmap81ParentPhaseBiasLabel, s_nStmap81ParentPhaseRows,
+            s_Stmap81ParentAigId, s_Stmap81ChildAigId, p->fMappingMode, fPhase,
+            CutOrdinal, pAction, fEligible, fOverride, fAccepted && !fOverride,
+            ChildLeaf, ChildPhase, pGate ? Mio_GateReadName(pGate) : "?",
+            pGateBefore ? Mio_GateReadName(pGateBefore) : "?",
+            pMatch->tArrive.Worst, pBestBefore ? pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE,
+            ArrivalDelta, pMatch->AreaFlow, pBestBefore ? pBestBefore->AreaFlow : MAP_FLOAT_LARGE,
+            AreaPremium, AreaRatio, ArrivalWindow, AreaPremiumWindow );
+    }
+    return fAccepted;
+}
+
+void Map_Stmap81PrintParentPhaseBiasSummary( void )
+{
+    printf( "%s parent-phase-bias stats: parent-aig = %d  child-aig = %d  rows = %d  child-phase0 = %d  eligible = %d  overrides = %d  already-selected = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-child = %d  arrival-window = %.3f  area-premium-window = %.3f  area-ratio-window = %.3f\n",
+        s_pStmap81ParentPhaseBiasLabel, s_Stmap81ParentAigId, s_Stmap81ChildAigId,
+        s_nStmap81ParentPhaseRows, s_nStmap81ParentPhaseChild0,
+        s_nStmap81ParentPhaseEligible, s_nStmap81ParentPhaseOverrides,
+        s_nStmap81ParentPhaseAlready, s_nStmap81ParentPhaseBlockedMode,
+        s_nStmap81ParentPhaseBlockedBest, s_nStmap81ParentPhaseBlockedWindow,
+        s_nStmap81ParentPhaseBlockedChild, 0.75f, 0.75f, 2.00f );
+}
+
+static int s_fStmap82StickyParentPhase = 0;
+static int s_fStmap82StickyParentPhaseActive = 0;
+static const char * s_pStmap82StickyParentPhaseLabel = "stmap82";
+static int s_Stmap82ParentAigId = -1;
+static int s_Stmap82ChildAigId = -1;
+static int s_nStmap82StickyRows = 0;
+static int s_nStmap82StickySet = 0;
+static int s_nStmap82StickyBlocked = 0;
+static int s_nStmap82StickyAllowedTiming = 0;
+static int s_nStmap82StickyAllowedChild0 = 0;
+static int s_nStmap82StickyIgnored = 0;
+static float s_Stmap82StickyTimingHoldWindow = 3.00f;
+
+static void Map_Stmap82ResetStickyParentPhaseCounters( void )
+{
+    s_nStmap82StickyRows = 0;
+    s_nStmap82StickySet = 0;
+    s_nStmap82StickyBlocked = 0;
+    s_nStmap82StickyAllowedTiming = 0;
+    s_nStmap82StickyAllowedChild0 = 0;
+    s_nStmap82StickyIgnored = 0;
+}
+
+static void Map_Stmap82ClearStickyParentPhase( void )
+{
+    s_fStmap82StickyParentPhase = 0;
+    s_fStmap82StickyParentPhaseActive = 0;
+    s_pStmap82StickyParentPhaseLabel = "stmap82";
+    s_Stmap82ParentAigId = -1;
+    s_Stmap82ChildAigId = -1;
+    s_Stmap82StickyTimingHoldWindow = 3.00f;
+    Map_Stmap82ResetStickyParentPhaseCounters();
+}
+
+void Map_Stmap82SetStickyParentPhase( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+{
+    Map_Stmap82ClearStickyParentPhase();
+    s_pStmap82StickyParentPhaseLabel = pLabel && pLabel[0] ? pLabel : "stmap82";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 )
+        return;
+    s_fStmap82StickyParentPhase = 1;
+    s_Stmap82ParentAigId = ParentAigId;
+    s_Stmap82ChildAigId = ChildAigId;
+}
+
+void Map_Stmap82SetStickyParentPhaseTimingWindow( float TimingHoldWindow )
+{
+    s_Stmap82StickyTimingHoldWindow = TimingHoldWindow > 0.0f ? TimingHoldWindow : 3.00f;
+}
+
+int Map_Stmap82StickyParentPhaseConfigured( void )
+{
+    return s_fStmap82StickyParentPhase;
+}
+
+void Map_Stmap82SetStickyParentPhaseActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap82StickyParentPhase )
+        return;
+    if ( fActive )
+        Map_Stmap82ResetStickyParentPhaseCounters();
+    s_fStmap82StickyParentPhaseActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Map_Stmap82StickyParentPhaseApplies( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
+{
+    Map_Node_t * pNodeRegular;
+    if ( !s_fStmap82StickyParentPhase || !s_fStmap82StickyParentPhaseActive || p == NULL || pNode == NULL )
+        return 0;
+    if ( p->fMappingMode != 2 && p->fMappingMode != 3 )
+        return 0;
+    pNodeRegular = Map_Regular( pNode );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return 0;
+    (void)fPhase;
+    return Map_NodeReadAigId( pNodeRegular ) == s_Stmap82ParentAigId;
+}
+
+static void Map_Stmap82RememberStickyParentPhase( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, int fAccepted, int * pfSticky, Map_Match_t * pStickyMatch, Map_Cut_t ** ppStickyCut, int * pStickyCutOrdinal )
+{
+    int ChildLeaf, ChildPhase;
+    if ( !fAccepted || !Map_Stmap82StickyParentPhaseApplies( p, pNode, fPhase ) )
+        return;
+    if ( !Map_Stmap81ReadChildPhase( pCut, pMatch, s_Stmap82ChildAigId, &ChildLeaf, &ChildPhase ) || ChildPhase != 0 )
+        LocalFeedback = (PressureRatio - 1.0) / 4.0;
+        if ( LocalFeedback > 1.0 )
+            LocalFeedback = 1.0;
+        Penalty += 0.16 * s_Stmap44SclFeedback * LocalFeedback * (LoadDriveRatio - 1.0) / LoadDriveRatio;
+    }
+    return Penalty > 0.75 ? 0.75 : Penalty;
+}
+
+static float s_Stmap45SclMaxLoadRatio = 0.0;
+static float s_Stmap45SclOverFrac = 0.0;
+static float s_Stmap45SclFeedback = 0.0;
+static float * s_pStmap45SclPressureRatios = NULL;
+static int s_nStmap45SclPressureRatios = 0;
+static int s_nStmap45SclPressureEntries = 0;
+static int s_fStmap60NearMissLeafDiag = 0;
+static int s_Stmap60NearMissLeafDiagTarget = -1;
+static int s_fStmap61CutOnlyGateDiag = 0;
+static int s_Stmap61CutOnlyGateDiagTarget = -1;
+static int s_fStmap62CutOnlyBeforeModerate = 0;
+static int s_fStmap63CutOnlyLoadDropGuard = 0;
+static int s_fStmap65StrongNodeLoadDropGuard = 0;
+static int s_fStmap66NearStrongNodeLoadDropDiag = 0;
+static int s_fStmap67NearStrongNodeWitnessDiag = 0;
+static int s_fStmap68BlockedStrongWitnessDiag = 0;
+static int s_nStmap68BlockedStrongWitnessSources = 0;
+static int s_fStmap69PressureNearWitnessDiag = 0;
+static int s_nStmap69PressureNearWitnessSources = 0;
+static int s_fStmap71ModeratePenaltyWitnessDiag = 0;
+static int s_nStmap71ModeratePenaltyWitnessSources = 0;
+static int s_fStmap72PathProximityWitnessDiag = 0;
+static int s_fStmap73AcceptedPressureWitnessDiag = 0;
+static int s_nStmap73AcceptedPressureWitnessSources = 0;
+#define MAP_STMAP75_WATCH_AIGS 4
+static int s_fStmap75FinalCriticalAigDiag = 0;
+static int s_nStmap75ActiveWatchAigs = 0;
+static int s_nStmap75SelectedMatchRows = 0;
+static int s_Stmap75WatchAigIds[MAP_STMAP75_WATCH_AIGS] = { -1, -1, -1, -1 };
+static int s_Stmap75WatchHitCounts[MAP_STMAP75_WATCH_AIGS];
+static const char * s_pStmap75FinalCriticalAigDiagLabel = "stmap75";
+#define MAP_STMAP64_MAX_WITNESSES 16
+static int s_fStmap64CutOnlyWitnessDiag = 0;
+static int s_nStmap64CutOnlyWitnesses = 0;
+static int s_Stmap64WitnessAigIds[MAP_STMAP64_MAX_WITNESSES];
+static int s_Stmap64WitnessPhases[MAP_STMAP64_MAX_WITNESSES];
+static int s_Stmap64WitnessNodes[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessNodePressureRatios[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessCutPressureRatios[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessSlacks[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessAreaSaves[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessArrivalDeltas[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessArrivalGainMargins[MAP_STMAP64_MAX_WITNESSES];
+static float s_Stmap64WitnessFeedbacks[MAP_STMAP64_MAX_WITNESSES];
+
+void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
+{
+    s_Stmap45SclMaxLoadRatio = MaxLoadRatio;
+    s_Stmap45SclOverFrac = OverFrac;
+    s_Stmap45SclFeedback = Severity;
+    s_pStmap45SclPressureRatios = pAigPressureRatios;
+    s_nStmap45SclPressureRatios = nAigPressureRatios;
+    s_nStmap45SclPressureEntries = nPressureEntries;
+}
+
+void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+{
+    Map_Stmap45SetSclLoadFeedbackWithEntries( MaxLoadRatio, OverFrac, Severity, pAigPressureRatios, nAigPressureRatios, 0 );
+}
+
+void Map_Stmap60SetNearMissLeafDiag( int fEnable, int TrackNode )
+{
+    s_fStmap60NearMissLeafDiag = fEnable;
+            pCut ? (int)pCut->nLeaves : 0, fPhase, pClass ? pClass : "unknown", fStored, fReplaced,
+            fDuplicate, Score, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, PenaltyFactor,
+            AreaMargin, fPressureAgreement, fPressureNear, fCutOnlyPressure, fAreaCap,
+            NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback );
+}
+
+static float Map_MatchStmap45PressureLookup( int AigId )
+{
+    if ( AigId < 0 || AigId >= s_nStmap45SclPressureRatios || s_Stmap45SclFeedback <= 0.0 || s_pStmap45SclPressureRatios == NULL )
+        return 0.0;
+    return s_pStmap45SclPressureRatios[AigId];
+}
+
+static float Map_MatchStmap45NodePressureRatio( Map_Node_t * pNode, int * pAigId )
+{
+    int AigId;
+    if ( pAigId )
+        *pAigId = -1;
+    if ( pNode == NULL || pNode->Num < 0 )
+        return 0.0;
+    AigId = Map_NodeReadAigId( pNode );
+    if ( pAigId )
+        *pAigId = AigId;
+    return Map_MatchStmap45PressureLookup( AigId );
+}
+
+static float Map_MatchStmap45CutPressureRatio( Map_Cut_t * pCut )
+{
+    Map_Node_t * pLeaf;
+    float Ratio, RatioMax = 0.0;
+    int i;
+    if ( pCut == NULL )
+        return 0.0;
+    for ( i = 0; i < (int)pCut->nLeaves; i++ )
+    {
+        pLeaf = Map_Regular( pCut->ppLeaves[i] );
+        if ( pLeaf == NULL )
+            continue;
+        Ratio = Map_MatchStmap45NodePressureRatio( pLeaf, NULL );
+        if ( RatioMax < Ratio )
+            RatioMax = Ratio;
+    }
+    return RatioMax;
+}
+
+static int Map_Stmap75WatchIndex( int AigId )
+{
+    int i;
+    if ( !s_fStmap75FinalCriticalAigDiag )
+        return -1;
+    for ( i = 0; i < s_nStmap75ActiveWatchAigs; i++ )
+        if ( s_Stmap75WatchAigIds[i] == AigId )
+            return i;
+    return -1;
+}
+
+static void Map_Stmap75ReadLeaf( Map_Cut_t * pCut, int iLeaf, int * pLeafNode, int * pLeafAigId )
+{
+    Map_Node_t * pLeaf;
+    if ( pLeafNode )
+        *pLeafNode = -1;
+    if ( pLeafAigId )
+        *pLeafAigId = -1;
+    if ( pCut == NULL || iLeaf < 0 || iLeaf >= (int)pCut->nLeaves )
+        return;
+    pLeaf = Map_Regular( pCut->ppLeaves[iLeaf] );
+    if ( pLeaf == NULL )
+        return;
+    if ( pLeafNode )
+        *pLeafNode = pLeaf->Num;
+    if ( pLeafAigId )
+        *pLeafAigId = Map_NodeReadAigId( pLeaf );
+}
+
+static void Map_Stmap75PrintSelectedMatches( Map_Man_t * p, Map_Node_t * pNode )
+{
+    Map_Cut_t * pCut;
+    Map_Match_t * pMatch;
+    Mio_Gate_t * pGate;
+    float NodePressureRatio, CutPressureRatio, LeafLoadAvg, LoadDriveRatio;
+    float Arrival, Required, Slack, AreaFlow;
+    int Phase, AigId, WatchIndex, FanLimit, Leaves, LeafNode[6], LeafAigId[6], i;
+
+    if ( !s_fStmap75FinalCriticalAigDiag || p == NULL || pNode == NULL )
+        return;
+    NodePressureRatio = Map_MatchStmap45NodePressureRatio( pNode, &AigId );
+    WatchIndex = Map_Stmap75WatchIndex( AigId );
+    if ( WatchIndex < 0 )
+        return;
+    for ( Phase = 0; Phase < 2; Phase++ )
+    {
+        pCut = pNode->pCutBest[Phase];
+        if ( pCut == NULL )
+            continue;
+        pMatch = pCut->M + Phase;
+        if ( pMatch->pSuperBest == NULL )
+        if ( pMatch->pSuperBest == NULL )
+            continue;
+        pGate = pMatch->pSuperBest->pRoot;
+        CutPressureRatio = Map_MatchStmap45CutPressureRatio( pCut );
+        LeafLoadAvg = Map_MatchStmap32CutLeafLoadAvg( pCut );
+        FanLimit = (int)pMatch->pSuperBest->nFanLimit;
+        LoadDriveRatio = FanLimit > 0 ? LeafLoadAvg / (float)FanLimit : LeafLoadAvg;
+        Arrival = pMatch->tArrive.Worst;
+        Required = pNode->tRequired[Phase].Worst;
+        if ( Required > MAP_FLOAT_LARGE / 2 )
+        {
+            Required = -1.0;
+            Slack = 0.0;
+        }
+        else
+            Slack = Required - Arrival;
+        AreaFlow = pMatch->AreaFlow;
+        Leaves = (int)pCut->nLeaves;
+        for ( i = 0; i < 6; i++ )
+            Map_Stmap75ReadLeaf( pCut, i, LeafNode + i, LeafAigId + i );
+        s_nStmap75SelectedMatchRows++;
+        s_Stmap75WatchHitCounts[WatchIndex]++;
+        printf( "%s selected-match: index = %d  watch-index = %d  mapper-mode = %d  node = %d  aig-id = %d  level = %u  refs = %d  phase = %d  gate = %s  leaves = %d  cut-leaf-load-avg = %.3f  fanout-limit = %d  load-drive-ratio = %.3f  arrival = %.6f  required = %.6f  slack = %.6f  area-flow = %.6f  u-phase-best = %u  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  scl-feedback = %.3f  leaf0-node = %d  leaf0-aig-id = %d  leaf1-node = %d  leaf1-aig-id = %d  leaf2-node = %d  leaf2-aig-id = %d  leaf3-node = %d  leaf3-aig-id = %d  leaf4-node = %d  leaf4-aig-id = %d  leaf5-node = %d  leaf5-aig-id = %d\n",
+            s_pStmap75FinalCriticalAigDiagLabel, s_nStmap75SelectedMatchRows, WatchIndex, p->fMappingMode, pNode->Num, AigId,
+            pNode->Level, pNode->nRefs, Phase, pGate ? Mio_GateReadName(pGate) : "?",
+            Leaves, LeafLoadAvg, FanLimit, LoadDriveRatio, Arrival, Required, Slack, AreaFlow,
+            pMatch->uPhaseBest, NodePressureRatio, CutPressureRatio, s_Stmap45SclFeedback,
+            LeafNode[0], LeafAigId[0], LeafNode[1], LeafAigId[1], LeafNode[2], LeafAigId[2],
+            LeafNode[3], LeafAigId[3], LeafNode[4], LeafAigId[4], LeafNode[5], LeafAigId[5] );
+    }
+}
+
+static void Map_MatchStmap60PrintNearMissLeafDiag( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int NearMissIndex, const char * pReason, float Slack, float AreaSave, float ArrivalDelta, float ArrivalGainMargin, float AreaMargin, float NodePressureRatio, float CutPressureRatio )
+{
+    Map_Node_t * pLeaf;
+    float LeafRatio, MaxLeafRatio = 0.0;
+    int i, NodeAigId, LeafAigId, LeafNode, MaxLeafAigId = -1, MaxLeafNode = -1, nLeaves = 0;
+    if ( !s_fStmap60NearMissLeafDiag || p == NULL || pNode == NULL || pCut == NULL || pNode->Num != s_Stmap60NearMissLeafDiagTarget )
+        return;
+    p->nStmap60NearMissLeafDiag++;
+    NodeAigId = Map_NodeReadAigId( pNode );
+    for ( i = 0; i < (int)pCut->nLeaves; i++ )
+    {
+        pLeaf = Map_Regular( pCut->ppLeaves[i] );
+        if ( pLeaf == NULL )
+            continue;
+        LeafAigId = Map_NodeReadAigId( pLeaf );
+        LeafNode = pLeaf->Num;
+        LeafRatio = Map_MatchStmap45PressureLookup( LeafAigId );
+        if ( nLeaves == 0 || LeafRatio > MaxLeafRatio )
+        {
+            MaxLeafRatio = LeafRatio;
+            MaxLeafAigId = LeafAigId;
+            MaxLeafNode = LeafNode;
+        }
+        nLeaves++;
+        printf( "stmap60 near-miss leaf diag: index = %d  near-miss-index = %d  tracked-node = %d  node-aig-id = %d  phase = %d  leaf-index = %d  leaf-node = %d  leaf-aig-id = %d  leaf-pressure-ratio = %.3f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  reason = %s\n",
+            p->nStmap60NearMissLeafDiag, NearMissIndex, pNode->Num, NodeAigId, fPhase, i,
+            LeafNode, LeafAigId, LeafRatio, NodePressureRatio, CutPressureRatio, pReason );
+    }
+    p->nStmap60NearMissLeafDiagLeaves += nLeaves;
+
+exec
+/bin/zsh -lc "ls -1 | sed -n '1,120p' && find . -maxdepth 2 -iname '*cmake*' -o -name 'CMakeLists.txt' -o -name '*.vcxproj' | sed -n '1,120p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+7nm_lvt_ff.lib
+AGENT.md
+CMakeLists.txt
+Makefile
+README.md
+abc
+abc.history
+abc.rc
+abcexe.dsp
+abclib.dsp
+abcspace.dsw
+arch_flags
+arch_flags.c
+benchmarks
+copyright.txt
+depends.sh
+i10.aig
+lib
+readmeaig
+src
+test
+./CMakeLists.txt
+./test/CMakeLists.txt
+
+exec
+/bin/zsh -lc "grep -R \"abcStmap_85\\|abcStmap_86\\|module.make\\|src/base/abci\" -n CMakeLists.txt src test | head -120" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 6822ms:
+Binary file src/base/abci/abcScorr.o matches
+src/base/abci/abcStmap_65.d:1:src/base/abci/abcStmap_65.d src/base/abci/abcStmap_65.o: src/base/abci/abcStmap_65.c src/base/abc/abc.h \
+Binary file src/base/abci/abcDec.o matches
+Binary file src/base/abci/abcStmap_46.o matches
+src/base/abci/abcCas.d:1:src/base/abci/abcCas.d src/base/abci/abcCas.o: src/base/abci/abcCas.c src/base/abc/abc.h src/misc/vec/vec.h \
+src/base/abci/abcStmap_82.d:1:src/base/abci/abcStmap_82.d src/base/abci/abcStmap_82.o: src/base/abci/abcStmap_82.c src/base/abc/abc.h \
+Binary file src/base/abci/abcSweep.o matches
+src/base/abci/abcSense.d:1:src/base/abci/abcSense.d src/base/abci/abcSense.o: src/base/abci/abcSense.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_27.o matches
+Binary file src/base/abci/abcFxu.o matches
+src/base/abci/abcRr.d:1:src/base/abci/abcRr.d src/base/abci/abcRr.o: src/base/abci/abcRr.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcOrchestration.o matches
+Binary file src/base/abci/abcStmap_63.o matches
+Binary file src/base/abci/abcDress3.o matches
+src/base/abci/abcStmap_40.d:1:src/base/abci/abcStmap_40.d src/base/abci/abcStmap_40.o: src/base/abci/abcStmap_40.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_84.o matches
+Binary file src/base/abci/abcStmap_69.o matches
+Binary file src/base/abci/abcDsd.o matches
+src/base/abci/abcLog.d:1:src/base/abci/abcLog.d src/base/abci/abcLog.o: src/base/abci/abcLog.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcFraig.o matches
+src/base/abci/abcStmap_21.d:1:src/base/abci/abcStmap_21.d src/base/abci/abcStmap_21.o: src/base/abci/abcStmap_21.c src/base/abc/abc.h \
+src/base/abci/abcStmap_25.d:1:src/base/abci/abcStmap_25.d src/base/abci/abcStmap_25.o: src/base/abci/abcStmap_25.c src/base/abc/abc.h \
+Binary file src/base/abci/abcFx.o matches
+Binary file src/base/abci/abcStmap_67.o matches
+src/base/abci/abcStmap_44.d:1:src/base/abci/abcStmap_44.d src/base/abci/abcStmap_44.o: src/base/abci/abcStmap_44.c src/base/abc/abc.h \
+src/base/abci/abcResub.d:1:src/base/abci/abcResub.d src/base/abci/abcResub.o: src/base/abci/abcResub.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_80.o matches
+Binary file src/base/abci/abcTiming.o matches
+src/base/abci/abcCollapse.d:1:src/base/abci/abcCollapse.d src/base/abci/abcCollapse.o: src/base/abci/abcCollapse.c src/base/abc/abc.h \
+src/base/abci/abcQuant.d:1:src/base/abci/abcQuant.d src/base/abci/abcQuant.o: src/base/abci/abcQuant.c src/base/abc/abc.h \
+Binary file src/base/abci/abcRunGen.o matches
+Binary file src/base/abci/abcReorder.o matches
+Binary file src/base/abci/abcAttach.o matches
+Binary file src/base/abci/abcStmap_23.o matches
+src/base/abci/abcStrash.d:1:src/base/abci/abcStrash.d src/base/abci/abcStrash.o: src/base/abci/abcStrash.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_48.o matches
+src/base/abci/abcStmap_86.c:3:  FileName    [abcStmap_86.c]
+Binary file src/base/abci/abcIfMux.o matches
+src/base/abci/abcStmap_61.d:1:src/base/abci/abcStmap_61.d src/base/abci/abcStmap_61.o: src/base/abci/abcStmap_61.c src/base/abc/abc.h \
+Binary file src/base/abci/abcIfif.o matches
+Binary file src/base/abci/abcStmap_42.o matches
+src/base/abci/abcStmap_86.d:1:src/base/abci/abcStmap_86.d src/base/abci/abcStmap_86.o: src/base/abci/abcStmap_86.c src/base/abc/abc.h \
+src/base/abci/abcMfs.d:1:src/base/abci/abcMfs.d src/base/abci/abcMfs.o: src/base/abci/abcMfs.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcStmap_29.o matches
+src/base/abci/abcVerify.d:1:src/base/abci/abcVerify.d src/base/abci/abcVerify.o: src/base/abci/abcVerify.c src/base/abc/abc.h \
+Binary file src/base/abci/abcRpo.o matches
+Binary file src/base/abci/abcStmap_16.o matches
+src/base/abci/abcStmap_35.d:1:src/base/abci/abcStmap_35.d src/base/abci/abcStmap_35.o: src/base/abci/abcStmap_35.c src/base/abc/abc.h \
+Binary file src/base/abci/abcRestruct.o matches
+src/base/abci/abcStmap_1.d:1:src/base/abci/abcStmap_1.d src/base/abci/abcStmap_1.o: src/base/abci/abcStmap_1.c src/base/abc/abc.h \
+Binary file src/base/abci/abcMulti.o matches
+Binary file src/base/abci/abcStmap_77.o matches
+src/base/abci/abcStmap_54.d:1:src/base/abci/abcStmap_54.d src/base/abci/abcStmap_54.o: src/base/abci/abcStmap_54.c src/base/abc/abc.h \
+Binary file src/base/abci/abcIvy.o matches
+src/base/abci/abcTim.d:1:src/base/abci/abcTim.d src/base/abci/abcTim.o: src/base/abci/abcTim.c src/base/abc/abc.h src/misc/vec/vec.h \
+src/base/abci/abcStmap_10.d:1:src/base/abci/abcStmap_10.d src/base/abci/abcStmap_10.o: src/base/abci/abcStmap_10.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_33.o matches
+Binary file src/base/abci/abcStmap_58.o matches
+Binary file src/base/abci/abcStmap_7.o matches
+Binary file src/base/abci/abcTopo.o matches
+src/base/abci/abcBmc.d:1:src/base/abci/abcBmc.d src/base/abci/abcBmc.o: src/base/abci/abcBmc.c src/base/abc/abc.h src/misc/vec/vec.h \
+src/base/abci/abcStmap_71.d:1:src/base/abci/abcStmap_71.d src/base/abci/abcStmap_71.o: src/base/abci/abcStmap_71.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_52.o matches
+Binary file src/base/abci/abcReconv.o matches
+src/base/abci/abcSpeedup.d:1:src/base/abci/abcSpeedup.d src/base/abci/abcSpeedup.o: src/base/abci/abcSpeedup.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_39.o matches
+src/base/abci/abcMiter.d:1:src/base/abci/abcMiter.d src/base/abci/abcMiter.o: src/base/abci/abcMiter.c src/base/abc/abc.h \
+src/base/abci/abcStmap_75.d:1:src/base/abci/abcStmap_75.d src/base/abci/abcStmap_75.o: src/base/abci/abcStmap_75.c src/base/abc/abc.h \
+src/base/abci/abcRenode.d:1:src/base/abci/abcRenode.d src/base/abci/abcRenode.o: src/base/abci/abcRenode.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_3.o matches
+src/base/abci/abcCascade.d:1:src/base/abci/abcCascade.d src/base/abci/abcCascade.o: src/base/abci/abcCascade.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_56.o matches
+src/base/abci/abcStmap_14.d:1:src/base/abci/abcStmap_14.d src/base/abci/abcStmap_14.o: src/base/abci/abcStmap_14.c src/base/abc/abc.h \
+src/base/abci/abcExact.d:1:src/base/abci/abcExact.d src/base/abci/abcExact.o: src/base/abci/abcExact.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_9.o matches
+Binary file src/base/abci/abcQbf.o matches
+Binary file src/base/abci/abcStmap_37.o matches
+Binary file src/base/abci/abcDetect.o matches
+Binary file src/base/abci/abcStmap_73.o matches
+Binary file src/base/abci/abcNpn.o matches
+Binary file src/base/abci/abcStmap_18.o matches
+Binary file src/base/abci/abcProve.o matches
+src/base/abci/abcStmap_5.d:1:src/base/abci/abcStmap_5.d src/base/abci/abcStmap_5.o: src/base/abci/abcStmap_5.c src/base/abc/abc.h \
+src/base/abci/abcStmap_50.d:1:src/base/abci/abcStmap_50.d src/base/abci/abcStmap_50.o: src/base/abci/abcStmap_50.c src/base/abc/abc.h \
+src/base/abci/abcMerge.d:1:src/base/abci/abcMerge.d src/base/abci/abcMerge.o: src/base/abci/abcMerge.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_12.o matches
+src/base/abci/abcLut.d:1:src/base/abci/abcLut.d src/base/abci/abcLut.o: src/base/abci/abcLut.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcStmap_79.o matches
+Binary file src/base/abci/abcMap.o matches
+src/base/abci/abcStmap_31.d:1:src/base/abci/abcStmap_31.d src/base/abci/abcStmap_31.o: src/base/abci/abcStmap_31.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_60.o matches
+src/base/abci/abcStmap_43.d:1:src/base/abci/abcStmap_43.d src/base/abci/abcStmap_43.o: src/base/abci/abcStmap_43.c src/base/abc/abc.h \
+src/base/abci/abcStmap_28.d:1:src/base/abci/abcStmap_28.d src/base/abci/abcStmap_28.o: src/base/abci/abcStmap_28.c src/base/abc/abc.h \
+src/base/abci/abcRefactor.d:1:src/base/abci/abcRefactor.d src/base/abci/abcRefactor.o: src/base/abci/abcRefactor.c src/base/abc/abc.h \
+Binary file src/base/abci/abcGen.o matches
+src/base/abci/abcDebug.d:1:src/base/abci/abcDebug.d src/base/abci/abcDebug.o: src/base/abci/abcDebug.c src/base/abc/abc.h \
+Binary file src/base/abci/abcCut.o matches
+src/base/abci/abcStmap_22.d:1:src/base/abci/abcStmap_22.d src/base/abci/abcStmap_22.o: src/base/abci/abcStmap_22.c src/base/abc/abc.h \
+src/base/abci/abcStmap_49.d:1:src/base/abci/abcStmap_49.d src/base/abci/abcStmap_49.o: src/base/abci/abcStmap_49.c src/base/abc/abc.h \
+src/base/abci/abcStmap_66.d:1:src/base/abci/abcStmap_66.d src/base/abci/abcStmap_66.o: src/base/abci/abcStmap_66.c src/base/abc/abc.h \
+src/base/abci/abcStmap_81.d:1:src/base/abci/abcStmap_81.d src/base/abci/abcStmap_81.o: src/base/abci/abcStmap_81.c src/base/abc/abc.h \
+Binary file src/base/abci/abcStmap_45.o matches
+Binary file src/base/abci/abcDress.o matches
+Binary file src/base/abci/abcNpnSave.o matches
+src/base/abci/abcUnate.d:1:src/base/abci/abcUnate.d src/base/abci/abcUnate.o: src/base/abci/abcUnate.c src/base/abc/abc.h \
+Binary file src/base/abci/abcBidec.o matches
+Binary file src/base/abci/abcMini.o matches
+Binary file src/base/abci/abcStmap_24.o matches
+src/base/abci/abcIf.d:1:src/base/abci/abcIf.d src/base/abci/abcIf.o: src/base/abci/abcIf.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcXsim.o matches
+src/base/abci/abc.d:1:src/base/abci/abc.d src/base/abci/abc.o: src/base/abci/abc.c src/base/abc/abc.h src/misc/vec/vec.h \
+src/base/abci/abc.d:35:  src/base/abci/abciUnfold2.c
+src/base/abci/abcStmap_68.d:1:src/base/abci/abcStmap_68.d src/base/abci/abcStmap_68.o: src/base/abci/abcStmap_68.c src/base/abc/abc.h \
+src/base/abci/abcHaig.d:1:src/base/abci/abcHaig.d src/base/abci/abcHaig.o: src/base/abci/abcHaig.c src/base/abc/abc.h src/misc/vec/vec.h \
+Binary file src/base/abci/abcStmap_20.o matches
+src/base/abci/abcStmap_62.d:1:src/base/abci/abcStmap_62.d src/base/abci/abcStmap_62.o: src/base/abci/abcStmap_62.c src/base/abc/abc.h \
+Binary file src/base/abci/abcOrder.o matches
+src/base/abci/abcStmap_85.c:3:  FileName    [abcStmap_85.c]
+src/base/abci/abcAuto.d:1:src/base/abci/abcAuto.d src/base/abci/abcAuto.o: src/base/abci/abcAuto.c src/base/abc/abc.h src/misc/vec/vec.h \
+src/base/abci/abcDress2.d:1:src/base/abci/abcDress2.d src/base/abci/abcDress2.o: src/base/abci/abcDress2.c src/base/abc/abc.h \
+
+exec
+/bin/zsh -lc "sed -n '1,260p' CMakeLists.txt && echo '--- src/base/abci? no CMake' && find src -name CMakeLists.txt -maxdepth 4 -print" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+cmake_minimum_required(VERSION 3.5.0)
+
+include(CMakeParseArguments)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+# Generate compilation database compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Default c++ standard used unless otherwise specified in target_compile_features.
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "the C++ standard to use for this project")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+function(addprefix var prefix)
+    foreach( s ${ARGN} )
+        list(APPEND tmp "-I${s}")
+    endforeach()
+    set(${var} ${tmp} PARENT_SCOPE)
+endfunction()
+
+# filter out flags that are not appropriate for the compiler being used
+function(target_compile_options_filtered target visibility)
+    foreach( flag ${ARGN} )
+        if( flag MATCHES "^-D.*" )
+            target_compile_options( ${target} ${visibility} ${flag} )
+        else()
+            check_c_compiler_flag( ${flag} C_COMPILER_SUPPORTS__${flag} )
+            if( C_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:C>:${flag}> )
+            endif()
+
+            check_cxx_compiler_flag( ${flag} CXX_COMPILER_SUPPORTS__${flag} )
+            if( CXX_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:CXX>:${flag}>  )
+            endif()
+        endif()
+    endforeach()
+endfunction()
+
+project(abc)
+
+if(READLINE_FOUND MATCHES TRUE)
+    addprefix(ABC_READLINE_INCLUDES_FLAGS "-I" ${READLINE_INCLUDE})
+    string(REPLACE ";" " " ABC_READLINE_INCLUDES_FLAGS "${ABC_READLINE_INCLUDES_FLAGS}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_INCLUDES=${ABC_READLINE_INCLUDES_FLAGS}")
+
+    string(REPLACE ";" " " ABC_READLINE_LIBRARIES_FLAGS "${READLINE_LIBRARIES}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_LIBRARIES=${ABC_READLINE_LIBRARIES_FLAGS}")
+elseif(READLINE_FOUND MATCHES FALSE)
+    list(APPEND ABC_READLINE_FLAGS "ABC_USE_NO_READLINE=1")
+endif()
+
+if(ABC_USE_NAMESPACE)
+    set(ABC_USE_NAMESPACE_FLAGS "ABC_USE_NAMESPACE=${ABC_USE_NAMESPACE}")
+endif()
+
+if( APPLE )
+    set(make_env ${CMAKE_COMMAND} -E env SDKROOT=${CMAKE_OSX_SYSROOT})
+endif()
+
+# run make to extract compiler options, linker options and list of source files
+execute_process(
+  COMMAND
+    ${make_env}
+    make
+        ${ABC_READLINE_FLAGS}
+        ${ABC_USE_NAMESPACE_FLAGS}
+        ARCHFLAGS_EXE=${CMAKE_CURRENT_BINARY_DIR}/abc_arch_flags_program.exe
+        ABC_MAKE_NO_DEPS=1
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        LD=${CMAKE_CXX_COMPILER}
+        cmake_info
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  OUTPUT_VARIABLE MAKE_OUTPUT
+)
+
+# extract options from make output
+function(extract_var SEPARATOR DEST_VARIABLE MAKE_OUTPUT)
+  string(REGEX MATCH "${SEPARATOR} .* ${SEPARATOR}" TMP "${MAKE_OUTPUT}")
+  string(REGEX REPLACE "${SEPARATOR} (.*) ${SEPARATOR}" "\\1" TMP "${TMP}")
+
+  separate_arguments(TMP)
+
+  set(${DEST_VARIABLE} ${TMP} PARENT_SCOPE)
+endfunction()
+
+extract_var(SEPARATOR_SRC ABC_SRC ${MAKE_OUTPUT})
+extract_var(SEPARATOR_LIBS ABC_LIBS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CFLAGS ABC_CFLAGS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CXXFLAGS ABC_CXXFLAGS ${MAKE_OUTPUT})
+
+if(ABC_USE_NAMESPACE)
+    set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
+endif()
+
+function(abc_properties target visibility)
+    target_include_directories(${target} ${visibility} ${CMAKE_CURRENT_SOURCE_DIR}/src )
+    target_compile_options_filtered(${target} ${visibility} ${ABC_CFLAGS} ${ABC_CXXFLAGS} -Wno-unused-but-set-variable )
+    target_link_libraries(${target} ${visibility} ${ABC_LIBS})
+endfunction()
+
+set(ABC_MAIN_SRC src/base/main/main.c)
+list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
+
+add_library(libabc EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc PUBLIC)
+set_property(TARGET libabc PROPERTY OUTPUT_NAME abc)
+
+add_executable(abc ${ABC_MAIN_SRC})
+target_link_libraries(abc PRIVATE libabc)
+abc_properties(abc PRIVATE)
+
+add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc-pic PUBLIC)
+set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
+
+if(NOT DEFINED ABC_SKIP_TESTS)
+    enable_testing()
+    include(FetchContent)
+    FetchContent_Declare(
+    googletest
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    # Specify the commit you depend on and update it regularly.
+    URL "https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip"
+    )
+    FetchContent_MakeAvailable(googletest)
+    include(GoogleTest)
+    add_subdirectory(test)
+endif()--- src/base/abci? no CMake
+
+exec
+/bin/zsh -lc "grep -R \"void Abc_Stmap76EnablePhaseSurvivalScope\\|void Abc_Stmap77SetReconstructionDiag\\|void Abc_Stmap78SetDemandPathDiag\\|void Abc_Stmap79SetParentCutDiag\\|void Map_Stmap80SetCandidateCutDiag\\|void Map_Stmap81SetParentPhaseBias\" -n src/base/abci src/map/mapper | sed -n '1,120p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 905ms:
+src/base/abci/abcStmap_82.c:85:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_82.c:86:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_82.c:88:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_82.c:90:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_82.c:92:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_82.c:94:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_65.c:584:    extern void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel );
+src/base/abci/abcStmap_86.c:89:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_86.c:90:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_86.c:92:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_86.c:94:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_86.c:96:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_86.c:98:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_81.c:86:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_81.c:87:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_81.c:89:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_81.c:91:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_81.c:93:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_81.c:95:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_85.c:88:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_85.c:89:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_85.c:91:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_85.c:93:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_85.c:95:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_85.c:97:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_78.c:87:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_78.c:88:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_78.c:90:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_76.c:68:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_80.c:85:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_80.c:86:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_80.c:88:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_80.c:90:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_80.c:92:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_84.c:87:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_84.c:88:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_84.c:90:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_84.c:92:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_84.c:94:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_84.c:96:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_79.c:86:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_79.c:87:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_79.c:89:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_79.c:91:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcMap.c:99:void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+src/base/abci/abcMap.c:315:void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId )
+src/base/abci/abcMap.c:580:void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId )
+src/base/abci/abcStmap_77.c:68:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_77.c:69:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_64.c:690:void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+src/base/abci/abcStmap_83.c:86:    extern void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_83.c:87:    extern void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs );
+src/base/abci/abcStmap_83.c:89:    extern void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId );
+src/base/abci/abcStmap_83.c:91:    extern void Abc_Stmap79SetParentCutDiag( int fEnable, const char * pLabel, int ChildAigId, int ParentAigId );
+src/base/abci/abcStmap_83.c:93:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_83.c:95:    extern void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/map/mapper/mapperMatch.c:143:void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+src/map/mapper/mapperMatch.c:313:void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+src/map/mapper/mapperMatch.c:329:void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel )
+
+exec
+/bin/zsh -lc "sed -n '80,130p' src/base/abci/abcMap.c && sed -n '680,730p' src/base/abci/abcStmap_64.c && sed -n '130,170p' src/map/mapper/mapperMatch.c && sed -n '300,330p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+        s_Stmap77ReconstructionRequestPhase[i] = 0;
+        s_Stmap77ReconstructionDirectPhase[i] = 0;
+        s_Stmap77ReconstructionInverterPhase[i] = 0;
+        s_Stmap77ReconstructionCachePhase[i] = 0;
+    }
+}
+
+static void Abc_Stmap77ClearReconstructionDiag( void )
+{
+    int i;
+    s_fStmap77ReconstructionDiag = 0;
+    s_fStmap77ReconstructionActive = 0;
+    s_pStmap77ReconstructionLabel = "stmap77";
+    s_nStmap77ReconstructionWatchAigs = 0;
+    for ( i = 0; i < ABC_STMAP77_MAX_WATCH_AIGS; i++ )
+        s_Stmap77ReconstructionWatchAigIds[i] = -1;
+    Abc_Stmap77ResetReconstructionCounters();
+}
+
+void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Abc_Stmap77ClearReconstructionDiag();
+    s_pStmap77ReconstructionLabel = pLabel && pLabel[0] ? pLabel : "stmap77";
+    if ( !fEnable || pWatchAigIds == NULL || nWatchAigs <= 0 )
+        return;
+    for ( i = 0; i < nWatchAigs && s_nStmap77ReconstructionWatchAigs < ABC_STMAP77_MAX_WATCH_AIGS; i++ )
+        if ( pWatchAigIds[i] >= 0 )
+            s_Stmap77ReconstructionWatchAigIds[s_nStmap77ReconstructionWatchAigs++] = pWatchAigIds[i];
+    if ( s_nStmap77ReconstructionWatchAigs == 0 )
+        return;
+    s_fStmap77ReconstructionDiag = 1;
+}
+
+int Abc_Stmap77ReconstructionDiagConfigured( void )
+{
+    return s_fStmap77ReconstructionDiag;
+}
+
+void Abc_Stmap77SetReconstructionActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap77ReconstructionDiag )
+        return;
+    if ( fActive )
+        Abc_Stmap77ResetReconstructionCounters();
+    s_fStmap77ReconstructionActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Abc_Stmap77ReconstructionWatchIndex( Map_Node_t * pNodeMap, int * pAigId )
+{
+void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel )
+{
+    s_fStmap74FinalCriticalScope = pNtk != NULL && pNtk->vOrigNodeIds != NULL;
+    s_pStmap74FinalCriticalNtk = s_fStmap74FinalCriticalScope ? pNtk : NULL;
+    s_pStmap74FinalCriticalOrigIds = s_fStmap74FinalCriticalScope ? pNtk->vOrigNodeIds : NULL;
+    s_pStmap74FinalCriticalLabel = pLabel && pLabel[0] ? pLabel : "stmap74";
+    if ( !s_fStmap74FinalCriticalScope )
+        s_pStmap74FinalCriticalLabel = "stmap74";
+}
+
+void Abc_Stmap76EnablePhaseSurvivalScope( Abc_Ntk_t * pNtk, const char * pLabel, int * pWatchAigIds, int nWatchAigs )
+{
+    int i;
+    Abc_Stmap76ClearPhaseSurvivalScope();
+    if ( pNtk == NULL || pNtk->vOrigNodeIds == NULL || pWatchAigIds == NULL || nWatchAigs <= 0 )
+        return;
+    for ( i = 0; i < nWatchAigs && s_nStmap76WatchAigs < ABC_STMAP76_MAX_WATCH_AIGS; i++ )
+        if ( pWatchAigIds[i] >= 0 )
+            s_Stmap76WatchAigIds[s_nStmap76WatchAigs++] = pWatchAigIds[i];
+    if ( s_nStmap76WatchAigs == 0 )
+        return;
+    s_fStmap76PhaseSurvivalScope = 1;
+    s_pStmap76PhaseSurvivalNtk = pNtk;
+    s_pStmap76PhaseSurvivalOrigIds = pNtk->vOrigNodeIds;
+    s_pStmap76PhaseSurvivalLabel = pLabel && pLabel[0] ? pLabel : "stmap76";
+}
+
+static int Abc_Stmap76WatchIndex( int AigId )
+{
+    int i;
+    for ( i = 0; i < s_nStmap76WatchAigs; i++ )
+        if ( s_Stmap76WatchAigIds[i] == AigId )
+            return i;
+    return -1;
+}
+
+static int Abc_Stmap76ObjAigPhase( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, int * pAigId, int * pPhase )
+{
+    int Lit;
+    if ( pAigId )
+        *pAigId = -1;
+    if ( pPhase )
+        *pPhase = -1;
+    if ( pNtk == NULL || pObj == NULL || pNtk->vOrigNodeIds == NULL )
+        return 0;
+    if ( Abc_ObjId(pObj) < 0 || Abc_ObjId(pObj) >= Vec_IntSize(pNtk->vOrigNodeIds) )
+        return 0;
+    Lit = Vec_IntEntry( pNtk->vOrigNodeIds, Abc_ObjId(pObj) );
+    if ( Lit < 0 )
+        return 0;
+    if ( pAigId )
+    s_nStmap80CandidateAreaSensitive = 0;
+}
+
+static void Map_Stmap80ClearCandidateCutDiag( void )
+{
+    s_fStmap80CandidateCutDiag = 0;
+    s_fStmap80CandidateCutActive = 0;
+    s_pStmap80CandidateCutLabel = "stmap80";
+    s_Stmap80ParentAigId = -1;
+    s_Stmap80ChildAigId = -1;
+    Map_Stmap80ResetCandidateCutCounters();
+}
+
+void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+{
+    Map_Stmap80ClearCandidateCutDiag();
+    s_pStmap80CandidateCutLabel = pLabel && pLabel[0] ? pLabel : "stmap80";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 )
+        return;
+    s_fStmap80CandidateCutDiag = 1;
+    s_Stmap80ParentAigId = ParentAigId;
+    s_Stmap80ChildAigId = ChildAigId;
+}
+
+int Map_Stmap80CandidateCutDiagConfigured( void )
+{
+    return s_fStmap80CandidateCutDiag;
+}
+
+void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap80CandidateCutDiag )
+        return;
+    if ( fActive )
+        Map_Stmap80ResetCandidateCutCounters();
+    s_fStmap80CandidateCutActive = fActive;
+    (void)pPassLabel;
+}
+
+static void Map_Stmap80RecordCandidateCut( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int Reason, int fSelectedUpdate, int fViable )
+{
+    s_nStmap81ParentPhaseBlockedChild = 0;
+}
+
+static void Map_Stmap81ClearParentPhaseBias( void )
+{
+    s_fStmap81ParentPhaseBias = 0;
+    s_fStmap81ParentPhaseBiasActive = 0;
+    s_pStmap81ParentPhaseBiasLabel = "stmap81";
+    s_Stmap81ParentAigId = -1;
+    s_Stmap81ChildAigId = -1;
+    Map_Stmap81ResetParentPhaseBiasCounters();
+}
+
+void Map_Stmap81SetParentPhaseBias( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+{
+    Map_Stmap81ClearParentPhaseBias();
+    s_pStmap81ParentPhaseBiasLabel = pLabel && pLabel[0] ? pLabel : "stmap81";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 )
+        return;
+    s_fStmap81ParentPhaseBias = 1;
+    s_Stmap81ParentAigId = ParentAigId;
+    s_Stmap81ChildAigId = ChildAigId;
+}
+
+int Map_Stmap81ParentPhaseBiasConfigured( void )
+{
+    return s_fStmap81ParentPhaseBias;
+}
+
+void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel )
+{
+
+exec
+/bin/zsh -lc "grep -n \"Stmap7\\|Stmap8\" -n src/base/abci/abcStmap_65.c | sed -n '1,140p' && sed -n '540,650p' src/base/abci/abcStmap_65.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+575:    extern int Abc_Stmap77ReconstructionDiagConfigured( void );
+576:    extern void Abc_Stmap77SetReconstructionActive( int fActive, const char * pPassLabel );
+577:    extern int Abc_Stmap78DemandPathDiagConfigured( void );
+578:    extern void Abc_Stmap78SetDemandPathActive( int fActive, const char * pPassLabel );
+579:    extern int Abc_Stmap79ParentCutDiagConfigured( void );
+580:    extern void Abc_Stmap79SetParentCutActive( int fActive, const char * pPassLabel );
+581:    extern int Map_Stmap80CandidateCutDiagConfigured( void );
+582:    extern void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel );
+583:    extern int Map_Stmap81ParentPhaseBiasConfigured( void );
+584:    extern void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel );
+585:    extern int Map_Stmap82StickyParentPhaseConfigured( void );
+586:    extern void Map_Stmap82SetStickyParentPhaseActive( int fActive, const char * pPassLabel );
+745:        if ( Abc_Stmap77ReconstructionDiagConfigured() )
+746:            Abc_Stmap77SetReconstructionActive( 0, "feedback" );
+747:        if ( Abc_Stmap78DemandPathDiagConfigured() )
+748:            Abc_Stmap78SetDemandPathActive( 0, "feedback" );
+749:        if ( Abc_Stmap79ParentCutDiagConfigured() )
+750:            Abc_Stmap79SetParentCutActive( 0, "feedback" );
+751:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+752:            Map_Stmap80SetCandidateCutActive( 0, "feedback" );
+753:        if ( Map_Stmap81ParentPhaseBiasConfigured() )
+754:            Map_Stmap81SetParentPhaseBiasActive( 0, "feedback" );
+755:        if ( Map_Stmap82StickyParentPhaseConfigured() )
+756:            Map_Stmap82SetStickyParentPhaseActive( 0, "feedback" );
+803:        if ( Abc_Stmap77ReconstructionDiagConfigured() )
+804:            Abc_Stmap77SetReconstructionActive( 1, "final" );
+805:        if ( Abc_Stmap78DemandPathDiagConfigured() )
+806:            Abc_Stmap78SetDemandPathActive( 1, "final" );
+807:        if ( Abc_Stmap79ParentCutDiagConfigured() )
+808:            Abc_Stmap79SetParentCutActive( 1, "final" );
+809:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+810:            Map_Stmap80SetCandidateCutActive( 1, "final" );
+811:        if ( Map_Stmap81ParentPhaseBiasConfigured() )
+812:            Map_Stmap81SetParentPhaseBiasActive( 1, "final" );
+813:        if ( Map_Stmap82StickyParentPhaseConfigured() )
+814:            Map_Stmap82SetStickyParentPhaseActive( 1, "final" );
+816:        if ( Abc_Stmap77ReconstructionDiagConfigured() )
+817:            Abc_Stmap77SetReconstructionActive( 0, "final" );
+818:        if ( Abc_Stmap78DemandPathDiagConfigured() )
+819:            Abc_Stmap78SetDemandPathActive( 0, "final" );
+820:        if ( Abc_Stmap79ParentCutDiagConfigured() )
+821:            Abc_Stmap79SetParentCutActive( 0, "final" );
+822:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+823:            Map_Stmap80SetCandidateCutActive( 0, "final" );
+824:        if ( Map_Stmap81ParentPhaseBiasConfigured() )
+825:            Map_Stmap81SetParentPhaseBiasActive( 0, "final" );
+826:        if ( Map_Stmap82StickyParentPhaseConfigured() )
+827:            Map_Stmap82SetStickyParentPhaseActive( 0, "final" );
+845:        if ( Abc_Stmap77ReconstructionDiagConfigured() )
+846:            Abc_Stmap77SetReconstructionActive( 1, "final" );
+847:        if ( Abc_Stmap78DemandPathDiagConfigured() )
+848:            Abc_Stmap78SetDemandPathActive( 1, "final" );
+849:        if ( Abc_Stmap79ParentCutDiagConfigured() )
+850:            Abc_Stmap79SetParentCutActive( 1, "final" );
+851:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+852:            Map_Stmap80SetCandidateCutActive( 1, "final" );
+853:        if ( Map_Stmap81ParentPhaseBiasConfigured() )
+854:            Map_Stmap81SetParentPhaseBiasActive( 1, "final" );
+855:        if ( Map_Stmap82StickyParentPhaseConfigured() )
+856:            Map_Stmap82SetStickyParentPhaseActive( 1, "final" );
+858:        if ( Abc_Stmap77ReconstructionDiagConfigured() )
+859:            Abc_Stmap77SetReconstructionActive( 0, "final" );
+860:        if ( Abc_Stmap78DemandPathDiagConfigured() )
+861:            Abc_Stmap78SetDemandPathActive( 0, "final" );
+862:        if ( Abc_Stmap79ParentCutDiagConfigured() )
+863:            Abc_Stmap79SetParentCutActive( 0, "final" );
+864:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+865:            Map_Stmap80SetCandidateCutActive( 0, "final" );
+866:        if ( Map_Stmap81ParentPhaseBiasConfigured() )
+867:            Map_Stmap81SetParentPhaseBiasActive( 0, "final" );
+868:        if ( Map_Stmap82StickyParentPhaseConfigured() )
+869:            Map_Stmap82SetStickyParentPhaseActive( 0, "final" );
+
+***********************************************************************/
+int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkMap, * pNtkRes, * pNtkFirst;
+    Abc_Stmap65LoadStats_t LoadStats;
+    Abc_Stmap65BoundedStats_t BoundedStats;
+    float * pBoundedPressureRatios = NULL;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 250; // base SCL/genlib gain for low and moderate pressure
+    float LowGain, SelectedGain;
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c, fTempMap = 0;
+    int fUseReducedGain, fSevereTransfer;
+    float OverFrac, Feedback;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+    extern void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries );
+    extern void Map_Stmap60SetNearMissLeafDiag( int fEnable, int TrackNode );
+    extern void Map_Stmap61SetCutOnlyGateDiag( int fEnable, int TrackNode );
+    extern void Map_Stmap62SetCutOnlyOrdering( int fEnable );
+    extern void Map_Stmap65SetStrongNodeLoadDropGuard( int fEnable );
+    extern int Abc_Stmap77ReconstructionDiagConfigured( void );
+    extern void Abc_Stmap77SetReconstructionActive( int fActive, const char * pPassLabel );
+    extern int Abc_Stmap78DemandPathDiagConfigured( void );
+    extern void Abc_Stmap78SetDemandPathActive( int fActive, const char * pPassLabel );
+    extern int Abc_Stmap79ParentCutDiagConfigured( void );
+    extern void Abc_Stmap79SetParentCutActive( int fActive, const char * pPassLabel );
+    extern int Map_Stmap80CandidateCutDiagConfigured( void );
+    extern void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel );
+    extern int Map_Stmap81ParentPhaseBiasConfigured( void );
+    extern void Map_Stmap81SetParentPhaseBiasActive( int fActive, const char * pPassLabel );
+    extern int Map_Stmap82StickyParentPhaseConfigured( void );
+    extern void Map_Stmap82SetStickyParentPhaseActive( int fActive, const char * pPassLabel );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    DelayTarget = -1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 57; // stmap65 reuses reviewed mode 57 plus a stricter command-scoped load-drop guard; -f disables it
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+
+exec
+/bin/zsh -lc "tail -n 120 .autoeda/runtime/results/stmap86/implementation_check.log 2>/dev/null || true && echo '--- eval tail ---' && tail -n 80 .autoeda/runtime/results/stmap86/eval.log 2>/dev/null || true && echo '--- build tail ---' && tail -n 60 .autoeda/runtime/results/stmap86/build.log 2>/dev/null || true" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+source file exists
+command symbol registered
+command name registered
+build metadata registered
+selected-match array API configured
+selected watch count diagnostic configured
+--- eval tail ---
+stmap86 evaluation complete
+flow_results=8
+diagnostic_kinds=candidate_cut,candidate_cut_stats,demand_leaf,demand_path,demand_path_stats,diagnostic,final_critical_lineage,final_critical_stats,parent_cut,parent_cut_stats,parent_phase_bias,parent_phase_bias_stats,phase_output_context,phase_survival,phase_survival_stats,reconstruct_cache,reconstruct_demand,reconstruct_emit,reconstruct_inverter,reconstruct_request,reconstruct_stats,selected_match,selected_match_stats,sticky_parent_phase,sticky_parent_phase_stats
+cec_passed=4/4
+status=PASS
+--- build tail ---
+`` Generating dependency: /src/map/mapper/mapperMatch.c
+`` Generating dependency: /src/base/abci/abcStmap_86.c
+`` Generating dependency: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abcStmap_86.c
+`` Compiling: /src/map/mapper/mapperMatch.c
+`` Building binary: abc
+ld: warning: reducing alignment of section __DATA,__common from 0x8000 to 0x4000 because it exceeds segment maximum alignment
+
+exec
+/bin/zsh -lc "diff -u src/base/abci/abcStmap_85.c src/base/abci/abcStmap_86.c | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+--- src/base/abci/abcStmap_85.c	2026-04-26 13:42:50
++++ src/base/abci/abcStmap_86.c	2026-04-26 13:55:31
+@@ -1,12 +1,12 @@
+ /**CFile****************************************************************
+ 
+-  FileName    [abcStmap_85.c]
++  FileName    [abcStmap_86.c]
+ 
+   SystemName  [ABC: Logic synthesis and verification system.]
+ 
+   PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+ 
+-  Synopsis    [stmap85 command.]
++  Synopsis    [stmap86 command.]
+ 
+ ***********************************************************************/
+ 
+@@ -17,7 +17,7 @@
+ 
+ ABC_NAMESPACE_IMPL_START
+ 
+-static int Abc_Stmap85WatchAigsForNetwork( Abc_Ntk_t * pNtk, int * pChildAig, int * pParentAig )
++static int Abc_Stmap86WatchAigsForNetwork( Abc_Ntk_t * pNtk, int * pChildAig, int * pParentAig )
+ {
+     char * pName = pNtk ? Abc_NtkName(pNtk) : NULL;
+     char * pBase, * pSlash, * pBackslash;
+@@ -62,26 +62,27 @@
+ 
+ /**Function*************************************************************
+ 
+-  Synopsis    [Runs the stmap85 parent selected-match probe.]
++  Synopsis    [Runs the stmap86 dual selected-match probe.]
+ 
+-  Description [stmap85 reuses the stmap81 child-phase-0 parent candidate
++  Description [stmap86 reuses the stmap81 child-phase-0 parent candidate
+   bias and the stmap82 same-node/same-phase sticky guard, but raises the
+   timing-release window high enough that watched child-missing replacements
+   are effectively blocked. It watches both the child and downstream parent
+-  AIG IDs in final phase-survival/reconstruction diagnostics, and moves the
+-  mapper selected-match watch to the downstream parent AIG.]
++  AIG IDs in final phase-survival/reconstruction diagnostics and in mapper
++  selected-match diagnostics.]
+ 
+   SideEffects []
+ 
+   SeeAlso     []
+ 
+ ***********************************************************************/
+-int Abc_CommandStmap85( Abc_Frame_t * pAbc, int argc, char ** argv )
++int Abc_CommandStmap86( Abc_Frame_t * pAbc, int argc, char ** argv )
+ {
+     Abc_Ntk_t * pNtk, * pNtkRes;
+     int i, RetValue, ChildAigId, ParentAigId, WatchAigs[2], nWatchAigs = 0;
+     extern int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv );
+     extern void Map_Stmap75SetFinalCriticalAigDiag( int fEnable, int WatchAigId );
++    extern void Map_Stmap75SetFinalCriticalAigDiagArray( int fEnable, int * pWatchAigIds, int nWatchAigs );
+     extern void Map_Stmap75SetFinalCriticalAigDiagLabel( const char * pLabel );
+     extern void Map_Stmap75PrintFinalCriticalAigSummary( void );
+     extern void Abc_Stmap74EnableFinalCriticalScope( Abc_Ntk_t * pNtk, const char * pLabel );
+@@ -107,22 +108,22 @@
+     }
+ 
+     pNtk = Abc_FrameReadNtk( pAbc );
+-    Abc_Stmap85WatchAigsForNetwork( pNtk, &ChildAigId, &ParentAigId );
++    Abc_Stmap86WatchAigsForNetwork( pNtk, &ChildAigId, &ParentAigId );
+     if ( ChildAigId >= 0 )
+         WatchAigs[nWatchAigs++] = ChildAigId;
+     if ( ParentAigId >= 0 )
+         WatchAigs[nWatchAigs++] = ParentAigId;
+-    printf( "stmap85 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  selected-watch-aig = %d  dual-phase-survival-watch-count = %d  source = stmap84-parent-selected-match-probe  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  candidate-cut-trace = 1  parent-phase-bias = 1  sticky-parent-phase = 1  final-phase-survival = 1  mapping-policy-change = watched-parent-child-phase0-strict-sticky\n",
+-        ParentAigId >= 0, pNtk && Abc_NtkName(pNtk) ? Abc_NtkName(pNtk) : "?",
+-        ChildAigId, ParentAigId, ParentAigId, nWatchAigs );
+-    Map_Stmap75SetFinalCriticalAigDiag( ParentAigId >= 0, ParentAigId );
+-    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap85" );
+-    Abc_Stmap77SetReconstructionDiag( nWatchAigs > 0, "stmap85", WatchAigs, nWatchAigs );
+-    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap85", ChildAigId, ParentAigId );
+-    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap85", ChildAigId, ParentAigId );
+-    Map_Stmap80SetCandidateCutDiag( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
+-    Map_Stmap81SetParentPhaseBias( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
+-    Map_Stmap82SetStickyParentPhase( ChildAigId >= 0, "stmap85", ParentAigId, ChildAigId );
++    printf( "stmap86 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  selected-watch-count = %d  dual-phase-survival-watch-count = %d  source = stmap85-dual-selected-match-probe  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  candidate-cut-trace = 1  parent-phase-bias = 1  sticky-parent-phase = 1  final-phase-survival = 1  mapping-policy-change = watched-parent-child-phase0-strict-sticky\n",
++        nWatchAigs > 0, pNtk && Abc_NtkName(pNtk) ? Abc_NtkName(pNtk) : "?",
++        ChildAigId, ParentAigId, nWatchAigs, nWatchAigs );
++    Map_Stmap75SetFinalCriticalAigDiagArray( nWatchAigs > 0, WatchAigs, nWatchAigs );
++    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap86" );
++    Abc_Stmap77SetReconstructionDiag( nWatchAigs > 0, "stmap86", WatchAigs, nWatchAigs );
++    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap86", ChildAigId, ParentAigId );
++    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap86", ChildAigId, ParentAigId );
++    Map_Stmap80SetCandidateCutDiag( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
++    Map_Stmap81SetParentPhaseBias( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
++    Map_Stmap82SetStickyParentPhase( ChildAigId >= 0, "stmap86", ParentAigId, ChildAigId );
+     Map_Stmap82SetStickyParentPhaseTimingWindow( 100000.00f );
+     RetValue = Abc_CommandStmap65( pAbc, argc, argv );
+     Abc_Stmap77PrintReconstructionSummary();
+@@ -131,25 +132,25 @@
+     Map_Stmap80PrintCandidateCutSummary();
+     Map_Stmap81PrintParentPhaseBiasSummary();
+     Map_Stmap82PrintStickyParentPhaseSummary();
+-    Map_Stmap82SetStickyParentPhase( 0, "stmap85", -1, -1 );
+-    Map_Stmap81SetParentPhaseBias( 0, "stmap85", -1, -1 );
+-    Map_Stmap80SetCandidateCutDiag( 0, "stmap85", -1, -1 );
+-    Abc_Stmap79SetParentCutDiag( 0, "stmap85", -1, -1 );
+-    Abc_Stmap78SetDemandPathDiag( 0, "stmap85", -1, -1 );
+-    Abc_Stmap77SetReconstructionDiag( 0, "stmap85", NULL, 0 );
++    Map_Stmap82SetStickyParentPhase( 0, "stmap86", -1, -1 );
++    Map_Stmap81SetParentPhaseBias( 0, "stmap86", -1, -1 );
++    Map_Stmap80SetCandidateCutDiag( 0, "stmap86", -1, -1 );
++    Abc_Stmap79SetParentCutDiag( 0, "stmap86", -1, -1 );
++    Abc_Stmap78SetDemandPathDiag( 0, "stmap86", -1, -1 );
++    Abc_Stmap77SetReconstructionDiag( 0, "stmap86", NULL, 0 );
+     Map_Stmap75PrintFinalCriticalAigSummary();
+     Map_Stmap75SetFinalCriticalAigDiag( 0, -1 );
+     if ( RetValue == 0 )
+     {
+         pNtkRes = Abc_FrameReadNtk( pAbc );
+-        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap85" );
+-        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap85", WatchAigs, nWatchAigs );
++        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap86" );
++        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap86", WatchAigs, nWatchAigs );
+     }
+     return RetValue;
+ 
+ usage:
+-    Abc_Print( -2, "usage: stmap85 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+-    Abc_Print( -2, "\t              performs stmap85 bounded-pressure mapping with strict sticky retention, dual phase-survival diagnostics, and parent selected-match tracing\n" );
++    Abc_Print( -2, "usage: stmap86 [-DABFSG float] [-M num] [-arspfuovh]\n" );
++    Abc_Print( -2, "\t              performs stmap86 bounded-pressure mapping with strict sticky retention plus dual child/parent selected-match and phase-survival diagnostics\n" );
+     Abc_Print( -2, "\t-D float : sets the global required times [default = not used]\n" );
+     Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = 0.00]\n" );
+     Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = 0.00]\n" );
+
+exec
+/bin/zsh -lc "find . -maxdepth 3 -name .gitignore -print -exec sed -n '1,200p' {} \\; && echo '--- tracked autoeda ---' && git ls-files .autoeda | sed -n '1,120p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+./.gitignore
+DebugLib/
+DebugExe/
+DebugExt/
+
+ReleaseLib/
+ReleaseExe/
+ReleaseExt/
+
+_/
+_TEST/
+lib/abc*
+lib/m114*
+lib/bip*
+docs/
+.cache/
+
+src/ext*
+src/xxx/
+src/aig/au/
+src/aig/ssm/
+src/aig/ddb/
+
+*~
+*.orig
+
+*.[od]
+
+*.ncb
+*.opt
+*.plg
+
+*.zip
+*.DS_Store
+
+abcspaceext.dsw
+abcext.dsp
+
+abcexe.vcproj*
+abclib.vcproj*
+/abcspace.sln
+abcspace.suo
+
+*.pyc
+
+src/python/build
+src/python/bdist
+src/python/pyabc.py
+src/python/pyabc_wrap.*
+
+.idea/
+build/
+
+*.rej
+*.orig
+
+tags
+
+/libabc.a
+/abc
+
+/arch_flags
+
+/cmake
+/cscope
+abc.history
+
+# AutoEDA live supervisor state is machine-local and not reproducible.
+/.autoeda/runtime/launch.pid
+/.autoeda/runtime/supervisor.lock
+/.autoeda/runtime/heartbeat.json
+/.autoeda/runtime/supervisor_state.json
+/.autoeda/runtime/logs/launch_*.log
+--- tracked autoeda ---
+.autoeda/.gitkeep
+.autoeda/README.md
+.autoeda/project_pack/agent.md
+.autoeda/project_pack/evaluation.yaml
+.autoeda/project_pack/git.yaml
+.autoeda/project_pack/mission.md
+.autoeda/project_pack/repo_guide.md
+.autoeda/project_pack/secrets.ref
+.autoeda/project_pack/skills/code_structure/SKILL.md
+.autoeda/project_pack/skills/implementation/SKILL.md
+.autoeda/project_pack/skills/methods/SKILL.md
+.autoeda/project_pack/supervisor.yaml
+.autoeda/project_pack/templates/version_log_section.md
+.autoeda/runtime/campaign_state.json
+.autoeda/runtime/harness_prompt.txt
+.autoeda/runtime/harness_result.json
+.autoeda/runtime/harness_review.md
+.autoeda/runtime/harness_review_prompt.txt
+.autoeda/runtime/last_prompt.txt
+.autoeda/runtime/logs/harness_20260425T141842Z.log
+.autoeda/runtime/logs/harness_review_20260425T142356Z.log
+.autoeda/runtime/preflight_report.json
+.autoeda/runtime/results/stmap0/baseline_i10.log
+.autoeda/runtime/results/stmap0/baseline_i10.stderr
+.autoeda/runtime/results/stmap0/baseline_i10.stdout
+.autoeda/runtime/results/stmap0/baseline_ode.log
+.autoeda/runtime/results/stmap0/baseline_ode.stderr
+.autoeda/runtime/results/stmap0/baseline_ode.stdout
+.autoeda/runtime/results/stmap0/baseline_or1200.log
+.autoeda/runtime/results/stmap0/baseline_or1200.stderr
+.autoeda/runtime/results/stmap0/baseline_or1200.stdout
+.autoeda/runtime/results/stmap0/baseline_syn2.log
+.autoeda/runtime/results/stmap0/baseline_syn2.stderr
+.autoeda/runtime/results/stmap0/baseline_syn2.stdout
+.autoeda/runtime/results/stmap0/build.log
+.autoeda/runtime/results/stmap0/build.stderr
+.autoeda/runtime/results/stmap0/build.stdout
+.autoeda/runtime/results/stmap0/candidate_i10.log
+.autoeda/runtime/results/stmap0/candidate_i10.stderr
+.autoeda/runtime/results/stmap0/candidate_i10.stdout
+.autoeda/runtime/results/stmap0/candidate_ode.log
+.autoeda/runtime/results/stmap0/candidate_ode.stderr
+.autoeda/runtime/results/stmap0/candidate_ode.stdout
+.autoeda/runtime/results/stmap0/candidate_or1200.log
+.autoeda/runtime/results/stmap0/candidate_or1200.stderr
+.autoeda/runtime/results/stmap0/candidate_or1200.stdout
+.autoeda/runtime/results/stmap0/candidate_syn2.log
+.autoeda/runtime/results/stmap0/candidate_syn2.stderr
+.autoeda/runtime/results/stmap0/candidate_syn2.stdout
+.autoeda/runtime/results/stmap0/cec_i10.log
+.autoeda/runtime/results/stmap0/cec_i10.stderr
+.autoeda/runtime/results/stmap0/cec_i10.stdout
+.autoeda/runtime/results/stmap0/cec_i10_candidate.aig
+.autoeda/runtime/results/stmap0/cec_i10_original.aig
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_i10_write_original.log
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_ode.log
+.autoeda/runtime/results/stmap0/cec_ode.stderr
+.autoeda/runtime/results/stmap0/cec_ode.stdout
+.autoeda/runtime/results/stmap0/cec_ode_candidate.aig
+.autoeda/runtime/results/stmap0/cec_ode_original.aig
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_ode_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_ode_write_original.log
+.autoeda/runtime/results/stmap0/cec_ode_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_ode_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_or1200.log
+.autoeda/runtime/results/stmap0/cec_or1200.stderr
+.autoeda/runtime/results/stmap0/cec_or1200.stdout
+.autoeda/runtime/results/stmap0/cec_or1200_candidate.aig
+.autoeda/runtime/results/stmap0/cec_or1200_original.aig
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_or1200_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.log
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_or1200_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_syn2.log
+.autoeda/runtime/results/stmap0/cec_syn2.stderr
+.autoeda/runtime/results/stmap0/cec_syn2.stdout
+.autoeda/runtime/results/stmap0/cec_syn2_candidate.aig
+.autoeda/runtime/results/stmap0/cec_syn2_original.aig
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_syn2_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.log
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_syn2_write_original.stdout
+.autoeda/runtime/results/stmap0/comparison.csv
+.autoeda/runtime/results/stmap0/final_build.log
+.autoeda/runtime/results/stmap0/final_diff_check.log
+.autoeda/runtime/results/stmap0/final_help.log
+.autoeda/runtime/results/stmap0/help_stmap0.log
+.autoeda/runtime/results/stmap0/help_stmap0.stderr
+.autoeda/runtime/results/stmap0/help_stmap0.stdout
+.autoeda/runtime/results/stmap0/metrics.csv
+.autoeda/runtime/results/stmap0/revalidation_build.log
+.autoeda/runtime/results/stmap0/revalidation_diff_check.log
+.autoeda/runtime/results/stmap0/revalidation_help.log
+.autoeda/runtime/results/stmap0/revalidation_source_lists.log
+.autoeda/runtime/results/stmap0/review_pass1.log
+.autoeda/runtime/results/stmap0/review_pass1_prompt.md
+.autoeda/runtime/results/stmap0/review_pass1_stdin.log
+.autoeda/runtime/results/stmap0/review_pass1_supported.log
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.log
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.stderr
+.autoeda/runtime/results/stmap0/smoke_stmap0_i10.stdout
+.autoeda/runtime/results/stmap0/summary.json
+.autoeda/runtime/results/stmap0/validate_pack.log
+.autoeda/runtime/results/stmap1/baseline_i10.log
+.autoeda/runtime/results/stmap1/baseline_i10.stderr
+.autoeda/runtime/results/stmap1/baseline_i10.stdout
+.autoeda/runtime/results/stmap1/baseline_ode.log
+.autoeda/runtime/results/stmap1/baseline_ode.stderr
+.autoeda/runtime/results/stmap1/baseline_ode.stdout
+
+exec
+/bin/zsh -lc "sed -n '1,240p' AGENT.md 2>/dev/null || true && find .. -name AGENT.md -print" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 1476ms:
+../abc/AGENT.md
+../abc-harness/AGENT.md
+
+exec
+/bin/zsh -lc 'ls -l .autoeda/runtime/versions.md 2>/dev/null || true && git ls-files .autoeda/runtime/versions.md && tail -n 120 .autoeda/runtime/versions.md 2>/dev/null || true' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+-rw-r--r--@ 1 cunxiy  staff  658445 Apr 26 13:53 .autoeda/runtime/versions.md
+.autoeda/runtime/versions.md
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap83/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap83/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap83/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues and specifically noted that `stmap82` keeps the default `3.00 ps` window while `stmap83` overrides it only for its scoped run.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap83: force strict sticky parent phase`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap84`, move the investigation outward from the local parent cut to final critical-path impact. `stmap83` proves the watched `ode` local polarity can be forced all the way to the final parent cut without changing benchmark QoR, so the next hypothesis should inspect or target whether this node is off the measured final critical path after topo/buffer/upsize/dnsize.
+
+
+## version84 / stmap84
+
+- hypothesis: Under strict sticky retention, the lack of QoR movement is explained by a final critical phase split: the watched child survives on the final critical path in one phase while the watched downstream parent survives in the opposite phase. If the child and parent are not both present in the final critical phase needed by the forced parent cut, then the local parent-cut polarity change is structurally real but still disconnected from the measured post-sizing bottleneck.
+- motivation: `stmap83` forced `ode` parent AIG `5229` phase `1` to consume child AIG `5219` phase `0`, but final QoR stayed identical to `stmap82`. The `stmap83` final-critical lineage still ranked child AIG `5219` phase `1` and parent AIG `5229` phase `0` as critical. `stmap84` makes this explicit by watching both the child and the parent in final phase-survival diagnostics.
+- command name: `stmap84`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_84.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap84/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap84` is a diagnostic extension of `stmap83`. It keeps the strict `100000.00 ps` sticky timing hold window and the same watched parent/child policy, but stores both child and downstream parent AIG IDs in `WatchAigs[2]`. Reconstruction and final phase-survival diagnostics are configured with both IDs, while demand-path, parent-cut, candidate-cut, parent-phase-bias, and sticky diagnostics remain focused on the child/parent edge.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap84/build.log`.
+  - help: `./abc -c "stmap84 -h"` printed `stmap84` usage. Log: `.autoeda/runtime/results/stmap84/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap84; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, and `phase-survival stats: watched-aigs = 2  matched-aigs = 2`. Log: `.autoeda/runtime/results/stmap84/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap84` selected child AIG `855`, parent AIG `861`, and dual watch count `2`, then reported zero sticky rows because no library was loaded. Log: `.autoeda/runtime/results/stmap84/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap83/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported watch IDs `-1`, dual watch count `0`, and zero diagnostics. Log: `.autoeda/runtime/results/stmap84/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap84/summary.json`, `metrics.csv`, `comparison.csv`, dual-watch `phase_survival.csv` and `phase_survival_stats.csv`, reconstruction diagnostics including inverter rows, strict sticky diagnostics, parent/candidate/demand/final-critical diagnostics, `cec_summary.json`, raw benchmark logs, CEC temporaries/logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- dual phase-survival diagnostic results:
+  - All four required benchmarks recorded `watched_aigs = 2` and `matched_aigs = 2`.
+  - `ode` child AIG `5219`: final survival is phase `1` only, with best gate `O2A1O1Ixp33_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, and load ratio `0.338`.
+  - `ode` parent AIG `5229`: final survival is phase `0` only, with best gate `OAI211xp5_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, and load ratio `0.135`.
+  - This confirms that the strict local parent phase-1 cut forced by `stmap83` is not the final surviving critical parent phase after topo/buffer/upsize/dnsize.
+  - `i10` has both child and parent phases present, with parent phase `1` criticality `1.000`.
+  - `or1200` child AIG `11491` is phase `0` only; parent AIG `13829` has both phases criticality `1.000`.
+  - `syn2` child AIG `18002` and parent AIG `18467` are both phase `1` only in final survival.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_84.c`.
+  - numbered command exists and is registered as `stmap84`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - dual child/parent phase-survival, strict sticky-parent-phase, parent-phase-bias, candidate-cut, parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, path-normalization, stale-state, and CEC diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap84/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap84/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap84/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap84/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap84/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap84/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap84/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap84/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap84: trace dual phase survival`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap85`, target the final surviving phase split instead of the non-surviving strict parent phase-1 cut. A concrete next probe is to instrument or bias the final surviving `ode` parent phase `0`/child phase `1` path, because `stmap84` shows the measured critical path uses parent AIG `5229` phase `0` and child AIG `5219` phase `1`.
+
+
+## version85 / stmap85
+
+- hypothesis: The final surviving `ode` parent AIG `5229` phase `0` path can be explained at mapper-selected-match level by directly tracing the downstream parent rather than the child. If selected-match shows phase `0` has tight positive slack and already consumes child AIG `5219` in phase `1`, then the next useful policy probe should target timing/load on that parent phase rather than the previously forced non-surviving parent phase `1`.
+- motivation: `stmap84` proved that final timing survives on child AIG `5219` phase `1` and parent AIG `5229` phase `0`. Earlier selected-match diagnostics watched the child, leaving parent mapper selection details implicit. `stmap85` keeps the strict sticky and dual phase-survival diagnostics but moves selected-match watch to the downstream parent AIG.
+- command name: `stmap85`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_85.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap85/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap85` is a diagnostic extension of `stmap84`. It keeps the strict `100000.00 ps` sticky timing hold window, the same parent/child cut diagnostics, and the dual child/parent final phase-survival watch. The only command-level diagnostic change is that `Map_Stmap75SetFinalCriticalAigDiag` is configured with `ParentAigId`, so `selected_match.csv` records the downstream parent AIG mapper choices.
+- validation run:
+  - build, help, smoke, path-normalization, stale-state, and implementation checks passed under `.autoeda/runtime/results/stmap85/`.
+  - full evaluation passed for all four required benchmarks, generated selected-match, phase-survival, sticky, parent-cut, candidate-cut, demand, reconstruction, and final-critical artifacts, and reported CEC `4/4`.
+- benchmark results:
+  - `benchmarks/i10.aig`: candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- selected-match diagnostic results:
+  - Parent selected-match watches were active for all four required benchmarks: `i10` parent `861` with `16` rows, `ode` parent `5229` with `16` rows, `or1200` parent `13829` with `12` rows, and `syn2` parent `18467` with `16` rows.
+  - For `ode`, mapper mode `3` parent phase `0` selects `OAI211xp5_ASAP7_75t_L`, arrival `173.970 ps`, required `174.050 ps`, slack `0.080 ps`, area-flow `1.400`, and consumes child AIG `5219`.
+  - For `ode`, strict parent phase `1` still selects `AOI221xp5_ASAP7_75t_L`, arrival `184.330 ps`, area-flow `1.630`, and consumes child AIG `5219`, but `stmap84` showed this phase does not survive final timing.
+  - Dual phase-survival remains unchanged: `ode` child AIG `5219` survives final timing only in phase `1`, while parent AIG `5229` survives only in phase `0`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_85.c`.
+  - numbered command exists and is registered as `stmap85`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - downstream-parent selected-match, dual child/parent phase-survival, strict sticky-parent-phase, parent-phase-bias, candidate-cut, parent-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no correctness-impacting issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap85: trace parent selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap86`, test a narrow policy or diagnostic on the final-surviving `ode` parent phase `0` path. The selected parent phase `0` has only about `0.08 ps` mapper slack in mode `3`, so a useful next probe is to look for timing/load alternatives or post-sizing load pressure on that specific final-surviving parent phase rather than continuing to force parent phase `1`.
+
+exec
+/bin/zsh -lc "grep -R \"Map_Stmap75PrintSelectedMatches\" -n src/map/mapper/mapperMatch.c src/map/mapper | sed -n '1,40p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/mapper/mapperMatch.c:2514:static void Map_Stmap75PrintSelectedMatches( Map_Man_t * p, Map_Node_t * pNode )
+src/map/mapper/mapperMatch.c:5981:        Map_Stmap75PrintSelectedMatches( p, pNode );
+src/map/mapper/mapperMatch.c:2514:static void Map_Stmap75PrintSelectedMatches( Map_Man_t * p, Map_Node_t * pNode )
+src/map/mapper/mapperMatch.c:5981:        Map_Stmap75PrintSelectedMatches( p, pNode );
+Binary file src/map/mapper/mapperMatch.o matches
+
+exec
+/bin/zsh -lc "sed -n '5940,6000p' src/map/mapper/mapperMatch.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+
+        // skip primary inputs and secondary nodes if mapping with choices
+        if ( !Map_NodeIsAnd( pNode ) || pNode->pRepr )
+            continue;
+
+        // make sure that at least one non-trival cut is present
+        if ( pNode->pCuts->pNext == NULL )
+        {
+            Extra_ProgressBarStop( pProgress );
+            printf( "\nError: A node in the mapping graph does not have feasible cuts.\n" );
+            return 0;
+        }
+
+        // match negative phase
+        if ( !Map_MatchNodePhase( p, pNode, 0 ) )
+        {
+            Extra_ProgressBarStop( pProgress );
+            return 0;
+        }
+        // match positive phase
+        if ( !Map_MatchNodePhase( p, pNode, 1 ) )
+        {
+            Extra_ProgressBarStop( pProgress );
+            return 0;
+        }
+
+        // make sure that at least one phase is mapped
+        if ( pNode->pCutBest[0] == NULL && pNode->pCutBest[1] == NULL )
+        {
+            printf( "\nError: Could not match both phases of AIG node %d.\n", pNode->Num );
+            printf( "Please make sure that the supergate library has equivalents of AND2 or NAND2.\n" );
+            printf( "If such supergates exist in the library, report a bug.\n" );
+            Extra_ProgressBarStop( pProgress );
+            return 0;
+        }
+
+        // if both phases are assigned, check if one of them can be dropped
+        Map_NodeTryDroppingOnePhase( p, pNode );
+        // set the arrival times of the node using the best cuts
+        Map_NodeTransferArrivalTimes( p, pNode );
+        // command-scoped stmap75 diagnostics; no mapper decisions depend on this.
+        Map_Stmap75PrintSelectedMatches( p, pNode );
+
+        // update the progress bar
+        Extra_ProgressBarUpdate( pProgress, i, "Matches ..." );
+    }
+    Extra_ProgressBarStop( pProgress );
+    return 1;
+}
+
+////////////////////////////////////////////////////////////////////////
+///                       END OF FILE                                ///
+////////////////////////////////////////////////////////////////////////
+ABC_NAMESPACE_IMPL_END
+
+exec
+/bin/zsh -lc 'grep -n "current network" -n src/base/abci/abcStmap_65.c | head' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "grep -n \"pNtk\" src/base/abci/abcStmap_65.c | sed -n '1,70p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+132:static int Abc_Stmap65MappedObjAigId( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj )
+135:    if ( pNtk == NULL || pObj == NULL || pNtk->vOrigNodeIds == NULL )
+137:    if ( Abc_ObjId(pObj) >= Vec_IntSize(pNtk->vOrigNodeIds) )
+139:    Lit = Vec_IntEntry( pNtk->vOrigNodeIds, Abc_ObjId(pObj) );
+254:static void Abc_Stmap65InsertConsumerFanins( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap65LoadStats_t * pStats, float Ratio, float SinkCriticality, int Depth )
+262:        AigId = Abc_Stmap65MappedObjAigId( pNtk, pFanin );
+268:        Abc_Stmap65InsertConsumerFanins( pNtk, pFanin, pStats, 0.78 * Ratio, SinkCriticality, Depth - 1 );
+272:static void Abc_Stmap65CollectHotspotCone( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap65LoadStats_t * pStats, SC_Man * pTime, float Ratio )
+279:    AigId = Abc_Stmap65MappedObjAigId( pNtk, pObj );
+288:        AigId = Abc_Stmap65MappedObjAigId( pNtk, pFanout );
+294:        Abc_Stmap65InsertConsumerFanins( pNtk, pFanout, pStats, 0.86 * Ratio, FanoutCriticality, 3 );
+298:            AigId = Abc_Stmap65MappedObjAigId( pNtk, pFanout2 );
+359:static void Abc_Stmap65CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap65LoadStats_t * pStats )
+372:    if ( Abc_NtkHasMapping(pNtk) )
+374:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+377:    Abc_NtkForEachNode( pNtk, pObj, i )
+409:        Abc_Stmap65CollectHotspotCone( pNtk, pObj, pStats, pTime, Ratio );
+544:    Abc_Ntk_t * pNtk, * pNtkMap, * pNtkRes, * pNtkFirst;
+568:    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+569:    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+588:    pNtk = Abc_FrameReadNtk(pAbc);
+709:    if ( pNtk == NULL )
+723:    pNtkMap = pNtk;
+724:    if ( !Abc_NtkIsStrash(pNtk) )
+726:        pNtkMap = Abc_NtkStrash( pNtk, 0, 0, 0 );
+727:        if ( pNtkMap == NULL )
+732:        pNtkMap = Abc_NtkBalance( pNtkRes = pNtkMap, 0, 0, 1 );
+733:        Abc_NtkDelete( pNtkRes );
+734:        if ( pNtkMap == NULL )
+757:        pNtkFirst = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 36, fUseProfile, fUseBuffs, fVerbose );
+758:        if ( pNtkFirst == NULL )
+761:                Abc_NtkDelete( pNtkMap );
+765:        Abc_Stmap65CollectSclLoadStats( pNtkFirst, &LoadStats );
+779:            Abc_NtkDelete( pNtkFirst );
+782:                Abc_NtkDelete( pNtkMap );
+797:        Abc_NtkDelete( pNtkFirst );
+815:        pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 57, fUseProfile, fUseBuffs, fVerbose );
+835:        if ( pNtkRes == NULL )
+838:                Abc_NtkDelete( pNtkMap );
+857:        pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 0, fUseProfile, fUseBuffs, fVerbose );
+870:        if ( pNtkRes == NULL )
+873:                Abc_NtkDelete( pNtkMap );
+879:        Abc_NtkDelete( pNtkMap );
+883:        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+884:        if ( Abc_NtkHasMapping(pNtkRes) )
+886:            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+887:            Abc_NtkDelete( pNtk );
+891:    Abc_Stmap65CollectSclLoadStats( pNtkRes, &LoadStats );
+894:    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+
+exec
+/bin/zsh -lc "sed -n '690,720p' src/base/abci/abcStmap_65.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+        case 'f':
+            fSkipFanout = fSkipFanout ? 0 : 57;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    Map_Stmap45SetSclLoadFeedbackWithEntries( 0.0, 0.0, 0.0, NULL, 0, 0 );
+    Map_Stmap60SetNearMissLeafDiag( 0, -1 );
+    Map_Stmap61SetCutOnlyGateDiag( 0, -1 );
+
+exec
+/bin/zsh -lc "git diff --check -- . ':"'!*.log'"' ':"'!*.csv'"' ':"'!*.json'"'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+
+exec
+/bin/zsh -lc "sed -n '1,240p' .autoeda/runtime/results/stmap86/run_stmap86_eval.py 2>/dev/null" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+#!/usr/bin/env python3
+import concurrent.futures
+import csv
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[4]
+RESULTS = ROOT / ".autoeda" / "runtime" / "results" / "stmap86"
+ABC = ROOT / "abc"
+LIB = "7nm_lvt_ff.lib"
+COMMAND = "stmap86"
+BENCHMARKS = [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif",
+]
+TIMEOUT = 600
+ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+STIME_RE = re.compile(
+    r'WireLoad\s*=\s*"[^"]*".*Area\s*=\s*([0-9]+(?:\.[0-9]+)?).*Delay\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*ps'
+)
+STMAP_LINE_RE = re.compile(r"^stmap86 ([^:]+):\s*(.*)$")
+KV_RE = re.compile(r"([A-Za-z0-9_-]+) = (.*?)(?=  [A-Za-z0-9_-]+ = |$)")
+
+
+def safe_name(path):
+    return path.replace("/", "_").replace(".", "_")
+
+
+def clean(text):
+    return ANSI_RE.sub("", text)
+
+
+def key_name(text):
+    return text.strip().replace("-", "_").replace(" ", "_")
+
+
+def run_abc(flow, log, exit_file):
+    cmd = [str(ABC), "-c", flow]
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=TIMEOUT,
+        )
+        text = proc.stdout
+        rc = proc.returncode
+    except subprocess.TimeoutExpired as exc:
+        text = (exc.stdout or "") + f"\nTIMEOUT after {TIMEOUT}s\n"
+        rc = 124
+    log.write_text(text)
+    exit_file.write_text(f"{rc}\n")
+    return rc, text
+
+
+def parse_stime(text):
+    matches = list(STIME_RE.finditer(clean(text)))
+    if not matches:
+        return {}
+    m = matches[-1]
+    return {"stime_area": float(m.group(1)), "stime_delay_ps": float(m.group(2))}
+
+
+def parse_stmap86_rows(bench, text):
+    rows_by_kind = {}
+    for line in clean(text).splitlines():
+        m = STMAP_LINE_RE.match(line)
+        if not m:
+            continue
+        kind = key_name(m.group(1))
+        row = {"benchmark": bench}
+        for key, value in KV_RE.findall(m.group(2)):
+            row[key_name(key)] = value.strip()
+        rows_by_kind.setdefault(kind, []).append(row)
+    return rows_by_kind
+
+
+def run_flow(kind, bench):
+    safe = safe_name(bench)
+    if kind == "baseline":
+        flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    else:
+        flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; {COMMAND}; topo; buffer; upsize -v; dnsize -v; stime"
+    log = RESULTS / f"{kind}_{safe}.log"
+    exit_file = RESULTS / f"{kind}_{safe}.exit"
+    rc, text = run_abc(flow, log, exit_file)
+    return {
+        "benchmark": bench,
+        "kind": kind,
+        "returncode": rc,
+        "metrics": parse_stime(text),
+        "diagnostics": parse_stmap86_rows(bench, text) if kind == "candidate" else {},
+        "log": str(log.relative_to(ROOT)),
+        "command": f"./abc -c \"{flow}\"",
+    }
+
+
+def write_aig(bench, suffix, flow):
+    safe = safe_name(bench)
+    aig = RESULTS / f"cec_{safe}_{suffix}.aig"
+    log = RESULTS / f"cec_{safe}_{suffix}_write.log"
+    exit_file = RESULTS / f"cec_{safe}_{suffix}_write.exit"
+    rc, _ = run_abc(f"{flow}; strash; write_aiger {aig}", log, exit_file)
+    return rc, aig
+
+
+def run_cec(bench):
+    safe = safe_name(bench)
+    orig_flow = f"read_lib {LIB}; read {bench}"
+    cand_flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; {COMMAND}; topo; buffer; upsize -v; dnsize -v; stime"
+    rc_orig, orig = write_aig(bench, "orig", orig_flow)
+    rc_cand, cand = write_aig(bench, COMMAND, cand_flow)
+    log = RESULTS / f"cec_{safe}.log"
+    exit_file = RESULTS / f"cec_{safe}.exit"
+    if rc_orig != 0 or rc_cand != 0:
+        log.write_text(f"write failed: orig={rc_orig} candidate={rc_cand}\n")
+        exit_file.write_text("1\n")
+        return {"benchmark": bench, "passed": False, "returncode": 1, "log": str(log.relative_to(ROOT))}
+    rc, text = run_abc(f"cec {orig} {cand}", log, exit_file)
+    passed = rc == 0 and (
+        "Networks are equivalent" in text or "Networks are equivalent after structural hashing" in text
+    )
+    return {
+        "benchmark": bench,
+        "passed": passed,
+        "returncode": rc,
+        "original": str(orig.relative_to(ROOT)),
+        "candidate": str(cand.relative_to(ROOT)),
+        "log": str(log.relative_to(ROOT)),
+    }
+
+
+def write_csv(path, rows, preferred=None):
+    rows = list(rows)
+    if preferred is None:
+        preferred = []
+    fields = []
+    for field in preferred:
+        if field not in fields:
+            fields.append(field)
+    for row in rows:
+        for field in row:
+            if field not in fields:
+                fields.append(field)
+    if not fields:
+        fields = ["benchmark"]
+    with path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+
+
+def as_int(row, key, default=0):
+    try:
+        return int(row.get(key, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def as_float(row, key, default=None):
+    try:
+        return float(row.get(key))
+    except (TypeError, ValueError):
+        return default
+
+
+def summarize_candidate_cuts(rows):
+    out = []
+    by_bench = {bench: [] for bench in BENCHMARKS}
+    for row in rows:
+        by_bench.setdefault(row.get("benchmark"), []).append(row)
+    for bench in BENCHMARKS:
+        bench_rows = by_bench.get(bench, [])
+        stats = {}
+        for row in bench_rows:
+            if "rows" in row and "viable" in row and "accepted_updates" in row:
+                stats = row
+        data_rows = [r for r in bench_rows if "cut_ordinal" in r]
+        viable = [r for r in data_rows if as_int(r, "viable") == 1]
+        accepted = [r for r in data_rows if as_int(r, "selected_update") == 1]
+        phase0 = [r for r in viable if r.get("child_requested_phase") == "0"]
+        phase1 = [r for r in viable if r.get("child_requested_phase") == "1"]
+        accepted_phase0 = [r for r in accepted if r.get("child_requested_phase") == "0"]
+        accepted_phase1 = [r for r in accepted if r.get("child_requested_phase") == "1"]
+        nonselected_phase0 = [r for r in phase0 if r.get("reason") == "nonselected"]
+        phase0_arrivals = [as_float(r, "arrival") for r in phase0 if as_float(r, "arrival") is not None]
+        phase0_areas = [as_float(r, "area_flow") for r in phase0 if as_float(r, "area_flow") is not None]
+        phase1_arrivals = [as_float(r, "arrival") for r in phase1 if as_float(r, "arrival") is not None]
+        phase1_areas = [as_float(r, "area_flow") for r in phase1 if as_float(r, "area_flow") is not None]
+        out.append(
+            {
+                "benchmark": bench,
+                "parent_aig": stats.get("parent_aig", data_rows[0].get("parent_aig") if data_rows else "-1"),
+                "child_aig": stats.get("child_aig", data_rows[0].get("child_aig") if data_rows else "-1"),
+                "rows": stats.get("rows", str(len(data_rows))),
+                "viable": stats.get("viable", str(len(viable))),
+                "accepted_updates": stats.get("accepted_updates", str(len(accepted))),
+                "child_phase0": stats.get("child_phase0", ""),
+                "child_phase1": stats.get("child_phase1", ""),
+                "child_unknown": stats.get("child_unknown", ""),
+                "child_missing": stats.get("child_missing", ""),
+                "viable_child_phase0": len(phase0),
+                "viable_child_phase1": len(phase1),
+                "accepted_child_phase0": len(accepted_phase0),
+                "accepted_child_phase1": len(accepted_phase1),
+                "nonselected_child_phase0": len(nonselected_phase0),
+                "phase0_gates": "+".join(sorted({r.get("gate", "?") for r in phase0})),
+                "phase1_gates": "+".join(sorted({r.get("gate", "?") for r in phase1})),
+                "phase0_min_arrival": min(phase0_arrivals) if phase0_arrivals else "",
+                "phase0_min_area_flow": min(phase0_areas) if phase0_areas else "",
+                "phase1_min_arrival": min(phase1_arrivals) if phase1_arrivals else "",
+                "phase1_min_area_flow": min(phase1_areas) if phase1_areas else "",
+            }
+        )
+    return out
+
+
+def summarize_parent_cuts(rows):
+    out = []
+    by_bench = {bench: [] for bench in BENCHMARKS}
+    for row in rows:
+        by_bench.setdefault(row.get("benchmark"), []).append(row)
+    for bench in BENCHMARKS:
+        bench_rows = by_bench.get(bench, [])
+        stats = {}
+        data_rows = []
+        for row in bench_rows:
+            if "phase0_has_cut" in row:
+                stats = row
+            elif "phase" in row:
+                data_rows.append(row)
+
+exec
+/bin/zsh -lc 'head -n 5 .autoeda/runtime/results/stmap86/selected_match.csv && cat .autoeda/runtime/results/stmap86/selected_match_stats.csv' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+benchmark,index,watch_index,mapper_mode,node,aig_id,level,refs,phase,gate,leaves,cut_leaf_load_avg,fanout_limit,load_drive_ratio,arrival,required,slack,area_flow,u_phase_best,node_sink_pressure_ratio,cut_sink_pressure_ratio,scl_feedback,leaf0_node,leaf0_aig_id,leaf1_node,leaf1_aig_id,leaf2_node,leaf2_aig_id,leaf3_node,leaf3_aig_id,leaf4_node,leaf4_aig_id,leaf5_node,leaf5_aig_id
+benchmarks/i10.aig,1,0,0,612,855,18,1,0,NAND5xp2_ASAP7_75t_L,5,10.400,1,10.400,71.230003,-1.000000,0.000000,23.789753,25,0.000,0.000,0.000,347,572,398,623,423,649,430,629,610,853,-1,-1
+benchmarks/i10.aig,2,0,0,612,855,18,1,1,NOR4xp25_ASAP7_75t_L,4,9.500,1,9.500,70.980003,-1.000000,0.000000,31.130444,10,0.000,0.000,0.000,347,572,398,623,430,629,611,854,-1,-1,-1,-1
+benchmarks/i10.aig,3,1,0,615,861,20,2,0,OAI22xp33_ASAP7_75t_L,4,1.250,1,1.250,81.550003,-1.000000,0.000000,71.081711,0,0.000,0.000,0.000,534,751,572,795,606,850,612,855,-1,-1,-1,-1
+benchmarks/i10.aig,4,1,0,615,861,20,2,1,AOI22xp33_ASAP7_75t_L,4,1.250,1,1.250,82.260010,-1.000000,0.000000,62.995266,15,0.000,0.000,0.000,534,751,572,795,606,850,612,855,-1,-1,-1,-1
+benchmark,watched_aigs,rows,watch0_aig_id,watch0_rows,watch1_aig_id,watch1_rows,watch2_aig_id,watch2_rows,watch3_aig_id,watch3_rows
+benchmarks/i10.aig,2,32,855,16,861,16,-1,0,-1,0
+benchmarks/ode.abc.blif,2,32,5219,16,5229,16,-1,0,-1,0
+benchmarks/or1200.abc.blif,2,24,11491,12,13829,12,-1,0,-1,0
+benchmarks/syn2.abc.blif,2,30,18002,14,18467,16,-1,0,-1,0
+
+codex
+No discrete correctness issues were found in the current code changes. The new stmap86 command is wired into the build and command registration, and the diagnostic array support appears scoped to the new command.
+No discrete correctness issues were found in the current code changes. The new stmap86 command is wired into the build and command registration, and the diagnostic array support appears scoped to the new command.

@@ -4927,3 +4927,56 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap85: trace parent selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap86`, test a narrow policy or diagnostic on the final-surviving `ode` parent phase `0` path. The selected parent phase `0` has only about `0.08 ps` mapper slack in mode `3`, so a useful next probe is to look for timing/load alternatives or post-sizing load pressure on that specific final-surviving parent phase rather than continuing to force parent phase `1`.
+
+
+## version86 / stmap86
+
+- hypothesis: Dual selected-match tracing can align mapper choices for the watched child and downstream parent in one diagnostic table. If `ode` child AIG `5219` phase `1` is effectively zero-slack while parent AIG `5229` phase `0` has only a small positive slack and consumes that child, the next policy should target the final-surviving child/parent phase pair rather than the non-surviving strict parent phase `1`.
+- motivation: `stmap84` showed final phase survival split across child phase `1` and parent phase `0`, while `stmap85` traced only the downstream parent selected matches. `stmap86` records both selected-match streams in the same run so the mapper-mode timing and leaf relationship can be compared directly.
+- command name: `stmap86`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_86.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap86/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap86` is a diagnostic extension of `stmap85`. It adds `Map_Stmap75SetFinalCriticalAigDiagArray()` so selected-match diagnostics can watch multiple AIG IDs while preserving the existing single-watch API for older commands. The new command configures both watched child and parent AIG IDs for selected-match, reconstruction, and final phase-survival diagnostics, while keeping the strict `100000.00 ps` sticky parent-phase hold inherited from `stmap83`.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap86/build.log`.
+  - help: `./abc -c "stmap86 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap86/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap86; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap86/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` selected child AIG `855`, parent AIG `861`, and selected-watch count `2`; the no-library direct-read flow produced zero selected-match rows as expected. Log: `.autoeda/runtime/results/stmap86/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then an unknown network; the second command reported selected-watch count `0`, watched AIGs `0`, and selected-match rows `0`. Log: `.autoeda/runtime/results/stmap86/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap86/summary.json`, `metrics.csv`, `comparison.csv`, dual selected-match diagnostics, dual phase-survival diagnostics, strict sticky diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- selected-match diagnostic results:
+  - All four benchmarks recorded two selected-match watches with rows for both watch IDs: `i10` child `855`/parent `861`, `ode` child `5219`/parent `5229`, `or1200` child `11491`/parent `13829`, and `syn2` child `18002`/parent `18467`.
+  - For `ode`, child AIG `5219` mode `3` phase `1` selects `O2A1O1Ixp33_ASAP7_75t_L`, arrival `162.370 ps`, required `162.370 ps`, and slack `-0.000015 ps`.
+  - For `ode`, parent AIG `5229` mode `3` phase `0` selects `OAI211xp5_ASAP7_75t_L`, arrival `173.970 ps`, required `174.050 ps`, slack `0.079971 ps`, and consumes child AIG `5219`.
+  - The strict parent phase `1` selected match still records `AOI221xp5_ASAP7_75t_L` consuming child AIG `5219`, but previous dual phase-survival evidence shows that phase is not the final surviving measured path.
+  - Final benchmark QoR is unchanged from `stmap85`; this iteration is a diagnostic narrowing step rather than a QoR-changing policy.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_86.c`.
+  - numbered command exists and is registered as `stmap86`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - selected-match, phase-survival, sticky-parent-phase, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no correctness-impacting issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap86: trace dual selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap87`, move from diagnostics to a narrow final-surviving phase policy. The strongest target is the `ode` child phase `1` / parent phase `0` pair: child phase `1` is effectively zero-slack and parent phase `0` has only about `0.08 ps` slack while consuming the child, so the next probe should either bias child phase-1 timing or protect parent phase-0 load/drive alternatives rather than continuing to force parent phase `1`.
