@@ -1,0 +1,44 @@
+Review the uncommitted stmap63 iteration after validation and review pass 1.
+
+Project context:
+- This is an AutoEDA Berkeley ABC campaign adding numbered `stmapN` commands.
+- The binding project pack requires preserving older variants, running build/help/smoke/full benchmark evaluation, CEC correctness gates, and review before committing.
+- Iteration stmap63 keeps the stmap61 bounded-pressure transfer mode 57, keeps the stmap62 cut-only-before-moderate ordering flag disabled, and adds a command-scoped `Map_Stmap63SetCutOnlyLoadDropGuard` exception.
+
+Hypothesis under review:
+- stmap62 showed that admitting the tracked one-sided cut-pressure seed can regress syn2 delay.
+- stmap63 should only allow a one-sided cut-pressure exception when there is independent load-drop evidence: severe feedback, enough pressure entries, no pressure agreement, a moderate deep seed profile, node pressure in [1.05, 1.55], cut pressure in [1.95, 2.20], strong negative arrival delta, and enough slack.
+
+Changed source files:
+- `src/base/abci/abc.c`
+- `src/base/abci/abcStmap_63.c`
+- `src/base/abci/module.make`
+- `src/map/mapper/mapperMatch.c`
+- `abclib.dsp`
+
+Validation already run:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `./abc -c "stmap63 -h"` passed.
+- Smoke flow on `benchmarks/i10.aig` passed.
+- Full four-benchmark flow passed for i10, ode, or1200, and syn2.
+- CEC passed for all four benchmark outputs.
+- Review pass 1 supported stdin invocation reported no discrete correctness, build, or runtime issues. The positional command form was also attempted and logged; this Codex version rejects `--uncommitted` with a positional prompt, so stdin is the supported configured-tool path.
+
+Key observed metrics:
+- i10: delay 198.64 ps vs baseline 207.24 ps.
+- ode: delay 522.05 ps vs baseline 531.32 ps.
+- or1200: delay 561.55 ps vs baseline 587.08 ps.
+- syn2: delay 479.78 ps vs baseline 508.82 ps; this restores the better stmap61 result and avoids stmap62's 482.04 ps regression.
+
+Diagnostics:
+- `mapper_mode_stats.csv` shows mode 57, cut_only_before_moderate=0, load_drop_cut_only_guard=1 for every benchmark.
+- `penalty_stats.csv` shows one accepted cut-only exception seed on syn2.
+- The stmap62 tracked syn2 node 23628/AIG 27645 remained blocked: cut-only gate stats accepted=0 and raw_pass=0.
+
+Please focus on:
+- Any leakage of command-scoped mapper flags to other commands or failure paths.
+- Whether the new load-drop exception can bypass intended area-cap, arrival, or slack gates.
+- Whether the diagnostic raw_expected and parser artifacts remain coherent with the new guard.
+- Any missing registration/build-system wiring for `stmap63`.
+
+Return only actionable correctness, build, runtime, or evaluation-record findings. If there are none, say so explicitly.

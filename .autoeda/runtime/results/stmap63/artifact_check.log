@@ -1,0 +1,5 @@
+artifact check passed for stmap63
+checked required files: 84
+required exit files are zero
+review positional prompt attempts are logged with expected CLI-conflict exit 2
+comparison rows, CEC summary, mapper flags, and cut-only diagnostics are coherent

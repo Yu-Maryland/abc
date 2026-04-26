@@ -1,0 +1,880 @@
+{
+  "command": "stmap63",
+  "library": "7nm_lvt_ff.lib",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "flow_results": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 1263.44,
+        "stime_delay_ps": 207.24
+      },
+      "stats": {},
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/baseline_benchmarks_i10_aig.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 1303.1,
+        "stime_delay_ps": 198.64
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "0",
+          "highest": "0",
+          "lower_mod": "0",
+          "upper_mod": "0",
+          "middle_slack": "0",
+          "middle_relief": "0",
+          "reject_slack": "0",
+          "reject_highest": "0",
+          "reject_arrival": "0",
+          "reject_area": "0"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "0"
+        },
+        "penalty_stats": {
+          "pressure_near_exception_seed": "0",
+          "pressure_near_exception_blocked": "0",
+          "cut_only_exception_seed": "0",
+          "cut_only_exception_blocked": "0",
+          "cut_only_area_cap_blocked": "0",
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "3",
+          "consumer_fanin": "651",
+          "consumer_fanout": "252",
+          "raw_pressure_entries": "262",
+          "raw_pressure_updates": "6",
+          "sink_pressure_entries": "262",
+          "sink_pressure_updates": "48",
+          "pressure_missed": "0",
+          "pressure_capacity": "4096",
+          "tracked_aig": "27645",
+          "tracked_node": "-1",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "0",
+          "max_load_ratio": "1.544",
+          "over_max_frac": "0.001948",
+          "severity": "0.000",
+          "raw_pressure_entries": "262",
+          "sink_pressure_entries": "262",
+          "pressure_capacity": "4096"
+        },
+        "blended_gain_stats": {
+          "base_gain": "250.00",
+          "blend_gain": "225.00",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "raw_pressure_threshold": "8000",
+          "selected_blend_gain": "0"
+        },
+        "bounded_pressure_stats": {
+          "severe_transfer": "0",
+          "raw_weight": "0.72",
+          "ratio_cap": "2.100",
+          "bounded_pressure_entries": "262",
+          "lifted": "0",
+          "capped": "0",
+          "raw_only": "0",
+          "sink_fallback": "262",
+          "tracked_aig": "27645",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000",
+          "tracked_bounded_ratio": "0.000"
+        },
+        "mapper_mode_stats": {
+          "bounded_pressure_transfer_mode": "57",
+          "cut_only_before_moderate": "0",
+          "load_drop_cut_only_guard": "1",
+          "blended_gain": "250.00",
+          "pressure_feed": "sink-fallback",
+          "raw_weight": "0.72",
+          "bounded_ratio_cap": "2.100",
+          "inherited_cut_only_area_save_cap": "1.35x-inverter",
+          "tracked_near_miss_node": "23628",
+          "cut_only_gate_diag": "1"
+        },
+        "cut_only_gate_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "primitive_pass": "0",
+          "raw_pass": "0",
+          "raw_blocked_by_moderate": "0",
+          "raw_blocked_by_primitive": "0",
+          "area_cap_pass": "0",
+          "area_cap_blocked": "0",
+          "accepted": "0",
+          "soft_seed_fail": "0",
+          "moderate_candidate_fail": "0",
+          "feedback_fail": "0",
+          "entry_fail": "0",
+          "agreement_blocked": "0",
+          "node_zero_fail": "0",
+          "cut_band_fail": "0",
+          "arrival_fail": "0",
+          "slack_fail": "0"
+        },
+        "near_miss_leaf_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "leaf_rows": "0",
+          "max_leaf_node": "-1",
+          "max_leaf_aig_id": "-1",
+          "max_leaf_pressure_ratio": "0.000"
+        }
+      },
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/candidate_benchmarks_i10_aig.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap63; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 4798.34,
+        "stime_delay_ps": 587.08
+      },
+      "stats": {},
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/baseline_benchmarks_or1200_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 4895.15,
+        "stime_delay_ps": 561.55
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "22679",
+          "highest": "8550",
+          "lower_mod": "10834",
+          "upper_mod": "3295",
+          "middle_slack": "35",
+          "middle_relief": "2",
+          "reject_slack": "959",
+          "reject_highest": "8476",
+          "reject_arrival": "5835",
+          "reject_area": "7062"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "2"
+        },
+        "penalty_stats": {
+          "pressure_near_exception_seed": "0",
+          "pressure_near_exception_blocked": "0",
+          "cut_only_exception_seed": "0",
+          "cut_only_exception_blocked": "0",
+          "cut_only_area_cap_blocked": "0",
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "41",
+          "consumer_fanin": "29938",
+          "consumer_fanout": "6010",
+          "raw_pressure_entries": "4362",
+          "raw_pressure_updates": "1390",
+          "sink_pressure_entries": "4362",
+          "sink_pressure_updates": "1571",
+          "pressure_missed": "0",
+          "pressure_capacity": "32768",
+          "tracked_aig": "27645",
+          "tracked_node": "-1",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "10.805",
+          "over_max_frac": "0.005085",
+          "severity": "0.733",
+          "raw_pressure_entries": "4362",
+          "sink_pressure_entries": "4362",
+          "pressure_capacity": "32768"
+        },
+        "blended_gain_stats": {
+          "base_gain": "250.00",
+          "blend_gain": "225.00",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "raw_pressure_threshold": "8000",
+          "selected_blend_gain": "0"
+        },
+        "bounded_pressure_stats": {
+          "severe_transfer": "0",
+          "raw_weight": "0.72",
+          "ratio_cap": "2.100",
+          "bounded_pressure_entries": "4362",
+          "lifted": "0",
+          "capped": "0",
+          "raw_only": "0",
+          "sink_fallback": "4362",
+          "tracked_aig": "27645",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000",
+          "tracked_bounded_ratio": "0.000"
+        },
+        "mapper_mode_stats": {
+          "bounded_pressure_transfer_mode": "57",
+          "cut_only_before_moderate": "0",
+          "load_drop_cut_only_guard": "1",
+          "blended_gain": "250.00",
+          "pressure_feed": "sink-fallback",
+          "raw_weight": "0.72",
+          "bounded_ratio_cap": "2.100",
+          "inherited_cut_only_area_save_cap": "1.35x-inverter",
+          "tracked_near_miss_node": "23628",
+          "cut_only_gate_diag": "1"
+        },
+        "cut_only_gate_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "primitive_pass": "0",
+          "raw_pass": "0",
+          "raw_blocked_by_moderate": "0",
+          "raw_blocked_by_primitive": "0",
+          "area_cap_pass": "0",
+          "area_cap_blocked": "0",
+          "accepted": "0",
+          "soft_seed_fail": "0",
+          "moderate_candidate_fail": "0",
+          "feedback_fail": "0",
+          "entry_fail": "0",
+          "agreement_blocked": "0",
+          "node_zero_fail": "0",
+          "cut_band_fail": "0",
+          "arrival_fail": "0",
+          "slack_fail": "0"
+        },
+        "near_miss_leaf_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "leaf_rows": "0",
+          "max_leaf_node": "-1",
+          "max_leaf_aig_id": "-1",
+          "max_leaf_pressure_ratio": "0.000"
+        }
+      },
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/candidate_benchmarks_or1200_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; stmap63; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 12491.21,
+        "stime_delay_ps": 531.32
+      },
+      "stats": {},
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/baseline_benchmarks_ode_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 11334.38,
+        "stime_delay_ps": 522.05
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "49626",
+          "highest": "22601",
+          "lower_mod": "19542",
+          "upper_mod": "7483",
+          "middle_slack": "765",
+          "middle_relief": "0",
+          "reject_slack": "12974",
+          "reject_highest": "14866",
+          "reject_arrival": "10527",
+          "reject_area": "11095"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "0"
+        },
+        "penalty_stats": {
+          "pressure_near_exception_seed": "0",
+          "pressure_near_exception_blocked": "0",
+          "cut_only_exception_seed": "0",
+          "cut_only_exception_blocked": "0",
+          "cut_only_area_cap_blocked": "0",
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "71",
+          "consumer_fanin": "90011",
+          "consumer_fanout": "16227",
+          "raw_pressure_entries": "4816",
+          "raw_pressure_updates": "3007",
+          "sink_pressure_entries": "4816",
+          "sink_pressure_updates": "3146",
+          "pressure_missed": "0",
+          "pressure_capacity": "32768",
+          "tracked_aig": "27645",
+          "tracked_node": "13988",
+          "tracked_raw_ratio": "6.473",
+          "tracked_sink_ratio": "2.915"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "8.715",
+          "over_max_frac": "0.006186",
+          "severity": "0.627",
+          "raw_pressure_entries": "4816",
+          "sink_pressure_entries": "4816",
+          "pressure_capacity": "32768"
+        },
+        "blended_gain_stats": {
+          "base_gain": "250.00",
+          "blend_gain": "225.00",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "raw_pressure_threshold": "8000",
+          "selected_blend_gain": "0"
+        },
+        "bounded_pressure_stats": {
+          "severe_transfer": "0",
+          "raw_weight": "0.72",
+          "ratio_cap": "2.100",
+          "bounded_pressure_entries": "4816",
+          "lifted": "0",
+          "capped": "0",
+          "raw_only": "0",
+          "sink_fallback": "4816",
+          "tracked_aig": "27645",
+          "tracked_raw_ratio": "6.473",
+          "tracked_sink_ratio": "2.915",
+          "tracked_bounded_ratio": "2.915"
+        },
+        "mapper_mode_stats": {
+          "bounded_pressure_transfer_mode": "57",
+          "cut_only_before_moderate": "0",
+          "load_drop_cut_only_guard": "1",
+          "blended_gain": "250.00",
+          "pressure_feed": "sink-fallback",
+          "raw_weight": "0.72",
+          "bounded_ratio_cap": "2.100",
+          "inherited_cut_only_area_save_cap": "1.35x-inverter",
+          "tracked_near_miss_node": "23628",
+          "cut_only_gate_diag": "1"
+        },
+        "cut_only_gate_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "primitive_pass": "0",
+          "raw_pass": "0",
+          "raw_blocked_by_moderate": "0",
+          "raw_blocked_by_primitive": "0",
+          "area_cap_pass": "0",
+          "area_cap_blocked": "0",
+          "accepted": "0",
+          "soft_seed_fail": "0",
+          "moderate_candidate_fail": "0",
+          "feedback_fail": "0",
+          "entry_fail": "0",
+          "agreement_blocked": "0",
+          "node_zero_fail": "0",
+          "cut_band_fail": "0",
+          "arrival_fail": "0",
+          "slack_fail": "0"
+        },
+        "near_miss_leaf_stats": {
+          "tracked_node": "23628",
+          "hits": "0",
+          "leaf_rows": "0",
+          "max_leaf_node": "-1",
+          "max_leaf_aig_id": "-1",
+          "max_leaf_pressure_ratio": "0.000"
+        }
+      },
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/candidate_benchmarks_ode_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; stmap63; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 21296.6,
+        "stime_delay_ps": 508.82
+      },
+      "stats": {},
+      "multi_stats": {},
+      "log": ".autoeda/runtime/results/stmap63/baseline_benchmarks_syn2_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 22203.59,
+        "stime_delay_ps": 479.78
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "98177",
+          "highest": "48853",
+          "lower_mod": "38104",
+          "upper_mod": "11220",
+          "middle_slack": "1662",
+          "middle_relief": "2",
+          "reject_slack": "35874",
+          "reject_highest": "28166",
+          "reject_arrival": "16631",
+          "reject_area": "17173"
+        },
+        "near_miss_stats": {
+          "near_miss": "17"
+        },
+        "early_seed_stats": {
+          "early_seed": "2"
+        },
+        "penalty_stats": {
+          "pressure_near_exception_seed": "0",
+          "pressure_near_exception_blocked": "0",
+          "cut_only_exception_seed": "1",
+          "cut_only_exception_blocked": "0",
+          "cut_only_area_cap_blocked": "0",
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "2"
+        },
+        "sink_pressure_stats": {
+          "roots": "133",
+          "consumer_fanin": "319126",
+          "consumer_fanout": "35406",
+          "raw_pressure_entries": "8980",
+          "raw_pressure_updates": "7261",
+          "sink_pressure_entries": "8980",
+          "sink_pressure_updates": "7463",
+          "pressure_missed": "0",
+          "pressure_capacity": "65536",
+          "tracked_aig": "27645",
+          "tracked_node": "-1",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "11.716",
+          "over_max_frac": "0.006413",
+          "severity": "0.884",
+          "raw_pressure_entries": "8980",
+          "sink_pressure_entries": "8980",
+          "pressure_capacity": "65536"
+        },
+        "blended_gain_stats": {
+          "base_gain": "250.00",
+          "blend_gain": "225.00",
+          "selected_gain": "225.00",
+          "severity_threshold": "0.850",
+          "raw_pressure_threshold": "8000",
+          "selected_blend_gain": "1"
+        },
+        "bounded_pressure_stats": {
+          "severe_transfer": "1",
+          "raw_weight": "0.72",
+          "ratio_cap": "2.100",
+          "bounded_pressure_entries": "8980",
+          "lifted": "3540",
+          "capped": "6316",
+          "raw_only": "0",
+          "sink_fallback": "5440",
+          "tracked_aig": "27645",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000",
+          "tracked_bounded_ratio": "0.000"
+        },
+        "mapper_mode_stats": {
+          "bounded_pressure_transfer_mode": "57",
+          "cut_only_before_moderate": "0",
+          "load_drop_cut_only_guard": "1",
+          "blended_gain": "225.00",
+          "pressure_feed": "bounded-raw",
+          "raw_weight": "0.72",
+          "bounded_ratio_cap": "2.100",
+          "inherited_cut_only_area_save_cap": "1.35x-inverter",
+          "tracked_near_miss_node": "23628",
+          "cut_only_gate_diag": "1"
+        },
+        "cut_only_gate_stats": {
+          "tracked_node": "23628",
+          "hits": "2",
+          "primitive_pass": "1",
+          "raw_pass": "0",
+          "raw_blocked_by_moderate": "1",
+          "raw_blocked_by_primitive": "0",
+          "area_cap_pass": "0",
+          "area_cap_blocked": "0",
+          "accepted": "0",
+          "soft_seed_fail": "1",
+          "moderate_candidate_fail": "2",
+          "feedback_fail": "0",
+          "entry_fail": "0",
+          "agreement_blocked": "0",
+          "node_zero_fail": "0",
+          "cut_band_fail": "1",
+          "arrival_fail": "1",
+          "slack_fail": "0"
+        },
+        "near_miss_leaf_stats": {
+          "tracked_node": "23628",
+          "hits": "2",
+          "leaf_rows": "8",
+          "max_leaf_node": "23506",
+          "max_leaf_aig_id": "26909",
+          "max_leaf_pressure_ratio": "2.100"
+        },
+        "near_miss_leaf_summary": {
+          "index": "2",
+          "near_miss_index": "13",
+          "tracked_node": "23628",
+          "node_aig_id": "27645",
+          "phase": "0",
+          "leaves": "4",
+          "max_leaf_node": "23617",
+          "max_leaf_aig_id": "27058",
+          "max_leaf_pressure_ratio": "2.100",
+          "node_sink_pressure_ratio": "0.000",
+          "cut_sink_pressure_ratio": "2.100",
+          "slack": "6.719986",
+          "area_save": "0.930000",
+          "arrival_delta": "-12.100006",
+          "arrival_gain_margin": "1.510000",
+          "area_margin": "1.400000",
+          "scl_feedback": "0.884"
+        }
+      },
+      "multi_stats": {
+        "near_miss_leaf_diag": [
+          {
+            "index": "1",
+            "near_miss_index": "12",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "0",
+            "leaf_node": "23506",
+            "leaf_aig_id": "26909",
+            "leaf_pressure_ratio": "2.100",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "0.000",
+            "reason": "moderate-gain-gate"
+          },
+          {
+            "index": "1",
+            "near_miss_index": "12",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "1",
+            "leaf_node": "23582",
+            "leaf_aig_id": "27022",
+            "leaf_pressure_ratio": "1.712",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "0.000",
+            "reason": "moderate-gain-gate"
+          },
+          {
+            "index": "1",
+            "near_miss_index": "12",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "2",
+            "leaf_node": "23616",
+            "leaf_aig_id": "26972",
+            "leaf_pressure_ratio": "2.100",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "0.000",
+            "reason": "moderate-gain-gate"
+          },
+          {
+            "index": "1",
+            "near_miss_index": "12",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "3",
+            "leaf_node": "23626",
+            "leaf_aig_id": "27065",
+            "leaf_pressure_ratio": "2.100",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "0.000",
+            "reason": "moderate-gain-gate"
+          },
+          {
+            "index": "2",
+            "near_miss_index": "13",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "0",
+            "leaf_node": "23582",
+            "leaf_aig_id": "27022",
+            "leaf_pressure_ratio": "1.712",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "2.100",
+            "reason": "cut-only-moderate-block"
+          },
+          {
+            "index": "2",
+            "near_miss_index": "13",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "1",
+            "leaf_node": "23617",
+            "leaf_aig_id": "27058",
+            "leaf_pressure_ratio": "2.100",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "2.100",
+            "reason": "cut-only-moderate-block"
+          },
+          {
+            "index": "2",
+            "near_miss_index": "13",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "2",
+            "leaf_node": "23619",
+            "leaf_aig_id": "27011",
+            "leaf_pressure_ratio": "2.100",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "2.100",
+            "reason": "cut-only-moderate-block"
+          },
+          {
+            "index": "2",
+            "near_miss_index": "13",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "leaf_index": "3",
+            "leaf_node": "23625",
+            "leaf_aig_id": "27064",
+            "leaf_pressure_ratio": "0.000",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "2.100",
+            "reason": "cut-only-moderate-block"
+          }
+        ],
+        "cut_only_gate_diag": [
+          {
+            "index": "1",
+            "near_miss_index": "12",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "reason": "moderate-gain-gate",
+            "first_blocker": "soft-seed",
+            "profile_open": "0",
+            "early_depth": "0",
+            "soft_seed": "0",
+            "moderate_candidate": "0",
+            "tight_critical": "0",
+            "slack_1p25_pass": "1",
+            "pressure_agreement": "0",
+            "pressure_near": "0",
+            "primitive_pass": "0",
+            "raw_expected": "0",
+            "raw_pass": "0",
+            "area_cap_pass": "1",
+            "area_cap_blocked": "0",
+            "accepted": "0",
+            "severe_feedback_pass": "1",
+            "pressure_entries": "8980",
+            "pressure_entries_pass": "1",
+            "moderate_gain_pass": "0",
+            "node_zero_pass": "1",
+            "cut_band_pass": "0",
+            "arrival_strength_pass": "0",
+            "slack_pass": "1",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "0.000",
+            "slack": "6.719986",
+            "slack_margin": "6.040000",
+            "area_save": "0.930000",
+            "area_save_cap": "0.945000",
+            "arrival_delta": "-2.330002",
+            "arrival_gain_margin": "1.510000",
+            "area_margin": "1.400000",
+            "one_inv_area": "0.700000",
+            "scl_feedback": "0.884"
+          },
+          {
+            "index": "2",
+            "near_miss_index": "13",
+            "tracked_node": "23628",
+            "node_aig_id": "27645",
+            "phase": "0",
+            "reason": "cut-only-moderate-block",
+            "first_blocker": "moderate-candidate",
+            "profile_open": "0",
+            "early_depth": "0",
+            "soft_seed": "1",
+            "moderate_candidate": "0",
+            "tight_critical": "1",
+            "slack_1p25_pass": "1",
+            "pressure_agreement": "0",
+            "pressure_near": "0",
+            "primitive_pass": "1",
+            "raw_expected": "0",
+            "raw_pass": "0",
+            "area_cap_pass": "1",
+            "area_cap_blocked": "0",
+            "accepted": "0",
+            "severe_feedback_pass": "1",
+            "pressure_entries": "8980",
+            "pressure_entries_pass": "1",
+            "moderate_gain_pass": "1",
+            "node_zero_pass": "1",
+            "cut_band_pass": "1",
+            "arrival_strength_pass": "1",
+            "slack_pass": "1",
+            "node_sink_pressure_ratio": "0.000",
+            "cut_sink_pressure_ratio": "2.100",
+            "slack": "6.719986",
+            "slack_margin": "6.040000",
+            "area_save": "0.930000",
+            "area_save_cap": "0.945000",
+            "arrival_delta": "-12.100006",
+            "arrival_gain_margin": "1.510000",
+            "area_margin": "1.400000",
+            "one_inv_area": "0.700000",
+            "scl_feedback": "0.884"
+          }
+        ]
+      },
+      "log": ".autoeda/runtime/results/stmap63/candidate_benchmarks_syn2_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap63; topo; buffer; upsize -v; dnsize -v; stime\""
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "baseline_area": 1263.44,
+      "candidate_area": 1303.1,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "baseline_area": 12491.21,
+      "candidate_area": 11334.38,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "candidate_delay_ps": 561.55,
+      "delay_delta_ps": -25.530000000000086,
+      "delay_delta_pct": -4.348640730394509,
+      "baseline_area": 4798.34,
+      "candidate_area": 4895.15,
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "candidate_delay_ps": 479.78,
+      "delay_delta_ps": -29.04000000000002,
+      "delay_delta_pct": -5.707322825360642,
+      "baseline_area": 21296.6,
+      "candidate_area": 22203.59,
+      "area_delta": 906.9900000000016,
+      "area_delta_pct": 4.258848830329732
+    }
+  ],
+  "cec": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap63/cec_benchmarks_i10_aig_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap63/cec_benchmarks_i10_aig_stmap63.aig",
+      "log": ".autoeda/runtime/results/stmap63/cec_benchmarks_i10_aig.log"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap63/cec_benchmarks_ode_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap63/cec_benchmarks_ode_abc_blif_stmap63.aig",
+      "log": ".autoeda/runtime/results/stmap63/cec_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap63/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap63/cec_benchmarks_or1200_abc_blif_stmap63.aig",
+      "log": ".autoeda/runtime/results/stmap63/cec_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap63/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap63/cec_benchmarks_syn2_abc_blif_stmap63.aig",
+      "log": ".autoeda/runtime/results/stmap63/cec_benchmarks_syn2_abc_blif.log"
+    }
+  ]
+}

@@ -3514,3 +3514,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap62: test cut-only ordering before moderate gate`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap62` proves the tracked cut-only candidate can be admitted, but that admission is not downstream-beneficial after final sizing and buffering. For `stmap63`, keep the ordering closed and instead add a post-admission diagnostic that compares accepted cut-only seeds against final `stime` criticality/load movement, or test a stricter non-hardcoded guard that requires both cut-side pressure near the cap and a downstream load reduction signal before letting one-sided cut pressure override moderate-candidate ordering.
+
+
+## version63 / stmap63
+
+- hypothesis: Keep the reviewed `stmap61` bounded-pressure two-pass flow and keep the `stmap62` cut-only-before-moderate ordering closed, but add a command-scoped load-drop evidence guard that can admit one-sided cut-pressure candidates only when node pressure, cut pressure, slack, arrival-strength, feedback severity, and pressure-entry evidence all agree.
+- motivation: `stmap62` admitted the tracked `syn2` cut-only event, but final `syn2` delay regressed from `479.78 ps` in `stmap61` to `482.04 ps`. `stmap63` tests whether a stricter non-hardcoded load-drop signature can keep the harmful tracked event blocked while still allowing better-evidenced pressure relief candidates.
+- command name: `stmap63`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_63.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap63/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap63` clones the `stmap62` command shell but disables `Map_Stmap62SetCutOnlyOrdering(1)` and keeps older commands unchanged. It performs the same first-pass SCL load collection, builds the same bounded pressure table, and remaps through mapper mode `57`. The intentional mapper change is command-scoped: `Map_Stmap63SetCutOnlyLoadDropGuard(1)` is enabled only around the final feedback remap and reset immediately afterward. The new cut-only path in `Map_MatchStmap54ModeratePenaltyFactor()` only fires when severe feedback is at least `0.85`, raw pressure entries are at least `8000`, pressure agreement is absent, the candidate has the moderate deep-seed timing profile, node pressure is in `[1.05, 1.55]`, cut pressure is in `[1.95, 2.20]`, arrival delta is at least `2.0x` the gain margin in the improving direction, and slack exceeds the slack margin. The inherited local area-save cap remains active after raw admission.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap63/build.log`.
+  - help: `./abc -c "stmap63 -h"` printed command usage. Log: `.autoeda/runtime/results/stmap63/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap63; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap63/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap63/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss cut-leaf diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- load-drop guard diagnostics:
+  - mapper mode `57` was used for all candidate benchmark runs with `cut-only-before-moderate = 0` and `load-drop-cut-only-guard = 1`; only `syn2` opened severe bounded-raw transfer.
+  - `syn2` first-pass feedback severity was `0.884` with `8980` raw pressure entries and bounded transfer active.
+  - `syn2` penalty stats recorded `1` cut-only exception seed, `0` cut-only exception blocks, `0` cut-only area-cap blocks, `0` moderate-penalty blocks, and `2` strong-penalty blocks.
+  - the admitted load-drop seed was mapper node `12167` / AIG ID `13915`, with node pressure `1.165`, cut pressure `2.100`, slack `6.739990`, area save `0.930000`, area cap `0.945000`, arrival delta `-4.720001`, arrival-gain margin `1.510000`, and SCL feedback `0.884`.
+  - the `stmap62` tracked `syn2` event at mapper node `23628` / AIG ID `27645` remained blocked: cut-only gate stats show `hits = 2`, `primitive-pass = 1`, `raw-pass = 0`, `raw-blocked-by-moderate = 1`, `accepted = 0`, `moderate-candidate-fail = 2`, `cut-band-fail = 1`, and `arrival-fail = 1`. The second tracked event still has node pressure `0.000`, cut pressure `2.100`, slack `6.719986`, area save `0.930000`, area cap `0.945000`, arrival delta `-12.100006`, and SCL feedback `0.884`.
+  - QoR matches the better `stmap61` result on the four required benchmarks while avoiding the `stmap62` tracked-seed regression. The new guard admits one non-tracked syn2 seed but produces no additional measured benchmark movement in this flow.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_63.c`.
+  - numbered command exists and is registered as `stmap63`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss cut-leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap63/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap63/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap63/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap63/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap63/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap63/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap63/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no actionable correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap63/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap63/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness, build integration, or runtime issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap63: require load-drop evidence for cut-only pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap64`, keep the load-drop guard closed unless a post-admission diagnostic shows the accepted seed affects final criticality or downstream load movement. The highest-value next test is to instrument accepted cut-only seeds after buffering/sizing and compare final critical-path membership and load ratios before widening the node-pressure window or adding more one-sided cut-pressure exceptions.
