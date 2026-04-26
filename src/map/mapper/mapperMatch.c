@@ -1324,6 +1324,216 @@ void Map_Stmap90PrintConsumerDriveTargetSummary( void )
         s_nStmap90ConsumerBlockedChild, s_nStmap90ConsumerBlockedDrive, 0.50f, 1.20f, 2.50f, 0.05f );
 }
 
+static int s_fStmap91ConsumerDriveTarget = 0;
+static int s_fStmap91ConsumerDriveTargetActive = 0;
+static const char * s_pStmap91ConsumerDriveTargetLabel = "stmap91";
+static int s_Stmap91ParentAigId = -1;
+static int s_Stmap91ChildAigId = -1;
+static int s_Stmap91ParentPhase = 0;
+static int s_Stmap91ChildPhase = 0;
+static int s_nStmap91ConsumerRows = 0;
+static int s_nStmap91ConsumerChildHits = 0;
+static int s_nStmap91ConsumerDriveHits = 0;
+static int s_nStmap91ConsumerPhaseFlexHits = 0;
+static int s_nStmap91ConsumerEligible = 0;
+static int s_nStmap91ConsumerPhaseFlexEligible = 0;
+static int s_nStmap91ConsumerOverrides = 0;
+static int s_nStmap91ConsumerAlready = 0;
+static int s_nStmap91ConsumerBlockedMode = 0;
+static int s_nStmap91ConsumerBlockedBest = 0;
+static int s_nStmap91ConsumerBlockedWindow = 0;
+static int s_nStmap91ConsumerBlockedChild = 0;
+static int s_nStmap91ConsumerBlockedDrive = 0;
+
+static void Map_Stmap91ResetConsumerDriveTargetCounters( void )
+{
+    s_nStmap91ConsumerRows = 0;
+    s_nStmap91ConsumerChildHits = 0;
+    s_nStmap91ConsumerDriveHits = 0;
+    s_nStmap91ConsumerPhaseFlexHits = 0;
+    s_nStmap91ConsumerEligible = 0;
+    s_nStmap91ConsumerPhaseFlexEligible = 0;
+    s_nStmap91ConsumerOverrides = 0;
+    s_nStmap91ConsumerAlready = 0;
+    s_nStmap91ConsumerBlockedMode = 0;
+    s_nStmap91ConsumerBlockedBest = 0;
+    s_nStmap91ConsumerBlockedWindow = 0;
+    s_nStmap91ConsumerBlockedChild = 0;
+    s_nStmap91ConsumerBlockedDrive = 0;
+}
+
+static void Map_Stmap91ClearConsumerDriveTarget( void )
+{
+    s_fStmap91ConsumerDriveTarget = 0;
+    s_fStmap91ConsumerDriveTargetActive = 0;
+    s_pStmap91ConsumerDriveTargetLabel = "stmap91";
+    s_Stmap91ParentAigId = -1;
+    s_Stmap91ChildAigId = -1;
+    s_Stmap91ParentPhase = 0;
+    s_Stmap91ChildPhase = 0;
+    Map_Stmap91ResetConsumerDriveTargetCounters();
+}
+
+void Map_Stmap91SetConsumerDriveTarget( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId, int ParentPhase, int ChildPhase )
+{
+    Map_Stmap91ClearConsumerDriveTarget();
+    s_pStmap91ConsumerDriveTargetLabel = pLabel && pLabel[0] ? pLabel : "stmap91";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 || ParentPhase < 0 || ParentPhase > 1 || ChildPhase < 0 || ChildPhase > 1 )
+        return;
+    s_fStmap91ConsumerDriveTarget = 1;
+    s_Stmap91ParentAigId = ParentAigId;
+    s_Stmap91ChildAigId = ChildAigId;
+    s_Stmap91ParentPhase = ParentPhase;
+    s_Stmap91ChildPhase = ChildPhase;
+}
+
+int Map_Stmap91ConsumerDriveTargetConfigured( void )
+{
+    return s_fStmap91ConsumerDriveTarget;
+}
+
+void Map_Stmap91SetConsumerDriveTargetActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap91ConsumerDriveTarget )
+        return;
+    if ( fActive )
+        Map_Stmap91ResetConsumerDriveTargetCounters();
+    s_fStmap91ConsumerDriveTargetActive = fActive;
+    (void)pPassLabel;
+}
+
+static int Map_Stmap91MaybeTargetConsumerDrive( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, Map_Cut_t * pBestCutBefore, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
+{
+    Map_Node_t * pNodeRegular;
+    Mio_Gate_t * pGate, * pGateBefore;
+    int AigId, ChildLeaf, ChildPhase, fEligible, fOverride;
+    int CandidateFanLimit, BestFanLimit, fFanLimitImproved, fLoadDriveImproved, fDriveImproved;
+    int fParentPhaseMatch, fPhaseFlex;
+    float ArrivalDelta, AreaPremium, AreaRatio, ArrivalWindow, AreaPremiumWindow, AreaRatioWindow;
+    float CandidateLeafLoadAvg, BestLeafLoadAvg, CandidateLoadDriveRatio, BestLoadDriveRatio, LoadDriveRatioMinGain;
+    const char * pAction;
+    if ( !s_fStmap91ConsumerDriveTarget || !s_fStmap91ConsumerDriveTargetActive || p == NULL || pNode == NULL || pCut == NULL || pMatch == NULL )
+        return fAccepted;
+    pNodeRegular = Map_Regular( pNode );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return fAccepted;
+    AigId = Map_NodeReadAigId( pNodeRegular );
+    if ( AigId != s_Stmap91ParentAigId )
+        return fAccepted;
+
+    s_nStmap91ConsumerRows++;
+    Map_Stmap81ReadChildPhase( pCut, pMatch, s_Stmap91ChildAigId, &ChildLeaf, &ChildPhase );
+    if ( ChildPhase == s_Stmap91ChildPhase )
+        s_nStmap91ConsumerChildHits++;
+    else
+        s_nStmap91ConsumerBlockedChild++;
+
+    ArrivalWindow = 0.50f;
+    AreaPremiumWindow = 1.20f;
+    AreaRatioWindow = 2.50f;
+    LoadDriveRatioMinGain = 0.05f;
+    ArrivalDelta = pBestBefore ? pMatch->tArrive.Worst - pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE;
+    AreaPremium = pBestBefore ? pMatch->AreaFlow - pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
+    AreaRatio = (pBestBefore && pBestBefore->AreaFlow > p->fEpsilon) ? pMatch->AreaFlow / pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
+    CandidateLeafLoadAvg = Map_MatchStmap32CutLeafLoadAvg( pCut );
+    BestLeafLoadAvg = pBestCutBefore ? Map_MatchStmap32CutLeafLoadAvg( pBestCutBefore ) : MAP_FLOAT_LARGE;
+    CandidateFanLimit = pMatch && pMatch->pSuperBest ? (int)pMatch->pSuperBest->nFanLimit : 0;
+    BestFanLimit = pBestBefore && pBestBefore->pSuperBest ? (int)pBestBefore->pSuperBest->nFanLimit : 0;
+    CandidateLoadDriveRatio = CandidateFanLimit > 0 ? CandidateLeafLoadAvg / (float)CandidateFanLimit : CandidateLeafLoadAvg;
+    BestLoadDriveRatio = BestFanLimit > 0 ? BestLeafLoadAvg / (float)BestFanLimit : BestLeafLoadAvg;
+    fFanLimitImproved = CandidateFanLimit > BestFanLimit;
+    fLoadDriveImproved = BestLoadDriveRatio < MAP_FLOAT_LARGE / 2 && CandidateLoadDriveRatio + LoadDriveRatioMinGain < BestLoadDriveRatio;
+    fDriveImproved = fFanLimitImproved || fLoadDriveImproved;
+    fParentPhaseMatch = fPhase == s_Stmap91ParentPhase;
+    fPhaseFlex = !fParentPhaseMatch;
+    if ( ChildPhase == s_Stmap91ChildPhase && fDriveImproved )
+    {
+        s_nStmap91ConsumerDriveHits++;
+        if ( fPhaseFlex )
+            s_nStmap91ConsumerPhaseFlexHits++;
+    }
+    fEligible = 0;
+    fOverride = 0;
+    pAction = "blocked-child-phase";
+
+    if ( ChildPhase == s_Stmap91ChildPhase )
+    {
+        if ( p->fMappingMode != 2 && p->fMappingMode != 3 )
+        {
+            s_nStmap91ConsumerBlockedMode++;
+            pAction = "blocked-mode";
+        }
+        else if ( pBestBefore == NULL || pBestBefore->pSuperBest == NULL || pBestCutBefore == NULL || pMatch->pSuperBest == NULL )
+        {
+            s_nStmap91ConsumerBlockedBest++;
+            pAction = "blocked-no-best";
+        }
+        else if ( ArrivalDelta > ArrivalWindow + p->fEpsilon || AreaPremium > AreaPremiumWindow + p->fEpsilon || AreaRatio > AreaRatioWindow + p->fEpsilon )
+        {
+            s_nStmap91ConsumerBlockedWindow++;
+            pAction = "blocked-window";
+        }
+        else if ( !fDriveImproved )
+        {
+            s_nStmap91ConsumerBlockedDrive++;
+            pAction = "blocked-drive";
+        }
+        else
+        {
+            s_nStmap91ConsumerEligible++;
+            if ( fPhaseFlex )
+                s_nStmap91ConsumerPhaseFlexEligible++;
+            fEligible = 1;
+            if ( fAccepted )
+            {
+                s_nStmap91ConsumerAlready++;
+                pAction = fPhaseFlex ? "already-selected-phase-flex" : "already-selected";
+            }
+            else
+            {
+                s_nStmap91ConsumerOverrides++;
+                fOverride = 1;
+                pAction = fPhaseFlex ? "override-phase-flex" : "override";
+                fAccepted = 1;
+            }
+        }
+    }
+
+    if ( ChildPhase == s_Stmap91ChildPhase || fOverride )
+    {
+        pGate = pMatch && pMatch->pSuperBest ? pMatch->pSuperBest->pRoot : NULL;
+        pGateBefore = pBestBefore && pBestBefore->pSuperBest ? pBestBefore->pSuperBest->pRoot : NULL;
+        printf( "%s consumer-flex-drive-target: index = %d  parent-aig = %d  child-aig = %d  target-parent-phase = %d  target-child-phase = %d  mapper-mode = %d  phase = %d  parent-phase-match = %d  phase-flex = %d  cut-ordinal = %d  action = %s  eligible = %d  override = %d  accepted-before = %d  child-leaf-index = %d  child-requested-phase = %d  gate = %s  best-gate = %s  arrival = %.3f  best-arrival = %.3f  arrival-delta = %.3f  area-flow = %.3f  best-area-flow = %.3f  area-premium = %.3f  area-ratio = %.3f  candidate-fanout-limit = %d  best-fanout-limit = %d  fanout-limit-improved = %d  candidate-cut-leaf-load-avg = %.3f  best-cut-leaf-load-avg = %.3f  candidate-load-drive-ratio = %.3f  best-load-drive-ratio = %.3f  load-drive-improved = %d  drive-improved = %d  arrival-window = %.3f  area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f\n",
+            s_pStmap91ConsumerDriveTargetLabel, s_nStmap91ConsumerRows,
+            s_Stmap91ParentAigId, s_Stmap91ChildAigId, s_Stmap91ParentPhase,
+            s_Stmap91ChildPhase, p->fMappingMode, fPhase, fParentPhaseMatch,
+            fPhaseFlex, CutOrdinal, pAction, fEligible, fOverride,
+            fAccepted && !fOverride, ChildLeaf, ChildPhase,
+            pGate ? Mio_GateReadName(pGate) : "?",
+            pGateBefore ? Mio_GateReadName(pGateBefore) : "?",
+            pMatch->tArrive.Worst, pBestBefore ? pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE,
+            ArrivalDelta, pMatch->AreaFlow, pBestBefore ? pBestBefore->AreaFlow : MAP_FLOAT_LARGE,
+            AreaPremium, AreaRatio, CandidateFanLimit, BestFanLimit,
+            fFanLimitImproved, CandidateLeafLoadAvg, BestLeafLoadAvg,
+            CandidateLoadDriveRatio, BestLoadDriveRatio, fLoadDriveImproved,
+            fDriveImproved, ArrivalWindow, AreaPremiumWindow, AreaRatioWindow,
+            LoadDriveRatioMinGain );
+    }
+    return fAccepted;
+}
+
+void Map_Stmap91PrintConsumerDriveTargetSummary( void )
+{
+    printf( "%s consumer-flex-drive-target stats: parent-aig = %d  child-aig = %d  target-parent-phase = %d  target-child-phase = %d  rows = %d  target-child-hits = %d  drive-hits = %d  phase-flex-hits = %d  eligible = %d  phase-flex-eligible = %d  overrides = %d  already-selected = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-child = %d  blocked-drive = %d  arrival-window = %.3f  area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f\n",
+        s_pStmap91ConsumerDriveTargetLabel, s_Stmap91ParentAigId, s_Stmap91ChildAigId,
+        s_Stmap91ParentPhase, s_Stmap91ChildPhase, s_nStmap91ConsumerRows,
+        s_nStmap91ConsumerChildHits, s_nStmap91ConsumerDriveHits, s_nStmap91ConsumerPhaseFlexHits,
+        s_nStmap91ConsumerEligible, s_nStmap91ConsumerPhaseFlexEligible, s_nStmap91ConsumerOverrides,
+        s_nStmap91ConsumerAlready, s_nStmap91ConsumerBlockedMode, s_nStmap91ConsumerBlockedBest,
+        s_nStmap91ConsumerBlockedWindow, s_nStmap91ConsumerBlockedChild, s_nStmap91ConsumerBlockedDrive,
+        0.50f, 1.20f, 2.50f, 0.05f );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
@@ -6371,6 +6581,7 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
         fAccepted = Map_Stmap88MaybeTargetChildPhase( p, pNode, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap89MaybeTargetConsumerPhase( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap90MaybeTargetConsumerDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
+        fAccepted = Map_Stmap91MaybeTargetConsumerDrive( p, pNode, pCut, pCutBest, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted );
         fAccepted = Map_Stmap82MaybeBlockStickyReplacement( p, pNode, pCut, fPhase, CutOrdinal, pMatch, fAccepted, fStmap82Sticky, &Stmap82StickyMatch, pStmap82StickyCut, Stmap82StickyCutOrdinal );
         Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
         if ( fAccepted )

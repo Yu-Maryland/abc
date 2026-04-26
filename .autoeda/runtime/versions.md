@@ -5196,3 +5196,57 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap90: target consumer drive load`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap91`, move the drive/load preference earlier than the exact-area override point or target reconstruction gate class directly. `stmap90` found drive-improved candidates in delay/area-flow modes but none eligible in exact-area modes, so a useful next probe is a tightly scoped mode-1 drive/load tie-break for the same final-consumer pairs, or a reconstruction-side policy that tests whether final emitted gate class/pin polarity rather than mapper cut choice is what downstream `stime` sees.
+
+
+## version91 / stmap91
+
+- hypothesis: A complementary parent phase can still matter to downstream reconstruction when the watched child phase has a real drive/load improvement. If an exact-area candidate for the watched parent consumes the target child phase and improves fanout/load-drive proxy, allowing it even when it is not the previously observed final parent phase may expose a downstream-visible reconstruction change.
+- motivation: `stmap90` found drive/load-improved candidates, but the exact-area override point had no eligible same-parent-phase changes. Its `syn2` diagnostics showed one exact-area mode `3` candidate blocked only by parent phase: parent AIG `18467` phase `0`, child AIG `18002` phase `1`, gate `AO32x2_ASAP7_75t_L`, with better arrival and much lower load-drive ratio than the current best. `stmap91` tests whether permitting that phase-flexible drive/load change can move final `stime`.
+- command name: `stmap91`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_91.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap91/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap91` adds `Map_Stmap91SetConsumerDriveTarget()` in `mapperMatch.c`. The helper is inactive by default and is activated by `stmap65` only around the final remap when explicitly configured by `stmap91`. During exact-area modes `2` and `3`, it may override a non-selected match for the watched parent AIG when the cut consumes the benchmark-specific target child phase, the candidate is within `0.50 ps` arrival, `1.20` area-flow premium, and `2.50x` area-ratio windows, and the candidate improves fanout limit or cut-load/fanout-limit ratio by at least `0.05`. Unlike `stmap90`, it does not require the parent phase to equal the final observed phase; it records whether each eligible or overriding row is phase-flexible.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap91/build.log`.
+  - help: `./abc -c "stmap91 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap91/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap91; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap91/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` selected child AIG `855`, parent AIG `861`, target parent phase `1`, target child phase `0`, and zero selected-match rows without a library as expected. Log: `.autoeda/runtime/results/stmap91/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then an unknown AIG; the second command reported selected-watch count `0`, consumer-flex-drive target disabled, selected-match rows `0`, and consumer-flex-drive-target rows `0`. Log: `.autoeda/runtime/results/stmap91/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap91/summary.json`, `metrics.csv`, `comparison.csv`, `consumer_flex_drive_target.csv`, `consumer_flex_drive_target_stats.csv`, selected-match diagnostics, phase-survival diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- consumer-flex-drive diagnostic results:
+  - `i10`: `15` rows, `5` target-child hits, `1` drive-hit, `0` phase-flex hits, `0` eligible overrides.
+  - `ode`: `28` rows, `6` target-child hits, `1` drive-hit, `0` phase-flex hits, `0` eligible overrides.
+  - `or1200`: `17` rows, `7` target-child hits, `2` drive-hits, `0` phase-flex hits, `0` eligible overrides, and `1` blocked-window row.
+  - `syn2`: `24` rows, `6` target-child hits, `1` drive-hit, `1` phase-flex hit, `1` eligible phase-flex row, and `1` override. The overriding row was mode `3`, parent phase `0`, cut ordinal `12`, gate `AO32x2_ASAP7_75t_L`, best gate `A2O1A1Ixp33_ASAP7_75t_L`, arrival delta `-2.770 ps`, area premium `0.930`, area ratio `1.795`, candidate load-drive ratio `4.200`, best load-drive ratio `22.750`.
+  - Final QoR stayed unchanged despite the targeted `syn2` override, indicating this complementary phase exact-area change either is not the reconstructed timing-critical phase or is absorbed by downstream buffering/sizing.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_91.c`.
+  - numbered command exists and is registered as `stmap91`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - consumer-flex-drive-target, selected-match, phase-survival, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues. The review noted the new command is registered/build-integrated and the mapper hooks remain inactive unless explicitly configured.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap91: allow phase flex drive target`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap92`, stop moving mapper alternatives that do not survive reconstruction. The next useful probe should target the reconstructed/emitted gate class for the final demanded parent phase, or use the reconstruction and phase-survival diagnostics to bias only rows that are actually emitted on the final critical demand path rather than merely available in the mapper phase table.

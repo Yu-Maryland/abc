@@ -1,0 +1,5 @@
+benchmark,parent_aig,child_aig,rows,viable,accepted_updates,child_phase0,child_phase1,child_unknown,child_missing,skip_fanout,no_supers,no_super_best,violates_required,area_sensitive_skip
+benchmarks/i10.aig,861,855,304,15,11,8,8,88,200,0,232,36,21,0
+benchmarks/ode.abc.blif,5229,5219,144,28,8,7,6,43,88,0,72,37,7,0
+benchmarks/or1200.abc.blif,13829,11491,140,17,6,8,5,15,112,34,32,31,1,25
+benchmarks/syn2.abc.blif,18467,18002,184,24,13,3,8,21,152,0,92,57,11,0

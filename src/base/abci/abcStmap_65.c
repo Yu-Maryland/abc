@@ -592,6 +592,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
     extern void Map_Stmap89SetConsumerPhaseTargetActive( int fActive, const char * pPassLabel );
     extern int Map_Stmap90ConsumerDriveTargetConfigured( void );
     extern void Map_Stmap90SetConsumerDriveTargetActive( int fActive, const char * pPassLabel );
+    extern int Map_Stmap91ConsumerDriveTargetConfigured( void );
+    extern void Map_Stmap91SetConsumerDriveTargetActive( int fActive, const char * pPassLabel );
 
     pNtk = Abc_FrameReadNtk(pAbc);
     DelayTarget = -1;
@@ -770,6 +772,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap89SetConsumerPhaseTargetActive( 0, "feedback" );
         if ( Map_Stmap90ConsumerDriveTargetConfigured() )
             Map_Stmap90SetConsumerDriveTargetActive( 0, "feedback" );
+        if ( Map_Stmap91ConsumerDriveTargetConfigured() )
+            Map_Stmap91SetConsumerDriveTargetActive( 0, "feedback" );
         pNtkFirst = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 36, fUseProfile, fUseBuffs, fVerbose );
         if ( pNtkFirst == NULL )
         {
@@ -836,6 +840,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap89SetConsumerPhaseTargetActive( 1, "final" );
         if ( Map_Stmap90ConsumerDriveTargetConfigured() )
             Map_Stmap90SetConsumerDriveTargetActive( 1, "final" );
+        if ( Map_Stmap91ConsumerDriveTargetConfigured() )
+            Map_Stmap91SetConsumerDriveTargetActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 57, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
@@ -857,6 +863,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap89SetConsumerPhaseTargetActive( 0, "final" );
         if ( Map_Stmap90ConsumerDriveTargetConfigured() )
             Map_Stmap90SetConsumerDriveTargetActive( 0, "final" );
+        if ( Map_Stmap91ConsumerDriveTargetConfigured() )
+            Map_Stmap91SetConsumerDriveTargetActive( 0, "final" );
         Map_Stmap65SetStrongNodeLoadDropGuard( 0 );
         Map_Stmap62SetCutOnlyOrdering( 0 );
         Map_Stmap61SetCutOnlyGateDiag( 0, -1 );
@@ -894,6 +902,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap89SetConsumerPhaseTargetActive( 1, "final" );
         if ( Map_Stmap90ConsumerDriveTargetConfigured() )
             Map_Stmap90SetConsumerDriveTargetActive( 1, "final" );
+        if ( Map_Stmap91ConsumerDriveTargetConfigured() )
+            Map_Stmap91SetConsumerDriveTargetActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 0, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
@@ -915,6 +925,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
             Map_Stmap89SetConsumerPhaseTargetActive( 0, "final" );
         if ( Map_Stmap90ConsumerDriveTargetConfigured() )
             Map_Stmap90SetConsumerDriveTargetActive( 0, "final" );
+        if ( Map_Stmap91ConsumerDriveTargetConfigured() )
+            Map_Stmap91SetConsumerDriveTargetActive( 0, "final" );
         if ( pNtkRes == NULL )
         {
             if ( fTempMap )

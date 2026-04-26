@@ -1,0 +1,10 @@
+Second review pass for stmap91. The first supported review found no discrete correctness issues.
+
+Please focus narrowly on residual risks in the final uncommitted patch:
+- stmap91 phase-flex consumer-drive hook should be inactive unless configured and activated.
+- stmap65 should activate/deactivate stmap91 in the same final-remap windows as stmap87-90.
+- stmap91 must not affect stmap90, older stmap commands, or classic map behavior.
+- The phase-flex override should only be possible in mapper modes 2 and 3 when child phase, drive/load, arrival, and area windows pass.
+- Build registration should include src/base/abci/abcStmap_91.c and command registration should expose stmap91.
+
+Report actionable findings only; if none, say there are no actionable correctness issues.

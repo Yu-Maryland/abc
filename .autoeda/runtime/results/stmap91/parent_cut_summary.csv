@@ -1,0 +1,5 @@
+benchmark,child_aig,parent_aig,requests,rows,phase0_has_cut,phase1_has_cut,child_phase0_count,child_phase1_count,child_missing,phase0_gate,phase0_child_requested_phase,phase1_gate,phase1_child_requested_phase
+benchmarks/i10.aig,855,861,9,2,1,1,1,1,0,OAI22xp33_ASAP7_75t_L,1,AOI22xp33_ASAP7_75t_L,0
+benchmarks/ode.abc.blif,5219,5229,5,2,1,1,0,1,1,OAI211xp5_ASAP7_75t_L,1,NOR2xp33_ASAP7_75t_L,-1
+benchmarks/or1200.abc.blif,11491,13829,4,2,0,1,1,0,0,?,-1,NOR2xp33_ASAP7_75t_L,0
+benchmarks/syn2.abc.blif,18002,18467,3,2,1,1,0,2,0,AO32x2_ASAP7_75t_L,1,AOI32xp33_ASAP7_75t_L,1

@@ -1,0 +1,11 @@
+Review stmap91 in this ABC AutoEDA campaign. Focus on correctness, build integration, command gating, and whether older stmap commands or classic map behavior could be affected.
+
+Scope:
+- New command file: src/base/abci/abcStmap_91.c
+- Registration/build files: src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp
+- Shared mapper edits: src/map/mapper/mapperMatch.c
+- stmap65 activation plumbing: src/base/abci/abcStmap_65.c
+
+Hypothesis: stmap91 keeps the watched child-phase drive/load test from stmap90 but allows a complementary parent phase in exact-area modes 2 and 3 when the candidate improves fanout limit or load-drive ratio within bounded arrival/area windows. It must remain inactive unless configured by stmap91 and activated only around the final stmap65 remap.
+
+Validation already run: make ABC_USE_NO_READLINE=1, stmap91 -h, i10 smoke, direct-read path normalization, stale unknown-network check, full four-benchmark flow, and CEC for all required benchmarks. Please report discrete actionable issues only; if none, say so.
