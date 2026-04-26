@@ -1,0 +1,18 @@
+Review the uncommitted stmap39 implementation for correctness risks.
+
+Context:
+- Project pack requires numbered `stmapN` commands to remain buildable and comparable.
+- New command is `stmap39`.
+- Hypothesis: collect first-pass SCL load/max-cap pressure around downstream fanout consumers and their fanin cones, pass that consumer-pressure table to mapper mode 40, and let high-reference strong-seed area-margin decisions use local consumer pressure when it is selected.
+- Primary source files touched: `src/base/abci/abcStmap_39.c`, `src/base/abci/abc.c`, `src/base/abci/module.make`, `src/map/mapper/mapperInt.h`, `src/map/mapper/mapperCore.c`, `src/map/mapper/mapperMatch.c`, `abclib.dsp`.
+- Validation already run: build, `stmap39 -h`, i10 smoke, full four benchmark baseline/candidate metrics, and CEC all passed. Artifacts are under `.autoeda/runtime/results/stmap39/`.
+
+Please prioritize:
+- missed command/build registration issues;
+- lifetime or ownership bugs in the feedback arrays passed from the command layer into mapper mode 40;
+- incorrect range changes from `<= 39` to `<= 40` that could alter older `stmap` modes or classic `map`;
+- consumer-pressure collection bugs in `abcStmap_39.c`;
+- mapper diagnostic counter or area-margin mistakes in mode 40;
+- missing validation or runtime logging required by the project pack.
+
+Return findings ordered by severity, with file/line references. Do not propose broad refactors unless they address a correctness risk.

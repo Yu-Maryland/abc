@@ -2096,3 +2096,66 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap38: broaden SCL hotspot feedback`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap38` shows that a wider first-pass root/fanin/fanout hotspot neighborhood still misses the tracked `syn2` strong-seed candidate at AIG ID `2318`, despite selecting the maximum `128` hotspots and seeing aggregate SCL feedback severity `0.884`. For `stmap39`, switch from static AIG-neighborhood matching to a reconstruction-aware association: map each final candidate cut or reconstructed supergate output to the first-pass mapped node IDs that consume its fanout, then penalize strong seeds by downstream consumers' measured SCL load ratio rather than by nearby original AIG IDs alone.
+
+## version39 / stmap39
+
+- hypothesis: A reconstruction-aware consumer-pressure table from first-pass SCL load offenders can bias final strong-seed mapper decisions more locally than root/fanin/fanout AIG-neighborhood hotspots.
+- motivation: `stmap38` broadened static SCL hotspot association but still left the known `syn2` refs-5 strong seed at mapper node `2318` with zero local hotspot pressure. `stmap39` tests whether downstream consumers of measured over-cap nodes, plus those consumers' fanin cones, expose the reconstructed AIG ID that the final mapper sees for the same decision.
+- command name: `stmap39`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_39.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap39/*`
+  - `.autoeda/runtime/results/stmap39_build_probe.*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap39` first maps with mapper mode `36` to preserve the direct SCL load measurement surface, then measures each mapped node's fanout input-pin load divided by Liberty `max_out_cap`. It collects a consumer-pressure table of up to `4096` original AIG IDs from over-cap roots, downstream consumers, and the consumers' fanin cones, keyed by original AIG ID and ranked by measured consumer load ratio. The final remap uses mapper mode `40`, which keeps the bounded drive-normalized strong-seed logic and adds a pressure term only when `Map_NodeReadAigId` or a candidate cut leaf AIG ID appears in that table. After review, the mapper intentionally does not fall back to internal mapper node numbers for this AIG-keyed table. Existing `map` and `stmap0` through `stmap38` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap39/build.log`.
+  - help: `./abc -c "stmap39 -h"` printed usage text with default `-G 250.00` and consumer-pressure SCL feedback enabled. Log: `.autoeda/runtime/results/stmap39/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap39; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap39/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap39/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `scl_load_stats.csv`, `feedback_load_stats.csv`, `consumer_pressure_stats.csv`, `consumer_pressure_top.csv`, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); consumer-pressure selected `262` of `4096`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); consumer-pressure selected `4096` of `4096`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); consumer-pressure selected `4096` of `4096`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); consumer-pressure selected `4096` of `4096`; penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `1`, strong blocked `0`.
+- consumer-pressure diagnostics:
+  - `benchmarks/i10.aig`: first-pass load stats nodes `1540`, matched `1540`, over-max `3`, average load ratio `0.068`, max load ratio `1.544`; pressure roots `3`, consumer fanin entries `651`, consumer fanout entries `252`, selected `262`, tracked AIG `5548` ratio `0.000`.
+  - `benchmarks/ode.abc.blif`: first-pass load stats nodes `11544`, matched `11478`, over-max `71`, average load ratio `0.074`, max load ratio `8.715`; pressure roots `71`, consumer fanin entries `90011`, consumer fanout entries `16227`, selected `4096`, tracked AIG `5548` ratio `0.000`.
+  - `benchmarks/or1200.abc.blif`: first-pass load stats nodes `8077`, matched `8063`, over-max `41`, average load ratio `0.067`, max load ratio `10.805`; pressure roots `41`, consumer fanin entries `29938`, consumer fanout entries `6010`, selected `4096`, tracked AIG `5548` ratio `0.000`.
+  - `benchmarks/syn2.abc.blif`: first-pass load stats nodes `20805`, matched `20740`, over-max `133`, average load ratio `0.083`, max load ratio `11.716`; pressure roots `133`, consumer fanin entries `319126`, consumer fanout entries `35406`, selected `4096`, tracked AIG `5548`, tracked mapped node `5656`, tracked ratio `2.265`.
+  - `benchmarks/syn2.abc.blif`: the known refs-5 strong seed at mapper node `2318` reconstructs to AIG ID `5548` and is still admitted with penalty factor `0.317`, area margin `0.921593`, load/drive ratio `6.750`, node pressure ratio `0.000`, cut pressure ratio `0.000`, and SCL feedback `0.884`. The first-pass consumer-pressure diagnostic now sees AIG `5548` with ratio `2.265`, but the capped selected table still does not deliver nonzero pressure to that final mapper decision after the unsafe mapper-number fallback was removed. Final QoR remains unchanged from `stmap38`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_39.c`.
+  - numbered command exists and is registered as `stmap39`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, SCL-load-stat, feedback-load-stat, consumer-pressure-stat, consumer-pressure-top, moderate-penalty-block, and strong-penalty-seed diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap39/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap39/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap39/artifact_check.log`.
+  - version-log check passed in `.autoeda/runtime/results/stmap39/version_log_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap39/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap39/review_pass1_supported.log`.
+  - accepted findings: P2 removed an unsafe mapper-node-number fallback in the AIG-ID keyed pressure table; P3 re-sorted the consumer-pressure hotspot table when repeated AIG IDs are updated with larger ratios.
+  - revalidation after accepted findings: build, help, smoke, full required benchmark metrics, and CEC all passed.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap39/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap39/review_pass2_supported.log`.
+  - accepted source findings: none.
+  - accepted runtime findings: transient `campaign_state.json` finalization remained pending during review and is addressed by the final iteration state update.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: pass-1 source fixes were revalidated; after pass 2 only runtime review summary, canonical logging, artifact/version checks, and campaign-state finalization were added.
+- commit: local commit created with message `stmap39: add consumer-pressure SCL feedback`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap39` confirms that reconstruction-aware consumer-pressure collection can observe the previously missing `syn2` AIG ID `5548`, but the capped sorted AIG table and final mapper lookup still fail to apply nonzero pressure to the admitted strong seed. For `stmap40`, use a denser direct association structure keyed by AIG ID, such as a sparse hash/table or threshold-preserving pressure map, or explicitly pass a separate mapped-node keyed relation, so medium-pressure reconstruction IDs are retained without reintroducing unsafe mapper-number fallback behavior.

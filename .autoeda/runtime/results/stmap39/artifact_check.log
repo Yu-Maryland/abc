@@ -1,0 +1,62 @@
+PASS file .autoeda/runtime/results/stmap39/build.log
+PASS file .autoeda/runtime/results/stmap39/help.log
+PASS file .autoeda/runtime/results/stmap39/smoke_i10.log
+PASS file .autoeda/runtime/results/stmap39/metrics.csv
+PASS file .autoeda/runtime/results/stmap39/comparison.csv
+PASS file .autoeda/runtime/results/stmap39/summary.json
+PASS file .autoeda/runtime/results/stmap39/cec_summary.json
+PASS file .autoeda/runtime/results/stmap39/guard_stats.csv
+PASS file .autoeda/runtime/results/stmap39/early_seed_stats.csv
+PASS file .autoeda/runtime/results/stmap39/near_miss_stats.csv
+PASS file .autoeda/runtime/results/stmap39/penalty_stats.csv
+PASS file .autoeda/runtime/results/stmap39/scl_load_stats.csv
+PASS file .autoeda/runtime/results/stmap39/feedback_load_stats.csv
+PASS file .autoeda/runtime/results/stmap39/consumer_pressure_stats.csv
+PASS file .autoeda/runtime/results/stmap39/consumer_pressure_top.csv
+PASS file .autoeda/runtime/results/stmap39/moderate_penalty_block_diag.csv
+PASS file .autoeda/runtime/results/stmap39/moderate_penalty_seed_diag.csv
+PASS file .autoeda/runtime/results/stmap39/strong_penalty_block_diag.csv
+PASS file .autoeda/runtime/results/stmap39/strong_penalty_seed_diag.csv
+PASS file .autoeda/runtime/results/stmap39/review_prompt1.txt
+PASS file .autoeda/runtime/results/stmap39/review_prompt2.txt
+PASS file .autoeda/runtime/results/stmap39/review_pass1.log
+PASS file .autoeda/runtime/results/stmap39/review_pass1_supported.log
+PASS file .autoeda/runtime/results/stmap39/review_pass2.log
+PASS file .autoeda/runtime/results/stmap39/review_pass2_supported.log
+PASS file .autoeda/runtime/results/stmap39/review_summary.md
+PASS file .autoeda/runtime/results/stmap39/run_stmap39_eval.py
+PASS file .autoeda/runtime/versions.md
+PASS file src/base/abci/abcStmap_39.c
+PASS file-exists .autoeda/runtime/results/stmap39/eval_driver.log
+PASS exit-zero .autoeda/runtime/results/stmap39/build.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/help.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/smoke_i10.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/eval_driver.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/review_pass1_supported.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/review_pass2_supported.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/baseline_benchmarks_i10_aig.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/baseline_benchmarks_ode_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/baseline_benchmarks_or1200_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/baseline_benchmarks_syn2_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/candidate_benchmarks_i10_aig.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/candidate_benchmarks_ode_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/candidate_benchmarks_or1200_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/candidate_benchmarks_syn2_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/cec_benchmarks_i10_aig.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/cec_benchmarks_ode_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/cec_benchmarks_or1200_abc_blif.exit
+PASS exit-zero .autoeda/runtime/results/stmap39/cec_benchmarks_syn2_abc_blif.exit
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_i10_aig_orig.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_i10_aig_stmap39.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_ode_abc_blif_orig.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_ode_abc_blif_stmap39.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_or1200_abc_blif_orig.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_or1200_abc_blif_stmap39.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_syn2_abc_blif_orig.aig
+PASS file .autoeda/runtime/results/stmap39/cec_benchmarks_syn2_abc_blif_stmap39.aig
+PASS metrics rows include 4 baseline and 4 candidate rows
+PASS comparison rows include all 4 benchmarks
+PASS consumer pressure rows include all 4 benchmarks
+PASS CEC summary has 4 passing benchmarks
+PASS versions.md contains stmap39 entry
+PASS stmap39 help command callable

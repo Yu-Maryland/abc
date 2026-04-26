@@ -1,0 +1,2 @@
+help_exit=0
+smoke_exit=0
