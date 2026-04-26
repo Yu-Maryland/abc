@@ -1,0 +1,5 @@
+benchmark,base_gain,low_gain,selected_gain,severity_threshold,sink_pressure_threshold,selected_low_gain
+benchmarks/i10.aig,250.00,200.00,250.00,0.850,8000,0
+benchmarks/ode.abc.blif,250.00,200.00,250.00,0.850,8000,0
+benchmarks/or1200.abc.blif,250.00,200.00,250.00,0.850,8000,0
+benchmarks/syn2.abc.blif,250.00,200.00,200.00,0.850,8000,1

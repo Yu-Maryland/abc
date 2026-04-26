@@ -1,0 +1,15 @@
+Review the uncommitted stmap48 iteration in this ABC AutoEDA campaign. Focus on correctness and project-contract risks, not style.
+
+Context:
+- stmap48 adds src/base/abci/abcStmap_48.c, registers stmap48, and wires it into module.make and abclib.dsp.
+- It intentionally reuses the existing stmap45 mapper mode 46 via Map_Stmap45SetSclLoadFeedback.
+- New hypothesis: first pass maps at base Gain=250, computes SCL feedback severity and sink-pressure entries, then final remap uses Gain=200 only when severity >= 0.850 and sink-pressure entries >= 8000; otherwise final remap stays at Gain=250.
+- Required evaluation has passed so far: build, stmap48 -h, smoke, four benchmark flows, parseable final stime metrics, and CEC on all four required benchmarks. Results are under .autoeda/runtime/results/stmap48/.
+
+Please inspect for:
+1. Functional bugs in the adaptive-gain implementation, command help, memory lifetime, or feedback transfer.
+2. Registration/build integration mistakes.
+3. Evaluation/logging or parser artifacts that could make the iteration invalid under the project pack.
+4. Any issue that should be fixed before committing.
+
+Return findings with severity and file/line references. If there are no blocking findings, say so explicitly.

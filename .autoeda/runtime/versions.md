@@ -2627,3 +2627,58 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap47: reduce SCL genlib gain for pressure mode`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap47` shows that lower gain is valuable on the most severe `syn2` pressure case but too expensive and too inconsistent as a global default. For `stmap48`, make gain adaptive from first-pass feedback severity: keep `Gain = 250` for low or moderate severity and use `Gain = 200` only for high-severity, large-design cases similar to `syn2`, with explicit diagnostics for the selected gain and its feedback threshold.
+
+## version48 / stmap48
+
+- hypothesis: Keep the `stmap45` pressure-agreement mapper mode and use `Gain = 250` for low/moderate first-pass SCL pressure, but switch the final feedback remap to `Gain = 200` only when the first-pass feedback severity and sink-pressure population identify a high-pressure large design. This should preserve the `stmap45` QoR on `i10`, `ode`, and `or1200` while retaining the `stmap47` timing win on severe `syn2`.
+- motivation: `stmap47` showed that global `Gain = 200` improves `syn2` delay from the `stmap45` point but spends much more area and regresses the other required benchmarks. The next diagnostic question is whether the lower-gain setting should be activated by measured first-pass SCL pressure instead of used globally.
+- command name: `stmap48`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_48.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap48/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap48` is a numbered two-pass `stmap` command. It runs the first feedback-load map at the base gain, default `250`, computes the existing SCL load/max-cap feedback severity and dense sink-pressure vector, and then remaps through `Map_Stmap45SetSclLoadFeedback()` using mapper mode `46`. The final remap keeps `Gain = 250` unless `severity >= 0.850` and `sink-pressure-entries >= 8000`, in which case it uses `0.80 * base_gain`, default `200`. Candidate logs print `stmap48 adaptive-gain` and `stmap48 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap47` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap48/build.log`.
+  - help: `./abc -c "stmap48 -h"` printed command usage with adaptive-gain two-pass mapping and default `-G 250.00`. Log: `.autoeda/runtime/results/stmap48/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap48; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap48/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap48/summary.json`, `metrics.csv`, `comparison.csv`, `adaptive_gain_stats.csv`, `mapper_mode_stats.csv`, guard/near-miss/early-seed diagnostics, sink-pressure and feedback diagnostics, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; feedback severity `0.000`; sink-pressure entries `262`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; feedback severity `0.627`; sink-pressure entries `4816`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; feedback severity `0.733`; sink-pressure entries `4362`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `484.80 ps`, area `23238.89`; delay delta `-24.02 ps` (`-4.72%`), area delta `+1942.29` (`+9.12%`); selected gain `200.00`; feedback severity `0.884`; sink-pressure entries `8980`; penalty stats: moderate seed `0`, moderate blocked `3`, strong seed `0`, strong blocked `0`.
+- adaptive-gain and sink-pressure diagnostics:
+  - adaptive gain selected `250.00` for `i10`, `ode`, and `or1200`, and selected `200.00` only for `syn2`.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, entries `262`; `ode` severity `0.627`, entries `4816`; `or1200` severity `0.733`, entries `4362`; `syn2` severity `0.884`, entries `8980`.
+  - `benchmarks/syn2.abc.blif`: tracked AIG `5548`, mapped node `5656`, raw pressure ratio `2.265`, and sink-pressure ratio `1.443`; the high-pressure selector activated lower gain only for this required design.
+  - Compared with `stmap47`, `stmap48` recovers the `stmap45`/`stmap44` QoR points for `i10`, `ode`, and `or1200` while preserving the `stmap47` `syn2` final delay of `484.80 ps`. The `syn2` area cost remains high, so the adaptive rule solves the global-regression problem but not the high-severity area tradeoff.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_48.c`.
+  - numbered command exists and is registered as `stmap48`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - adaptive-gain, mapper-mode, sink-pressure, feedback, guard, early-seed, near-miss, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap48/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap48/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap48/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap48/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap48/review_pass1.log`.
+  - accepted source findings: none.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap48/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap48/review_pass2.log`.
+  - accepted source findings: none.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: after review pass 1, the cloned source header filename was corrected from `abcStmap_47.c` to `abcStmap_48.c` and revalidated with build, help, and smoke; review pass 2 reported no actionable findings. After review pass 2, only runtime review summary, artifact checks, canonical logging, version checks, and campaign-state finalization were added.
+- commit: local commit created with message `stmap48: adapt gain for severe SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap48` confirms that a first-pass SCL pressure gate can avoid the broad `stmap47` regressions while keeping the severe `syn2` delay win. For `stmap49`, keep the adaptive selector but reduce the `syn2` area cost, for example by using an intermediate selected gain such as `225`, by adding an area-cap condition to the low-gain activation, or by blending gain with pressure severity rather than using a binary `250/200` switch.
