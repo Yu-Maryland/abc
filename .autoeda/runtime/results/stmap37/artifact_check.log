@@ -1,0 +1,4 @@
+artifact_check: PASS
+all required stmap37 artifacts are present and nonempty
+build/help/smoke/benchmark/cec/review exit checks passed
+summary.json reports metrics_ok=true and cec_ok=true

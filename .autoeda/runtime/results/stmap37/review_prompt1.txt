@@ -1,0 +1,30 @@
+Review the uncommitted stmap37 iteration for correctness regressions.
+
+Project context:
+- This repo is ABC. The campaign family is stmap, baseline command is map, and this iteration adds stmap37.
+- The intended hypothesis is local first-pass SCL hotspot feedback: map once with the stmap35/stmap36 SCL-observation surface, collect first-pass mapped over-cap hotspots and immediate mapped fanin-cone AIG IDs, then remap with mapper mode 38 so the bounded strong-seed SCL penalty applies only to current mapper nodes whose AIG ID appears in that local hotspot set.
+
+Primary files to inspect:
+- src/base/abci/abcStmap_37.c
+- src/base/abci/abc.c
+- src/base/abci/module.make
+- abclib.dsp
+- src/map/mapper/mapperInt.h
+- src/map/mapper/mapperCore.c
+- src/map/mapper/mapperMatch.c
+
+Validation already run:
+- make ABC_USE_NO_READLINE=1: passed.
+- ./abc -c "stmap37 -h": passed.
+- smoke flow on benchmarks/i10.aig: passed and parsed final stime metrics.
+- full baseline/candidate benchmark metrics on benchmarks/i10.aig, benchmarks/ode.abc.blif, benchmarks/or1200.abc.blif, benchmarks/syn2.abc.blif: passed.
+- CEC for original strashed benchmark vs post-flow stmap37 strashed candidate: passed for all four benchmarks.
+
+Please prioritize:
+- source-level correctness issues in the two-pass command flow, including feedback reset on all exits.
+- ownership/lifetime bugs for the hotspot AIG ID and ratio arrays passed from abcStmap_37.c into mapperMatch.c.
+- mode-range mistakes that could perturb prior stmap0..stmap36 behavior.
+- incorrect AIG ID matching that makes the local hotspot penalty silently ineffective or unsafe.
+- missing command registration/build-system integration.
+
+Report only actionable findings with file/line references. If there are no correctness findings, state that.

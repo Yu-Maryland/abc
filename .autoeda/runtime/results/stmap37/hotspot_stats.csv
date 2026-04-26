@@ -1,0 +1,5 @@
+benchmark,roots,cone,selected,capacity
+benchmarks/i10.aig,3,12,6,64
+benchmarks/ode.abc.blif,71,152,64,64
+benchmarks/or1200.abc.blif,41,69,64,64
+benchmarks/syn2.abc.blif,133,309,64,64

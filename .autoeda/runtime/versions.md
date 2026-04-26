@@ -1973,3 +1973,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap36: feed SCL load feedback into mapper`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap36` proves the direct SCL load diagnostic can alter mapper decisions in the intended direction, but the blocked `syn2` strong seed still leaves final downstream QoR unchanged. For `stmap37`, make the feedback more local by associating first-pass over-cap hotspots with mapper node IDs or fanout cones, so the penalty can target SCL-proven load offenders instead of applying an aggregate scalar across all strong seeds.
+
+## version37 / stmap37
+
+- hypothesis: First-pass direct SCL over-cap hotspots can be mapped back to original AIG IDs and used as a local feedback set, so the final mapper penalizes only high-reference strong seeds that are spatially near measured downstream load offenders.
+- motivation: `stmap36` proved that direct SCL load feedback can alter mapper decisions, but its aggregate scalar blocked the known `syn2` strong seed globally without improving final downstream `stime`. `stmap37` tests whether localizing that feedback to first-pass over-cap roots and their immediate mapped fanin cone is a safer discriminator.
+- command name: `stmap37`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_37.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperMatch.c`
+  - `.autoeda/runtime/results/stmap37/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap37` keeps the classic SCL-genlib gain default of `250`. The command first maps with mapper mode `36`, preserving the observational direct SCL load surface from `stmap35`, then measures each mapped node's SCL fanout input-pin load divided by its Liberty `max_out_cap`. Over-cap mapped roots and their immediate mapped fanin cone are translated through `vOrigNodeIds` into original AIG IDs, sorted by local load ratio, and capped at `64` hotspots. The command then remaps with mapper mode `38`. Mode 38 keeps the continuous moderate-seed penalty and the bounded drive-normalized strong-seed penalty, but adds an extra SCL term only when the current mapper node's AIG ID appears in the first-pass hotspot set with ratio greater than `1.0`. The feedback globals are reset after the final map. Existing `map` and `stmap0` through `stmap36` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap37/build.log`.
+  - help: `./abc -c "stmap37 -h"` printed usage text with default `-G 250.00` and local SCL hotspot feedback enabled. Log: `.autoeda/runtime/results/stmap37/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap37; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, inactive feedback severity `0.000`, and six selected local hotspots. Log: `.autoeda/runtime/results/stmap37/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap37/summary.json`, `metrics.csv`, `comparison.csv`, `guard_stats.csv`, `early_seed_stats.csv`, `near_miss_stats.csv`, `penalty_stats.csv`, `scl_load_stats.csv`, `feedback_load_stats.csv`, `feedback_stats.csv`, `hotspot_stats.csv`, `feedback_load_top.csv`, `hotspot_top.csv`, penalty diagnostic CSVs, raw baseline/candidate logs, CEC temporaries, CEC logs, CEC summary, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); feedback active `0`, severity `0.000`, hotspots `6`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); feedback active `1`, severity `0.627`, hotspots `64`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); feedback active `1`, severity `0.733`, hotspots `64`; penalty stats: moderate seed `0`, moderate blocked `0`, strong seed `0`, strong blocked `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `490.96 ps`, area `21541.78`; delay delta `-17.86 ps` (`-3.51%`), area delta `+245.18` (`+1.15%`); feedback active `1`, severity `0.884`, hotspots `64`; penalty stats: moderate seed `0`, moderate blocked `2`, strong seed `1`, strong blocked `0`.
+- local SCL hotspot diagnostics:
+  - `benchmarks/i10.aig`: first-pass load stats nodes `1540`, matched `1540`, over-max `3`, average load ratio `0.068`, max load ratio `1.544`; hotspot roots `3`, cone `12`, selected `6`.
+  - `benchmarks/ode.abc.blif`: first-pass load stats nodes `11544`, matched `11478`, over-max `71`, average load ratio `0.074`, max load ratio `8.715`; hotspot roots `71`, cone `152`, selected `64`.
+  - `benchmarks/or1200.abc.blif`: first-pass load stats nodes `8077`, matched `8063`, over-max `41`, average load ratio `0.067`, max load ratio `10.805`; hotspot roots `41`, cone `69`, selected `64`.
+  - `benchmarks/syn2.abc.blif`: first-pass load stats nodes `20805`, matched `20740`, over-max `133`, average load ratio `0.083`, max load ratio `11.716`; hotspot roots `133`, cone `309`, selected `64`.
+  - `benchmarks/syn2.abc.blif`: top first-pass load-ratio node `20772`, gate `NAND2xp33_ASAP7_75t_L`, fanouts `306`, load `134.970`, max-cap `11.520`, load ratio `11.716`; the top hotspot AIG ID is `41263` with local ratio `11.716`.
+  - `benchmarks/syn2.abc.blif`: the known refs-5 strong seed at mapper node `2318` is admitted with penalty factor `0.317`, area margin `0.921593`, load/drive ratio `6.750`, `hotspot-ratio = 0.000`, and SCL feedback `0.884`. This shows the local hotspot gate is active as a discriminator but does not associate that candidate with the first-pass over-cap set.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_37.c`.
+  - numbered command exists and is registered as `stmap37`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - guard-stat, early-seed, near-miss, penalty-stat, SCL-load-stat, feedback-load-stat, feedback-stat, hotspot-stat, hotspot-top, moderate-penalty-block, and strong-penalty-seed diagnostic parsing passed and are recorded under `.autoeda/runtime/results/stmap37/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap37/`.
+  - artifact check passed in `.autoeda/runtime/results/stmap37/artifact_check.log`.
+  - version-log check passed in `.autoeda/runtime/results/stmap37/version_log_check.log`.
+- review pass 1:
+  - configured prompt-form review failed because the installed Codex CLI rejects `--uncommitted` together with a positional prompt; the failure is logged in `.autoeda/runtime/results/stmap37/review_pass1.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap37/review_pass1_supported.log`.
+  - accepted findings: none; the reviewer reported no actionable correctness issue in the two-pass command flow, feedback lifetime, mode ranges, command wiring, or local hotspot matching.
+- review pass 2:
+  - configured prompt-form review failed for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap37/review_pass2.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap37/review_pass2_supported.log`.
+  - accepted findings: none; the reviewer reported no actionable correctness issue in the final source changes or runtime artifacts.
+- rejected findings: none.
+- open findings: none.
+- source changes after review: none; only runtime review summary, canonical logging, and campaign-state finalization were added after review.
+- commit: local commit created with message `stmap37: localize SCL load feedback`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap37` verifies that first-pass SCL hotspots can be captured and fed into mapper mode 38, but the `syn2` strong seed is not in the root/immediate-fanin hotspot set. For `stmap38`, broaden the local association to downstream fanout cones, timing-near endpoints, or mapped supergate leaves reachable from over-cap roots, and log whether the known `2318` strong-seed candidate is connected to those SCL offenders before increasing penalty strength.

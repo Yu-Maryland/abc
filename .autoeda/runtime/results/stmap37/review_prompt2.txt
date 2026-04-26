@@ -1,0 +1,12 @@
+Second review pass for the uncommitted stmap37 iteration.
+
+Pass 1 result:
+- The configured prompt-form invocation failed due to the local Codex CLI argument conflict between --uncommitted and a positional prompt; this is logged in review_pass1.log.
+- The supported configured-tool invocation via stdin completed successfully and reported no actionable correctness issues; this is logged in review_pass1_supported.log.
+- No source changes were made after review pass 1.
+
+Current validation status:
+- build, command help, smoke flow, full benchmark metrics, diagnostics parsing, and CEC all passed for stmap37.
+- Candidate QoR matches stmap36 on the four required benchmarks while changing the strong-seed decision surface back to a local-hotspot-gated SCL feedback condition.
+
+Please do a final correctness-focused review of the uncommitted changes and report only actionable findings with file/line references. Focus on whether any accepted-finding revalidation is required, whether runtime/campaign artifacts appear sufficient, and whether there are source defects missed in pass 1.
