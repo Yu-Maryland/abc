@@ -1,0 +1,9 @@
+Review the corrected uncommitted stmap78 changes after review pass 1.
+
+Context:
+- stmap78 keeps stmap65 mapping policy unchanged and adds diagnostics only.
+- Review pass 1 found a P2 diagnostic issue: fallback reconstruction paths stored the outer requested phase in the demand-path stack instead of the opposite cut phase used for leaf recursion.
+- The fix adds Abc_Stmap78DemandPathSetTopPhase() and temporarily switches the stack top phase while recursing through the fallback cut.
+- Revalidation passed: build, help, smoke, path-normalization, stale-state, full four-benchmark eval, CEC, and fallback_phase_consistency.log shows mismatches=0.
+
+Please look for remaining correctness, diagnostic, stale-state, build-registration, or maintainability issues in the uncommitted diff. Return findings with file/line references. If no issues remain, say so clearly.

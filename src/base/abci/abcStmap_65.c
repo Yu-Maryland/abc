@@ -574,6 +574,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
     extern void Map_Stmap65SetStrongNodeLoadDropGuard( int fEnable );
     extern int Abc_Stmap77ReconstructionDiagConfigured( void );
     extern void Abc_Stmap77SetReconstructionActive( int fActive, const char * pPassLabel );
+    extern int Abc_Stmap78DemandPathDiagConfigured( void );
+    extern void Abc_Stmap78SetDemandPathActive( int fActive, const char * pPassLabel );
 
     pNtk = Abc_FrameReadNtk(pAbc);
     DelayTarget = -1;
@@ -734,6 +736,8 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
     {
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "feedback" );
+        if ( Abc_Stmap78DemandPathDiagConfigured() )
+            Abc_Stmap78SetDemandPathActive( 0, "feedback" );
         pNtkFirst = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 36, fUseProfile, fUseBuffs, fVerbose );
         if ( pNtkFirst == NULL )
         {
@@ -782,9 +786,13 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
         Map_Stmap65SetStrongNodeLoadDropGuard( 1 );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 1, "final" );
+        if ( Abc_Stmap78DemandPathDiagConfigured() )
+            Abc_Stmap78SetDemandPathActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 57, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
+        if ( Abc_Stmap78DemandPathDiagConfigured() )
+            Abc_Stmap78SetDemandPathActive( 0, "final" );
         Map_Stmap65SetStrongNodeLoadDropGuard( 0 );
         Map_Stmap62SetCutOnlyOrdering( 0 );
         Map_Stmap61SetCutOnlyGateDiag( 0, -1 );
@@ -804,9 +812,13 @@ int Abc_CommandStmap65( Abc_Frame_t * pAbc, int argc, char ** argv )
     {
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 1, "final" );
+        if ( Abc_Stmap78DemandPathDiagConfigured() )
+            Abc_Stmap78SetDemandPathActive( 1, "final" );
         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 0, fUseProfile, fUseBuffs, fVerbose );
         if ( Abc_Stmap77ReconstructionDiagConfigured() )
             Abc_Stmap77SetReconstructionActive( 0, "final" );
+        if ( Abc_Stmap78DemandPathDiagConfigured() )
+            Abc_Stmap78SetDemandPathActive( 0, "final" );
         if ( pNtkRes == NULL )
         {
             if ( fTempMap )

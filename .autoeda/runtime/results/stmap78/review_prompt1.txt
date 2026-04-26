@@ -1,0 +1,10 @@
+Review the uncommitted stmap78 changes for correctness, build integration, and diagnostic reliability.
+
+Context:
+- Project requires one versioned ABC mapper experiment per iteration.
+- stmap78 should keep the stmap65 mapping policy unchanged.
+- stmap78 adds final-remap demand-path diagnostics for watched AIGs, especially ode AIG 5219 and downstream fanout AIG 5229.
+- Existing stmap77 reconstruction diagnostics are reused and labeled stmap78.
+- Full build, help, smoke, path-normalization, stale-state, four benchmark evaluation, and CEC have passed.
+
+Please prioritize bugs that could affect correctness, alter mapping behavior, corrupt diagnostics across runs, break unknown-network stale-state clearing, or omit build registration. Return findings with file/line references. If no issues, say so clearly.

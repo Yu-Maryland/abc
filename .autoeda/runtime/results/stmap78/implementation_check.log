@@ -1,0 +1,19 @@
+src/base/abci/abcStmap_78.c:3:  FileName    [abcStmap_78.c]
+src/base/abci/abcStmap_78.c:9:  Synopsis    [stmap78 command.]
+src/base/abci/abcStmap_78.c:65:  Synopsis    [Runs the stmap78 final-demand path diagnostic.]
+src/base/abci/abcStmap_78.c:67:  Description [stmap78 keeps the reviewed stmap65 mapping policy unchanged,
+src/base/abci/abcStmap_78.c:78:int Abc_CommandStmap78( Abc_Frame_t * pAbc, int argc, char ** argv )
+src/base/abci/abcStmap_78.c:102:    printf( "stmap78 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  watch-aig = %d  downstream-aig = %d  source = stmap77-final-demand-hypothesis  reconstruction-phase-trace = 1  demand-path-trace = 1  final-phase-survival = 1  mapping-policy-change = 0\n",
+src/base/abci/abcStmap_78.c:106:    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap78" );
+src/base/abci/abcStmap_78.c:107:    Abc_Stmap77SetReconstructionDiag( WatchAigId >= 0, "stmap78", WatchAigs, WatchAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_78.c:108:    Abc_Stmap78SetDemandPathDiag( WatchAigId >= 0, "stmap78", WatchAigId, DownstreamAigId );
+src/base/abci/abcStmap_78.c:112:    Abc_Stmap78SetDemandPathDiag( 0, "stmap78", -1, -1 );
+src/base/abci/abcStmap_78.c:113:    Abc_Stmap77SetReconstructionDiag( 0, "stmap78", NULL, 0 );
+src/base/abci/abcStmap_78.c:119:        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap78" );
+src/base/abci/abcStmap_78.c:120:        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap78", WatchAigs, WatchAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_78.c:125:    Abc_Print( -2, "usage: stmap78 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+src/base/abci/abcStmap_78.c:126:    Abc_Print( -2, "\t              performs stmap78 bounded-pressure mapping with final demand-path diagnostics\n" );
+abclib.dsp:794:SOURCE=.\src\base\abci\abcStmap_78.c
+src/base/abci/module.make:147:    src/base/abci/abcStmap_78.c \
+src/base/abci/abc.c:378:extern int Abc_CommandStmap78                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+src/base/abci/abc.c:1303:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap78",       Abc_CommandStmap78,          1 );

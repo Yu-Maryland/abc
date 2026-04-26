@@ -25,6 +25,7 @@
 #include "misc/util/utilNam.h"
 #include "map/scl/sclCon.h"
 #include "map/scl/sclLib.h"
+#include <string.h>
 
 ABC_NAMESPACE_IMPL_START
 
@@ -99,6 +100,7 @@ void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * p
 {
     int i;
     Abc_Stmap77ClearReconstructionDiag();
+    s_pStmap77ReconstructionLabel = pLabel && pLabel[0] ? pLabel : "stmap77";
     if ( !fEnable || pWatchAigIds == NULL || nWatchAigs <= 0 )
         return;
     for ( i = 0; i < nWatchAigs && s_nStmap77ReconstructionWatchAigs < ABC_STMAP77_MAX_WATCH_AIGS; i++ )
@@ -107,7 +109,6 @@ void Abc_Stmap77SetReconstructionDiag( int fEnable, const char * pLabel, int * p
     if ( s_nStmap77ReconstructionWatchAigs == 0 )
         return;
     s_fStmap77ReconstructionDiag = 1;
-    s_pStmap77ReconstructionLabel = pLabel && pLabel[0] ? pLabel : "stmap77";
 }
 
 int Abc_Stmap77ReconstructionDiagConfigured( void )
@@ -259,6 +260,286 @@ void Abc_Stmap77PrintReconstructionSummary( void )
         s_Stmap77ReconstructionDirectPhase[1], s_Stmap77ReconstructionInverterPhase[0],
         s_Stmap77ReconstructionInverterPhase[1], s_Stmap77ReconstructionCachePhase[0],
         s_Stmap77ReconstructionCachePhase[1] );
+}
+
+#define ABC_STMAP78_MAX_PATH 256
+static int s_fStmap78DemandPathDiag = 0;
+static int s_fStmap78DemandPathActive = 0;
+static const char * s_pStmap78DemandPathLabel = "stmap78";
+static int s_Stmap78WatchAigId = -1;
+static int s_Stmap78DownstreamAigId = -1;
+static const char * s_pStmap78RootKind = "?";
+static int s_iStmap78RootCo = -1;
+static int s_nStmap78DemandRows = 0;
+static int s_nStmap78TargetRequests = 0;
+static int s_nStmap78TargetViaDownstream = 0;
+static int s_nStmap78LeafDemands = 0;
+static int s_nStmap78LeafViaDownstream = 0;
+static int s_Stmap78TargetPhaseRequests[2] = { 0, 0 };
+static int s_Stmap78LeafPhaseRequests[2] = { 0, 0 };
+static int s_nStmap78Phase0Direct = 0;
+static int s_nStmap78Phase0Invert = 0;
+static int s_nStmap78Stack = 0;
+static int s_Stmap78PathNodes[ABC_STMAP78_MAX_PATH];
+static int s_Stmap78PathAigs[ABC_STMAP78_MAX_PATH];
+static int s_Stmap78PathPhases[ABC_STMAP78_MAX_PATH];
+
+static void Abc_Stmap78ResetDemandPathCounters( void )
+{
+    s_pStmap78RootKind = "?";
+    s_iStmap78RootCo = -1;
+    s_nStmap78DemandRows = 0;
+    s_nStmap78TargetRequests = 0;
+    s_nStmap78TargetViaDownstream = 0;
+    s_nStmap78LeafDemands = 0;
+    s_nStmap78LeafViaDownstream = 0;
+    s_Stmap78TargetPhaseRequests[0] = 0;
+    s_Stmap78TargetPhaseRequests[1] = 0;
+    s_Stmap78LeafPhaseRequests[0] = 0;
+    s_Stmap78LeafPhaseRequests[1] = 0;
+    s_nStmap78Phase0Direct = 0;
+    s_nStmap78Phase0Invert = 0;
+    s_nStmap78Stack = 0;
+}
+
+static void Abc_Stmap78ClearDemandPathDiag( void )
+{
+    s_fStmap78DemandPathDiag = 0;
+    s_fStmap78DemandPathActive = 0;
+    s_pStmap78DemandPathLabel = "stmap78";
+    s_Stmap78WatchAigId = -1;
+    s_Stmap78DownstreamAigId = -1;
+    Abc_Stmap78ResetDemandPathCounters();
+}
+
+void Abc_Stmap78SetDemandPathDiag( int fEnable, const char * pLabel, int WatchAigId, int DownstreamAigId )
+{
+    Abc_Stmap78ClearDemandPathDiag();
+    if ( !fEnable || WatchAigId < 0 )
+        return;
+    s_fStmap78DemandPathDiag = 1;
+    s_pStmap78DemandPathLabel = pLabel && pLabel[0] ? pLabel : "stmap78";
+    s_Stmap78WatchAigId = WatchAigId;
+    s_Stmap78DownstreamAigId = DownstreamAigId;
+}
+
+int Abc_Stmap78DemandPathDiagConfigured( void )
+{
+    return s_fStmap78DemandPathDiag;
+}
+
+void Abc_Stmap78SetDemandPathActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap78DemandPathDiag )
+        return;
+    if ( fActive )
+        Abc_Stmap78ResetDemandPathCounters();
+    s_fStmap78DemandPathActive = fActive;
+    (void)pPassLabel;
+}
+
+static const char * Abc_Stmap78PhaseAction( Map_Node_t * pNodeMap, int fPhase )
+{
+    Map_Node_t * pNodeRegular;
+    if ( pNodeMap == NULL )
+        return "unavailable";
+    pNodeRegular = Map_Regular( pNodeMap );
+    if ( Map_NodeReadData( pNodeRegular, fPhase ) != NULL )
+        return "cached";
+    if ( Map_NodeReadCutBest( pNodeRegular, fPhase ) != NULL )
+        return "direct-cut";
+    if ( Map_NodeReadCutBest( pNodeRegular, !fPhase ) != NULL )
+        return "inverter-from-opposite";
+    return "unavailable";
+}
+
+static const char * Abc_Stmap78PhaseGateName( Map_Node_t * pNodeMap, int fPhase )
+{
+    Map_Cut_t * pCutBest;
+    Map_Super_t * pSuperBest;
+    Mio_Gate_t * pGate;
+    if ( pNodeMap == NULL )
+        return "?";
+    pCutBest = Map_NodeReadCutBest( Map_Regular(pNodeMap), fPhase );
+    if ( pCutBest == NULL )
+        return "?";
+    pSuperBest = Map_CutReadSuperBest( pCutBest, fPhase );
+    pGate = pSuperBest ? Map_SuperReadRoot( pSuperBest ) : NULL;
+    return pGate ? Mio_GateReadName( pGate ) : "?";
+}
+
+static void Abc_Stmap78AppendValue( char * pBuffer, int nBuffer, int * pPos, int Value )
+{
+    int nWritten;
+    if ( *pPos >= nBuffer )
+        return;
+    nWritten = snprintf( pBuffer + *pPos, nBuffer - *pPos, *pPos ? ">%d" : "%d", Value );
+    if ( nWritten < 0 )
+        return;
+    *pPos += nWritten;
+    if ( *pPos >= nBuffer )
+        *pPos = nBuffer - 1;
+}
+
+static int Abc_Stmap78PathContainsAig( int AigId )
+{
+    int i, Limit = s_nStmap78Stack < ABC_STMAP78_MAX_PATH ? s_nStmap78Stack : ABC_STMAP78_MAX_PATH;
+    for ( i = 0; i < Limit; i++ )
+        if ( s_Stmap78PathAigs[i] == AigId )
+            return 1;
+    return 0;
+}
+
+static void Abc_Stmap78FormatPath( char * pAigs, char * pNodes, char * pPhases, int nBuffer )
+{
+    int i, Limit = s_nStmap78Stack < ABC_STMAP78_MAX_PATH ? s_nStmap78Stack : ABC_STMAP78_MAX_PATH;
+    int nAigPos = 0, nNodePos = 0, nPhasePos = 0;
+    pAigs[0] = pNodes[0] = pPhases[0] = 0;
+    for ( i = 0; i < Limit; i++ )
+    {
+        Abc_Stmap78AppendValue( pAigs, nBuffer, &nAigPos, s_Stmap78PathAigs[i] );
+        Abc_Stmap78AppendValue( pNodes, nBuffer, &nNodePos, s_Stmap78PathNodes[i] );
+        Abc_Stmap78AppendValue( pPhases, nBuffer, &nPhasePos, s_Stmap78PathPhases[i] );
+    }
+    if ( pAigs[0] == 0 )
+    {
+        pAigs[0] = '-'; pAigs[1] = 0;
+        pNodes[0] = '-'; pNodes[1] = 0;
+        pPhases[0] = '-'; pPhases[1] = 0;
+    }
+}
+
+static void Abc_Stmap78RecordTargetRequest( Map_Node_t * pNodeMap, int fPhase )
+{
+    char pAigs[1024], pNodes[1024], pPhases[1024];
+    Map_Node_t * pNodeRegular = Map_Regular( pNodeMap );
+    int Limit = s_nStmap78Stack < ABC_STMAP78_MAX_PATH ? s_nStmap78Stack : ABC_STMAP78_MAX_PATH;
+    int ParentAig = Limit >= 2 ? s_Stmap78PathAigs[Limit - 2] : -1;
+    int ParentNode = Limit >= 2 ? s_Stmap78PathNodes[Limit - 2] : -1;
+    int ParentPhase = Limit >= 2 ? s_Stmap78PathPhases[Limit - 2] : -1;
+    int fViaDownstream = Abc_Stmap78PathContainsAig( s_Stmap78DownstreamAigId );
+    const char * pPhase0Action = Abc_Stmap78PhaseAction( pNodeRegular, 0 );
+    const char * pPhase1Action = Abc_Stmap78PhaseAction( pNodeRegular, 1 );
+    Abc_Stmap78FormatPath( pAigs, pNodes, pPhases, 1024 );
+    s_nStmap78DemandRows++;
+    s_nStmap78TargetRequests++;
+    if ( fPhase >= 0 && fPhase < 2 )
+        s_Stmap78TargetPhaseRequests[fPhase]++;
+    if ( fViaDownstream )
+        s_nStmap78TargetViaDownstream++;
+    if ( !strcmp( pPhase0Action, "direct-cut" ) || !strcmp( pPhase0Action, "cached" ) )
+        s_nStmap78Phase0Direct++;
+    else if ( !strcmp( pPhase0Action, "inverter-from-opposite" ) )
+        s_nStmap78Phase0Invert++;
+    printf( "%s demand-path: index = %d  co-kind = %s  co-index = %d  watch-aig = %d  downstream-aig = %d  requested-phase = %d  stack-depth = %d  via-downstream = %d  parent-node = %d  parent-aig-id = %d  parent-phase = %d  parent-is-downstream = %d  phase0-action = %s  phase1-action = %s  phase0-has-cut = %d  phase1-has-cut = %d  phase0-cached = %d  phase1-cached = %d  phase0-gate = %s  phase1-gate = %s  path-aigs = %s  path-nodes = %s  path-phases = %s\n",
+        s_pStmap78DemandPathLabel, s_nStmap78DemandRows, s_pStmap78RootKind,
+        s_iStmap78RootCo, s_Stmap78WatchAigId, s_Stmap78DownstreamAigId,
+        fPhase, s_nStmap78Stack, fViaDownstream, ParentNode, ParentAig,
+        ParentPhase, ParentAig == s_Stmap78DownstreamAigId, pPhase0Action,
+        pPhase1Action, Map_NodeReadCutBest(pNodeRegular, 0) != NULL,
+        Map_NodeReadCutBest(pNodeRegular, 1) != NULL,
+        Map_NodeReadData(pNodeRegular, 0) != NULL,
+        Map_NodeReadData(pNodeRegular, 1) != NULL,
+        Abc_Stmap78PhaseGateName( pNodeRegular, 0 ),
+        Abc_Stmap78PhaseGateName( pNodeRegular, 1 ),
+        pAigs, pNodes, pPhases );
+}
+
+static void Abc_Stmap78DemandPathPush( Map_Node_t * pNodeMap, int fPhase )
+{
+    Map_Node_t * pNodeRegular;
+    int AigId;
+    if ( !s_fStmap78DemandPathDiag || !s_fStmap78DemandPathActive || pNodeMap == NULL )
+        return;
+    pNodeRegular = Map_Regular( pNodeMap );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return;
+    AigId = Map_NodeReadAigId( pNodeRegular );
+    if ( s_nStmap78Stack < ABC_STMAP78_MAX_PATH )
+    {
+        s_Stmap78PathNodes[s_nStmap78Stack] = Map_NodeReadNum( pNodeRegular );
+        s_Stmap78PathAigs[s_nStmap78Stack] = AigId;
+        s_Stmap78PathPhases[s_nStmap78Stack] = fPhase;
+    }
+    s_nStmap78Stack++;
+    if ( AigId == s_Stmap78WatchAigId )
+        Abc_Stmap78RecordTargetRequest( pNodeRegular, fPhase );
+}
+
+static void Abc_Stmap78DemandPathPop( void )
+{
+    if ( !s_fStmap78DemandPathDiag || !s_fStmap78DemandPathActive )
+        return;
+    if ( s_nStmap78Stack > 0 )
+        s_nStmap78Stack--;
+}
+
+static int Abc_Stmap78DemandPathSetTopPhase( int fPhase )
+{
+    int iTop, fOldPhase;
+    if ( !s_fStmap78DemandPathDiag || !s_fStmap78DemandPathActive )
+        return -1;
+    if ( s_nStmap78Stack <= 0 || s_nStmap78Stack > ABC_STMAP78_MAX_PATH )
+        return -1;
+    iTop = s_nStmap78Stack - 1;
+    fOldPhase = s_Stmap78PathPhases[iTop];
+    s_Stmap78PathPhases[iTop] = fPhase;
+    return fOldPhase;
+}
+
+static void Abc_Stmap78DemandPathSetRoot( const char * pKind, int CoIndex )
+{
+    if ( !s_fStmap78DemandPathDiag || !s_fStmap78DemandPathActive )
+        return;
+    s_pStmap78RootKind = pKind ? pKind : "?";
+    s_iStmap78RootCo = CoIndex;
+    s_nStmap78Stack = 0;
+}
+
+static void Abc_Stmap78RecordLeafDemand( Map_Node_t * pParentMap, int ParentPhase, Map_Node_t * pLeafMap, int LeafPhase, int LeafIndex, Map_Cut_t * pCutBest, Map_Super_t * pSuperBest, unsigned uPhaseBest )
+{
+    char pAigs[1024], pNodes[1024], pPhases[1024];
+    Map_Node_t * pParentRegular, * pLeafRegular;
+    Mio_Gate_t * pParentGate;
+    int ParentAig, LeafAig, fParentIsDownstream;
+    if ( !s_fStmap78DemandPathDiag || !s_fStmap78DemandPathActive || pParentMap == NULL || pLeafMap == NULL )
+        return;
+    pParentRegular = Map_Regular( pParentMap );
+    pLeafRegular = Map_Regular( pLeafMap );
+    if ( Map_NodeIsConst(pParentRegular) || Map_NodeIsConst(pLeafRegular) )
+        return;
+    ParentAig = Map_NodeReadAigId( pParentRegular );
+    LeafAig = Map_NodeReadAigId( pLeafRegular );
+    if ( LeafAig != s_Stmap78WatchAigId )
+        return;
+    pParentGate = pSuperBest ? Map_SuperReadRoot( pSuperBest ) : NULL;
+    fParentIsDownstream = ParentAig == s_Stmap78DownstreamAigId;
+    Abc_Stmap78FormatPath( pAigs, pNodes, pPhases, 1024 );
+    s_nStmap78DemandRows++;
+    s_nStmap78LeafDemands++;
+    if ( LeafPhase >= 0 && LeafPhase < 2 )
+        s_Stmap78LeafPhaseRequests[LeafPhase]++;
+    if ( fParentIsDownstream )
+        s_nStmap78LeafViaDownstream++;
+    printf( "%s demand-leaf: index = %d  co-kind = %s  co-index = %d  parent-node = %d  parent-aig-id = %d  parent-phase = %d  parent-is-downstream = %d  parent-gate = %s  leaf-index = %d  leaf-aig-id = %d  leaf-requested-phase = %d  leaf-inverted-pin = %d  parent-cut-leaves = %d  u-phase-best = %u  path-aigs = %s  path-nodes = %s  path-phases = %s\n",
+        s_pStmap78DemandPathLabel, s_nStmap78DemandRows, s_pStmap78RootKind,
+        s_iStmap78RootCo, Map_NodeReadNum(pParentRegular), ParentAig,
+        ParentPhase, fParentIsDownstream, pParentGate ? Mio_GateReadName(pParentGate) : "?",
+        LeafIndex, LeafAig, LeafPhase, !LeafPhase,
+        pCutBest ? Map_CutReadLeavesNum(pCutBest) : 0, uPhaseBest,
+        pAigs, pNodes, pPhases );
+}
+
+void Abc_Stmap78PrintDemandPathSummary( void )
+{
+    printf( "%s demand-path stats: watch-aig = %d  downstream-aig = %d  rows = %d  target-requests = %d  target-phase0 = %d  target-phase1 = %d  target-via-downstream = %d  leaf-demands = %d  leaf-phase0 = %d  leaf-phase1 = %d  leaf-via-downstream = %d  phase0-direct-or-cached = %d  phase0-inverter-from-opposite = %d\n",
+        s_pStmap78DemandPathLabel, s_Stmap78WatchAigId, s_Stmap78DownstreamAigId,
+        s_nStmap78DemandRows, s_nStmap78TargetRequests,
+        s_Stmap78TargetPhaseRequests[0], s_Stmap78TargetPhaseRequests[1],
+        s_nStmap78TargetViaDownstream, s_nStmap78LeafDemands,
+        s_Stmap78LeafPhaseRequests[0], s_Stmap78LeafPhaseRequests[1],
+        s_nStmap78LeafViaDownstream, s_nStmap78Phase0Direct,
+        s_nStmap78Phase0Invert );
 }
 
 /**Function*************************************************************
@@ -650,6 +931,7 @@ Abc_Obj_t * Abc_NodeFromMapPhase_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap
     for ( i = 0; i < nLeaves; i++ )
     {
         fInvPin = ((uPhaseBest & (1 << i)) > 0);
+        Abc_Stmap78RecordLeafDemand( pNodeMap, fPhase, ppLeaves[i], !fInvPin, i, pCutBest, pSuperBest, uPhaseBest );
         pNodePIs[i] = Abc_NodeFromMap_rec( pNtkNew, ppLeaves[i], !fInvPin );
         assert( pNodePIs[i] != NULL );
     }
@@ -664,6 +946,7 @@ Abc_Obj_t * Abc_NodeFromMapPhase_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap
 Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int fPhase )
 {
     Abc_Obj_t * pNodeNew, * pNodeInv;
+    int fPushed = 0, fOldPathPhase = -1;
 
     // check the case of constant node
     if ( Map_NodeIsConst(pNodeMap) )
@@ -674,6 +957,8 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
         return pNodeNew;
     }
 
+    Abc_Stmap78DemandPathPush( pNodeMap, fPhase );
+    fPushed = s_fStmap78DemandPathDiag && s_fStmap78DemandPathActive;
     Abc_Stmap77RecordReconstructionRequest( pNodeMap, fPhase );
 
     // check if the phase is already implemented
@@ -681,16 +966,27 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
     if ( pNodeNew )
     {
         Abc_Stmap77RecordReconstructionCache( pNodeMap, fPhase, pNodeNew, "request" );
+        if ( fPushed )
+            Abc_Stmap78DemandPathPop();
         return pNodeNew;
     }
 
     // implement the node if the best cut is assigned
     if ( Map_NodeReadCutBest(pNodeMap, fPhase) != NULL )
-        return Abc_NodeFromMapPhase_rec( pNtkNew, pNodeMap, fPhase );
+    {
+        pNodeNew = Abc_NodeFromMapPhase_rec( pNtkNew, pNodeMap, fPhase );
+        if ( fPushed )
+            Abc_Stmap78DemandPathPop();
+        return pNodeNew;
+    }
 
     // if the cut is not assigned, implement the node
     assert( Map_NodeReadCutBest(pNodeMap, !fPhase) != NULL || Map_NodeIsConst(pNodeMap) );
+    if ( fPushed )
+        fOldPathPhase = Abc_Stmap78DemandPathSetTopPhase( !fPhase );
     pNodeNew = Abc_NodeFromMapPhase_rec( pNtkNew, pNodeMap, !fPhase );
+    if ( fPushed && fOldPathPhase >= 0 )
+        Abc_Stmap78DemandPathSetTopPhase( fOldPathPhase );
 
     // add the inverter
     pNodeInv = Abc_NtkCreateNode( pNtkNew );
@@ -701,6 +997,8 @@ Abc_Obj_t * Abc_NodeFromMap_rec( Abc_Ntk_t * pNtkNew, Map_Node_t * pNodeMap, int
     // set the inverter
     Map_NodeSetData( pNodeMap, fPhase, (char *)pNodeInv );
     Abc_Stmap77RecordReconstructionInverter( pNodeMap, fPhase, pNodeNew, pNodeInv );
+    if ( fPushed )
+        Abc_Stmap78DemandPathPop();
     return pNodeInv;
 }
 Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
@@ -734,6 +1032,7 @@ Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
             continue;
         pNodeMap = Map_ManReadBufDriver( pMan, i - (Abc_NtkCoNum(pNtk) - pNtk->nBarBufs) );
         Abc_Stmap77RecordReconstructionDemand( "barbuf", i, pNodeMap, !Map_IsComplement(pNodeMap) );
+        Abc_Stmap78DemandPathSetRoot( "barbuf", i );
         pNodeNew = Abc_NodeFromMap_rec( pNtkNew, Map_Regular(pNodeMap), !Map_IsComplement(pNodeMap) );
         assert( !Abc_ObjIsComplement(pNodeNew) );
         Abc_ObjAddFanin( pNode->pCopy, pNodeNew );
@@ -744,6 +1043,7 @@ Abc_Ntk_t * Abc_NtkFromMap( Map_Man_t * pMan, Abc_Ntk_t * pNtk, int fUseBuffs )
             break;
         pNodeMap = Map_ManReadOutputs(pMan)[i];
         Abc_Stmap77RecordReconstructionDemand( "co", i, pNodeMap, !Map_IsComplement(pNodeMap) );
+        Abc_Stmap78DemandPathSetRoot( "co", i );
         pNodeNew = Abc_NodeFromMap_rec( pNtkNew, Map_Regular(pNodeMap), !Map_IsComplement(pNodeMap) );
         assert( !Abc_ObjIsComplement(pNodeNew) );
         Abc_ObjAddFanin( pNode->pCopy, pNodeNew );

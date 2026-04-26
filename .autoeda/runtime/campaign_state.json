@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 78,
-  "next_iteration": 78,
+  "completed_iterations": 79,
+  "next_iteration": 79,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 77,
-  "last_completed_version": "stmap77",
-  "last_successful_commit": "local commit to be created: stmap77: trace final reconstruction phases; see git history for hash",
+  "last_completed_iteration": 78,
+  "last_completed_version": "stmap78",
+  "last_successful_commit": "local commit to be created: stmap78: trace final demand paths; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -500,8 +500,15 @@
     "stmap77 validation passed: build, help, smoke, full benchmark metrics, final-remap reconstruction diagnostics, selected-match diagnostics, final-critical lineage parsing, phase-survival diagnostics, phase-output-context parsing, path-normalization check, stale-state check, artifact check, version-log check, and CEC.",
     "stmap77 review pass 1 accepted a final-remap diagnostic scoping fix; review pass 2 completed with no findings after the fix.",
     "stmap77 diagnostic result: ode watched AIG 5219 was requested and reconstructed only in phase 1 during the final remap, matching final phase survival and isolating the selected-vs-final discrepancy to final reconstruction demand.",
-    "stmap77 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap77 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap78 active iteration prepared: final-demand path diagnostic for ode AIG 5219 and downstream fanout 5229, with mapping policy unchanged.",
+    "stmap78 build, help, smoke, path normalization, and stale-state gates passed; full evaluation and CEC started.",
+    "stmap78 full evaluation and CEC passed; review loop started.",
+    "stmap78 review pass 1 accepted P2 diagnostic finding; fallback stack top phase fix applied and revalidation started.",
+    "stmap78 fallback stack-phase fix revalidated: build/help/smoke/path/stale/full eval/CEC passed and mismatch check reported zero mismatches; review pass 2 started.",
+    "stmap78 validation passed: build, help, smoke, full benchmark metrics, demand-path parsing, fallback consistency, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap78 local commit is planned with push enabled by full-campaign git.yaml."
   ],
   "updated_at": "2026-04-26T16:23:11Z",
-  "updated_at_utc": "2026-04-26T16:23:11Z"
+  "updated_at_utc": "2026-04-26T16:48:26.828801Z"
 }

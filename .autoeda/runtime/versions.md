@@ -4444,3 +4444,69 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap77: trace final reconstruction phases`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap78`, use the `stmap77` finding to test a narrow final-demand hypothesis on `ode`: add a diagnostic that walks final CO/reconstruction demand polarity for watched AIG `5219` and its best downstream fanout AIG `5229`, recording which output path requests phase `1` and whether phase `0` would require an added inverter or different cut boundary. Keep the mapping policy unchanged until that demand path is identified; pressure changes are still not the targeted mechanism.
+
+
+## version78 / stmap78
+
+- hypothesis: Keep the reviewed `stmap65` mapping policy unchanged and trace the final-remap demand path from CO roots to watched final-critical AIGs. If `ode` AIG `5219` is requested only as phase `1` through downstream fanout AIG `5229`, while phase `0` is still available as a direct cut, then the selected-vs-final discrepancy is caused by downstream parent polarity and output demand rather than by child reconstruction inability or inverter fallback.
+- motivation: `stmap77` isolated `ode` AIG `5219` to final reconstruction demand: the final remap directly emitted only phase `1` and only phase `1` survived. The remaining question was which output path and parent fanout asked for that phase, and whether phase `0` would have required an inverter.
+- command name: `stmap78`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcMap.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_78.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap78/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap78` is a diagnostic-only wrapper over `Abc_CommandStmap65`. It configures the same required-benchmark watched AIGs as `stmap77` plus one downstream fanout AIG from `stmap76` phase-output context. It reuses selected-match, final-remap reconstruction, final-critical, and phase-survival diagnostics under the `stmap78` label, and adds demand-path tracing inside `Abc_NtkFromMap`: each watched-node request records CO kind/index, ancestor AIG/node/phase path, immediate parent, whether the downstream fanout is on the path, phase-0/phase-1 cut/cache availability, and direct parent leaf-demand rows. Review pass 1 found that inverter-fallback parent paths initially reported the outer requested phase rather than the opposite cut phase used for leaf recursion; the accepted fix temporarily switches the stack top phase during fallback cut recursion and revalidates consistency. No mapper scoring, gate selection, pressure-transfer policy, buffering, sizing, or classic `map` behavior is intentionally changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap78/build.log`.
+  - help: `./abc -c "stmap78 -h"` printed `stmap78` usage. Log: `.autoeda/runtime/results/stmap78/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap78; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`, and printed demand-path, reconstruction, selected-match, final-critical, phase-survival, and phase-output-context diagnostics. Log: `.autoeda/runtime/results/stmap78/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap78` selected watch AIG `855`, downstream AIG `861`, and printed selected-match, reconstruction, and demand-path rows. Log: `.autoeda/runtime/results/stmap78/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap77/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported `watched-aigs = 0`, `rows = 0`, and demand-path `watch-aig = -1`. Log: `.autoeda/runtime/results/stmap78/unknown_aig_stale_check.log`.
+  - fallback consistency check: `.autoeda/runtime/results/stmap78/fallback_phase_consistency.log` reports `mismatches=0` between demand-leaf parent phases and demand-path parent phases.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap78/summary.json`, `metrics.csv`, `comparison.csv`, `demand_path.csv`, `demand_leaf.csv`, `demand_path_stats.csv`, `demand_path_summary.csv`, `reconstruct_stats.csv`, `reconstruct_request.csv`, `reconstruct_emit.csv`, `reconstruct_cache.csv`, `reconstruct_inverter.csv`, `reconstruct_summary.csv`, selected-match, phase-survival, final-critical, inherited feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- demand-path diagnostic results:
+  - `i10` watched AIG `855` / downstream `861`: `13` target requests, phases `0+1`, `2` requests via downstream `861`, and phase `0` was always direct or cached.
+  - `ode` watched AIG `5219` / downstream `5229`: `9` target requests, all phase `1`, with one CO path via downstream `5229` from output `171`. The direct downstream parent row is `OAI211xp5_ASAP7_75t_L`, parent phase `0`, leaf-requested phase `1`, path `13061>8729>5612>5379>5367>5365>5283>5231>5229>5219`. Phase `0` action is `direct-cut` for all target rows and `phase0_inverter_from_opposite_rows = 0`, so phase `0` is not absent because it would need an inverter; it is absent because the final-demand path chooses phase `1`.
+  - `or1200` watched AIG `11491` / downstream `13829`: `6` target requests, all phase `0`, with one path via downstream `13829`; phase `0` remained direct/cached.
+  - `syn2` watched AIG `18002` / downstream `18467`: `6` target requests, all phase `1`, with one path via downstream `18467`; phase `0` would require `inverter-from-opposite` for all target rows.
+- reconstruction diagnostic results:
+  - `i10` watched AIG `855`: final remap requested and directly emitted both phases; both phases survived.
+  - `ode` watched AIG `5219`: final remap requested/emitted only phase `1` through `O2A1O1Ixp33_ASAP7_75t_L`; phase `0` had a direct cut available but no final demand-path request.
+  - `or1200` watched AIG `11491`: final remap requested/emitted only phase `0` through `A2O1A1Ixp33_ASAP7_75t_L`.
+  - `syn2` watched AIG `18002`: final remap requested phase `1` and would need an inverter fallback for phase `0`.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_78.c`.
+  - numbered command exists and is registered as `stmap78`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - demand-path, fallback-phase consistency, final-remap reconstruction, selected-match, final-critical lineage, phase-survival, phase-output-context, path-normalization, stale-state, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, early-seed, near-miss, penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap78/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap78/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap78/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap78/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap78/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap78/review_pass1.log`.
+  - accepted source finding: inverter-fallback parent paths reported the outer requested phase in the demand-path stack instead of the opposite cut phase used to recurse into leaves. The stack top phase is now temporarily switched during fallback recursion and restored before inverter creation.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap78/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap78/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness, build-integration, diagnostic lifecycle, or maintainability issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap78: trace final demand paths`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap79`, watch both the `ode` child AIG `5219` and downstream parent AIG `5229` at the selected-match/reconstruction boundary. Record `5229` selected parent cuts, leaf polarities, and any alternate cuts that request phase `0` of `5219`. If parent alternatives exist with comparable timing/area, the next policy target should be parent-cut polarity selection around final-critical fanouts rather than child reconstruction or pressure thresholds.
