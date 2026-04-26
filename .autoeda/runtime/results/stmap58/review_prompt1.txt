@@ -1,0 +1,24 @@
+Review the uncommitted stmap58 implementation for correctness regressions.
+
+Context:
+- This is an AutoEDA ABC mapper iteration.
+- New command: stmap58.
+- Main source changes: src/base/abci/abcStmap_58.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp.
+- stmap58 intentionally reuses reviewed mapper mode 57 and changes only the command-layer pressure handoff: severe-feedback runs feed a bounded pressure array to Map_Stmap45SetSclLoadFeedbackWithEntries(), using 0.72 raw-pressure weight capped at 2.10; non-severe runs use sink-weighted pressure.
+- Older map and stmap0..stmap57 behavior should remain buildable and comparable.
+
+Validation already run before review:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap58 -h" printed usage.
+- i10 smoke flow passed with parseable stime.
+- Full required benchmark evaluation passed for i10, ode, or1200, syn2.
+- CEC passed for all four required benchmarks.
+
+Please focus on:
+- Memory lifetime of the bounded pressure array across Abc_NtkMap().
+- Whether allocation/failure paths leak or double-free networks or arrays.
+- Whether the severe gate and bounded-entry count are consistent with the inherited mode 57 checks.
+- Whether command registration/build integration is complete.
+- Any accidental behavior change to map or older stmap commands.
+
+Return only actionable findings with severity and file/line references. If there are no actionable findings, say so.

@@ -1,0 +1,5 @@
+benchmark,severe_transfer,raw_weight,ratio_cap,bounded_pressure_entries,lifted,capped,raw_only,sink_fallback,tracked_aig,tracked_raw_ratio,tracked_sink_ratio,tracked_bounded_ratio
+benchmarks/i10.aig,0,0.72,2.100,262,0,0,0,262,5548,0.000,0.000,0.000
+benchmarks/ode.abc.blif,0,0.72,2.100,4816,0,0,0,4816,5548,0.000,0.000,0.000
+benchmarks/or1200.abc.blif,0,0.72,2.100,4362,0,0,0,4362,5548,0.000,0.000,0.000
+benchmarks/syn2.abc.blif,1,0.72,2.100,8980,3540,6316,0,5440,5548,2.265,1.443,1.911

@@ -1,0 +1,19 @@
+Review the final uncommitted stmap58 implementation after the pass-1 fix.
+
+Pass-1 accepted finding:
+- The severe bounded-pressure path capped only the raw candidate, allowing sink fallback ratios above 2.10 to reach the mapper.
+
+Fix made:
+- src/base/abci/abcStmap_58.c now caps the final selected ratio when severe transfer is active, regardless of whether the value came from sink fallback or raw transfer.
+
+Validation after the fix:
+- make ABC_USE_NO_READLINE=1 passed.
+- ./abc -c "stmap58 -h" printed usage.
+- i10 smoke flow passed with parseable stime.
+- Full required benchmark evaluation passed for i10, ode, or1200, syn2.
+- Bounded-pressure diagnostics parsed; syn2 severe transfer reports capped=6316 and tracked-bounded-ratio=1.911.
+- CEC passed for all four required benchmarks.
+
+Please check for any remaining actionable correctness issues, especially around the final cap logic, counter consistency, pointer lifetime, failure cleanup, and accidental changes to map or older stmap commands.
+
+Return only actionable findings with severity and file/line references. If there are no actionable findings, say so.

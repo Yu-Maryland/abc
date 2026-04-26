@@ -1,0 +1,20 @@
+PASS artifact check for stmap58
+
+Required artifacts present:
+- build/help/smoke logs and exit markers
+- full baseline and candidate logs for all four required benchmarks
+- metrics.csv and comparison.csv with parseable final stime delay/area for all four required benchmarks
+- summary.json with command, library, benchmark, flow, and CEC evidence
+- feedback_stats.csv, bounded_pressure_stats.csv, blended_gain_stats.csv, mapper_mode_stats.csv, sink_pressure_stats.csv
+- inherited guard, early-seed, near-miss, and penalty diagnostic CSV files
+- CEC write logs, CEC logs, and original/candidate AIG temporaries for all four required benchmarks
+- review prompts, positional-failure logs, supported review logs, review_summary.md
+- version_log_check.log
+
+Correctness summary:
+- build passed
+- help passed
+- smoke passed
+- full benchmark metrics passed
+- CEC passed for all four required benchmarks
+- review loop completed with pass-1 accepted finding fixed, revalidated, and pass-2 clean
