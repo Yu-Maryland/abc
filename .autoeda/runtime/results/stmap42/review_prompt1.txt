@@ -1,0 +1,9 @@
+Review the uncommitted stmap42 AutoEDA iteration in this ABC repository.
+
+Context:
+- New command: stmap42
+- Main hypothesis: propagate first-pass over-cap consumer sink criticality into the fanin pressure cone with a bounded raw-pressure floor, then use mapper mode 43 to apply this dense sink-pressure vector to strong-seed area margins.
+- Key source changes: src/base/abci/abcStmap_42.c, src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp, src/map/mapper/mapperInt.h, src/map/mapper/mapperCore.c, src/map/mapper/mapperMatch.c.
+- Validation already run: make ABC_USE_NO_READLINE=1, stmap42 -h, smoke on benchmarks/i10.aig, full baseline/candidate evaluation on all required benchmarks, and CEC on all required benchmarks.
+
+Please review for correctness risks, build/registration issues, stale stmap41 behavior leaking into stmap42, memory lifetime problems around the dense pressure vector, missed mode-43 range checks, diagnostic parsing/logging problems, and any issue that would invalidate the iteration.

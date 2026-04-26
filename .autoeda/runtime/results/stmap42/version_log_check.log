@@ -1,0 +1,16 @@
+OK: found ## version42 / stmap42
+OK: found - hypothesis:
+OK: found - motivation:
+OK: found - command name: `stmap42`
+OK: found src/base/abci/abcStmap_42.c
+OK: found src/map/mapper/mapperMatch.c
+OK: found benchmarks/i10.aig
+OK: found benchmarks/ode.abc.blif
+OK: found benchmarks/or1200.abc.blif
+OK: found benchmarks/syn2.abc.blif
+OK: found CEC passed for all four required designs
+OK: found review pass 1
+OK: found review pass 2
+OK: found stmap42: propagate sink-critical SCL pressure
+OK: found next-step recommendation
+OK: single stmap42 version entry

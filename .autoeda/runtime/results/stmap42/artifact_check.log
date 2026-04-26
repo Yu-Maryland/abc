@@ -1,0 +1,48 @@
+OK: build.log exists and is nonempty
+OK: build.exit exists and is nonempty
+OK: help.log exists and is nonempty
+OK: help.exit exists and is nonempty
+OK: smoke_i10.log exists and is nonempty
+OK: smoke_i10.exit exists and is nonempty
+OK: eval_driver.exit exists and is nonempty
+OK: summary.json exists and is nonempty
+OK: metrics.csv exists and is nonempty
+OK: comparison.csv exists and is nonempty
+OK: cec_summary.json exists and is nonempty
+OK: sink_pressure_stats.csv exists and is nonempty
+OK: sink_pressure_top.csv exists and is nonempty
+OK: penalty_stats.csv exists and is nonempty
+OK: strong_penalty_block_diag.csv exists and is nonempty
+OK: moderate_penalty_block_diag.csv exists and is nonempty
+OK: review_pass1.log exists and is nonempty
+OK: review_pass1.exit exists and is nonempty
+OK: review_pass1_supported.log exists and is nonempty
+OK: review_pass1_supported.exit exists and is nonempty
+OK: review_pass2.log exists and is nonempty
+OK: review_pass2.exit exists and is nonempty
+OK: review_pass2_supported.log exists and is nonempty
+OK: review_pass2_supported.exit exists and is nonempty
+OK: review_summary.md exists and is nonempty
+OK: run_stmap42_eval.py exists and is nonempty
+OK: eval_driver.log exists; quiet success is allowed because eval_driver.exit is authoritative
+OK: build.exit == 0
+OK: help.exit == 0
+OK: smoke_i10.exit == 0
+OK: eval_driver.exit == 0
+OK: review_pass1_supported.exit == 0
+OK: review_pass2_supported.exit == 0
+OK: review_pass1.exit == 2 for local CLI positional-prompt conflict
+OK: review_pass2.exit == 2 for local CLI positional-prompt conflict
+OK: summary command is stmap42
+OK: all metrics parseable
+OK: all CEC checks passed
+OK: comparison contains all required benchmarks in order
+OK: candidate metrics positive for benchmarks/i10.aig
+OK: candidate metrics positive for benchmarks/ode.abc.blif
+OK: candidate metrics positive for benchmarks/or1200.abc.blif
+OK: candidate metrics positive for benchmarks/syn2.abc.blif
+OK: CEC summary has four passing benchmarks
+OK: sink-pressure diagnostics captured tracked syn2 AIG 5548 pressure
+OK: penalty stats captured two syn2 strong blocks
+OK: review_pass1_supported.log reports no discrete correctness issue
+OK: review_pass2_supported.log reports no discrete correctness issue
