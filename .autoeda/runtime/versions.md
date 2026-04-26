@@ -2737,3 +2737,58 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit created with message `stmap49: blend gain for severe SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: `stmap49` shows that the severe-pressure branch benefits from an intermediate gain: it improves both `syn2` delay and area relative to `stmap48` while preserving other required benchmarks. For `stmap50`, keep the `225` high-pressure branch and investigate whether the remaining `syn2` area overhead can be reduced by adding an area-aware high-pressure admission cap or by testing a severity-continuous gain blend between `225` and `237.5` only when predicted delay slack allows it.
+
+## version50 / stmap50
+
+- hypothesis: Keep the `stmap49` first-pass SCL pressure selector and the `stmap45` pressure-agreement mapper mode, but split the high-pressure gain branch into two severity bands: use `0.95 * base_gain` (`237.50` by default) for high but sub-extreme pressure and reserve `0.90 * base_gain` (`225.00` by default) for extreme pressure. This should reduce the severe-pressure `syn2` area cost while preserving useful delay improvement versus baseline.
+- motivation: `stmap49` improved `syn2` delay to `479.50 ps` but still spent `+935.45` area versus baseline. Its next-step recommendation called for a severity-continuous or area-aware gain between `225` and `237.5`. `stmap50` tests the simplest severity-banded form of that idea using the existing first-pass feedback severity and sink-pressure population.
+- command name: `stmap50`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_50.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap50/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap50` is a numbered two-pass `stmap` command. It clones the `stmap49` SCL load/max-cap collection, dense sink-pressure feedback, and high-pressure selector, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the high-pressure selected gain: below the high-pressure gate it keeps `base_gain`; when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, it selects `0.95 * base_gain`; when severity is at least `0.900` under the same pressure-entry gate, it selects `0.90 * base_gain`. Candidate logs print `stmap50 banded-gain` and `stmap50 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap49` remain on their prior command paths and mode numbers.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap50/build.log`.
+  - help: `./abc -c "stmap50 -h"` printed command usage with severity-banded two-pass mapping. Log: `.autoeda/runtime/results/stmap50/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap50; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap50/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap50/summary.json`, `metrics.csv`, `comparison.csv`, `banded_gain_stats.csv`, `mapper_mode_stats.csv`, guard/near-miss/early-seed diagnostics, sink-pressure and feedback diagnostics, penalty diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; feedback severity `0.000`; sink-pressure entries `262`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; feedback severity `0.627`; sink-pressure entries `4816`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; feedback severity `0.733`; sink-pressure entries `4362`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `486.74 ps`, area `21808.18`; delay delta `-22.08 ps` (`-4.34%`), area delta `+511.58` (`+2.40%`); selected gain `237.50`; feedback severity `0.884`; sink-pressure entries `8980`.
+- banded-gain and sink-pressure diagnostics:
+  - banded gain selected `250.00` for `i10`, `ode`, and `or1200`, and selected the soft high-pressure gain `237.50` only for `syn2`.
+  - first-pass feedback severity and pressure population were: `i10` severity `0.000`, entries `262`; `ode` severity `0.627`, entries `4816`; `or1200` severity `0.733`, entries `4362`; `syn2` severity `0.884`, entries `8980`.
+  - `benchmarks/syn2.abc.blif`: tracked AIG `5548`, mapped node `5656`, raw pressure ratio `2.265`, sink-pressure ratio `1.443`, six moderate pressure blocks, and two strong pressure blocks.
+  - Compared with `stmap49`, `stmap50` preserves the same QoR points for `i10`, `ode`, and `or1200`. On `syn2`, it reduces area from `22232.05` to `21808.18` but worsens delay from `479.50 ps` to `486.74 ps`. The soft gain band therefore buys area, but gives back more timing than desired.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_50.c`.
+  - numbered command exists and is registered as `stmap50`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - banded-gain, mapper-mode, sink-pressure, feedback, guard, early-seed, near-miss, moderate-penalty, and strong-penalty diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap50/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap50/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap50/artifact_check.log`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap50/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap50/review_pass1.log`.
+  - accepted source findings: none.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap50/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap50/review_pass2.log`.
+  - accepted source findings: none.
+- rejected findings: none.
+- open findings: none after campaign-state finalization.
+- source changes after review: none; only runtime review summary, artifact checks, canonical logging, version checks, and campaign-state finalization were added after the review passes.
+- commit: local commit to be created with message `stmap50: band gain for severe SCL pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: `stmap50` confirms that `237.50` gain meaningfully reduces `syn2` area but gives back too much timing versus `stmap49`. For `stmap51`, try a narrower selected gain such as `231.25`, or keep `225` but add a downstream area-pressure guard inside mapper mode `46` so only the expensive high-pressure choices are constrained rather than globally softening the remap gain.

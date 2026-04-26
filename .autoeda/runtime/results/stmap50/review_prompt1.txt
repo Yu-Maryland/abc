@@ -1,0 +1,22 @@
+Review the uncommitted stmap50 implementation for correctness and campaign-policy issues.
+
+Context:
+- This is Berkeley ABC in an AutoEDA campaign.
+- New command: stmap50.
+- Hypothesis: reuse stmap45 mapper mode 46 and stmap49 SCL sink-pressure feedback, but select a severity-banded high-pressure SCL/genlib gain: base 250 for low/moderate pressure, 237.5 for severity >= 0.850 and sink-pressure entries >= 8000, and 225 for severity >= 0.900 with the same pressure-entry gate.
+- Required behavior: preserve map and all previous stmap0..stmap49 commands, expose stmap50 -h usage, build with make ABC_USE_NO_READLINE=1, evaluate with read_lib 7nm_lvt_ff.lib and downstream topo/buffer/upsize/dnsize/stime, and keep CEC-valid behavior.
+
+Please focus on:
+- build or command-registration defects
+- bugs in abcStmap_50.c versus the intended severity-banded selector
+- stale stmap49 names or diagnostics that would break parsing or auditability
+- memory lifetime issues around the SCL pressure arrays passed into Map_Stmap45SetSclLoadFeedback
+- evaluation-driver parsing defects in .autoeda/runtime/results/stmap50/run_stmap50_eval.py
+- any missing correctness/logging artifacts required before counting the iteration
+
+Validation already run before review:
+- make ABC_USE_NO_READLINE=1 passed
+- ./abc -c "stmap50 -h" printed usage
+- smoke flow on benchmarks/i10.aig passed with final stime Delay 198.64 ps and Area 1303.10
+- full four-benchmark evaluation passed with parseable metrics
+- CEC passed on all four required benchmarks

@@ -1,0 +1,5 @@
+benchmark,reused_stmap45_mode,banded_gain
+benchmarks/i10.aig,46,250.00
+benchmarks/ode.abc.blif,46,250.00
+benchmarks/or1200.abc.blif,46,250.00
+benchmarks/syn2.abc.blif,46,237.50

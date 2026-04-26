@@ -1,0 +1,16 @@
+Second review pass for stmap50 after review pass 1 reported no actionable findings.
+
+Please review the current uncommitted changes again, focusing on regressions that would prevent counting this AutoEDA iteration:
+- command registration and build integration for stmap50
+- correctness of the severity-banded gain selector in src/base/abci/abcStmap_50.c
+- whether previous map and stmap0..stmap49 behavior remains unchanged
+- whether diagnostic names in candidate logs match the parser in .autoeda/runtime/results/stmap50/run_stmap50_eval.py
+- whether any generated runtime artifacts appear incomplete or inconsistent with the evaluation contract
+
+Current validation evidence:
+- build.exit = 0
+- help.exit = 0
+- smoke_i10.exit = 0 with parseable final stime metrics
+- evaluation.exit = 0
+- comparison.csv has all four required benchmarks
+- cec_summary.json reports passed=true for all four required benchmarks
