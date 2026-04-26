@@ -1,0 +1,9 @@
+Review the uncommitted stmap84 changes for correctness, build integration, stale global state, and diagnostic/evaluation soundness.
+
+Project constraints:
+- This is iteration stmap84 in the stmap family.
+- The command keeps the stmap83 strict sticky watched-parent child-phase-0 policy and adds a dual child/parent final phase-survival and reconstruction watch.
+- Classic map and earlier stmap commands must remain unchanged unless explicitly configured.
+- Required benchmark flow and CEC have passed under .autoeda/runtime/results/stmap84.
+
+Focus on changed/untracked files only. Report concrete P0/P1/P2 findings with file/line references. If there are no correctness issues, say so.

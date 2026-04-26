@@ -4819,3 +4819,64 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap83: force strict sticky parent phase`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap84`, move the investigation outward from the local parent cut to final critical-path impact. `stmap83` proves the watched `ode` local polarity can be forced all the way to the final parent cut without changing benchmark QoR, so the next hypothesis should inspect or target whether this node is off the measured final critical path after topo/buffer/upsize/dnsize.
+
+
+## version84 / stmap84
+
+- hypothesis: Under strict sticky retention, the lack of QoR movement is explained by a final critical phase split: the watched child survives on the final critical path in one phase while the watched downstream parent survives in the opposite phase. If the child and parent are not both present in the final critical phase needed by the forced parent cut, then the local parent-cut polarity change is structurally real but still disconnected from the measured post-sizing bottleneck.
+- motivation: `stmap83` forced `ode` parent AIG `5229` phase `1` to consume child AIG `5219` phase `0`, but final QoR stayed identical to `stmap82`. The `stmap83` final-critical lineage still ranked child AIG `5219` phase `1` and parent AIG `5229` phase `0` as critical. `stmap84` makes this explicit by watching both the child and the parent in final phase-survival diagnostics.
+- command name: `stmap84`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_84.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap84/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap84` is a diagnostic extension of `stmap83`. It keeps the strict `100000.00 ps` sticky timing hold window and the same watched parent/child policy, but stores both child and downstream parent AIG IDs in `WatchAigs[2]`. Reconstruction and final phase-survival diagnostics are configured with both IDs, while demand-path, parent-cut, candidate-cut, parent-phase-bias, and sticky diagnostics remain focused on the child/parent edge.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap84/build.log`.
+  - help: `./abc -c "stmap84 -h"` printed `stmap84` usage. Log: `.autoeda/runtime/results/stmap84/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap84; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, and `phase-survival stats: watched-aigs = 2  matched-aigs = 2`. Log: `.autoeda/runtime/results/stmap84/smoke_i10.log`.
+  - path-normalization check: `read ./benchmarks/i10.aig; stmap84` selected child AIG `855`, parent AIG `861`, and dual watch count `2`, then reported zero sticky rows because no library was loaded. Log: `.autoeda/runtime/results/stmap84/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then unknown `.autoeda/runtime/results/stmap83/cec_benchmarks_i10_aig_orig.aig`; the unknown network reported watch IDs `-1`, dual watch count `0`, and zero diagnostics. Log: `.autoeda/runtime/results/stmap84/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap84/summary.json`, `metrics.csv`, `comparison.csv`, dual-watch `phase_survival.csv` and `phase_survival_stats.csv`, reconstruction diagnostics including inverter rows, strict sticky diagnostics, parent/candidate/demand/final-critical diagnostics, `cec_summary.json`, raw benchmark logs, CEC temporaries/logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- dual phase-survival diagnostic results:
+  - All four required benchmarks recorded `watched_aigs = 2` and `matched_aigs = 2`.
+  - `ode` child AIG `5219`: final survival is phase `1` only, with best gate `O2A1O1Ixp33_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, and load ratio `0.338`.
+  - `ode` parent AIG `5229`: final survival is phase `0` only, with best gate `OAI211xp5_ASAP7_75t_L`, criticality `1.000`, slack `0.000000`, and load ratio `0.135`.
+  - This confirms that the strict local parent phase-1 cut forced by `stmap83` is not the final surviving critical parent phase after topo/buffer/upsize/dnsize.
+  - `i10` has both child and parent phases present, with parent phase `1` criticality `1.000`.
+  - `or1200` child AIG `11491` is phase `0` only; parent AIG `13829` has both phases criticality `1.000`.
+  - `syn2` child AIG `18002` and parent AIG `18467` are both phase `1` only in final survival.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_84.c`.
+  - numbered command exists and is registered as `stmap84`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - dual child/parent phase-survival, strict sticky-parent-phase, parent-phase-bias, candidate-cut, parent-cut, demand-path, final-remap reconstruction, selected-match, final-critical lineage, path-normalization, stale-state, and CEC diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap84/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap84/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap84/artifact_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap84/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with the known `--uncommitted` conflict. The failure is logged in `.autoeda/runtime/results/stmap84/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap84/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap84/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap84/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap84: trace dual phase survival`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap85`, target the final surviving phase split instead of the non-surviving strict parent phase-1 cut. A concrete next probe is to instrument or bias the final surviving `ode` parent phase `0`/child phase `1` path, because `stmap84` shows the measured critical path uses parent AIG `5229` phase `0` and child AIG `5219` phase `1`.

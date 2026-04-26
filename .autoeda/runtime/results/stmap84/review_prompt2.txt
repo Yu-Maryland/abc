@@ -1,0 +1,5 @@
+Second review pass for stmap84 after pass 1 reported no discrete correctness issues.
+
+Re-check the current uncommitted changes for missed correctness, isolation, build-registration, stale-state, or evaluation-artifact issues. Pay special attention to the dual WatchAigs array and whether unknown networks pass nWatchAigs=0 without leaking previous child/parent watches.
+
+Report concrete P0/P1/P2 findings with file/line references. If there are no issues, say so.

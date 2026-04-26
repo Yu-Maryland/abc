@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 84,
-  "next_iteration": 84,
+  "completed_iterations": 85,
+  "next_iteration": 85,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 83,
-  "last_completed_version": "stmap83",
-  "last_successful_commit": "local commit to be created: stmap83: force strict sticky parent phase; see git history for hash",
+  "last_completed_iteration": 84,
+  "last_completed_version": "stmap84",
+  "last_successful_commit": "local commit to be created: stmap84: trace dual phase survival; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -538,8 +538,15 @@
     "stmap83 validation passed: build, help, smoke, full benchmark metrics, strict sticky-parent-phase diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
     "stmap83 review completed with no findings across two supported review passes; no source changes were made after final review.",
     "stmap83 diagnostic result: strict sticky retention forced ode parent AIG 5229 phase 1 to consume child AIG 5219 phase 0, but final benchmark QoR stayed identical to stmap82.",
-    "stmap83 local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap83 local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap84 active iteration prepared: strict sticky policy with dual child/parent final phase-survival diagnostics.",
+    "stmap84 implementation built successfully; help, smoke, path-normalization, stale-state, and implementation checks passed; full evaluation started.",
+    "stmap84 full benchmark metrics, dual child/parent phase-survival diagnostic parsing, and CEC completed successfully; review loop started.",
+    "stmap84 validation passed: build, help, smoke, full benchmark metrics, dual child/parent phase-survival diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap84 review completed with no findings across two supported review passes; no source changes were made after final review.",
+    "stmap84 diagnostic result: ode child AIG 5219 survives final timing only in phase 1 while parent AIG 5229 survives final timing only in phase 0.",
+    "stmap84 local commit is planned with push enabled by full-campaign git.yaml."
   ],
-  "updated_at": "2026-04-26T18:28:22Z",
-  "updated_at_utc": "2026-04-26T18:28:22Z"
+  "updated_at": "2026-04-26T18:41:23Z",
+  "updated_at_utc": "2026-04-26T18:41:23Z"
 }
