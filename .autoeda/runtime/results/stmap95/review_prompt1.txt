@@ -1,0 +1,5 @@
+Review the uncommitted stmap95 iteration in this ABC repository.
+
+Focus on correctness risks, build integration, command registration, stale global state, and whether the new emitted-drive sticky-after-override behavior is gated only by stmap95. The intended hypothesis is: after a relaxed emitted-drive override fires for the watched final-critical AIG/phase, later same-target replacements in the same mapper mode should be blocked unless they materially improve arrival by more than 2.00 ps or preserve/improve the drive/load proxy.
+
+Validation artifacts under .autoeda/runtime/results/stmap95 show build/help/smoke/path-normalization/stale-state/full metrics/CEC passing. Please identify actionable bugs or missing validation only.

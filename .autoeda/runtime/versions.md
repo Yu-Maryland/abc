@@ -5411,3 +5411,60 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap94: move emitted drive after sticky`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap95`, target the actual child-node replacement that undoes the `or1200` emitted-drive override. The clean next probe is to make the emitted-drive override sticky within the target AIG/phase after it fires, blocking later same-node replacements that give back the stronger-drive candidate unless they materially improve arrival or preserve the drive/load proxy.
+
+
+## version95 / stmap95
+
+- hypothesis: The relaxed final-critical emitted-drive override from `stmap93`/`stmap94` can be undone by later same-target replacements. Making the override sticky after it fires should force the stronger-drive emitted gate to survive unless a later replacement materially improves arrival or preserves/improves the drive/load proxy.
+- motivation: `stmap94` showed the post-sticky emitted-drive override still selected `OAI21xp33_ASAP7_75t_L` transiently on `or1200` AIG `11491` phase `0`, but a later accepted replacement restored `A2O1A1Ixp33_ASAP7_75t_L` before reconstruction. `stmap95` tests whether preserving the forced emitted-drive gate improves final downstream `stime`.
+- command name: `stmap95`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_95.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap95/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap95` adds a new command that reuses the `stmap94` emitted-drive/sticky-parent setup and enables a new inactive-by-default sticky emitted-drive override flag in the existing `stmap93` hook. When a watched emitted-drive override fires, the hook records the target phase, selected fanout limit, mapper arrival, and candidate load/drive ratio. Later target-phase replacements are vetoed unless they improve arrival by more than `2.00 ps`, have at least the sticky candidate fanout limit, or improve the load/drive ratio by at least `0.05`. The final implementation computes emitted-drive eligibility before applying sticky, so override-driven replacements are also subject to the sticky veto. All shared behavior is gated by `stmap95` and cleared after the command run.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap95/build.log`.
+  - help: `./abc -c "stmap95 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap95/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap95; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap95/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` and `./i10.aig` both selected target AIG `855`, downstream AIG `861`, enabled sticky parent-phase and emitted-drive targeting, and produced no stale target rows after reset. Log: `.autoeda/runtime/results/stmap95/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then `.autoeda/runtime/results/stmap95/unknown.blif`; the unknown network reported selected-watch count `0`, sticky parent-phase disabled, emitted-drive target disabled, and zero emitted-relaxed-drive rows. Log: `.autoeda/runtime/results/stmap95/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap95/summary.json`, `metrics.csv`, `comparison.csv`, `sticky_parent_phase.csv`, `sticky_parent_phase_stats.csv`, `emitted_relaxed_drive_target.csv`, `emitted_relaxed_drive_target_stats.csv`, selected-match diagnostics, phase-survival diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `567.55 ps`, area `4860.39`; delay delta `-19.53 ps` (`-3.33%`), area delta `+62.05` (`+1.29%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- diagnostic results:
+  - emitted-relaxed-drive stats: `i10` had `13` rows, `7` target-phase rows, `1` material-drive row, `0` overrides, and `0` sticky blocks; `ode` had `28` rows, `6` target-phase rows, `1` material-drive row, `0` overrides, and `0` sticky blocks; `syn2` had `52` rows, `26` target-phase rows, `1` material-drive row, `0` overrides, and `0` sticky blocks.
+  - `or1200` AIG `11491` phase `0` had `46` rows, `22` target-phase rows, `6` material-drive rows, `3` eligible rows, `1` relaxed-eligible row, `1` override, `2` already-selected rows, `1` sticky-set row, and `3` sticky-blocked replacements.
+  - The sticky target survived: selected-match mode `2` and mode `3` both kept AIG `11491` phase `0` as `OAI21xp33_ASAP7_75t_L`, and reconstruction emitted `OAI21xp33_ASAP7_75t_L` for the same AIG/phase.
+  - Final QoR worsened relative to `stmap94`: `or1200` final delay moved from `561.55 ps` to `567.55 ps`. The final critical path shifted away from the watched AIG, showing that forcing the stronger-drive local gate solved the survival problem but hurt global downstream timing.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_95.c`.
+  - numbered command exists and is registered as `stmap95`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - sticky-parent-phase, emitted-relaxed-drive-target, selected-match, phase-survival, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict.
+  - supported stdin review completed with exit `0`; accepted two findings. The same-mode sticky guard was removed so mode-2 sticky choices can block mode-3 replacements, and the diagnostic now preserves pre-veto acceptance with `fAcceptedBeforeSticky`.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict.
+  - supported stdin review completed with exit `0`; accepted one P2 source finding that override-driven replacements could bypass sticky when `fAccepted` was initially false. The fix computes override eligibility before sticky, applies sticky to either core-accepted or override-eligible candidates, then reran build/help/smoke/path/stale/full eval/CEC.
+- review pass 3:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict.
+  - supported stdin review completed with exit `0`; no remaining source, build integration, stale-state, older-command regression, or diagnostic-counter findings were reported. It repeated the expected campaign-state finalization finding, which is addressed during closeout before commit.
+- rejected findings: none.
+- open findings: none after state finalization.
+- source changes after final source review: none; only runtime review summary, canonical version log, version-log check, artifact check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap95: stick emitted drive override`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap96`, soften or qualify the sticky emitted-drive policy instead of forcing the `OAI21` survivor unconditionally. The useful result is that the survival blocker is solved, but the global critical path worsens; the next probe should release sticky for mode-3 candidates with better local arrival/area tradeoffs or confine sticky to diagnostics/reconstruction tracing rather than final selection.

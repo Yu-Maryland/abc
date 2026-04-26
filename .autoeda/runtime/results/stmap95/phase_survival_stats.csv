@@ -1,0 +1,5 @@
+benchmark,watched_aigs,matched_aigs,final_delay
+benchmarks/i10.aig,2,2,198.640
+benchmarks/ode.abc.blif,2,2,522.047
+benchmarks/or1200.abc.blif,2,2,567.548
+benchmarks/syn2.abc.blif,2,2,479.776

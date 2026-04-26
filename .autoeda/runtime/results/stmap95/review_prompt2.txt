@@ -1,0 +1,32 @@
+Review the uncommitted stmap95 implementation after accepted review-pass-1 fixes.
+
+Project contract:
+- This is iteration 95 in the `stmap` family.
+- Baseline flow is `read_lib 7nm_lvt_ff.lib; read <design>; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime`.
+- Candidate flow replaces `map` with `stmap95`.
+- Required benchmarks are `benchmarks/i10.aig`, `benchmarks/ode.abc.blif`, `benchmarks/or1200.abc.blif`, and `benchmarks/syn2.abc.blif`.
+- Older `stmapN` commands must remain buildable and behavior-gated.
+
+stmap95 hypothesis:
+- The relaxed emitted-drive override from stmap93/stmap94 can be undone by later same-target replacements.
+- `stmap95` makes the emitted-drive override sticky after it fires, so later replacements for the same target phase are blocked unless they materially improve arrival by more than 2.00 ps or preserve/improve the drive/load proxy.
+
+Changes to review:
+- `src/base/abci/abcStmap_95.c` adds the `stmap95` command and enables the sticky emitted-drive override only around the inherited stmap65/stmap94-style mapping path.
+- `src/map/mapper/mapperMatch.c` extends the existing inactive-by-default stmap93 emitted-drive hook with sticky state, counters, diagnostics, and a new setter `Map_Stmap93SetEmittedDriveTargetStickyOverride()`.
+- `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp` wire in the new command/file.
+
+Accepted review-pass-1 findings already fixed and revalidated:
+- P2: The initial sticky replacement check was scoped to the same mapper mode, so a sticky target recorded in mode 2 could still be replaced in mode 3. The mode guard was removed so accepted replacements for the same target phase are checked across mapper modes.
+- P3: The `accepted-before` diagnostic was printed after sticky veto changed `fAccepted`, hiding vetoed replacements. A separate `fAcceptedBeforeSticky` variable now preserves the pre-veto acceptance state in diagnostics.
+
+Validation after fixes:
+- Build passed: `.autoeda/runtime/results/stmap95/build.log`.
+- Help, smoke, path-normalization, stale-state, and implementation checks passed.
+- Full benchmark evaluation passed and is parseable: `.autoeda/runtime/results/stmap95/comparison.csv`.
+- CEC passed on all four required benchmarks: `.autoeda/runtime/results/stmap95/cec_summary.json`.
+
+Key observed result:
+- On `or1200`, the sticky override fires once, blocks three later replacements, and makes AIG 11491 reconstruct as `OAI21xp33_ASAP7_75t_L`, but final `stime` delay worsens relative to stmap94 (`567.55 ps` versus `561.55 ps`) while still improving over baseline `map` (`587.08 ps`).
+
+Please look for correctness, build integration, stale-state, older-command regression, diagnostic accuracy, and campaign-contract issues. Findings should be concrete and tied to file/line references.

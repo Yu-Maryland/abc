@@ -1725,9 +1725,15 @@ void Map_Stmap92PrintEmittedDriveTargetSummary( void )
 static int s_fStmap93EmittedDriveTarget = 0;
 static int s_fStmap93EmittedDriveTargetActive = 0;
 static int s_fStmap93EmittedDriveTargetPostSticky = 0;
+static int s_fStmap93EmittedDriveTargetStickyOverride = 0;
+static int s_fStmap93EmittedStickyValid = 0;
 static const char * s_pStmap93EmittedDriveTargetLabel = "stmap93";
 static int s_Stmap93AigId = -1;
 static int s_Stmap93Phase = 0;
+static int s_Stmap93EmittedStickyMode = -1;
+static int s_Stmap93EmittedStickyFanLimit = 0;
+static float s_Stmap93EmittedStickyArrival = 0.0f;
+static float s_Stmap93EmittedStickyLoadDriveRatio = 0.0f;
 static int s_nStmap93EmittedRows = 0;
 static int s_nStmap93EmittedPhaseHits = 0;
 static int s_nStmap93EmittedDriveHits = 0;
@@ -1741,6 +1747,10 @@ static int s_nStmap93EmittedBlockedMode = 0;
 static int s_nStmap93EmittedBlockedBest = 0;
 static int s_nStmap93EmittedBlockedWindow = 0;
 static int s_nStmap93EmittedBlockedDrive = 0;
+static int s_nStmap93EmittedStickySet = 0;
+static int s_nStmap93EmittedStickyBlocked = 0;
+static int s_nStmap93EmittedStickyAllowedArrival = 0;
+static int s_nStmap93EmittedStickyAllowedDrive = 0;
 
 static void Map_Stmap93ResetEmittedDriveTargetCounters( void )
 {
@@ -1757,6 +1767,15 @@ static void Map_Stmap93ResetEmittedDriveTargetCounters( void )
     s_nStmap93EmittedBlockedBest = 0;
     s_nStmap93EmittedBlockedWindow = 0;
     s_nStmap93EmittedBlockedDrive = 0;
+    s_nStmap93EmittedStickySet = 0;
+    s_nStmap93EmittedStickyBlocked = 0;
+    s_nStmap93EmittedStickyAllowedArrival = 0;
+    s_nStmap93EmittedStickyAllowedDrive = 0;
+    s_fStmap93EmittedStickyValid = 0;
+    s_Stmap93EmittedStickyMode = -1;
+    s_Stmap93EmittedStickyFanLimit = 0;
+    s_Stmap93EmittedStickyArrival = 0.0f;
+    s_Stmap93EmittedStickyLoadDriveRatio = 0.0f;
 }
 
 static void Map_Stmap93ClearEmittedDriveTarget( void )
@@ -1764,6 +1783,7 @@ static void Map_Stmap93ClearEmittedDriveTarget( void )
     s_fStmap93EmittedDriveTarget = 0;
     s_fStmap93EmittedDriveTargetActive = 0;
     s_fStmap93EmittedDriveTargetPostSticky = 0;
+    s_fStmap93EmittedDriveTargetStickyOverride = 0;
     s_pStmap93EmittedDriveTargetLabel = "stmap93";
     s_Stmap93AigId = -1;
     s_Stmap93Phase = 0;
@@ -1806,14 +1826,21 @@ static int Map_Stmap93EmittedDriveTargetPostSticky( void )
     return s_fStmap93EmittedDriveTargetPostSticky;
 }
 
+void Map_Stmap93SetEmittedDriveTargetStickyOverride( int fEnable )
+{
+    s_fStmap93EmittedDriveTargetStickyOverride = fEnable;
+}
+
 static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, Map_Cut_t * pBestCutBefore, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
 {
     Map_Node_t * pNodeRegular;
     Mio_Gate_t * pGate, * pGateBefore;
-    int AigId, fEligible, fOverride, fExactMode, fBestAreaZero, fRelaxedWindowUsed, fWindowOk;
+    int AigId, fEligible, fOverride, fExactMode, fBestAreaZero, fRelaxedWindowUsed, fWindowOk, fAcceptedBeforeSticky;
     int CandidateFanLimit, BestFanLimit, fFanLimitImproved, fLoadDriveImproved, fLoadDriveMaterial, fMaterialDrive;
+    int fStickyReplacementBlock, fStickyReplacementAllowArrival, fStickyReplacementAllowDrive;
     float ArrivalDelta, AreaPremium, AreaRatio, ArrivalWindow, AreaPremiumWindow, ExactAreaPremiumWindow, AreaRatioWindow;
     float CandidateLeafLoadAvg, BestLeafLoadAvg, CandidateLoadDriveRatio, BestLoadDriveRatio, LoadDriveRatioMinGain, LoadDriveRatioMaterialGain;
+    float StickyArrivalGain, StickyArrivalAllowWindow;
     const char * pAction;
     if ( !s_fStmap93EmittedDriveTarget || !s_fStmap93EmittedDriveTargetActive || p == NULL || pNode == NULL || pCut == NULL || pMatch == NULL )
         return fAccepted;
@@ -1831,6 +1858,11 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
     AreaRatioWindow = 2.50f;
     LoadDriveRatioMinGain = 0.05f;
     LoadDriveRatioMaterialGain = 2.00f;
+    StickyArrivalAllowWindow = 2.00f;
+    StickyArrivalGain = 0.0f;
+    fStickyReplacementBlock = 0;
+    fStickyReplacementAllowArrival = 0;
+    fStickyReplacementAllowDrive = 0;
     ArrivalDelta = pBestBefore ? pMatch->tArrive.Worst - pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE;
     AreaPremium = pBestBefore ? pMatch->AreaFlow - pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
     AreaRatio = (pBestBefore && pBestBefore->AreaFlow > p->fEpsilon) ? pMatch->AreaFlow / pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
@@ -1871,6 +1903,7 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
 
     fEligible = 0;
     fOverride = 0;
+    fAcceptedBeforeSticky = fAccepted;
     pAction = "blocked-phase";
     if ( fPhase == s_Stmap93Phase )
     {
@@ -1900,19 +1933,49 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
             if ( fRelaxedWindowUsed )
                 s_nStmap93EmittedRelaxedEligible++;
             fEligible = 1;
-            if ( fAccepted )
-            {
-                s_nStmap93EmittedAlready++;
-                pAction = fRelaxedWindowUsed ? "already-selected-relaxed" : "already-selected";
-            }
-            else
-            {
-                s_nStmap93EmittedOverrides++;
-                fOverride = 1;
-                pAction = fRelaxedWindowUsed ? "override-relaxed" : "override";
-                fAccepted = 1;
-            }
         }
+    }
+    if ( fPhase == s_Stmap93Phase && s_fStmap93EmittedDriveTargetStickyOverride && s_fStmap93EmittedStickyValid && (fAccepted || fEligible) )
+    {
+        StickyArrivalGain = s_Stmap93EmittedStickyArrival - pMatch->tArrive.Worst;
+        fStickyReplacementAllowArrival = StickyArrivalGain > StickyArrivalAllowWindow + p->fEpsilon;
+        fStickyReplacementAllowDrive = CandidateFanLimit >= s_Stmap93EmittedStickyFanLimit ||
+            CandidateLoadDriveRatio + LoadDriveRatioMinGain < s_Stmap93EmittedStickyLoadDriveRatio;
+        if ( fStickyReplacementAllowArrival )
+            s_nStmap93EmittedStickyAllowedArrival++;
+        if ( fStickyReplacementAllowDrive )
+            s_nStmap93EmittedStickyAllowedDrive++;
+        if ( !fStickyReplacementAllowArrival && !fStickyReplacementAllowDrive )
+        {
+            s_nStmap93EmittedStickyBlocked++;
+            fStickyReplacementBlock = 1;
+            fAccepted = 0;
+            pAction = "sticky-block-replacement";
+        }
+    }
+    if ( fEligible && !fStickyReplacementBlock )
+    {
+        if ( fAccepted )
+        {
+            s_nStmap93EmittedAlready++;
+            pAction = fRelaxedWindowUsed ? "already-selected-relaxed" : "already-selected";
+        }
+        else
+        {
+            s_nStmap93EmittedOverrides++;
+            fOverride = 1;
+            pAction = fRelaxedWindowUsed ? "override-relaxed" : "override";
+            fAccepted = 1;
+        }
+    }
+    if ( fOverride && s_fStmap93EmittedDriveTargetStickyOverride )
+    {
+        s_fStmap93EmittedStickyValid = 1;
+        s_Stmap93EmittedStickyMode = p->fMappingMode;
+        s_Stmap93EmittedStickyFanLimit = CandidateFanLimit;
+        s_Stmap93EmittedStickyArrival = pMatch->tArrive.Worst;
+        s_Stmap93EmittedStickyLoadDriveRatio = CandidateLoadDriveRatio;
+        s_nStmap93EmittedStickySet++;
     }
 
     if ( fPhase == s_Stmap93Phase || fOverride )
@@ -1922,7 +1985,7 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
         printf( "%s emitted-relaxed-drive-target: index = %d  target-aig = %d  target-phase = %d  mapper-mode = %d  phase = %d  cut-ordinal = %d  action = %s  eligible = %d  override = %d  accepted-before = %d  exact-mode = %d  best-area-zero = %d  relaxed-window-used = %d  gate = %s  best-gate = %s  arrival = %.3f  best-arrival = %.3f  arrival-delta = %.3f  area-flow = %.3f  best-area-flow = %.3f  area-premium = %.3f  area-ratio = %.3f  candidate-fanout-limit = %d  best-fanout-limit = %d  fanout-limit-improved = %d  candidate-cut-leaf-load-avg = %.3f  best-cut-leaf-load-avg = %.3f  candidate-load-drive-ratio = %.3f  best-load-drive-ratio = %.3f  load-drive-improved = %d  load-drive-material = %d  material-drive = %d  arrival-window = %.3f  area-premium-window = %.3f  exact-area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f  load-drive-ratio-material-gain = %.3f\n",
             s_pStmap93EmittedDriveTargetLabel, s_nStmap93EmittedRows,
             s_Stmap93AigId, s_Stmap93Phase, p->fMappingMode, fPhase,
-            CutOrdinal, pAction, fEligible, fOverride, fAccepted && !fOverride,
+            CutOrdinal, pAction, fEligible, fOverride, fAcceptedBeforeSticky && !fOverride,
             fExactMode, fBestAreaZero, fRelaxedWindowUsed,
             pGate ? Mio_GateReadName(pGate) : "?",
             pGateBefore ? Mio_GateReadName(pGateBefore) : "?",
@@ -1940,7 +2003,7 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
 
 void Map_Stmap93PrintEmittedDriveTargetSummary( void )
 {
-    printf( "%s emitted-relaxed-drive-target stats: target-aig = %d  target-phase = %d  rows = %d  phase-hits = %d  drive-hits = %d  material-drive-hits = %d  eligible = %d  relaxed-eligible = %d  overrides = %d  already-selected = %d  blocked-phase = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-drive = %d  arrival-window = %.3f  area-premium-window = %.3f  exact-area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f  load-drive-ratio-material-gain = %.3f\n",
+    printf( "%s emitted-relaxed-drive-target stats: target-aig = %d  target-phase = %d  rows = %d  phase-hits = %d  drive-hits = %d  material-drive-hits = %d  eligible = %d  relaxed-eligible = %d  overrides = %d  already-selected = %d  blocked-phase = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-drive = %d  sticky-enabled = %d  sticky-set = %d  sticky-blocked = %d  sticky-allowed-arrival = %d  sticky-allowed-drive = %d  sticky-arrival-allow-window = %.3f  arrival-window = %.3f  area-premium-window = %.3f  exact-area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f  load-drive-ratio-material-gain = %.3f\n",
         s_pStmap93EmittedDriveTargetLabel, s_Stmap93AigId, s_Stmap93Phase,
         s_nStmap93EmittedRows, s_nStmap93EmittedPhaseHits, s_nStmap93EmittedDriveHits,
         s_nStmap93EmittedMaterialDriveHits, s_nStmap93EmittedEligible,
@@ -1948,7 +2011,10 @@ void Map_Stmap93PrintEmittedDriveTargetSummary( void )
         s_nStmap93EmittedAlready, s_nStmap93EmittedBlockedPhase,
         s_nStmap93EmittedBlockedMode, s_nStmap93EmittedBlockedBest,
         s_nStmap93EmittedBlockedWindow, s_nStmap93EmittedBlockedDrive,
-        0.75f, 1.20f, 2.20f, 2.50f, 0.05f, 2.00f );
+        s_fStmap93EmittedDriveTargetStickyOverride, s_nStmap93EmittedStickySet,
+        s_nStmap93EmittedStickyBlocked, s_nStmap93EmittedStickyAllowedArrival,
+        s_nStmap93EmittedStickyAllowedDrive, 2.00f, 0.75f, 1.20f, 2.20f,
+        2.50f, 0.05f, 2.00f );
 }
 
 /**Function*************************************************************

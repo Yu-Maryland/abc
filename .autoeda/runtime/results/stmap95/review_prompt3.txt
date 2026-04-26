@@ -1,0 +1,26 @@
+Review the final uncommitted stmap95 implementation after the review-pass-2 source fix and revalidation.
+
+Project contract:
+- Iteration 95 in the `stmap` family.
+- Candidate command is `stmap95`; older `stmapN` commands must remain buildable and behavior-gated.
+- Required evaluation compares `map` versus `stmap95` after `topo; buffer; upsize -v; dnsize -v; stime` on all four required benchmarks.
+
+stmap95 hypothesis:
+- Once the stmap93/stmap94 emitted-drive override fires for the watched final-critical AIG/phase, later same-target replacements should not undo it unless they materially improve arrival by more than 2.00 ps or preserve/improve the drive/load proxy.
+
+Accepted review findings already addressed:
+- Pass 1 P2: removed the same-mode sticky guard so mode-2 sticky choices can block later mode-3 replacements.
+- Pass 1 P3: preserved the pre-veto acceptance state in diagnostics with `fAcceptedBeforeSticky`.
+- Pass 2 P2: the sticky veto previously only considered candidates already accepted by the core comparator, so a later candidate accepted through this same emitted-drive override path could bypass sticky. The implementation now first computes emitted-drive eligibility, then applies the sticky veto when either the core comparator accepted the candidate or the candidate is emitted-drive-eligible, and only then counts already-selected/override outcomes.
+
+Revalidation after the pass-2 fix:
+- `make ABC_USE_NO_READLINE=1` passed.
+- `stmap95 -h`, smoke flow, path-normalization, stale-state, and implementation checks passed.
+- Full benchmark evaluation and CEC passed via `.autoeda/runtime/results/stmap95/run_stmap95_eval.py`.
+- Updated metrics are in `.autoeda/runtime/results/stmap95/comparison.csv`.
+- Updated CEC summary is in `.autoeda/runtime/results/stmap95/cec_summary.json`.
+
+Key final observation:
+- On `or1200`, sticky state is set once, one relaxed override is kept, and three later replacements are blocked. Final delay remains `567.55 ps`, which improves over `map` (`587.08 ps`) but regresses versus stmap94 (`561.55 ps`).
+
+Please check for remaining correctness, stale-state, older-command regression, build integration, diagnostic-counter, and campaign-contract issues. Findings should be concrete and tied to file/line references.

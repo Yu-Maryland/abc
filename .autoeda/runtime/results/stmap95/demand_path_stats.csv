@@ -1,0 +1,5 @@
+benchmark,watch_aig,downstream_aig,rows,target_requests,target_phase0,target_phase1,target_via_downstream,leaf_demands,leaf_phase0,leaf_phase1,leaf_via_downstream,phase0_direct_or_cached,phase0_inverter_from_opposite
+benchmarks/i10.aig,855,861,26,13,8,5,2,13,8,5,2,13,0
+benchmarks/ode.abc.blif,5219,5229,18,9,0,9,1,9,0,9,1,9,0
+benchmarks/or1200.abc.blif,11491,13829,9,5,5,0,1,4,4,0,1,5,0
+benchmarks/syn2.abc.blif,18002,18467,12,6,0,6,1,6,0,6,1,0,6

@@ -1,0 +1,2 @@
+benchmark,index,watch_index,node,aig_id,requested_phase,source_phase,source_node,source_gate,inverter_node,inverter_gate
+benchmarks/or1200.abc.blif,8,1,11983,13829,0,1,7518,NOR2xp33_ASAP7_75t_L,7519,INVx1_ASAP7_75t_L
