@@ -1,0 +1,11 @@
+benchmark,index,watch_index,node,aig_id,phase,new_node,gate,leaves,u_phase_best,fanout_limit,leaf0_aig_id,leaf0_phase,leaf1_aig_id,leaf1_phase,leaf2_aig_id,leaf2_phase,leaf3_aig_id,leaf3_phase,leaf4_aig_id,leaf4_phase,leaf5_aig_id,leaf5_phase
+benchmarks/i10.aig,2,0,612,855,1,756,NOR4xp25_ASAP7_75t_L,4,10,1,572,1,623,0,629,1,854,0,-1,-1,-1,-1
+benchmarks/i10.aig,4,0,612,855,0,809,NAND5xp2_ASAP7_75t_L,5,25,1,572,0,623,1,649,1,629,0,853,0,-1,-1
+benchmarks/i10.aig,12,1,615,861,0,872,OAI22xp33_ASAP7_75t_L,4,0,1,751,1,795,1,850,1,855,1,-1,-1,-1,-1
+benchmarks/i10.aig,18,1,615,861,1,876,AOI22xp33_ASAP7_75t_L,4,15,1,751,0,795,0,850,0,855,0,-1,-1,-1,-1
+benchmarks/ode.abc.blif,2,0,2417,5219,1,4974,O2A1O1Ixp33_ASAP7_75t_L,4,13,1,4471,0,5204,1,5215,0,5218,0,-1,-1,-1,-1
+benchmarks/ode.abc.blif,10,1,2427,5229,0,4987,OAI211xp5_ASAP7_75t_L,4,10,1,5070,1,4729,0,5219,1,5223,0,-1,-1,-1,-1
+benchmarks/or1200.abc.blif,3,0,9641,11491,0,6717,A2O1A1Ixp33_ASAP7_75t_L,4,12,1,1193,1,1994,1,11486,0,11489,0,-1,-1,-1,-1
+benchmarks/or1200.abc.blif,7,1,11983,13829,1,7517,NOR2xp33_ASAP7_75t_L,2,1,5,11491,0,13828,1,-1,-1,-1,-1,-1,-1,-1,-1
+benchmarks/syn2.abc.blif,3,0,14582,18002,1,11210,NOR2xp33_ASAP7_75t_L,2,3,5,17827,0,17848,0,-1,-1,-1,-1,-1,-1,-1,-1
+benchmarks/syn2.abc.blif,4,1,14992,18467,1,11218,AOI32xp33_ASAP7_75t_L,5,8,1,17961,1,18002,1,18447,1,18460,0,18461,1,-1,-1

@@ -1,0 +1,20 @@
+Review stmap87 for correctness and campaign compliance.
+
+Scope:
+- Uncommitted changes for stmap87 only.
+- New command file: src/base/abci/abcStmap_87.c.
+- Shared mapper change: src/map/mapper/mapperMatch.c adds a command-scoped parent phase target helper.
+- Shared activation hook: src/base/abci/abcStmap_65.c activates/deactivates the stmap87 helper only when configured.
+- Command registration/build integration: src/base/abci/abc.c, src/base/abci/module.make, abclib.dsp.
+- Runtime artifacts under .autoeda/runtime/results/stmap87 and campaign bookkeeping.
+
+Hypothesis:
+- stmap87 targets the final-surviving parent phase 0 / child phase 1 pair identified by stmap86.
+- The helper may override near-tie matches for the watched parent when exact-area modes 2/3 evaluate a cut where the watched parent phase is 0 and the watched child is requested in phase 1.
+- Existing stmap commands must remain buildable and behavior-compatible unless they explicitly configure this helper.
+
+Validation already run:
+- build, command help, smoke, path-normalization, stale-state, implementation check, full benchmark evaluation, parseable metrics, and CEC passed.
+- parent_phase_target diagnostics were emitted for all four required benchmarks.
+
+Please focus on correctness risks, stale global diagnostic state, activation/deactivation scoping through stmap65, unintended behavior changes to older commands, command wiring, and whether any accepted findings require source changes or revalidation.

@@ -4980,3 +4980,57 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap86: trace dual selected matches`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap87`, move from diagnostics to a narrow final-surviving phase policy. The strongest target is the `ode` child phase `1` / parent phase `0` pair: child phase `1` is effectively zero-slack and parent phase `0` has only about `0.08 ps` slack while consuming the child, so the next probe should either bias child phase-1 timing or protect parent phase-0 load/drive alternatives rather than continuing to force parent phase `1`.
+
+
+## version87 / stmap87
+
+- hypothesis: A scoped exact-area recovery bias for the final-surviving parent phase `0` / child phase `1` pair can protect mapper choices that match the measured final critical topology. If the watched parent phase `0` consumes the watched child in phase `1` within tight arrival and area windows, allowing a near-tie override should either preserve or improve final `stime` timing without changing older commands.
+- motivation: `stmap86` showed the useful `ode` path is child AIG `5219` phase `1` feeding parent AIG `5229` phase `0`; the child phase is effectively zero-slack and the parent has only about `0.08 ps` mapper slack. Earlier strict sticky work targeted parent phase `1`, which does not survive final timing. `stmap87` moves the policy to the final-surviving phase pair.
+- command name: `stmap87`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_87.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap87/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap87` adds a command-scoped `Map_Stmap87SetParentPhaseTarget()` helper in `mapperMatch.c`. The helper is inactive by default and is activated/deactivated by `stmap65` only when explicitly configured. During final remap exact-area modes `2` and `3`, it may override a non-selected cut only when the watched parent AIG is being mapped in target parent phase `0`, the cut consumes the watched child AIG in target child phase `1`, and the candidate is within `0.20 ps` arrival, `0.60` area-flow premium, and `1.75x` area-ratio windows. `stmap87` keeps the `stmap86` dual selected-match, phase-survival, reconstruction, demand, parent-cut, candidate-cut, parent-phase-bias, and strict sticky diagnostics.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap87/build.log`.
+  - help: `./abc -c "stmap87 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap87/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap87; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps`, area `1303.10`, and parent-phase-target overrides recorded. Log: `.autoeda/runtime/results/stmap87/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` selected child AIG `855`, parent AIG `861`, selected-watch count `2`, and parent-phase-target active for the watched pair. Log: `.autoeda/runtime/results/stmap87/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then an unknown network; the second command reported selected-watch count `0`, target state disabled, selected-match rows `0`, and parent-phase-target rows `0`. Log: `.autoeda/runtime/results/stmap87/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap87/summary.json`, `metrics.csv`, `comparison.csv`, `parent_phase_target.csv`, `parent_phase_target_stats.csv`, selected-match diagnostics, phase-survival diagnostics, strict sticky diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- parent-phase-target diagnostic results:
+  - `i10`: `15` rows, `5` target-child hits, `2` eligible overrides, final QoR unchanged.
+  - `ode`: `28` rows, `6` target-child hits, `2` eligible overrides. Both overrides were `OAI211xp5_ASAP7_75t_L` on parent phase `0` consuming child phase `1`; the final parent-cut summary still reports phase `0` as `OAI211xp5_ASAP7_75t_L` with child-requested phase `1`.
+  - `or1200`: `17` rows, `4` target-child hits, `1` eligible override, final QoR unchanged.
+  - `syn2`: `24` rows, `6` target-child hits, `0` overrides, and `1` blocked-window row; the target windows prevented a higher-cost change.
+  - The unchanged benchmark QoR indicates that the targeted parent phase `0` near-tie overrides mostly reinforced existing selected choices rather than changing final mapped topology.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_87.c`.
+  - numbered command exists and is registered as `stmap87`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - parent-phase-target, selected-match, phase-survival, sticky-parent-phase, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no correctness-impacting issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues. The review specifically noted that the new mapper hook is gated behind explicit stmap87 configuration and activation.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap87: target final parent phase pair`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap88`, stop spending policy on parent phase `0` self-ties. `stmap87` proves the final-surviving parent/child pair can be explicitly targeted but QoR is unchanged, so the next probe should move one level upstream and bias the child AIG phase `1` match itself, where `stmap86` showed the effective zero-slack condition.

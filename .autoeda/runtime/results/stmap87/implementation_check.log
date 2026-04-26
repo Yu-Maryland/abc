@@ -1,0 +1,6 @@
+OK src/base/abci/abcStmap_87.c: stmap87-parent-phase0-child-phase1-policy-probe
+OK src/base/abci/abc.c: stmap87
+OK src/base/abci/module.make: abcStmap_87.c
+OK abclib.dsp: abcStmap_87.c
+OK src/map/mapper/mapperMatch.c: Map_Stmap87SetParentPhaseTarget
+OK src/base/abci/abcStmap_65.c: Map_Stmap87SetParentPhaseTargetActive

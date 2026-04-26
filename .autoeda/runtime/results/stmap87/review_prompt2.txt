@@ -1,0 +1,10 @@
+Second review for stmap87 after clean pass 1.
+
+Focus:
+- Verify the shared stmap87 parent-phase target helper remains command-scoped.
+- Verify activation/deactivation in src/base/abci/abcStmap_65.c cannot leak to older commands or non-final mapping passes.
+- Verify the exact-area override criteria in mapperMatch.c are bounded by target parent phase, target child phase, mode 2/3, arrival/area windows, and watched parent/child AIG IDs.
+- Verify command reset paths clear selected-match, reconstruction, demand, parent-cut, candidate-cut, parent-phase-bias, sticky, and stmap87 target state.
+- Verify runtime evidence is sufficient: build/help/smoke/path/stale/implementation/full eval/CEC passed and parent_phase_target diagnostics were parsed.
+
+Pass 1 found no discrete correctness issues. Please report only correctness-impacting findings or state explicitly that none remain.
