@@ -1,0 +1,294 @@
+======== ABC command line "read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap47; topo; buffer; upsize -v; dnsize -v; stime"
+Library "ASAP7_7nm_LVT_FF" from "7nm_lvt_ff.lib" has 159 cells (26 skipped: 23 seq; 0 tri-state; 3 no func; 0 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.24 sec
+Warning: Detected 2 multi-output cells (for example, "FAx1_ASAP7_75t_L").
+Hierarchy reader converted 4 instances of blackboxes.
+Starting:  syn2            : pi =   450  po =   321  lat =  1512  and =   25570  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   25403  lev =  67
+Refactor:  syn2            : pi =   450  po =   321  lat =  1512  and =   25150  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   25132  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   25006  lev =  67
+Starting:  syn2            : pi =   450  po =   321  lat =  1512  and =   25006  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   24948  lev =  67
+Refactor:  syn2            : pi =   450  po =   321  lat =  1512  and =   24842  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24835  lev =  67
+Rewrite:   syn2            : pi =   450  po =   321  lat =  1512  and =   24782  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   24739  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24735  lev =  67
+RefactorZ: syn2            : pi =   450  po =   321  lat =  1512  and =   24578  lev =  67
+RewriteZ:  syn2            : pi =   450  po =   321  lat =  1512  and =   24476  lev =  67
+Balance:   syn2            : pi =   450  po =   321  lat =  1512  and =   24470  lev =  67
+Parameters: Sim words = 8. Conf limit = 1000. SAT var max = 5000.
+AIG nodes : Total =  68304. Dangling =  45536. Main =  22768. ( 33.33 %)
+SAT solver: Vars = 1905. Max cone = 5246. Recycles = 8.
+SAT calls : All =  12993. Unsat =   4111. Sat =   8882. Fail =      0.
+Choices   : Lits =  21248. Reprs =     0. Equivs =     0. Choices =     0.
+Choicing runtime statistics:
+Sim init    =     0.01 sec (  0.69 %)
+Sim SAT     =     0.61 sec ( 28.72 %)
+SAT solving =     1.46 sec ( 69.01 %)
+  sat       =     1.33 sec ( 62.70 %)
+  unsat     =     0.14 sec (  6.53 %)
+  undecided =     0.00 sec (  0.00 %)
+Choice      =     0.00 sec (  0.00 %)
+Other       =     0.03 sec (  1.58 %)
+TOTAL       =     2.12 sec (100.00 %)
+Synthesis   =     0.97 sec
+Old choice computation time =     2.12 sec
+STATS:  Ands:   68304  ->   47143.  Reprs:  19635  ->   3665.  Choices =   3066.
+stmap35 relief diag: index = 1  profile-open = 0  node = 21363  level = 49  refs = 4  leaves = 4  phase = 0  slack = 7.010010  area-save = 0.930000  arrival-delta = -8.250000  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap35 near-miss diag: index = 1  reason = moderate-gain-gate  profile-open = 0  node = 23648  level = 37  refs = 4  leaves = 4  phase = 0  slack = 6.560013  area-save = 0.930000  arrival-delta = -1.970001  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 relief diag: index = 2  profile-open = 0  node = 23673  level = 37  refs = 4  leaves = 5  phase = 1  slack = 7.069992  area-save = 0.930000  arrival-delta = -10.369995  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap35 near-miss diag: index = 2  reason = continuous-penalty-band-gate  profile-open = 0  node = 23752  level = 36  refs = 4  leaves = 4  phase = 1  slack = 10.849991  area-save = 0.930000  arrival-delta = -6.730011  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 relief diag: index = 3  profile-open = 0  node = 23885  level = 36  refs = 4  leaves = 4  phase = 1  slack = 11.280045  area-save = 0.930000  arrival-delta = -12.120026  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap35 near-miss diag: index = 3  reason = arrival-gate  profile-open = 0  node = 27110  level = 58  refs = 4  leaves = 4  phase = 1  slack = 6.520035  area-save = 0.930000  arrival-delta = -0.559998  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 near-miss diag: index = 4  reason = arrival-gate  profile-open = 0  node = 34508  level = 27  refs = 5  leaves = 4  phase = 0  slack = 8.600021  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 relief diag: index = 4  profile-open = 0  node = 34565  level = 31  refs = 5  leaves = 4  phase = 0  slack = 9.170029  area-save = 0.930000  arrival-delta = -10.809998  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap35 near-miss diag: index = 5  reason = arrival-gate  profile-open = 0  node = 46593  level = 29  refs = 5  leaves = 4  phase = 1  slack = 9.290054  area-save = 0.930000  arrival-delta = -1.199997  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 relief diag: index = 5  profile-open = 1  node = 23628  level = 38  refs = 4  leaves = 4  phase = 0  slack = 7.590027  area-save = 1.640000  arrival-delta = -0.250000  arrival-gain-margin = 1.435000  area-margin = 1.400000
+stmap35 near-miss diag: index = 6  reason = arrival-gate  profile-open = 1  node = 23673  level = 37  refs = 4  leaves = 4  phase = 0  slack = 5.960007  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 relief diag: index = 6  profile-open = 1  node = 24250  level = 38  refs = 4  leaves = 4  phase = 0  slack = 7.270004  area-save = 1.630000  arrival-delta = -6.779999  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap35 near-miss diag: index = 7  reason = arrival-gate  profile-open = 1  node = 34508  level = 27  refs = 5  leaves = 4  phase = 0  slack = 8.130035  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap35 guard stats: exact-risk = 99334  highest = 49817  lower-mod = 38382  upper-mod = 11135  middle-slack = 1451  middle-relief = 6  reject-slack = 37406  reject-highest = 26917  reject-arrival = 17029  reject-area = 17640
+stmap35 near-miss stats: near-miss = 7
+stmap35 early-seed stats: early-seed = 4
+stmap35 penalty stats: moderate-penalty-seed = 0  moderate-penalty-blocked = 0  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap47 feedback-load stats: nodes = 22059  matched = 21994  fanout-pins = 59021  over-max = 158  avg-load-ratio = 0.084  max-load-ratio = 12.940
+stmap47 feedback-load criticality: timing-delay = 3338.867  critical-nodes = 1894  avg-criticality = 0.054  max-criticality = 1.000
+stmap47 feedback-load top: rank = 1  node = 11731  gate = AOI21xp33_ASAP7_75t_L  fanouts = 342  load = 149.073  max-cap = 11.520  load-ratio = 12.940
+stmap47 feedback-load top: rank = 2  node = 11762  gate = AOI21xp33_ASAP7_75t_L  fanouts = 318  load = 138.396  max-cap = 11.520  load-ratio = 12.014
+stmap47 feedback-load top: rank = 3  node = 22036  gate = NAND2xp33_ASAP7_75t_L  fanouts = 308  load = 134.462  max-cap = 11.520  load-ratio = 11.672
+stmap47 feedback-load top: rank = 4  node = 16514  gate = NOR2xp33_ASAP7_75t_L  fanouts = 298  load = 130.148  max-cap = 11.520  load-ratio = 11.298
+stmap47 feedback-load top: rank = 5  node = 11772  gate = NOR2xp33_ASAP7_75t_L  fanouts = 284  load = 124.985  max-cap = 11.520  load-ratio = 10.849
+stmap47 sink-pressure stats: roots = 158  consumer-fanin = 369016  consumer-fanout = 42957  raw-pressure-entries = 9455  raw-pressure-updates = 9727  sink-pressure-entries = 9455  sink-pressure-updates = 9902  pressure-missed = 0  pressure-capacity = 65536  tracked-aig = 5548  tracked-node = 5636  tracked-raw-ratio = 1.220  tracked-sink-ratio = 1.077
+stmap47 sink-pressure: rank = 1  aig-id = 21046  mapped-node = 12095  sink-pressure-ratio = 12.148
+stmap47 sink-pressure: rank = 2  aig-id = 21641  mapped-node = 14047  sink-pressure-ratio = 11.875
+stmap47 sink-pressure: rank = 3  aig-id = 20187  mapped-node = 14034  sink-pressure-ratio = 11.803
+stmap47 sink-pressure: rank = 4  aig-id = 19095  mapped-node = 11784  sink-pressure-ratio = 10.849
+stmap47 sink-pressure: rank = 5  aig-id = 19109  mapped-node = 11863  sink-pressure-ratio = 10.490
+stmap47 sink-pressure: rank = 6  aig-id = 19127  mapped-node = 11799  sink-pressure-ratio = 10.457
+stmap47 sink-pressure: rank = 7  aig-id = 19095  mapped-node = 11784  sink-pressure-ratio = 10.457
+stmap47 sink-pressure: rank = 8  aig-id = 19121  mapped-node = 11882  sink-pressure-ratio = 10.457
+stmap47 sink-pressure: rank = 9  aig-id = 19036  mapped-node = 11731  sink-pressure-ratio = 10.457
+stmap47 sink-pressure: rank = 10  aig-id = 21638  mapped-node = 14046  sink-pressure-ratio = 10.225
+stmap47 feedback: remap = 1  active = 1  max-load-ratio = 12.940  over-max-frac = 0.007184  severity = 0.952  raw-pressure-entries = 9455  sink-pressure-entries = 9455  pressure-capacity = 65536
+stmap47 mapper-mode: reused-stmap45-mode = 46  reduced-gain = 200.00
+stmap45 moderate penalty block diag: index = 1  node = 21363  aig-id = 24696  level = 49  refs = 4  leaves = 4  phase = 0  slack = 7.010010  area-save = 0.930000  arrival-delta = -8.250000  arrival-gain-margin = 1.435000  penalty-factor = 0.000  area-margin = 1.400000  node-sink-pressure-ratio = 1.230  cut-sink-pressure-ratio = 4.545  scl-feedback = 0.952
+stmap45 near-miss diag: index = 1  reason = agreement-admitted-moderate-block  profile-open = 0  node = 21363  level = 49  refs = 4  leaves = 4  phase = 0  slack = 7.010010  area-save = 0.930000  arrival-delta = -8.250000  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 near-miss diag: index = 2  reason = moderate-gain-gate  profile-open = 0  node = 23648  level = 37  refs = 4  leaves = 4  phase = 0  slack = 6.560013  area-save = 0.930000  arrival-delta = -1.970001  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 relief diag: index = 1  profile-open = 0  node = 23673  level = 37  refs = 4  leaves = 5  phase = 1  slack = 7.069992  area-save = 0.930000  arrival-delta = -10.369995  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap45 near-miss diag: index = 3  reason = agreement-admitted-moderate-block  profile-open = 0  node = 23752  level = 36  refs = 4  leaves = 4  phase = 1  slack = 10.849991  area-save = 0.930000  arrival-delta = -6.730011  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 moderate penalty block diag: index = 2  node = 23885  aig-id = 27163  level = 36  refs = 4  leaves = 4  phase = 1  slack = 11.280045  area-save = 0.930000  arrival-delta = -12.120026  arrival-gain-margin = 1.435000  penalty-factor = 0.000  area-margin = 1.400000  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 2.089  scl-feedback = 0.952
+stmap45 near-miss diag: index = 4  reason = agreement-admitted-moderate-block  profile-open = 0  node = 23885  level = 36  refs = 4  leaves = 4  phase = 1  slack = 11.280045  area-save = 0.930000  arrival-delta = -12.120026  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 moderate penalty block diag: index = 3  node = 23885  aig-id = 27163  level = 36  refs = 4  leaves = 5  phase = 1  slack = 11.280045  area-save = 0.930000  arrival-delta = -11.300018  arrival-gain-margin = 1.435000  penalty-factor = 0.000  area-margin = 1.400000  node-sink-pressure-ratio = 0.000  cut-sink-pressure-ratio = 2.089  scl-feedback = 0.952
+stmap45 near-miss diag: index = 5  reason = agreement-admitted-moderate-block  profile-open = 0  node = 23885  level = 36  refs = 4  leaves = 5  phase = 1  slack = 11.280045  area-save = 0.930000  arrival-delta = -11.300018  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 near-miss diag: index = 6  reason = arrival-gate  profile-open = 0  node = 27110  level = 58  refs = 4  leaves = 4  phase = 1  slack = 6.520035  area-save = 0.930000  arrival-delta = -0.559998  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 near-miss diag: index = 7  reason = arrival-gate  profile-open = 0  node = 34508  level = 27  refs = 5  leaves = 4  phase = 0  slack = 8.600021  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 moderate penalty block diag: index = 4  node = 34565  aig-id = 37923  level = 31  refs = 5  leaves = 4  phase = 0  slack = 9.170029  area-save = 0.930000  arrival-delta = -10.809998  arrival-gain-margin = 1.435000  penalty-factor = 0.000  area-margin = 1.400000  node-sink-pressure-ratio = 1.087  cut-sink-pressure-ratio = 2.401  scl-feedback = 0.952
+stmap45 near-miss diag: index = 8  reason = agreement-admitted-moderate-block  profile-open = 0  node = 34565  level = 31  refs = 5  leaves = 4  phase = 0  slack = 9.170029  area-save = 0.930000  arrival-delta = -10.809998  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 moderate penalty block diag: index = 5  node = 34565  aig-id = 37923  level = 31  refs = 5  leaves = 4  phase = 0  slack = 9.170029  area-save = 0.930000  arrival-delta = -10.669998  arrival-gain-margin = 1.435000  penalty-factor = 0.000  area-margin = 1.400000  node-sink-pressure-ratio = 1.087  cut-sink-pressure-ratio = 1.202  scl-feedback = 0.952
+stmap45 near-miss diag: index = 9  reason = agreement-admitted-moderate-block  profile-open = 0  node = 34565  level = 31  refs = 5  leaves = 4  phase = 0  slack = 9.170029  area-save = 0.930000  arrival-delta = -10.669998  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 near-miss diag: index = 10  reason = arrival-gate  profile-open = 0  node = 46593  level = 29  refs = 5  leaves = 4  phase = 1  slack = 9.290054  area-save = 0.930000  arrival-delta = -1.199997  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 relief diag: index = 2  profile-open = 1  node = 23628  level = 38  refs = 4  leaves = 4  phase = 0  slack = 7.590027  area-save = 1.640000  arrival-delta = -0.250000  arrival-gain-margin = 1.435000  area-margin = 1.400000
+stmap45 near-miss diag: index = 11  reason = arrival-gate  profile-open = 1  node = 23673  level = 37  refs = 4  leaves = 4  phase = 0  slack = 5.960007  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 relief diag: index = 3  profile-open = 1  node = 24250  level = 38  refs = 4  leaves = 4  phase = 0  slack = 7.270004  area-save = 1.630000  arrival-delta = -6.779999  arrival-gain-margin = 1.435000  area-margin = 0.700000
+stmap45 near-miss diag: index = 12  reason = arrival-gate  profile-open = 1  node = 34508  level = 27  refs = 5  leaves = 4  phase = 0  slack = 5.800064  area-save = 0.930000  arrival-delta = -0.729996  arrival-gain-margin = 1.435000  area-margin = 1.400000  one-inv-area = 0.700000
+stmap45 guard stats: exact-risk = 99364  highest = 49842  lower-mod = 38378  upper-mod = 11144  middle-slack = 1451  middle-relief = 3  reject-slack = 37784  reject-highest = 26875  reject-arrival = 16832  reject-area = 17534
+stmap45 near-miss stats: near-miss = 12
+stmap45 early-seed stats: early-seed = 1
+stmap45 penalty stats: moderate-penalty-seed = 0  moderate-penalty-blocked = 5  strong-penalty-seed = 0  strong-penalty-blocked = 0
+stmap47 scl-load stats: nodes = 22105  matched = 22040  fanout-pins = 59132  over-max = 158  avg-load-ratio = 0.084  max-load-ratio = 12.940
+stmap47 scl-load criticality: timing-delay = 3339.040  critical-nodes = 1895  avg-criticality = 0.054  max-criticality = 1.000
+stmap47 scl-load top: rank = 1  node = 11731  gate = AOI21xp33_ASAP7_75t_L  fanouts = 342  load = 149.073  max-cap = 11.520  load-ratio = 12.940
+stmap47 scl-load top: rank = 2  node = 11762  gate = AOI21xp33_ASAP7_75t_L  fanouts = 318  load = 138.396  max-cap = 11.520  load-ratio = 12.014
+stmap47 scl-load top: rank = 3  node = 22083  gate = NAND2xp33_ASAP7_75t_L  fanouts = 308  load = 134.462  max-cap = 11.520  load-ratio = 11.672
+stmap47 scl-load top: rank = 4  node = 16516  gate = NOR2xp33_ASAP7_75t_L  fanouts = 298  load = 130.148  max-cap = 11.520  load-ratio = 11.298
+stmap47 scl-load top: rank = 5  node = 11772  gate = NOR2xp33_ASAP7_75t_L  fanouts = 284  load = 124.985  max-cap = 11.520  load-ratio = 10.849
+Parameters: Iters = 1000.  Time win =  1 %. Update ratio = 10 %. UseDept = 1. UseWL = 0. Target =    0 ps. DelayGap =  0 ps. Timeout =   0 sec
+   0 Win:  1. PO:    20. Path:     80. Gate:    8. TFO:   4326. A: 24070.07 ( +0.0 %)  D: 659.96 ps ( -1.6 %)  B: 659.96 ps ( -1.6 %)    0.00 sec    
+   1 Win:  1. PO:    20. Path:    155. Gate:   15. TFO:   3691. A: 24082.67 ( +0.1 %)  D: 636.59 ps ( -5.1 %)  B: 636.59 ps ( -5.1 %)    0.00 sec    
+   2 Win:  1. PO:    20. Path:    190. Gate:   19. TFO:   4892. A: 24102.04 ( +0.2 %)  D: 619.21 ps ( -7.7 %)  B: 619.21 ps ( -7.7 %)    0.00 sec    
+   3 Win:  1. PO:    20. Path:    168. Gate:   16. TFO:   4331. A: 24115.34 ( +0.2 %)  D: 606.59 ps ( -9.6 %)  B: 606.59 ps ( -9.6 %)    0.01 sec    
+   4 Win:  1. PO:    40. Path:    169. Gate:   16. TFO:   8003. A: 24133.31 ( +0.3 %)  D: 592.93 ps (-11.6 %)  B: 592.93 ps (-11.6 %)    0.01 sec    
+   5 Win:  1. PO:    40. Path:    238. Gate:   23. TFO:   7398. A: 24154.79 ( +0.4 %)  D: 583.71 ps (-13.0 %)  B: 583.71 ps (-13.0 %)    0.01 sec    
+   6 Win:  2. PO:    80. Path:   1114. Gate:  111. TFO:  17689. A: 24246.97 ( +0.8 %)  D: 555.96 ps (-17.1 %)  B: 555.96 ps (-17.1 %)    0.02 sec    
+   7 Win:  1. PO:    20. Path:    193. Gate:   19. TFO:   3650. A: 24262.14 ( +0.8 %)  D: 549.72 ps (-18.0 %)  B: 549.72 ps (-18.0 %)    0.02 sec    
+   8 Win:  1. PO:    63. Path:    436. Gate:   43. TFO:  13627. A: 24289.45 ( +0.9 %)  D: 541.72 ps (-19.2 %)  B: 541.72 ps (-19.2 %)    0.03 sec    
+   9 Win:  1. PO:    43. Path:    319. Gate:   31. TFO:   8231. A: 24314.19 ( +1.0 %)  D: 534.89 ps (-20.3 %)  B: 534.89 ps (-20.3 %)    0.03 sec    
+  10 Win:  1. PO:    60. Path:    416. Gate:   41. TFO:  11765. A: 24345.45 ( +1.2 %)  D: 528.74 ps (-21.2 %)  B: 528.74 ps (-21.2 %)    0.03 sec    
+  11 Win:  1. PO:    60. Path:    347. Gate:   34. TFO:  12575. A: 24380.46 ( +1.3 %)  D: 523.78 ps (-21.9 %)  B: 523.78 ps (-21.9 %)    0.04 sec    
+  12 Win:  1. PO:    60. Path:    411. Gate:   41. TFO:  12898. A: 24411.26 ( +1.4 %)  D: 518.04 ps (-22.8 %)  B: 518.04 ps (-22.8 %)    0.04 sec    
+  13 Win:  2. PO:    81. Path:   1614. Gate:  161. TFO:  18304. A: 24522.57 ( +1.9 %)  D: 509.65 ps (-24.0 %)  B: 509.65 ps (-24.0 %)    0.05 sec    
+  14 Win:  1. PO:    20. Path:    196. Gate:   19. TFO:   3711. A: 24534.94 ( +2.0 %)  D: 507.18 ps (-24.4 %)  B: 507.18 ps (-24.4 %)    0.05 sec    
+  15 Win:  1. PO:    40. Path:    237. Gate:   23. TFO:   7170. A: 24554.08 ( +2.0 %)  D: 501.15 ps (-25.3 %)  B: 501.15 ps (-25.3 %)    0.06 sec    
+  16 Win:  1. PO:    57. Path:    556. Gate:   55. TFO:  11978. A: 24589.31 ( +2.2 %)  D: 499.74 ps (-25.5 %)  B: 499.74 ps (-25.5 %)    0.06 sec    
+  17 Win:  1. PO:    61. Path:    414. Gate:   41. TFO:  15842. A: 24620.58 ( +2.3 %)  D: 498.50 ps (-25.7 %)  B: 498.50 ps (-25.7 %)    0.07 sec    
+  18 Win:  1. PO:    40. Path:    378. Gate:   37. TFO:   8032. A: 24641.12 ( +2.4 %)  D: 493.62 ps (-26.4 %)  B: 493.62 ps (-26.4 %)    0.07 sec    
+  19 Win:  1. PO:    60. Path:    454. Gate:   45. TFO:  11541. A: 24676.59 ( +2.5 %)  D: 492.19 ps (-26.6 %)  B: 492.19 ps (-26.6 %)    0.07 sec    
+  20 Win:  2. PO:    83. Path:   1381. Gate:  138. TFO:  17338. A: 24759.20 ( +2.9 %)  D: 490.51 ps (-26.9 %)  B: 490.51 ps (-26.9 %)    0.08 sec    
+  21 Win:  1. PO:    20. Path:    229. Gate:   22. TFO:   3641. A: 24780.90 ( +3.0 %)  D: 490.56 ps (-26.9 %)  B: 490.51 ps (-26.9 %)    0.08 sec    
+  22 Win:  1. PO:    20. Path:    179. Gate:   17. TFO:   3736. A: 24792.11 ( +3.0 %)  D: 486.10 ps (-27.5 %)  B: 486.10 ps (-27.5 %)    0.08 sec    
+  23 Win:  1. PO:    60. Path:    506. Gate:   50. TFO:  11770. A: 24828.75 ( +3.2 %)  D: 485.57 ps (-27.6 %)  B: 485.57 ps (-27.6 %)    0.09 sec    
+  24 Win:  1. PO:    31. Path:    402. Gate:   40. TFO:   8172. A: 24847.65 ( +3.3 %)  D: 486.13 ps (-27.5 %)  B: 485.57 ps (-27.6 %)    0.09 sec    
+  25 Win:  1. PO:    20. Path:    253. Gate:   25. TFO:   4327. A: 24866.32 ( +3.3 %)  D: 488.05 ps (-27.2 %)  B: 485.57 ps (-27.6 %)    0.09 sec    
+  26 Win:  1. PO:    23. Path:    258. Gate:   25. TFO:   4325. A: 24882.42 ( +3.4 %)  D: 490.41 ps (-26.9 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  27 Win:  2. PO:    43. Path:    773. Gate:   77. TFO:   7795. A: 24928.87 ( +3.6 %)  D: 496.50 ps (-26.0 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  28 Win:  1. PO:    20. Path:    114. Gate:    8. TFO:   3508. A: 24936.33 ( +3.6 %)  D: 493.52 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  29 Win:  1. PO:    20. Path:    129. Gate:    7. TFO:   3786. A: 24943.10 ( +3.7 %)  D: 490.63 ps (-26.9 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  30 Win:  1. PO:    20. Path:    134. Gate:    5. TFO:   4327. A: 24944.50 ( +3.7 %)  D: 489.65 ps (-27.0 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  31 Win:  1. PO:    23. Path:    160. Gate:    9. TFO:   4301. A: 24949.63 ( +3.7 %)  D: 490.46 ps (-26.9 %)  B: 485.57 ps (-27.6 %)    0.10 sec    
+  32 Win:  1. PO:    20. Path:    108. Gate:    4. TFO:   3503. A: 24951.73 ( +3.7 %)  D: 490.81 ps (-26.8 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  33 Win:  1. PO:    20. Path:    222. Gate:   15. TFO:   3695. A: 24965.27 ( +3.7 %)  D: 489.86 ps (-27.0 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  34 Win:  2. PO:    43. Path:    439. Gate:   43. TFO:   7542. A: 24973.43 ( +3.8 %)  D: 490.13 ps (-26.9 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  35 Win:  1. PO:    20. Path:    210. Gate:   11. TFO:   3537. A: 24969.23 ( +3.8 %)  D: 493.71 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  36 Win:  1. PO:    20. Path:    123. Gate:    3. TFO:    578. A: 24969.93 ( +3.8 %)  D: 493.71 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  37 Win:  2. PO:    23. Path:    264. Gate:   15. TFO:   3483. A: 24967.84 ( +3.8 %)  D: 493.51 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  38 Win:  1. PO:    20. Path:    116. Gate:    1. TFO:    179. A: 24967.37 ( +3.8 %)  D: 493.51 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.11 sec    
+  39 Win:  1. PO:    20. Path:    117. Gate:    2. TFO:   2389. A: 24969.24 ( +3.8 %)  D: 493.51 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  40 Win:  1. PO:    20. Path:    110. Gate:    1. TFO:    388. A: 24971.10 ( +3.8 %)  D: 493.51 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  41 Win:  2. PO:    23. Path:    233. Gate:   17. TFO:   3683. A: 24968.30 ( +3.8 %)  D: 493.95 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  42 Win:  1. PO:    20. Path:    129. Gate:    4. TFO:   3451. A: 24966.90 ( +3.8 %)  D: 492.80 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  43 Win:  1. PO:    20. Path:    233. Gate:   17. TFO:   3524. A: 24977.63 ( +3.8 %)  D: 493.86 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  44 Win:  1. PO:    20. Path:    152. Gate:    4. TFO:   3316. A: 24980.43 ( +3.8 %)  D: 492.90 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  45 Win:  1. PO:    20. Path:    218. Gate:    3. TFO:    539. A: 24985.33 ( +3.8 %)  D: 492.90 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  46 Win:  1. PO:    20. Path:    206. Gate:    1. TFO:    201. A: 24985.80 ( +3.8 %)  D: 492.90 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  47 Win:  2. PO:    23. Path:    463. Gate:   25. TFO:   3654. A: 24993.27 ( +3.9 %)  D: 492.98 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.12 sec    
+  48 Win:  2. PO:    23. Path:    317. Gate:   13. TFO:   3524. A: 24994.90 ( +3.9 %)  D: 494.37 ps (-26.3 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  49 Win:  1. PO:    20. Path:    117. Gate:    7. TFO:   3359. A: 25000.27 ( +3.9 %)  D: 493.91 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  50 Win:  1. PO:    20. Path:    114. Gate:    2. TFO:   3017. A: 24998.17 ( +3.9 %)  D: 493.59 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  51 Win:  2. PO:    23. Path:    271. Gate:    9. TFO:   3783. A: 25001.44 ( +3.9 %)  D: 493.39 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  52 Win:  1. PO:    20. Path:    132. Gate:    3. TFO:   3104. A: 24998.40 ( +3.9 %)  D: 495.01 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  53 Win:  1. PO:    20. Path:    109. Gate:    2. TFO:   2294. A: 24999.80 ( +3.9 %)  D: 495.01 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  54 Win:  1. PO:    20. Path:     98. Gate:    4. TFO:   2700. A: 25000.27 ( +3.9 %)  D: 499.06 ps (-25.6 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  55 Win:  2. PO:    23. Path:    178. Gate:   12. TFO:   3520. A: 24995.60 ( +3.9 %)  D: 497.72 ps (-25.8 %)  B: 485.57 ps (-27.6 %)    0.13 sec    
+  56 Win:  1. PO:    20. Path:    108. Gate:    2. TFO:   1938. A: 24996.77 ( +3.9 %)  D: 497.16 ps (-25.9 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  57 Win:  2. PO:    23. Path:    170. Gate:    6. TFO:   3286. A: 25000.27 ( +3.9 %)  D: 496.06 ps (-26.0 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  58 Win:  1. PO:    20. Path:    113. Gate:    1. TFO:    392. A: 25002.14 ( +3.9 %)  D: 496.06 ps (-26.0 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  59 Win:  1. PO:    20. Path:    104. Gate:    3. TFO:   3502. A: 25002.14 ( +3.9 %)  D: 493.53 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  60 Win:  1. PO:    20. Path:    112. Gate:    5. TFO:   3087. A: 25003.07 ( +3.9 %)  D: 493.25 ps (-26.5 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  61 Win:  1. PO:    20. Path:     99. Gate:    1. TFO:   2846. A: 25003.77 ( +3.9 %)  D: 492.53 ps (-26.6 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  62 Win:  2. PO:    23. Path:    247. Gate:   13. TFO:   3676. A: 24999.33 ( +3.9 %)  D: 494.75 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  63 Win:  1. PO:    20. Path:    207. Gate:   12. TFO:   3604. A: 25004.00 ( +3.9 %)  D: 494.71 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  64 Win:  1. PO:    20. Path:    170. Gate:    4. TFO:   3206. A: 25007.03 ( +3.9 %)  D: 495.28 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.14 sec    
+  65 Win:  1. PO:    20. Path:    199. Gate:    5. TFO:   3099. A: 25007.96 ( +3.9 %)  D: 493.48 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  66 Win:  1. PO:    20. Path:    221. Gate:    3. TFO:   3327. A: 25010.77 ( +3.9 %)  D: 495.14 ps (-26.2 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  67 Win:  1. PO:    20. Path:    137. Gate:    6. TFO:   3517. A: 25014.03 ( +3.9 %)  D: 493.37 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  68 Win:  1. PO:    20. Path:    181. Gate:    5. TFO:   2340. A: 25018.23 ( +4.0 %)  D: 493.37 ps (-26.4 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  69 Win:  2. PO:    23. Path:    379. Gate:   21. TFO:   3926. A: 25018.46 ( +4.0 %)  D: 497.45 ps (-25.8 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  70 Win:  1. PO:    20. Path:     97. Gate:    2. TFO:    461. A: 25020.10 ( +4.0 %)  D: 497.45 ps (-25.8 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  71 Win:  1. PO:    20. Path:     95. Gate:    2. TFO:   2903. A: 25021.26 ( +4.0 %)  D: 496.36 ps (-26.0 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  72 Win:  1. PO:    20. Path:    105. Gate:    1. TFO:    307. A: 25024.76 ( +4.0 %)  D: 496.36 ps (-26.0 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  73 Win:  2. PO:    23. Path:    192. Gate:   11. TFO:   3536. A: 25013.33 ( +3.9 %)  D: 505.21 ps (-24.7 %)  B: 485.57 ps (-27.6 %)    0.15 sec    
+  74 Win:  1. PO:    20. Path:     95. Gate:    5. TFO:   3512. A: 25010.29 ( +3.9 %)  D: 504.20 ps (-24.8 %)  B: 485.57 ps (-27.6 %)    0.16 sec    
+  74 Win:  1. PO:    29. Path:    274. Gate:   20. TFO:   5244. A: 24828.46 ( +3.2 %)  D: 485.57 ps (-27.6 %)  B: 485.57 ps (-27.6 %)    0.16 sec    
+Runtime: Critical path =     0.00 sec (  0.81 %)
+Runtime: Sizing eval   =     0.04 sec ( 27.44 %)
+Runtime: Timing update =     0.11 sec ( 69.46 %)
+Runtime: Other         =     0.00 sec (  2.28 %)
+Runtime: TOTAL         =     0.16 sec (100.00 %)
+Parameters: Iters =    5.  UseDept = 1. UseWL = 0. Target =    0 ps. DelayGap =1000 ps. Timeout =   0 sec
+    0 : Try = 24261  Over = 16485  Fail =  7539  Win =   237  A: 24651.87 ( -0.7 %)  D: 485.36 ps ( -0.0 %)      0.03 sec    
+    1 : Try = 16485  Over = 12148  Fail =  4130  Win =   207  A: 24534.11 ( -1.2 %)  D: 484.42 ps ( -0.2 %)      0.06 sec    
+    2 : Try = 12148  Over =  9265  Fail =  2702  Win =   181  A: 24449.93 ( -1.5 %)  D: 484.66 ps ( -0.2 %)      0.08 sec    
+    3 : Try =  9265  Over =  7209  Fail =  1887  Win =   169  A: 24378.82 ( -1.8 %)  D: 482.50 ps ( -0.6 %)      0.09 sec    
+    4 : Try =  7209  Over =  5718  Fail =  1333  Win =   158  A: 24319.16 ( -2.1 %)  D: 483.46 ps ( -0.4 %)      0.11 sec    
+    5 : Try =  5718  Over =  4554  Fail =  1016  Win =   148  A: 24267.66 ( -2.3 %)  D: 483.36 ps ( -0.5 %)      0.13 sec    
+    6 : Try =  4554  Over =  3827  Fail =   591  Win =   136  A: 24223.40 ( -2.4 %)  D: 482.45 ps ( -0.6 %)      0.14 sec    
+    7 : Try =  3827  Over =  3180  Fail =   521  Win =   126  A: 24183.57 ( -2.6 %)  D: 482.88 ps ( -0.6 %)      0.15 sec    
+    8 : Try =  3180  Over =  2733  Fail =   330  Win =   117  A: 24145.36 ( -2.8 %)  D: 483.09 ps ( -0.5 %)      0.16 sec    
+    9 : Try =  2733  Over =  2374  Fail =   250  Win =   109  A: 24109.02 ( -2.9 %)  D: 483.49 ps ( -0.4 %)      0.17 sec    
+   10 : Try =  2374  Over =  2121  Fail =   147  Win =   106  A: 24077.12 ( -3.0 %)  D: 484.42 ps ( -0.2 %)      0.18 sec    
+   11 : Try =  2121  Over =  1876  Fail =   145  Win =   100  A: 24048.25 ( -3.1 %)  D: 484.00 ps ( -0.3 %)      0.19 sec    
+   12 : Try =  1876  Over =  1662  Fail =   119  Win =    95  A: 24021.02 ( -3.3 %)  D: 483.45 ps ( -0.4 %)      0.20 sec    
+   13 : Try =  1662  Over =  1481  Fail =    95  Win =    86  A: 23997.04 ( -3.3 %)  D: 483.43 ps ( -0.4 %)      0.20 sec    
+   14 : Try =  1481  Over =  1332  Fail =    63  Win =    86  A: 23974.24 ( -3.4 %)  D: 483.43 ps ( -0.4 %)      0.21 sec    
+   15 : Try =  1332  Over =  1183  Fail =    70  Win =    79  A: 23953.77 ( -3.5 %)  D: 483.43 ps ( -0.4 %)      0.22 sec    
+   16 : Try =  1183  Over =  1036  Fail =    68  Win =    79  A: 23933.54 ( -3.6 %)  D: 483.42 ps ( -0.4 %)      0.22 sec    
+   17 : Try =  1036  Over =   917  Fail =    47  Win =    72  A: 23914.46 ( -3.7 %)  D: 483.42 ps ( -0.4 %)      0.23 sec    
+   18 : Try =   917  Over =   805  Fail =    45  Win =    67  A: 23897.71 ( -3.7 %)  D: 483.42 ps ( -0.4 %)      0.23 sec    
+   19 : Try =   805  Over =   699  Fail =    43  Win =    63  A: 23881.20 ( -3.8 %)  D: 483.42 ps ( -0.4 %)      0.24 sec    
+   20 : Try =   699  Over =   597  Fail =    46  Win =    56  A: 23867.48 ( -3.9 %)  D: 483.51 ps ( -0.4 %)      0.24 sec    
+   21 : Try =   597  Over =   511  Fail =    38  Win =    48  A: 23855.62 ( -3.9 %)  D: 483.51 ps ( -0.4 %)      0.25 sec    
+   22 : Try =   511  Over =   440  Fail =    22  Win =    49  A: 23843.29 ( -4.0 %)  D: 483.39 ps ( -0.4 %)      0.25 sec    
+   23 : Try =   440  Over =   378  Fail =    18  Win =    44  A: 23832.83 ( -4.0 %)  D: 483.39 ps ( -0.4 %)      0.25 sec    
+   24 : Try =   378  Over =   316  Fail =    25  Win =    37  A: 23824.23 ( -4.0 %)  D: 483.66 ps ( -0.4 %)      0.26 sec    
+   25 : Try =   316  Over =   267  Fail =    11  Win =    38  A: 23815.16 ( -4.1 %)  D: 483.66 ps ( -0.4 %)      0.26 sec    
+   26 : Try =   267  Over =   221  Fail =    12  Win =    34  A: 23807.03 ( -4.1 %)  D: 483.66 ps ( -0.4 %)      0.26 sec    
+   27 : Try =   221  Over =   181  Fail =    10  Win =    30  A: 23799.35 ( -4.1 %)  D: 483.39 ps ( -0.4 %)      0.26 sec    
+   28 : Try =   181  Over =   149  Fail =     6  Win =    26  A: 23792.61 ( -4.2 %)  D: 483.39 ps ( -0.4 %)      0.26 sec    
+   29 : Try =   149  Over =   111  Fail =    14  Win =    24  A: 23786.79 ( -4.2 %)  D: 483.39 ps ( -0.4 %)      0.26 sec    
+   30 : Try =   111  Over =    88  Fail =     6  Win =    17  A: 23782.37 ( -4.2 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   31 : Try =    88  Over =    64  Fail =     7  Win =    17  A: 23778.42 ( -4.2 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   32 : Try =    64  Over =    49  Fail =     3  Win =    12  A: 23775.63 ( -4.2 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   33 : Try =    49  Over =    34  Fail =     1  Win =    14  A: 23772.14 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   34 : Try =    34  Over =    23  Fail =     1  Win =    10  A: 23769.82 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   35 : Try =    23  Over =    12  Fail =     1  Win =    10  A: 23767.50 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   36 : Try =    12  Over =     7  Fail =     1  Win =     4  A: 23766.57 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   37 : Try =     7  Over =     5  Fail =     0  Win =     2  A: 23766.10 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   38 : Try =     5  Over =     3  Fail =     0  Win =     2  A: 23765.64 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   39 : Try =     3  Over =     1  Fail =     0  Win =     2  A: 23765.17 ( -4.3 %)  D: 483.39 ps ( -0.4 %)      0.27 sec    
+   40 : Try =     1  Over =     0  Fail =     0  Win =     1  A: 23764.94 ( -4.3 %)  D: 483.14 ps ( -0.5 %)      0.27 sec    
+Total : Try =108323  Over = 84062  Fail = 21363  Win =  2898  A: 23764.94 ( -4.3 %)  D: 483.14 ps ( -0.5 %)      0.27 sec    
+    0 : Try = 24261  Over = 13657  Fail = 10459  Win =   145  A: 23699.90 ( -4.5 %)  D: 486.38 ps ( +0.2 %)      0.30 sec    
+    1 : Try = 13657  Over =  8670  Fail =  4854  Win =   133  A: 23657.75 ( -4.7 %)  D: 486.38 ps ( +0.2 %)      0.32 sec    
+    2 : Try =  8670  Over =  5870  Fail =  2688  Win =   112  A: 23624.22 ( -4.9 %)  D: 486.38 ps ( +0.2 %)      0.34 sec    
+    3 : Try =  5870  Over =  4303  Fail =  1453  Win =   114  A: 23591.63 ( -5.0 %)  D: 486.38 ps ( +0.2 %)      0.35 sec    
+    4 : Try =  4303  Over =  3312  Fail =   888  Win =   103  A: 23561.83 ( -5.1 %)  D: 484.92 ps ( -0.1 %)      0.37 sec    
+    5 : Try =  3312  Over =  2677  Fail =   539  Win =    96  A: 23535.54 ( -5.2 %)  D: 484.92 ps ( -0.1 %)      0.38 sec    
+    6 : Try =  2677  Over =  2241  Fail =   355  Win =    81  A: 23514.60 ( -5.3 %)  D: 484.92 ps ( -0.1 %)      0.38 sec    
+    7 : Try =  2241  Over =  1891  Fail =   268  Win =    82  A: 23493.20 ( -5.4 %)  D: 484.92 ps ( -0.1 %)      0.39 sec    
+    8 : Try =  1891  Over =  1624  Fail =   186  Win =    81  A: 23472.97 ( -5.5 %)  D: 484.53 ps ( -0.2 %)      0.40 sec    
+    9 : Try =  1624  Over =  1390  Fail =   162  Win =    72  A: 23455.30 ( -5.5 %)  D: 484.67 ps ( -0.2 %)      0.41 sec    
+   10 : Try =  1390  Over =  1200  Fail =   124  Win =    66  A: 23438.79 ( -5.6 %)  D: 484.67 ps ( -0.2 %)      0.41 sec    
+   11 : Try =  1200  Over =  1020  Fail =   116  Win =    64  A: 23423.68 ( -5.7 %)  D: 484.67 ps ( -0.2 %)      0.42 sec    
+   12 : Try =  1020  Over =   840  Fail =   123  Win =    57  A: 23410.19 ( -5.7 %)  D: 484.67 ps ( -0.2 %)      0.42 sec    
+   13 : Try =   840  Over =   679  Fail =   108  Win =    53  A: 23397.88 ( -5.8 %)  D: 484.67 ps ( -0.2 %)      0.42 sec    
+   14 : Try =   679  Over =   511  Fail =   129  Win =    39  A: 23388.81 ( -5.8 %)  D: 484.67 ps ( -0.2 %)      0.43 sec    
+   15 : Try =   511  Over =   423  Fail =    49  Win =    39  A: 23379.75 ( -5.8 %)  D: 484.53 ps ( -0.2 %)      0.43 sec    
+   16 : Try =   423  Over =   331  Fail =    56  Win =    36  A: 23371.38 ( -5.9 %)  D: 484.53 ps ( -0.2 %)      0.43 sec    
+   17 : Try =   331  Over =   266  Fail =    31  Win =    34  A: 23363.48 ( -5.9 %)  D: 485.05 ps ( -0.1 %)      0.44 sec    
+   18 : Try =   266  Over =   213  Fail =    25  Win =    28  A: 23356.97 ( -5.9 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   19 : Try =   213  Over =   160  Fail =    32  Win =    21  A: 23352.09 ( -5.9 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   20 : Try =   160  Over =   115  Fail =    24  Win =    21  A: 23347.21 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   21 : Try =   115  Over =    84  Fail =    15  Win =    16  A: 23343.49 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   22 : Try =    84  Over =    65  Fail =     6  Win =    13  A: 23340.47 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   23 : Try =    65  Over =    50  Fail =     6  Win =     9  A: 23338.38 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   24 : Try =    50  Over =    34  Fail =     7  Win =     9  A: 23336.28 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   25 : Try =    34  Over =    18  Fail =     8  Win =     8  A: 23334.42 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   26 : Try =    18  Over =    10  Fail =     3  Win =     5  A: 23333.26 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   27 : Try =    10  Over =     2  Fail =     4  Win =     4  A: 23332.33 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+   28 : Try =     2  Over =     0  Fail =     1  Win =     1  A: 23332.10 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+Total : Try = 75917  Over = 51656  Fail = 22719  Win =  1542  A: 23332.10 ( -6.0 %)  D: 485.27 ps ( -0.1 %)      0.44 sec    
+    0 : Try = 24261  Over =  8126  Fail = 16076  Win =    59  A: 23310.43 ( -6.1 %)  D: 484.65 ps ( -0.2 %)      0.48 sec    
+    1 : Try =  8126  Over =  3569  Fail =  4512  Win =    45  A: 23296.92 ( -6.2 %)  D: 484.90 ps ( -0.1 %)      0.49 sec    
+    2 : Try =  3569  Over =  1610  Fail =  1932  Win =    27  A: 23289.48 ( -6.2 %)  D: 484.65 ps ( -0.2 %)      0.50 sec    
+    3 : Try =  1610  Over =   835  Fail =   755  Win =    20  A: 23283.89 ( -6.2 %)  D: 484.65 ps ( -0.2 %)      0.51 sec    
+    4 : Try =   835  Over =   593  Fail =   224  Win =    18  A: 23279.00 ( -6.2 %)  D: 484.65 ps ( -0.2 %)      0.51 sec    
+    5 : Try =   593  Over =   358  Fail =   224  Win =    11  A: 23275.98 ( -6.3 %)  D: 484.65 ps ( -0.2 %)      0.51 sec    
+    6 : Try =   358  Over =   231  Fail =   117  Win =    10  A: 23273.42 ( -6.3 %)  D: 484.65 ps ( -0.2 %)      0.51 sec    
+    7 : Try =   231  Over =   126  Fail =    99  Win =     6  A: 23271.79 ( -6.3 %)  D: 484.65 ps ( -0.2 %)      0.51 sec    
+    8 : Try =   126  Over =    51  Fail =    70  Win =     5  A: 23270.63 ( -6.3 %)  D: 484.64 ps ( -0.2 %)      0.52 sec    
+    9 : Try =    51  Over =    31  Fail =    16  Win =     4  A: 23269.70 ( -6.3 %)  D: 484.64 ps ( -0.2 %)      0.52 sec    
+   10 : Try =    31  Over =    18  Fail =     9  Win =     4  A: 23268.77 ( -6.3 %)  D: 484.64 ps ( -0.2 %)      0.52 sec    
+   11 : Try =    18  Over =     0  Fail =    17  Win =     1  A: 23268.54 ( -6.3 %)  D: 484.64 ps ( -0.2 %)      0.52 sec    
+Total : Try = 39809  Over = 15548  Fail = 24051  Win =   210  A: 23268.54 ( -6.3 %)  D: 484.64 ps ( -0.2 %)      0.52 sec    
+    0 : Try = 24261  Over =  5344  Fail = 18883  Win =    34  A: 23259.46 ( -6.3 %)  D: 484.80 ps ( -0.2 %)      0.55 sec    
+    1 : Try =  5344  Over =  1537  Fail =  3783  Win =    24  A: 23253.42 ( -6.3 %)  D: 484.80 ps ( -0.2 %)      0.56 sec    
+    2 : Try =  1537  Over =   354  Fail =  1174  Win =     9  A: 23251.32 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    3 : Try =   354  Over =   140  Fail =   208  Win =     6  A: 23249.93 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    4 : Try =   140  Over =    75  Fail =    61  Win =     4  A: 23249.00 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    5 : Try =    75  Over =    35  Fail =    38  Win =     2  A: 23248.54 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    6 : Try =    35  Over =    27  Fail =     6  Win =     2  A: 23248.07 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    7 : Try =    27  Over =     0  Fail =    27  Win =     0  A: 23245.42 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+Total : Try = 31773  Over =  7512  Fail = 24180  Win =    81  A: 23245.42 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.57 sec    
+    0 : Try = 24261  Over =  2948  Fail = 21294  Win =    19  A: 23240.77 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.61 sec    
+    1 : Try =  2948  Over =   207  Fail =  2736  Win =     5  A: 23239.61 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.61 sec    
+    2 : Try =   207  Over =    25  Fail =   180  Win =     2  A: 23239.14 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.62 sec    
+    3 : Try =    25  Over =     7  Fail =    17  Win =     1  A: 23238.91 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.62 sec    
+    4 : Try =     7  Over =     0  Fail =     7  Win =     0  A: 23238.89 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.62 sec    
+Total : Try = 27448  Over =  3187  Fail = 24234  Win =    27  A: 23238.89 ( -6.4 %)  D: 484.80 ps ( -0.2 %)      0.62 sec    
+Runtime: Critical path =     0.18 sec ( 28.79 %)
+Runtime: Sizing eval   =     0.12 sec ( 18.83 %)
+Runtime: Timing update =     0.23 sec ( 37.41 %)
+Runtime: Other         =     0.09 sec ( 14.97 %)
+Runtime: TOTAL         =     0.62 sec (100.00 %)
+WireLoad = "none"  [1;33mGates =  24326[0m ( 24.3 %)   [1;32mCap =  1.1 ff[0m (  1.5 %)   [1;36mArea =    23238.89[0m ( 91.6 %)   [1;35mDelay =   484.80 ps[0m  ( 11.1 %)               

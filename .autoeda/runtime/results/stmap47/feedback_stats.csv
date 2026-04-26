@@ -1,0 +1,5 @@
+benchmark,active,max_load_ratio,over_max_frac,severity,raw_pressure_entries,sink_pressure_entries,pressure_capacity
+benchmarks/i10.aig,0,1.504,0.001892,0.000,206,206,4096
+benchmarks/ode.abc.blif,1,7.795,0.006994,0.600,5039,5039,32768
+benchmarks/or1200.abc.blif,1,10.763,0.003996,0.666,4004,4004,32768
+benchmarks/syn2.abc.blif,1,12.940,0.007184,0.952,9455,9455,65536

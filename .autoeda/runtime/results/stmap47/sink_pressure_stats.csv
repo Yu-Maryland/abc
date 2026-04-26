@@ -1,0 +1,5 @@
+benchmark,roots,consumer_fanin,consumer_fanout,raw_pressure_entries,raw_pressure_updates,sink_pressure_entries,sink_pressure_updates,pressure_missed,pressure_capacity,tracked_aig,tracked_node,tracked_raw_ratio,tracked_sink_ratio
+benchmarks/i10.aig,3,575,284,206,23,206,29,0,4096,5548,0,0.000,0.000
+benchmarks/ode.abc.blif,87,112524,21438,5039,6041,5039,6523,0,32768,5548,0,0.000,0.000
+benchmarks/or1200.abc.blif,32,25237,4843,4004,1216,4004,1382,0,32768,5548,0,0.000,0.000
+benchmarks/syn2.abc.blif,158,369016,42957,9455,9727,9455,9902,0,65536,5548,5636,1.220,1.077
