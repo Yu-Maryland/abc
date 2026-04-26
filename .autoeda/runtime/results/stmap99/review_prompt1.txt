@@ -1,0 +1,18 @@
+Review the uncommitted stmap99 implementation and artifacts.
+
+Project contract:
+- Iteration 99 in the `stmap` family, final numbered iteration before the target of 100 completed iterations.
+- Candidate command is `stmap99`; older commands must remain buildable and behavior-gated.
+
+Hypothesis:
+- After stmap95-stmap98 showed the sticky/survival variants underperform stmap94, stmap99 is a controlled rollback endpoint: preserve the stmap94 post-sticky emitted-drive behavior under a new numbered command and confirm the best endpoint before final reporting.
+
+Changes to review:
+- `src/base/abci/abcStmap_99.c` is copied from the stmap94 command path with labels/command renamed to stmap99.
+- `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp` wire in the new command/file.
+
+Validation already run:
+- Build, help, smoke, path-normalization, stale-state, implementation checks, full evaluation, and CEC passed.
+- Metrics reproduce stmap94: `or1200` candidate delay `561.55 ps`; all CEC checks passed.
+
+Please check correctness, build integration, stale-state, older-command regression, diagnostic accuracy, and campaign-contract issues.

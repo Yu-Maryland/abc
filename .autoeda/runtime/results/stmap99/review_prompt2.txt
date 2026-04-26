@@ -1,0 +1,10 @@
+Second review pass for the final uncommitted stmap99 implementation.
+
+No source changes were made after review pass 1. Review pass 1 found no actionable source, build integration, stale-state, or artifact issues.
+
+stmap99 summary:
+- Adds `stmap99` as a controlled rollback endpoint from the stmap94 path.
+- Build, help, smoke, path-normalization, stale-state, full evaluation, and CEC passed.
+- Metrics reproduce the stmap94 `or1200` delay of `561.55 ps`.
+
+Please check for any remaining source, build integration, stale-state, older-command regression, diagnostic, or campaign-contract issues.

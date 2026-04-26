@@ -5608,3 +5608,42 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap98: limit emitted target to mode two`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap99`, stop changing the forced emitted-drive policy and use the final iteration as a controlled rollback/summary probe: expose a command that preserves the stmap94 behavior while retaining the added diagnostics, confirming the best local endpoint for the final report.
+
+
+## version99 / stmap99
+
+- hypothesis: A controlled rollback endpoint that preserves the `stmap94` post-sticky emitted-drive behavior should reproduce the best result from the late emitted-drive investigation and provide a clean final numbered command before report generation.
+- motivation: `stmap95` through `stmap98` proved that forcing emitted-drive survival changes the reconstructed gate but does not improve final downstream timing. The final iteration confirms that the best late-family endpoint is the less intrusive `stmap94` behavior.
+- command name: `stmap99`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_99.c`
+  - `src/base/abci/module.make`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap99/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap99` is a label-renamed controlled rollback of the `stmap94` command path. It keeps post-sticky emitted-drive diagnostics and target behavior but does not enable the sticky emitted-drive override, soft release, mode-3 skip, or max-mode restrictions introduced in `stmap95` through `stmap98`.
+- validation run:
+  - build, help, smoke, path-normalization, stale-state, implementation checks, full benchmark evaluation, and CEC passed. Logs and parsed artifacts are under `.autoeda/runtime/results/stmap99/`.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps`, area delta `+39.66`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps`, area delta `-1156.83`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps`, area delta `+96.81`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps`, area delta `+906.99`.
+- diagnostic results:
+  - `stmap99` reproduced the `stmap94` final metrics. `or1200` returned to `561.55 ps`, better than the forced-survival variants `stmap95` through `stmap98`.
+- correctness results:
+  - build, numbered implementation, command registration, command help, smoke, metrics, CEC, diagnostics, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict.
+  - supported stdin review completed with exit `0`; no actionable findings were reported.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict.
+  - supported stdin review completed with exit `0`; no actionable findings were reported.
+- rejected findings: none.
+- open findings: none.
+- source changes after final review: none; only runtime review summary, canonical version log, version-log check, artifact check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap99: restore post sticky endpoint`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: Target iterations are complete after this version. Generate the final report from `versions.md` and `.autoeda/runtime/results`, emphasizing that the best late endpoint is the non-sticky-survival `stmap94`/`stmap99` behavior and that forcing local emitted-drive survival can worsen global downstream timing.
