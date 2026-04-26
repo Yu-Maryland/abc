@@ -1,0 +1,22 @@
+Review the uncommitted stmap98 implementation and artifacts.
+
+Project contract:
+- Iteration 98 in the `stmap` family.
+- Candidate command is `stmap98`; older commands must remain buildable and behavior-gated.
+- Required benchmarks are `benchmarks/i10.aig`, `benchmarks/ode.abc.blif`, `benchmarks/or1200.abc.blif`, and `benchmarks/syn2.abc.blif`.
+
+Hypothesis:
+- The remaining stmap96/stmap97 difference from stmap94 may be the emitted-drive hook itself biasing mode-3 selection.
+- stmap98 limits the emitted-drive target hook to mapper modes through mode 2 (`max-mode = 2`), so mode-3 phase-aware recovery runs without the emitted-drive hook.
+
+Changes to review:
+- `src/base/abci/abcStmap_98.c` adds the `stmap98` command and sets `Map_Stmap93SetEmittedDriveTargetMaxMode(2)` around watched networks, resetting to `3` after the run.
+- `src/map/mapper/mapperMatch.c` adds a default-off max-mode gate for the existing stmap93 emitted-drive hook and reports `max-mode` in the stats.
+- `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp` wire in the command/file.
+
+Validation already run:
+- Build, help, smoke, path-normalization, stale-state, implementation checks, full evaluation, and CEC passed.
+- Metrics: `or1200` remains `564.80 ps`; all CEC checks passed.
+- Diagnostics show `max_mode = 2`, fewer emitted-drive rows, and reconstruction still emits `OAI22xp33_ASAP7_75t_L` for `or1200` AIG `11491`.
+
+Please check correctness, build integration, stale-state, older-command regression, diagnostic accuracy, and campaign-contract issues. Findings should be concrete and tied to file/line references.

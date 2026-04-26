@@ -1727,6 +1727,7 @@ static int s_fStmap93EmittedDriveTargetActive = 0;
 static int s_fStmap93EmittedDriveTargetPostSticky = 0;
 static int s_fStmap93EmittedDriveTargetStickyOverride = 0;
 static int s_fStmap93EmittedStickySkipMode3 = 0;
+static int s_Stmap93EmittedDriveTargetMaxMode = 3;
 static int s_fStmap93EmittedStickyValid = 0;
 static const char * s_pStmap93EmittedDriveTargetLabel = "stmap93";
 static int s_Stmap93AigId = -1;
@@ -1787,6 +1788,7 @@ static void Map_Stmap93ClearEmittedDriveTarget( void )
     s_fStmap93EmittedDriveTargetPostSticky = 0;
     s_fStmap93EmittedDriveTargetStickyOverride = 0;
     s_fStmap93EmittedStickySkipMode3 = 0;
+    s_Stmap93EmittedDriveTargetMaxMode = 3;
     s_Stmap93EmittedStickyArrivalAllowWindow = 2.00f;
     s_pStmap93EmittedDriveTargetLabel = "stmap93";
     s_Stmap93AigId = -1;
@@ -1845,6 +1847,11 @@ void Map_Stmap93SetEmittedDriveTargetStickySkipMode3( int fEnable )
     s_fStmap93EmittedStickySkipMode3 = fEnable;
 }
 
+void Map_Stmap93SetEmittedDriveTargetMaxMode( int MaxMode )
+{
+    s_Stmap93EmittedDriveTargetMaxMode = MaxMode >= 0 ? MaxMode : 3;
+}
+
 static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, Map_Cut_t * pBestCutBefore, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int fAccepted )
 {
     Map_Node_t * pNodeRegular;
@@ -1863,6 +1870,8 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
         return fAccepted;
     AigId = Map_NodeReadAigId( pNodeRegular );
     if ( AigId != s_Stmap93AigId )
+        return fAccepted;
+    if ( p->fMappingMode > s_Stmap93EmittedDriveTargetMaxMode )
         return fAccepted;
 
     s_nStmap93EmittedRows++;
@@ -2018,7 +2027,7 @@ static int Map_Stmap93MaybeTargetEmittedDrive( Map_Man_t * p, Map_Node_t * pNode
 
 void Map_Stmap93PrintEmittedDriveTargetSummary( void )
 {
-    printf( "%s emitted-relaxed-drive-target stats: target-aig = %d  target-phase = %d  rows = %d  phase-hits = %d  drive-hits = %d  material-drive-hits = %d  eligible = %d  relaxed-eligible = %d  overrides = %d  already-selected = %d  blocked-phase = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-drive = %d  sticky-enabled = %d  sticky-skip-mode3 = %d  sticky-set = %d  sticky-blocked = %d  sticky-allowed-arrival = %d  sticky-allowed-drive = %d  sticky-arrival-allow-window = %.3f  arrival-window = %.3f  area-premium-window = %.3f  exact-area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f  load-drive-ratio-material-gain = %.3f\n",
+    printf( "%s emitted-relaxed-drive-target stats: target-aig = %d  target-phase = %d  rows = %d  phase-hits = %d  drive-hits = %d  material-drive-hits = %d  eligible = %d  relaxed-eligible = %d  overrides = %d  already-selected = %d  blocked-phase = %d  blocked-mode = %d  blocked-best = %d  blocked-window = %d  blocked-drive = %d  sticky-enabled = %d  sticky-skip-mode3 = %d  max-mode = %d  sticky-set = %d  sticky-blocked = %d  sticky-allowed-arrival = %d  sticky-allowed-drive = %d  sticky-arrival-allow-window = %.3f  arrival-window = %.3f  area-premium-window = %.3f  exact-area-premium-window = %.3f  area-ratio-window = %.3f  load-drive-ratio-min-gain = %.3f  load-drive-ratio-material-gain = %.3f\n",
         s_pStmap93EmittedDriveTargetLabel, s_Stmap93AigId, s_Stmap93Phase,
         s_nStmap93EmittedRows, s_nStmap93EmittedPhaseHits, s_nStmap93EmittedDriveHits,
         s_nStmap93EmittedMaterialDriveHits, s_nStmap93EmittedEligible,
@@ -2026,7 +2035,8 @@ void Map_Stmap93PrintEmittedDriveTargetSummary( void )
         s_nStmap93EmittedAlready, s_nStmap93EmittedBlockedPhase,
         s_nStmap93EmittedBlockedMode, s_nStmap93EmittedBlockedBest,
         s_nStmap93EmittedBlockedWindow, s_nStmap93EmittedBlockedDrive,
-        s_fStmap93EmittedDriveTargetStickyOverride, s_fStmap93EmittedStickySkipMode3, s_nStmap93EmittedStickySet,
+        s_fStmap93EmittedDriveTargetStickyOverride, s_fStmap93EmittedStickySkipMode3,
+        s_Stmap93EmittedDriveTargetMaxMode, s_nStmap93EmittedStickySet,
         s_nStmap93EmittedStickyBlocked, s_nStmap93EmittedStickyAllowedArrival,
         s_nStmap93EmittedStickyAllowedDrive, s_Stmap93EmittedStickyArrivalAllowWindow, 0.75f, 1.20f, 2.20f,
         2.50f, 0.05f, 2.00f );

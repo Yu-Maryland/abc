@@ -5567,3 +5567,44 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap97: skip sticky in mode three`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap98`, stop forcing the emitted-drive survivor and instead use the emitted-drive target as a diagnostic or mode-2-only probe that clears before mode 3. `stmap97` shows full mode-3 sticky-veto freedom is not enough to recover `stmap94`; the remaining difference is likely that the emitted-drive override itself still biases mode-3 candidate selection.
+
+
+## version98 / stmap98
+
+- hypothesis: The emitted-drive target hook itself may still bias mode-3 phase-aware recovery even when the sticky veto is skipped. Limiting the hook to mapper modes through mode 2 should let mode 3 run without emitted-drive targeting.
+- motivation: `stmap97` matched `stmap96` exactly on `or1200`, keeping the `OAI22` survivor and `564.80 ps` delay. Since mode-3 sticky-veto freedom did not recover `stmap94`, `stmap98` disables the emitted-drive hook itself after mode 2.
+- command name: `stmap98`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_98.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap98/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap98` adds `Map_Stmap93SetEmittedDriveTargetMaxMode()` to the existing emitted-drive hook. The default max mode remains `3`, preserving older commands. `stmap98` sets max mode `2` around watched networks, so mode 3 bypasses the emitted-drive hook entirely, and resets max mode to `3` after the run.
+- validation run:
+  - build, help, smoke, path-normalization, stale-state, implementation checks, full benchmark evaluation, and CEC passed. Logs and parsed artifacts are under `.autoeda/runtime/results/stmap98/`.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps`, area delta `+39.66`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps`, area delta `-1156.83`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `564.80 ps`, area `4858.76`; delay delta `-22.28 ps`, area delta `+60.42`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps`, area delta `+906.99`.
+- diagnostic results:
+  - `or1200` emitted-drive stats reported `max-mode = 2`, fewer target rows than `stmap97`, `1` sticky-set row, `1` sticky-blocked row, and reconstruction still emitted `OAI22xp33_ASAP7_75t_L` for AIG `11491` phase `0`.
+  - Final QoR remained identical to `stmap96` and `stmap97`, so mode-3 emitted-drive hook activity was not the remaining source of the gap to `stmap94`.
+- correctness results:
+  - build, numbered implementation, command registration, command help, smoke, metrics, CEC, diagnostics, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict.
+  - supported stdin review completed with exit `0`; no actionable findings were reported.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict.
+  - supported stdin review completed with exit `0`; no actionable findings were reported.
+- rejected findings: none.
+- open findings: none.
+- source changes after final review: none; only runtime review summary, canonical version log, version-log check, artifact check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap98: limit emitted target to mode two`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap99`, stop changing the forced emitted-drive policy and use the final iteration as a controlled rollback/summary probe: expose a command that preserves the stmap94 behavior while retaining the added diagnostics, confirming the best local endpoint for the final report.

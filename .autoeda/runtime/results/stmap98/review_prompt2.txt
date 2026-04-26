@@ -1,0 +1,11 @@
+Second review pass for the final uncommitted stmap98 implementation.
+
+No source changes were made after review pass 1. Review pass 1 reported no actionable correctness, build, stale-state, or diagnostic regressions.
+
+stmap98 summary:
+- Adds `stmap98`.
+- Adds a gated `Map_Stmap93SetEmittedDriveTargetMaxMode()` setter.
+- Keeps the emitted-drive target active only through mapper mode 2 for watched networks, then resets the default max mode to 3.
+- Build, help, smoke, path-normalization, stale-state, full evaluation, and CEC passed.
+
+Please check for any remaining source, build integration, stale-state, older-command regression, diagnostic, or campaign-contract issues.
