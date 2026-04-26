@@ -30,6 +30,7 @@ extern int Map_Stmap60NearMissLeafDiagEnabled( void );
 extern int Map_Stmap60NearMissLeafDiagTarget( void );
 extern int Map_Stmap61CutOnlyGateDiagEnabled( void );
 extern int Map_Stmap61CutOnlyGateDiagTarget( void );
+extern int Map_Stmap66NearStrongNodeLoadDropDiagEnabled( void );
 
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
@@ -364,6 +365,9 @@ ABC_PRT( "Time", Abc_Clock() - clk );
             p->nStmap61CutOnlyEntryFail, p->nStmap61CutOnlyAgreementBlocked,
             p->nStmap61CutOnlyNodeZeroFail, p->nStmap61CutOnlyCutBandFail,
             p->nStmap61CutOnlyArrivalFail, p->nStmap61CutOnlySlackFail );
+    if ( p->fSkipFanout == 57 && Map_Stmap66NearStrongNodeLoadDropDiagEnabled() )
+        printf( "stmap66 near-strong-node load-drop stats: near-band = %d  area-cap-pass = %d\n",
+            p->nStmap66NearStrongNodeLoadDrop, p->nStmap66NearStrongNodeAreaCapPass );
 
     // print the arrival times of the latest outputs
     if ( p->fVerbose )

@@ -1419,6 +1419,7 @@ static int s_Stmap61CutOnlyGateDiagTarget = -1;
 static int s_fStmap62CutOnlyBeforeModerate = 0;
 static int s_fStmap63CutOnlyLoadDropGuard = 0;
 static int s_fStmap65StrongNodeLoadDropGuard = 0;
+static int s_fStmap66NearStrongNodeLoadDropDiag = 0;
 #define MAP_STMAP64_MAX_WITNESSES 16
 static int s_fStmap64CutOnlyWitnessDiag = 0;
 static int s_nStmap64CutOnlyWitnesses = 0;
@@ -1493,6 +1494,16 @@ void Map_Stmap63SetCutOnlyLoadDropGuard( int fEnable )
 void Map_Stmap65SetStrongNodeLoadDropGuard( int fEnable )
 {
     s_fStmap65StrongNodeLoadDropGuard = fEnable;
+}
+
+void Map_Stmap66SetNearStrongNodeLoadDropDiag( int fEnable )
+{
+    s_fStmap66NearStrongNodeLoadDropDiag = fEnable;
+}
+
+int Map_Stmap66NearStrongNodeLoadDropDiagEnabled( void )
+{
+    return s_fStmap66NearStrongNodeLoadDropDiag;
 }
 
 void Map_Stmap64ClearCutOnlyWitnesses( void )
@@ -1894,6 +1905,25 @@ static int Map_MatchStmap65HasStrongNodeLoadDropCutOnlyPressureException( float 
     if ( !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
         return 0;
     if ( NodePressureRatio < 1.25 || NodePressureRatio > 1.55 )
+        return 0;
+    if ( CutPressureRatio < 1.95 || CutPressureRatio > 2.20 )
+        return 0;
+    if ( ArrivalDelta > -2.0 * ArrivalGainMargin - Epsilon )
+        return 0;
+    if ( Slack < SlackMargin + Epsilon )
+        return 0;
+    return 1;
+}
+
+static int Map_MatchStmap66HasNearStrongNodeLoadDropCandidate( float NodePressureRatio, float CutPressureRatio, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon )
+{
+    if ( s_Stmap45SclFeedback < 0.85 || s_nStmap45SclPressureEntries < 8000 )
+        return 0;
+    if ( Map_MatchStmap45HasPressureAgreement( NodePressureRatio, CutPressureRatio ) )
+        return 0;
+    if ( !Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, Epsilon ) )
+        return 0;
+    if ( NodePressureRatio < 1.15 || NodePressureRatio >= 1.25 )
         return 0;
     if ( CutPressureRatio < 1.95 || CutPressureRatio > 2.20 )
         return 0;
@@ -2507,6 +2537,7 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
     int fStmap54ModerateSoftSeed, fStmap54ModeratePenaltyCandidate, fStmap54ModeratePressureAgreement, fStmap54ModerateAreaCap, fStmap54ModeratePressureNear, fStmap54CutOnlyPressure, fStmap54StrongPenaltyCandidate, Stmap54FanLimit, Stmap54NodeAigId;
     int fStmap55ModerateSoftSeed, fStmap55ModeratePenaltyCandidate, fStmap55ModeratePressureAgreement, fStmap55ModerateAreaCap, fStmap55ModeratePressureNear, fStmap55CutOnlyPressureRaw, fStmap55CutOnlyPressure, fStmap55CutOnlyAreaCapBlocked, fStmap55StrongPenaltyCandidate, Stmap55FanLimit, Stmap55NodeAigId;
     int fStmap56ModerateSoftSeed, fStmap56ModeratePenaltyCandidate, fStmap56ModeratePressureAgreement, fStmap56ModerateAreaCap, fStmap56ModeratePressureNear, fStmap56CutOnlyPressureRaw, fStmap56CutOnlyPressure, fStmap56CutOnlyAreaCapBlocked, fStmap56StrongPenaltyCandidate, Stmap56FanLimit, Stmap56NodeAigId;
+    int fStmap66NearStrongNodeLoadDrop;
 
     if ( p->fSkipFanout < 7 || p->fSkipFanout > 57 )
         return 0;
@@ -3111,6 +3142,25 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                     fStmap56CutOnlyPressure = 1;
                 else
                     fStmap56CutOnlyAreaCapBlocked = 1;
+            }
+            fStmap66NearStrongNodeLoadDrop =
+                s_fStmap66NearStrongNodeLoadDropDiag &&
+                p->fSkipFanout == 57 &&
+                fStmap56ModerateSoftSeed &&
+                !fStmap56CutOnlyPressureRaw &&
+                Map_MatchStmap66HasNearStrongNodeLoadDropCandidate( Stmap56NodePressureRatio, Stmap56CutPressureRatio, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+            if ( fStmap66NearStrongNodeLoadDrop )
+            {
+                int fAreaCapPass = Map_MatchStmap56CutOnlyAreaCapPass( AreaSave, OneInvArea, p->fEpsilon );
+                p->nStmap66NearStrongNodeLoadDrop++;
+                if ( fAreaCapPass )
+                    p->nStmap66NearStrongNodeAreaCapPass++;
+                if ( p->nStmap66NearStrongNodeLoadDrop <= 64 )
+                    printf( "stmap66 near-strong-node load-drop diag: index = %d  node = %d  aig-id = %d  level = %u  refs = %d  leaves = %d  phase = %d  area-cap-pass = %d  slack = %.6f  area-save = %.6f  area-save-cap = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  pressure-entries = %d  scl-feedback = %.3f\n",
+                        p->nStmap66NearStrongNodeLoadDrop, pNode->Num, Stmap56NodeAigId, pNode->Level, pNode->nRefs,
+                        pCut->nLeaves, fPhase, fAreaCapPass, Slack, AreaSave, 1.35 * OneInvArea,
+                        ArrivalDelta, ArrivalGainMargin, Stmap56NodePressureRatio, Stmap56CutPressureRatio,
+                        s_nStmap45SclPressureEntries, s_Stmap45SclFeedback );
             }
             fStrictFallback =
                 p->fSkipFanout == 15 ||

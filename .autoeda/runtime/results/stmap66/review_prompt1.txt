@@ -1,0 +1,16 @@
+Review the uncommitted stmap66 implementation in this ABC repository for correctness and campaign-policy issues.
+
+Context:
+- stmap66 is a command-scoped diagnostic version.
+- It should preserve classic map and older stmap0..stmap65 behavior.
+- It reuses the reviewed stmap65 mapping policy and only enables a new mapper-side diagnostic for near-threshold strong-node load-drop candidates with node pressure in [1.15, 1.25).
+- Required command help, build, smoke, full benchmark metrics, and CEC have passed.
+
+Please focus on:
+1. Whether stmap66 can accidentally change stmap65 or older command behavior.
+2. Whether the new global diagnostic flag is scoped/reset correctly.
+3. Whether mapper counters and prints are safe, parseable, and not misleading.
+4. Whether command registration/build integration is complete.
+5. Any correctness or reproducibility concern that should block counting this iteration.
+
+Return findings first, with severity and file/line references. If there are no blocking findings, say so explicitly.

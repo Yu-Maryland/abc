@@ -3711,3 +3711,63 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap65: tighten load-drop cut-only pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap66`, keep the `1.25` node-pressure minimum and add a diagnostic for near-miss strong-node load-drop candidates with node pressure in `[1.15, 1.25)`. If any such candidate later shows final criticality at least `0.50` or materially higher final load pressure, test a narrow adaptive node-pressure threshold; otherwise continue tightening around final-criticality evidence instead of widening one-sided cut-pressure admission.
+
+
+## version66 / stmap66
+
+- hypothesis: Keep the reviewed `stmap65` strong-node load-drop guard unchanged and add a command-scoped diagnostic for near-threshold load-drop candidates with node pressure in `[1.15, 1.25)`. This tests whether any blocked candidate sits close enough to the `1.25` threshold to justify a future adaptive threshold experiment.
+- motivation: `stmap65` blocked the prior low-final-criticality load-drop seed by requiring node pressure at least `1.25`. The next safe step is diagnostic only: identify near-threshold candidates without changing mapper admission or final QoR policy.
+- command name: `stmap66`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_66.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperInt.h`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap66/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap66` preserves the `stmap65` mapping policy by enabling the existing strong-node load-drop guard and reusing mapper mode `57`, bounded SCL pressure transfer, selected gain policy, and inherited `1.35x` inverter area-save cap. The only new mapper behavior is diagnostic: while `stmap66` is active, `Map_Stmap66SetNearStrongNodeLoadDropDiag(1)` counts and prints candidates that satisfy the severe feedback, pressure-entry, no-pressure-agreement, moderate deep-seed gain, cut-pressure, arrival, and slack gates, but whose node pressure is in `[1.15, 1.25)` rather than the admitted `[1.25, 1.55]` band. The diagnostic flag is reset after the delegated `stmap65` command returns and does not alter match selection.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap66/build.log`.
+  - help: `./abc -c "stmap66 -h"` printed `stmap66` usage. Log: `.autoeda/runtime/results/stmap66/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap66; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap66/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap66/summary.json`, `metrics.csv`, `comparison.csv`, feedback/bounded-pressure/blended-gain/mapper-mode/sink-pressure diagnostics, inherited guard/near-miss/early-seed/penalty diagnostics, cut-only gate diagnostics, near-miss leaf diagnostics, new near-strong-node load-drop diagnostics, raw baseline/candidate logs, CEC temporaries and logs, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`.
+- near-threshold diagnostic results:
+  - `i10`, `ode`, and `or1200` had `0` near-band candidates.
+  - `syn2` had `1` near-band candidate, and it passed the inherited area cap: mapper node `12167`, AIG ID `13915`, phase `1`, node pressure `1.165`, cut pressure `2.100`, slack `6.739990`, area save `0.930000`, area cap `0.945000`, arrival delta `-4.720001`, arrival-gain margin `1.510000`, pressure entries `8980`, and feedback severity `0.884`.
+  - This is the same load-drop seed family previously shown by `stmap64` to survive final `stime` with final load ratio `0.039` and final criticality `0.272`, so the diagnostic does not support widening the node-pressure threshold yet.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_66.c`.
+  - numbered command exists and is registered as `stmap66`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - near-strong-node diagnostics, feedback, bounded-pressure, blended-gain, mapper-mode, sink-pressure, inherited guard, inherited early-seed, inherited near-miss, inherited penalty, cut-only gate, and near-miss leaf diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap66/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap66/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap66/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap66/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap66/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap66/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap66/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no discrete correctness, build, or maintainability findings.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap66/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap66/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no discrete correctness issues and noted the wrapper/diagnostic is command-scoped and non-mutating.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap66: diagnose near-threshold load-drop seeds`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap67`, do not lower the strong-node threshold based on this diagnostic alone. The only near-band candidate is the already-observed low-final-criticality `syn2` seed, so the next useful step is either a downstream final-witness diagnostic for near-band candidates before admission or a stricter final-criticality/load-pressure filter, rather than widening one-sided cut-pressure admission.
