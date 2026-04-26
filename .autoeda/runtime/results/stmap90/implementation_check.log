@@ -1,0 +1,6 @@
+OK src/base/abci/abcStmap_90.c
+OK src/base/abci/abc.c: stmap90
+OK src/base/abci/module.make: abcStmap_90.c
+OK abclib.dsp: abcStmap_90.c
+OK src/map/mapper/mapperMatch.c: Map_Stmap90SetConsumerDriveTarget
+OK src/base/abci/abcStmap_65.c: Map_Stmap90SetConsumerDriveTargetActive

@@ -5142,3 +5142,57 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap89: target final consumer phase pairs`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap90`, stop spending iterations on phase-pair tie overrides alone. Since final-consumer alignment still leaves final QoR unchanged, the next probe should target a downstream-visible quantity such as consumer drive/load, fanout load ratio, or reconstruction gate class rather than simply preserving a mapper-equivalent phase/cut tie.
+
+
+## version90 / stmap90
+
+- hypothesis: A final-consumer drive/load target is more likely to affect downstream `buffer`, sizing, and `stime` than another phase-pair tie override. If a candidate for the watched parent/child phase pair improves a mapper drive proxy, either by increasing the selected supergate fanout limit or reducing cut-load divided by fanout limit, then allowing that candidate within bounded exact-area windows may expose downstream-visible topology changes.
+- motivation: `stmap89` showed that benchmark-specific final-consumer phase-pair overrides fired on all four required designs but final QoR stayed unchanged. That result suggests the phase/cut changes were mapper-equivalent ties. `stmap90` keeps the same final consumer pairs but adds a drive/load condition so only candidates with a downstream-facing signal are considered.
+- command name: `stmap90`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_90.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap90/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap90` adds `Map_Stmap90SetConsumerDriveTarget()` in `mapperMatch.c`. The helper is inactive by default and is activated by `stmap65` only around the final remap when explicitly configured by `stmap90`. During exact-area modes `2` and `3`, it may override a non-selected parent match only when the watched parent is in the benchmark-specific target phase, the candidate consumes the watched child in the benchmark-specific target phase, arrival delta is at most `0.50 ps`, area-flow premium is at most `1.20`, area ratio is at most `2.50x`, and the candidate improves fanout limit or cut-load/fanout-limit ratio by at least `0.05`. It logs `consumer-drive-target` rows and summary stats for the watched pair. Older commands remain gated off.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap90/build.log`.
+  - help: `./abc -c "stmap90 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap90/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap90; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap90/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` selected child AIG `855`, parent AIG `861`, target parent phase `1`, target child phase `0`, and zero selected-match rows without a library as expected. Log: `.autoeda/runtime/results/stmap90/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then an unknown AIG; the second command reported selected-watch count `0`, consumer-drive target disabled, selected-match rows `0`, and consumer-drive-target rows `0`. Log: `.autoeda/runtime/results/stmap90/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap90/summary.json`, `metrics.csv`, `comparison.csv`, `consumer_drive_target.csv`, `consumer_drive_target_stats.csv`, selected-match diagnostics, phase-survival diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- consumer-drive-target diagnostic results:
+  - `i10`: target parent phase `1`, child phase `0`; `15` rows, `5` target-child hits, `1` drive-improved row, `0` eligible exact-area overrides, and `2` blocked-drive exact-area rows.
+  - `ode`: target parent phase `0`, child phase `1`; `28` rows, `6` target-child hits, `1` drive-improved row, `0` eligible exact-area overrides, and `2` blocked-drive exact-area rows.
+  - `or1200`: target parent phase `1`, child phase `0`; `17` rows, `7` target-child hits, `2` drive-improved rows, `0` eligible exact-area overrides, `1` blocked-window row, and `2` blocked-drive exact-area rows.
+  - `syn2`: target parent phase `1`, child phase `1`; `24` rows, `6` target-child hits, `0` same-phase drive-improved rows, and `2` blocked-drive exact-area rows.
+  - The drive/load signal appears in earlier mapping modes, but exact-area modes mostly revisit the same selected gate and cut. This makes `stmap90` a controlled negative result: it confirms that downstream-visible drive alternatives were not available at the current exact-area override point.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_90.c`.
+  - numbered command exists and is registered as `stmap90`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - consumer-drive-target, selected-match, phase-survival, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no discrete correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues. The review noted the hook is gated and build/command integration is consistent with the versioned mapper pattern.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap90: target consumer drive load`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap91`, move the drive/load preference earlier than the exact-area override point or target reconstruction gate class directly. `stmap90` found drive-improved candidates in delay/area-flow modes but none eligible in exact-area modes, so a useful next probe is a tightly scoped mode-1 drive/load tie-break for the same final-consumer pairs, or a reconstruction-side policy that tests whether final emitted gate class/pin polarity rather than mapper cut choice is what downstream `stime` sees.

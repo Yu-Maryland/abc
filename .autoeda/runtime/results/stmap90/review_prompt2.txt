@@ -1,0 +1,10 @@
+Second review pass for stmap90. The first supported review found no discrete correctness issues.
+
+Please focus narrowly on residual risks in the final uncommitted patch:
+- stmap90 hook in mapperMatch.c should be inactive unless configured and activated.
+- stmap65 should activate/deactivate stmap90 in the same final-remap windows as stmap87-89.
+- stmap90 should not change stmap89, older stmap commands, or classic map behavior.
+- Build registration should include src/base/abci/abcStmap_90.c and command registration should expose stmap90.
+- Generated eval artifacts should be sufficient for the campaign gate.
+
+Report actionable findings only; if none, say there are no actionable correctness issues.
