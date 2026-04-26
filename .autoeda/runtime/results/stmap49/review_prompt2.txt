@@ -1,0 +1,3 @@
+Second review pass for the uncommitted stmap49 AutoEDA iteration.
+
+No source changes were made after review pass 1. Re-check for concrete correctness risks in the new stmap49 command, command registration/build wiring, preservation of existing stmap commands, benchmark/CEC artifact completeness, and parser/log consistency. Focus on issues that should block counting the iteration.

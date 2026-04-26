@@ -1,0 +1,5 @@
+Review the uncommitted stmap49 AutoEDA iteration in this ABC repository.
+
+Focus on correctness risks in the new stmap49 command, command registration and build wiring, preservation of existing map and stmap0 through stmap48 behavior, benchmark/CEC artifact completeness, and parser/logging consistency. The intended hypothesis is a versioned command that reuses the stmap45 pressure-agreement mapper mode and stmap48 first-pass SCL pressure selector, but uses an intermediate high-pressure final gain of 0.90 * base_gain, default 225, instead of stmap48's 0.80 * base_gain.
+
+Report concrete blocking bugs, behavioral regressions, missing correctness gates, or incomplete campaign logging. Do not comment on unrelated historical stmap implementations unless the new change breaks them.
