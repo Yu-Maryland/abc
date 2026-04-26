@@ -1416,6 +1416,7 @@ static int s_fStmap60NearMissLeafDiag = 0;
 static int s_Stmap60NearMissLeafDiagTarget = -1;
 static int s_fStmap61CutOnlyGateDiag = 0;
 static int s_Stmap61CutOnlyGateDiagTarget = -1;
+static int s_fStmap62CutOnlyBeforeModerate = 0;
 
 void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
 {
@@ -1462,6 +1463,11 @@ int Map_Stmap61CutOnlyGateDiagEnabled( void )
 int Map_Stmap61CutOnlyGateDiagTarget( void )
 {
     return s_Stmap61CutOnlyGateDiagTarget;
+}
+
+void Map_Stmap62SetCutOnlyOrdering( int fEnable )
+{
+    s_fStmap62CutOnlyBeforeModerate = fEnable;
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -1603,14 +1609,14 @@ static void Map_MatchStmap61PrintCutOnlyGateDiag( Map_Man_t * p, Map_Node_t * pN
     fSlackGate = Slack >= SlackMargin + p->fEpsilon;
     fAreaCapGate = OneInvArea > 0.0 && AreaSave <= 1.35 * OneInvArea + p->fEpsilon;
     fPrimitivePass = fFeedbackGate && fEntryGate && !fPressureAgreement && fModerateGainGate && fNodeZeroGate && fCutBandGate && fArrivalStrongGate && fSlackGate;
-    fRawExpected = fModeratePenaltyCandidate && fPrimitivePass;
-    pFirstBlocker = Map_MatchStmap61CutOnlyFirstBlocker( fModerateSoftSeed, fModeratePenaltyCandidate, fPressureAgreement, fPressureNear, fFeedbackGate, fEntryGate, fModerateGainGate, fNodeZeroGate, fCutBandGate, fArrivalStrongGate, fSlackGate, fAreaCapGate );
+    fRawExpected = (fModeratePenaltyCandidate || s_fStmap62CutOnlyBeforeModerate) && fPrimitivePass;
+    pFirstBlocker = fCutOnlyPressure ? "none" : Map_MatchStmap61CutOnlyFirstBlocker( fModerateSoftSeed, fModeratePenaltyCandidate, fPressureAgreement, fPressureNear, fFeedbackGate, fEntryGate, fModerateGainGate, fNodeZeroGate, fCutBandGate, fArrivalStrongGate, fSlackGate, fAreaCapGate );
     p->nStmap61CutOnlyGateDiag++;
     if ( fPrimitivePass )
         p->nStmap61CutOnlyPrimitivePass++;
     if ( fCutOnlyRaw )
         p->nStmap61CutOnlyRawPass++;
-    if ( fPrimitivePass && !fModeratePenaltyCandidate )
+    if ( fPrimitivePass && !fModeratePenaltyCandidate && !fCutOnlyPressure )
         p->nStmap61CutOnlyRawBlockedByModerate++;
     if ( fModeratePenaltyCandidate && !fPrimitivePass )
         p->nStmap61CutOnlyRawBlockedByPrimitive++;
@@ -1780,6 +1786,13 @@ static float Map_MatchStmap54ModeratePenaltyFactor( Map_Node_t * pNode, Map_Cut_
         return Penalty;
     if ( pPressureNear && *pPressureNear )
         return 0.0;
+    if ( s_fStmap62CutOnlyBeforeModerate &&
+         Map_MatchStmap54HasCutOnlyPressureException( pNodePressureRatio ? *pNodePressureRatio : 0.0, pCutPressureRatio ? *pCutPressureRatio : 0.0, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
+    {
+        if ( pCutOnlyPressure )
+            *pCutOnlyPressure = 1;
+        return 0.0;
+    }
     if ( !Map_MatchIsStmap28ModeratePenaltyCandidate( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )
         return 0.0;
     if ( Map_MatchStmap54HasCutOnlyPressureException( pNodePressureRatio ? *pNodePressureRatio : 0.0, pCutPressureRatio ? *pCutPressureRatio : 0.0, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon ) )

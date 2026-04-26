@@ -1,0 +1,5 @@
+benchmark,tracked_node,hits,primitive_pass,raw_pass,raw_blocked_by_moderate,raw_blocked_by_primitive,area_cap_pass,area_cap_blocked,accepted,soft_seed_fail,moderate_candidate_fail,feedback_fail,entry_fail,agreement_blocked,node_zero_fail,cut_band_fail,arrival_fail,slack_fail
+benchmarks/i10.aig,23628,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+benchmarks/ode.abc.blif,23628,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+benchmarks/or1200.abc.blif,23628,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+benchmarks/syn2.abc.blif,23628,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0

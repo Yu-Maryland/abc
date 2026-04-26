@@ -1,0 +1,24 @@
+Review the uncommitted stmap62 iteration for correctness and campaign compliance.
+
+Context:
+- Project pack requires a new numbered ABC mapper command stmap62, preserving all previous stmapN commands.
+- Hypothesis: keep the reviewed stmap61 bounded-pressure two-pass flow, but during the final remap open the mode-57 cut-only pressure exception before the moderate-candidate gate for severe-feedback events. This tests whether the stmap61-diagnosed syn2 node 23628 cut-only event can be admitted without breaking correctness.
+- Implementation files of interest:
+  - src/base/abci/abcStmap_62.c
+  - src/base/abci/abc.c
+  - src/base/abci/module.make
+  - src/map/mapper/mapperMatch.c
+  - abclib.dsp
+  - .autoeda/runtime/results/stmap62/*
+- Validation already run:
+  - make ABC_USE_NO_READLINE=1
+  - ./abc -c "stmap62 -h"
+  - smoke flow on benchmarks/i10.aig
+  - full baseline/candidate evaluation on all four required benchmarks
+  - CEC on all four required benchmarks using strashed AIG temporaries
+
+Please prioritize:
+- Any source correctness bugs, global-state leakage, command-registration/build-integration issues, or older stmap command regressions.
+- Whether the command-scoped mapper flag can accidentally affect classic map or prior stmap commands.
+- Whether the evaluation artifacts are complete and parseable enough for the project-pack contract.
+- Any required revalidation if you recommend a source change.

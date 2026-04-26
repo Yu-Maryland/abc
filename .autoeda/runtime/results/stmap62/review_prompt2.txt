@@ -1,0 +1,16 @@
+Second review pass for stmap62 after pass 1 reported no actionable findings.
+
+Changes since pass 1:
+- Non-semantic source metadata fix: src/base/abci/abcStmap_62.c now has the correct FileName header.
+- Revalidated build, command help, and i10 smoke after that metadata fix.
+
+Please review the final uncommitted stmap62 source and artifacts for:
+- Any remaining source correctness issue or global flag leakage.
+- Any build integration or command registration gap.
+- Any campaign-contract issue that would prevent counting stmap62 after the already completed full benchmark evaluation and CEC.
+
+The intended source behavior remains:
+- stmap62 is a new command.
+- It reuses reviewed bounded-pressure mode 57.
+- Only during the stmap62 final remap, Map_Stmap62SetCutOnlyOrdering(1) lets the cut-only pressure exception be tested before the moderate-candidate gate.
+- The flag is reset immediately after the final remap and is initialized off before command execution.
