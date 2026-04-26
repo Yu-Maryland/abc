@@ -1,0 +1,10 @@
+artifact_check: required_files = 80
+build.exit: 0
+help.exit: 0
+smoke_i10.exit: 0
+evaluation.exit: 0
+review_pass1.exit: 0
+review_pass2.exit: 0
+comparison_rows: 4
+cec_rows: 4
+artifact_check: PASS

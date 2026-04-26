@@ -1,0 +1,3692 @@
+OpenAI Codex v0.124.0 (research preview)
+--------
+workdir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019dc876-8890-76f1-aedb-cac886d0a13e
+--------
+user
+current changes
+exec
+/bin/zsh -lc 'git status --short && git rev-parse --show-toplevel' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+ M .autoeda/runtime/campaign_state.json
+ M .autoeda/runtime/last_prompt.txt
+ M abclib.dsp
+ M src/base/abci/abc.c
+ M src/base/abci/module.make
+?? .autoeda/runtime/results/stmap51/
+?? src/base/abci/abcStmap_51.c
+/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+
+exec
+/bin/zsh -lc 'git diff --stat && git diff -- abclib.dsp src/base/abci/abc.c src/base/abci/module.make src/base/abci/abcStmap_51.c' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 103ms:
+exec
+/bin/zsh -lc "ls -R .autoeda/runtime/results/stmap51 src/base/abci/abcStmap_51.c && wc -l src/base/abci/abcStmap_51.c && sed -n '1,240p' src/base/abci/abcStmap_51.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/base/abci/abcStmap_51.c
+
+.autoeda/runtime/results/stmap51:
+baseline_benchmarks_i10_aig.exit
+baseline_benchmarks_i10_aig.log
+baseline_benchmarks_ode_abc_blif.exit
+baseline_benchmarks_ode_abc_blif.log
+baseline_benchmarks_or1200_abc_blif.exit
+baseline_benchmarks_or1200_abc_blif.log
+baseline_benchmarks_syn2_abc_blif.exit
+baseline_benchmarks_syn2_abc_blif.log
+build.exit
+build.log
+candidate_benchmarks_i10_aig.exit
+candidate_benchmarks_i10_aig.log
+candidate_benchmarks_ode_abc_blif.exit
+candidate_benchmarks_ode_abc_blif.log
+candidate_benchmarks_or1200_abc_blif.exit
+candidate_benchmarks_or1200_abc_blif.log
+candidate_benchmarks_syn2_abc_blif.exit
+candidate_benchmarks_syn2_abc_blif.log
+cec_benchmarks_i10_aig.exit
+cec_benchmarks_i10_aig.log
+cec_benchmarks_i10_aig_orig.aig
+cec_benchmarks_i10_aig_orig_write.exit
+cec_benchmarks_i10_aig_orig_write.log
+cec_benchmarks_i10_aig_stmap51.aig
+cec_benchmarks_i10_aig_stmap51_write.exit
+cec_benchmarks_i10_aig_stmap51_write.log
+cec_benchmarks_ode_abc_blif.exit
+cec_benchmarks_ode_abc_blif.log
+cec_benchmarks_ode_abc_blif_orig.aig
+cec_benchmarks_ode_abc_blif_orig_write.exit
+cec_benchmarks_ode_abc_blif_orig_write.log
+cec_benchmarks_ode_abc_blif_stmap51.aig
+cec_benchmarks_ode_abc_blif_stmap51_write.exit
+cec_benchmarks_ode_abc_blif_stmap51_write.log
+cec_benchmarks_or1200_abc_blif.exit
+cec_benchmarks_or1200_abc_blif.log
+cec_benchmarks_or1200_abc_blif_orig.aig
+cec_benchmarks_or1200_abc_blif_orig_write.exit
+cec_benchmarks_or1200_abc_blif_orig_write.log
+cec_benchmarks_or1200_abc_blif_stmap51.aig
+cec_benchmarks_or1200_abc_blif_stmap51_write.exit
+cec_benchmarks_or1200_abc_blif_stmap51_write.log
+cec_benchmarks_syn2_abc_blif.exit
+cec_benchmarks_syn2_abc_blif.log
+cec_benchmarks_syn2_abc_blif_orig.aig
+cec_benchmarks_syn2_abc_blif_orig_write.exit
+cec_benchmarks_syn2_abc_blif_orig_write.log
+cec_benchmarks_syn2_abc_blif_stmap51.aig
+cec_benchmarks_syn2_abc_blif_stmap51_write.exit
+cec_benchmarks_syn2_abc_blif_stmap51_write.log
+cec_summary.json
+comparison.csv
+early_seed_stats.csv
+eval_driver.log
+evaluation.exit
+feedback_stats.csv
+guard_stats.csv
+help.exit
+help.log
+mapper_mode_stats.csv
+metrics.csv
+midpoint_gain_stats.csv
+near_miss_stats.csv
+penalty_stats.csv
+review_pass1.exit
+review_pass1.log
+review_pass1_positional.exit
+review_pass1_positional.log
+review_pass2.log
+review_pass2_positional.exit
+review_pass2_positional.log
+review_prompt1.txt
+review_prompt2.txt
+run_stmap51_eval.py
+sink_pressure_stats.csv
+smoke_i10.exit
+smoke_i10.log
+summary.json
+     742 src/base/abci/abcStmap_51.c
+/**CFile****************************************************************
+
+  FileName    [abcStmap_51.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+
+  Synopsis    [stmap51 command.]
+
+***********************************************************************/
+
+#include "base/abc/abc.h"
+#include "base/main/main.h"
+#include "map/mio/mio.h"
+#include "map/scl/sclLib.h"
+#include "map/scl/sclSize.h"
+#include "misc/extra/extra.h"
+#include <string.h>
+
+ABC_NAMESPACE_IMPL_START
+
+#define ABC_STMAP51_TOP_PRESSURES 10
+#define ABC_STMAP51_TRACK_AIG_ID 5548
+
+typedef struct Abc_Stmap51LoadStats_t_
+{
+    int fAvailable;
+    int nNodes;
+    int nMatched;
+    int nPins;
+    int nOver;
+    int nHotspotRoots;
+    int nHotspotFanin;
+    int nHotspotFanout;
+    int nPressureEntries;
+    int nPressureUpdates;
+    int nPressureMissed;
+    int nSinkPressureEntries;
+    int nSinkPressureUpdates;
+    int nAigPressureRatios;
+    int nCriticalNodes;
+    int TrackedNode;
+    float RatioSum;
+    float RatioMax;
+    float TrackedRatio;
+    float TrackedSinkRatio;
+    float TimingDelay;
+    float CriticalitySum;
+    float CriticalityMax;
+    float * pAigPressureRatios;
+    float * pAigSinkPressureRatios;
+    float TopRatios[5];
+    float TopLoads[5];
+    float TopCaps[5];
+    const char * pTopGates[5];
+    int TopNodes[5];
+    int TopFanouts[5];
+    int TopPressureAigIds[ABC_STMAP51_TOP_PRESSURES];
+    int TopPressureNodes[ABC_STMAP51_TOP_PRESSURES];
+    float TopPressureRatios[ABC_STMAP51_TOP_PRESSURES];
+} Abc_Stmap51LoadStats_t;
+
+static void Abc_Stmap51LoadStatsClear( Abc_Stmap51LoadStats_t * pStats )
+{
+    memset( pStats, 0, sizeof(Abc_Stmap51LoadStats_t) );
+}
+
+static void Abc_Stmap51LoadStatsFree( Abc_Stmap51LoadStats_t * pStats )
+{
+    ABC_FREE( pStats->pAigPressureRatios );
+    ABC_FREE( pStats->pAigSinkPressureRatios );
+    pStats->nAigPressureRatios = 0;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Inserts one mapped-load diagnostic into the top list.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static void Abc_Stmap51TopInsert( float * pRatios, int * pNodes, const char ** ppGates, int * pFanouts, float * pLoads, float * pCaps, float Ratio, int Node, const char * pGate, int Fanouts, float Load, float Cap )
+{
+    int i, k;
+    if ( Ratio <= pRatios[4] )
+        return;
+    for ( i = 0; i < 5; i++ )
+    {
+        if ( Ratio <= pRatios[i] )
+            continue;
+        for ( k = 4; k > i; k-- )
+        {
+            pRatios[k] = pRatios[k-1];
+            pNodes[k] = pNodes[k-1];
+            ppGates[k] = ppGates[k-1];
+            pFanouts[k] = pFanouts[k-1];
+            pLoads[k] = pLoads[k-1];
+            pCaps[k] = pCaps[k-1];
+        }
+        pRatios[i] = Ratio;
+        pNodes[i] = Node;
+        ppGates[i] = pGate;
+        pFanouts[i] = Fanouts;
+        pLoads[i] = Load;
+        pCaps[i] = Cap;
+        return;
+    }
+}
+
+static int Abc_Stmap51MappedObjAigId( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj )
+{
+    int Lit;
+    if ( pNtk == NULL || pObj == NULL || pNtk->vOrigNodeIds == NULL )
+        return -1;
+    if ( Abc_ObjId(pObj) >= Vec_IntSize(pNtk->vOrigNodeIds) )
+        return -1;
+    Lit = Vec_IntEntry( pNtk->vOrigNodeIds, Abc_ObjId(pObj) );
+    return Lit >= 0 ? Abc_Lit2Var(Lit) : -1;
+}
+
+static void Abc_Stmap51PressureTopInsert( Abc_Stmap51LoadStats_t * pStats, int AigId, int NodeId, float Ratio )
+{
+    int i, k;
+    if ( Ratio <= pStats->TopPressureRatios[ABC_STMAP51_TOP_PRESSURES-1] )
+        return;
+    for ( i = 0; i < ABC_STMAP51_TOP_PRESSURES; i++ )
+    {
+        if ( Ratio <= pStats->TopPressureRatios[i] )
+            continue;
+        for ( k = ABC_STMAP51_TOP_PRESSURES - 1; k > i; k-- )
+        {
+            pStats->TopPressureRatios[k] = pStats->TopPressureRatios[k-1];
+            pStats->TopPressureAigIds[k] = pStats->TopPressureAigIds[k-1];
+            pStats->TopPressureNodes[k] = pStats->TopPressureNodes[k-1];
+        }
+        pStats->TopPressureRatios[i] = Ratio;
+        pStats->TopPressureAigIds[i] = AigId;
+        pStats->TopPressureNodes[i] = NodeId;
+        return;
+    }
+}
+
+static int Abc_Stmap51EnsurePressureCapacity( Abc_Stmap51LoadStats_t * pStats, int AigId )
+{
+    float * pNew, * pNewSink;
+    int i, nOld, nNew;
+    if ( AigId < 0 )
+        return 0;
+    if ( AigId < pStats->nAigPressureRatios )
+        return 1;
+    nOld = pStats->nAigPressureRatios;
+    nNew = nOld ? nOld : 1024;
+    while ( nNew <= AigId )
+        nNew *= 2;
+    pNew = ABC_REALLOC( float, pStats->pAigPressureRatios, nNew );
+    if ( pNew == NULL )
+        return 0;
+    pStats->pAigPressureRatios = pNew;
+    pNewSink = ABC_REALLOC( float, pStats->pAigSinkPressureRatios, nNew );
+    if ( pNewSink == NULL )
+        return 0;
+    pStats->pAigSinkPressureRatios = pNewSink;
+    for ( i = nOld; i < nNew; i++ )
+    {
+        pStats->pAigPressureRatios[i] = 0.0;
+        pStats->pAigSinkPressureRatios[i] = 0.0;
+    }
+    pStats->nAigPressureRatios = nNew;
+    return 1;
+}
+
+static float Abc_Stmap51ObjCriticality( SC_Man * pTime, Abc_Obj_t * pObj )
+{
+    float Slack, Window, Criticality;
+    if ( pTime == NULL || pObj == NULL || pTime->MaxDelay <= 0.0 )
+        return 0.0;
+    if ( Abc_ObjId(pObj) < 0 || Abc_ObjId(pObj) >= pTime->nObjs )
+        return 0.0;
+    Slack = Abc_SclObjGetSlack( pTime, pObj, pTime->MaxDelay );
+    if ( Slack < 0.0 )
+        Slack = 0.0;
+    Window = 0.18 * pTime->MaxDelay;
+    if ( Window < 10.0 )
+        Window = 10.0;
+    Criticality = 1.0 - Slack / Window;
+    if ( Criticality < 0.0 )
+        return 0.0;
+    return Criticality > 1.0 ? 1.0 : Criticality;
+}
+
+static void Abc_Stmap51PressureInsert( Abc_Stmap51LoadStats_t * pStats, int AigId, int NodeId, float Ratio, float SinkCriticality )
+{
+    float OldRatio, OldSinkRatio, SinkWeight, SinkRatio;
+    if ( AigId < 0 || Ratio <= 1.0 )
+        return;
+    if ( SinkCriticality < 0.0 )
+        SinkCriticality = 0.0;
+    if ( SinkCriticality > 1.0 )
+        SinkCriticality = 1.0;
+    SinkWeight = 0.35 + 0.65 * SinkCriticality;
+    SinkRatio = 1.0 + (Ratio - 1.0) * SinkWeight;
+    if ( AigId == ABC_STMAP51_TRACK_AIG_ID && Ratio > pStats->TrackedRatio )
+    {
+        pStats->TrackedRatio = Ratio;
+        pStats->TrackedNode = NodeId;
+    }
+    if ( AigId == ABC_STMAP51_TRACK_AIG_ID && SinkRatio > pStats->TrackedSinkRatio )
+        pStats->TrackedSinkRatio = SinkRatio;
+    if ( !Abc_Stmap51EnsurePressureCapacity( pStats, AigId ) )
+    {
+        pStats->nPressureMissed++;
+        return;
+    }
+    OldRatio = pStats->pAigPressureRatios[AigId];
+    OldSinkRatio = pStats->pAigSinkPressureRatios[AigId];
+    if ( OldRatio == 0.0 )
+        pStats->nPressureEntries++;
+    else if ( Ratio > OldRatio )
+        pStats->nPressureUpdates++;
+    if ( Ratio > OldRatio )
+        pStats->pAigPressureRatios[AigId] = Ratio;
+    if ( SinkRatio <= 1.0 || SinkRatio <= OldSinkRatio )
+        return;
+    if ( OldSinkRatio == 0.0 )
+        pStats->nSinkPressureEntries++;
+    else
+        pStats->nSinkPressureUpdates++;
+    pStats->pAigSinkPressureRatios[AigId] = SinkRatio;
+    Abc_Stmap51PressureTopInsert( pStats, AigId, NodeId, SinkRatio );
+}
+
+static void Abc_Stmap51InsertConsumerFanins( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap51LoadStats_t * pStats, float Ratio, float SinkCriticality, int Depth )
+{
+    Abc_Obj_t * pFanin;
+    int i, AigId;
+
+exec
+/bin/zsh -lc "sed -n '241,520p' src/base/abci/abcStmap_51.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    if ( pObj == NULL || Ratio <= 1.0 || Depth <= 0 )
+        return;
+    Abc_ObjForEachFanin( pObj, pFanin, i )
+    {
+        AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanin );
+        if ( AigId >= 0 )
+        {
+            pStats->nHotspotFanin++;
+            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanin), Ratio, SinkCriticality );
+        }
+        Abc_Stmap51InsertConsumerFanins( pNtk, pFanin, pStats, 0.78 * Ratio, SinkCriticality, Depth - 1 );
+    }
+}
+
+static void Abc_Stmap51CollectHotspotCone( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap51LoadStats_t * pStats, SC_Man * pTime, float Ratio )
+{
+    Abc_Obj_t * pFanout, * pFanout2;
+    float FanoutCriticality;
+    int i, k, AigId;
+    if ( Ratio <= 1.0 )
+        return;
+    AigId = Abc_Stmap51MappedObjAigId( pNtk, pObj );
+    if ( AigId >= 0 )
+    {
+        pStats->nHotspotRoots++;
+        Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pObj), 0.90 * Ratio, Abc_Stmap51ObjCriticality( pTime, pObj ) );
+    }
+    Abc_ObjForEachFanout( pObj, pFanout, i )
+    {
+        FanoutCriticality = Abc_Stmap51ObjCriticality( pTime, pFanout );
+        AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanout );
+        if ( AigId >= 0 )
+        {
+            pStats->nHotspotFanout++;
+            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanout), Ratio, FanoutCriticality );
+        }
+        Abc_Stmap51InsertConsumerFanins( pNtk, pFanout, pStats, 0.86 * Ratio, FanoutCriticality, 3 );
+        Abc_ObjForEachFanout( pFanout, pFanout2, k )
+        {
+            FanoutCriticality = Abc_Stmap51ObjCriticality( pTime, pFanout2 );
+            AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanout2 );
+            if ( AigId < 0 )
+                continue;
+            pStats->nHotspotFanout++;
+            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanout2), 0.66 * Ratio, FanoutCriticality );
+        }
+    }
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Returns direct SCL input-pin load driven by a mapped node.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static float Abc_Stmap51FanoutLoad( SC_Lib * pLib, Abc_Obj_t * pObj, int * pFanouts, int * pPins )
+{
+    Abc_Obj_t * pFanout;
+    Mio_Gate_t * pGateFan;
+    SC_Cell * pCellFan;
+    float Load = 0.0;
+    int i, iFanin, CellId;
+    *pFanouts = 0;
+    *pPins = 0;
+    Abc_ObjForEachFanout( pObj, pFanout, i )
+    {
+        (*pFanouts)++;
+        if ( !Abc_ObjIsNode(pFanout) || pFanout->pData == NULL )
+            continue;
+        iFanin = Abc_NodeFindFanin( pFanout, pObj );
+        if ( iFanin < 0 )
+            continue;
+        pGateFan = (Mio_Gate_t *)pFanout->pData;
+        CellId = Abc_SclCellFind( pLib, Mio_GateReadName(pGateFan) );
+        if ( CellId < 0 )
+            continue;
+        pCellFan = SC_LibCell( pLib, CellId );
+        if ( pCellFan == NULL || iFanin >= pCellFan->n_inputs )
+            continue;
+        Load += SC_CellPinCap( pCellFan, iFanin );
+        (*pPins)++;
+    }
+    return Load;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Prints direct SCL load diagnostics for the mapped network.]
+
+  Description []
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static void Abc_Stmap51CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap51LoadStats_t * pStats )
+{
+    SC_Lib * pLib = (SC_Lib *)Abc_FrameReadLibScl();
+    SC_Man * pTime = NULL;
+    Abc_Obj_t * pObj;
+    Mio_Gate_t * pGate;
+    SC_Cell * pCell;
+    float Load, MaxCap, Ratio, Criticality;
+    int i, CellId, Fanouts, Pins;
+    Abc_Stmap51LoadStatsClear( pStats );
+    if ( pLib == NULL || !Abc_SclHasDelayInfo(pLib) )
+        return;
+    pStats->fAvailable = 1;
+    if ( Abc_NtkHasMapping(pNtk) )
+    {
+        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+        pStats->TimingDelay = pTime->MaxDelay;
+    }
+    Abc_NtkForEachNode( pNtk, pObj, i )
+    {
+        pStats->nNodes++;
+        if ( pObj->pData == NULL )
+            continue;
+        pGate = (Mio_Gate_t *)pObj->pData;
+        CellId = Abc_SclCellFind( pLib, Mio_GateReadName(pGate) );
+        if ( CellId < 0 )
+            continue;
+        pCell = SC_LibCell( pLib, CellId );
+        if ( pCell == NULL || pCell->n_outputs == 0 )
+            continue;
+        MaxCap = SC_CellPin( pCell, pCell->n_inputs )->max_out_cap;
+        if ( MaxCap <= 0.0 )
+            continue;
+        Load = Abc_Stmap51FanoutLoad( pLib, pObj, &Fanouts, &Pins );
+        Ratio = Load / MaxCap;
+        pStats->RatioSum += Ratio;
+        if ( pStats->RatioMax < Ratio )
+            pStats->RatioMax = Ratio;
+        if ( Ratio > 1.0 )
+            pStats->nOver++;
+        pStats->nMatched++;
+        pStats->nPins += Pins;
+        Criticality = Abc_Stmap51ObjCriticality( pTime, pObj );
+        pStats->CriticalitySum += Criticality;
+        if ( Criticality > 0.0 )
+            pStats->nCriticalNodes++;
+        if ( pStats->CriticalityMax < Criticality )
+            pStats->CriticalityMax = Criticality;
+        Abc_Stmap51TopInsert( pStats->TopRatios, pStats->TopNodes, pStats->pTopGates, pStats->TopFanouts, pStats->TopLoads, pStats->TopCaps,
+            Ratio, Abc_ObjId(pObj), Mio_GateReadName(pGate), Fanouts, Load, MaxCap );
+        Abc_Stmap51CollectHotspotCone( pNtk, pObj, pStats, pTime, Ratio );
+    }
+    if ( pTime )
+        Abc_SclManFree( pTime );
+}
+
+static void Abc_Stmap51PrintSclLoadStats( const char * pLabel, Abc_Stmap51LoadStats_t * pStats )
+{
+    int i;
+    if ( !pStats->fAvailable )
+    {
+        printf( "stmap51 %s stats: unavailable = 1\n", pLabel );
+        return;
+    }
+    printf( "stmap51 %s stats: nodes = %d  matched = %d  fanout-pins = %d  over-max = %d  avg-load-ratio = %.3f  max-load-ratio = %.3f\n",
+        pLabel, pStats->nNodes, pStats->nMatched, pStats->nPins, pStats->nOver,
+        pStats->nMatched ? pStats->RatioSum / (float)pStats->nMatched : 0.0, pStats->RatioMax );
+    printf( "stmap51 %s criticality: timing-delay = %.3f  critical-nodes = %d  avg-criticality = %.3f  max-criticality = %.3f\n",
+        pLabel, pStats->TimingDelay, pStats->nCriticalNodes,
+        pStats->nMatched ? pStats->CriticalitySum / (float)pStats->nMatched : 0.0,
+        pStats->CriticalityMax );
+    for ( i = 0; i < 5 && pStats->TopRatios[i] > 0.0; i++ )
+        printf( "stmap51 %s top: rank = %d  node = %d  gate = %s  fanouts = %d  load = %.3f  max-cap = %.3f  load-ratio = %.3f\n",
+            pLabel, i + 1, pStats->TopNodes[i], pStats->pTopGates[i] ? pStats->pTopGates[i] : "?",
+            pStats->TopFanouts[i], pStats->TopLoads[i], pStats->TopCaps[i], pStats->TopRatios[i] );
+}
+
+static void Abc_Stmap51PrintHotspots( Abc_Stmap51LoadStats_t * pStats )
+{
+    int i;
+    if ( !pStats->fAvailable )
+        return;
+    printf( "stmap51 sink-pressure stats: roots = %d  consumer-fanin = %d  consumer-fanout = %d  raw-pressure-entries = %d  raw-pressure-updates = %d  sink-pressure-entries = %d  sink-pressure-updates = %d  pressure-missed = %d  pressure-capacity = %d  tracked-aig = %d  tracked-node = %d  tracked-raw-ratio = %.3f  tracked-sink-ratio = %.3f\n",
+        pStats->nHotspotRoots, pStats->nHotspotFanin, pStats->nHotspotFanout,
+        pStats->nPressureEntries, pStats->nPressureUpdates,
+        pStats->nSinkPressureEntries, pStats->nSinkPressureUpdates,
+        pStats->nPressureMissed,
+        pStats->nAigPressureRatios, ABC_STMAP51_TRACK_AIG_ID, pStats->TrackedNode,
+        pStats->TrackedRatio, pStats->TrackedSinkRatio );
+    for ( i = 0; i < ABC_STMAP51_TOP_PRESSURES && pStats->TopPressureRatios[i] > 0.0; i++ )
+        printf( "stmap51 sink-pressure: rank = %d  aig-id = %d  mapped-node = %d  sink-pressure-ratio = %.3f\n",
+            i + 1, pStats->TopPressureAigIds[i], pStats->TopPressureNodes[i], pStats->TopPressureRatios[i] );
+}
+
+static float Abc_Stmap51FeedbackSeverity( Abc_Stmap51LoadStats_t * pStats )
+{
+    float OverFrac, MaxPart, OverPart, Severity;
+    if ( !pStats->fAvailable || pStats->nMatched == 0 )
+        return 0.0;
+    OverFrac = (float)pStats->nOver / (float)pStats->nMatched;
+    MaxPart = pStats->RatioMax > 4.0 ? (pStats->RatioMax - 4.0) / 8.0 : 0.0;
+    OverPart = OverFrac > 0.002 ? (OverFrac - 0.002) / 0.006 : 0.0;
+    if ( MaxPart > 1.0 )
+        MaxPart = 1.0;
+    if ( OverPart > 1.0 )
+        OverPart = 1.0;
+    Severity = 0.65 * MaxPart + 0.35 * OverPart;
+    return Severity > 1.0 ? 1.0 : Severity;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Runs the stmap51 mapper probe.]
+
+  Description [stmap51 measures direct SCL load/max-cap pressure after an
+  initial base-gain map, then reuses the stmap45 pressure-agreement mapper
+  mode with a midpoint SCL/genlib gain for high-severity, large pressure
+  cases. The hypothesis is that 0.925x gain can recover more of the stmap49
+  timing benefit than stmap50 while spending less area than the 0.90x branch.]
+
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+int Abc_CommandStmap51( Abc_Frame_t * pAbc, int argc, char ** argv )
+{
+    Abc_Ntk_t * pNtk, * pNtkMap, * pNtkRes, * pNtkFirst;
+    Abc_Stmap51LoadStats_t LoadStats;
+    char Buffer[100];
+    double DelayTarget;
+    double AreaMulti;
+    double DelayMulti;
+    float LogFan = 0;
+    float Slew = 0; // choose based on the library
+    float Gain = 250; // base SCL/genlib gain for low and moderate pressure
+    float MidGain, SelectedGain;
+    int nGatesMin = 0;
+    int fAreaOnly;
+    int fRecovery;
+    int fSweep;
+    int fSwitching;
+    int fSkipFanout;
+    int fUseProfile;
+    int fUseBuffs;
+    int fVerbose;
+    int c, fTempMap = 0;
+    int fUseHighPressureGain;
+    float OverFrac, Feedback;
+    extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+    extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+
+    pNtk = Abc_FrameReadNtk(pAbc);
+    DelayTarget = -1;
+    AreaMulti   = 0;
+    DelayMulti  = 0;
+    fAreaOnly   = 0;
+    fRecovery   = 1;
+    fSweep      = 0;
+    fSwitching  = 0;
+    fSkipFanout = 46; // stmap45 agreement-admitted mapper mode with midpoint SCL gain; -f disables it
+    fUseProfile = 0;
+    fUseBuffs   = 0;
+    fVerbose    = 0;
+    Extra_UtilGetoptReset();
+    while ( ( c = Extra_UtilGetopt( argc, argv, "DABFSGMarspfuovh" ) ) != EOF )
+    {
+        switch ( c )
+        {
+        case 'D':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-D\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayTarget = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( DelayTarget <= 0.0 )
+
+exec
+/bin/zsh -lc "sed -n '521,820p' src/base/abci/abcStmap_51.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+                goto usage;
+            break;
+        case 'A':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-A\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            AreaMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'B':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-B\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            DelayMulti = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            break;
+        case 'F':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-F\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            LogFan = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( LogFan < 0.0 )
+                goto usage;
+            break;
+        case 'S':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-S\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Slew = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Slew <= 0.0 )
+                goto usage;
+            break;
+        case 'G':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-G\" should be followed by a floating point number.\n" );
+                goto usage;
+            }
+            Gain = (float)atof(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( Gain <= 0.0 )
+                goto usage;
+            break;
+        case 'M':
+            if ( globalUtilOptind >= argc )
+            {
+                Abc_Print( -1, "Command line switch \"-M\" should be followed by a positive integer.\n" );
+                goto usage;
+            }
+            nGatesMin = atoi(argv[globalUtilOptind]);
+            globalUtilOptind++;
+            if ( nGatesMin < 0 )
+                goto usage;
+            break;
+        case 'a':
+            fAreaOnly ^= 1;
+            break;
+        case 'r':
+            fRecovery ^= 1;
+            break;
+        case 's':
+            fSweep ^= 1;
+            break;
+        case 'p':
+            fSwitching ^= 1;
+            break;
+        case 'f':
+            fSkipFanout = fSkipFanout ? 0 : 46;
+            break;
+        case 'u':
+            fUseProfile ^= 1;
+            break;
+        case 'o':
+            fUseBuffs ^= 1;
+            break;
+        case 'v':
+            fVerbose ^= 1;
+            break;
+        case 'h':
+            goto usage;
+        default:
+            goto usage;
+        }
+    }
+
+    if ( pNtk == NULL )
+    {
+        Abc_Print( -1, "Empty network.\n" );
+        return 1;
+    }
+
+    if ( fAreaOnly )
+        DelayTarget = ABC_INFINITY;
+
+    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+    pNtkMap = pNtk;
+    if ( !Abc_NtkIsStrash(pNtk) )
+    {
+        pNtkMap = Abc_NtkStrash( pNtk, 0, 0, 0 );
+        if ( pNtkMap == NULL )
+        {
+            Abc_Print( -1, "Strashing before stmap51 has failed.\n" );
+            return 1;
+        }
+        pNtkMap = Abc_NtkBalance( pNtkRes = pNtkMap, 0, 0, 1 );
+        Abc_NtkDelete( pNtkRes );
+        if ( pNtkMap == NULL )
+        {
+            Abc_Print( -1, "Balancing before stmap51 has failed.\n" );
+            return 1;
+        }
+        fTempMap = 1;
+        Abc_Print( 0, "The network was strashed and balanced before stmap51.\n" );
+    }
+
+    if ( fSkipFanout )
+    {
+        pNtkFirst = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 36, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkFirst == NULL )
+        {
+            if ( fTempMap )
+                Abc_NtkDelete( pNtkMap );
+            Abc_Print( -1, "stmap51 has failed.\n" );
+            return 1;
+        }
+        Abc_Stmap51CollectSclLoadStats( pNtkFirst, &LoadStats );
+        Abc_Stmap51PrintSclLoadStats( "feedback-load", &LoadStats );
+        Abc_Stmap51PrintHotspots( &LoadStats );
+        OverFrac = LoadStats.nMatched ? (float)LoadStats.nOver / (float)LoadStats.nMatched : 0.0;
+        Feedback = Abc_Stmap51FeedbackSeverity( &LoadStats );
+        MidGain = 0.925 * Gain;
+        SelectedGain = Gain;
+        fUseHighPressureGain = Feedback >= 0.85 && LoadStats.nSinkPressureEntries >= 8000;
+        if ( fUseHighPressureGain && MidGain > 0.0 )
+            SelectedGain = MidGain;
+        printf( "stmap51 feedback: remap = 1  active = %d  max-load-ratio = %.3f  over-max-frac = %.6f  severity = %.3f  raw-pressure-entries = %d  sink-pressure-entries = %d  pressure-capacity = %d\n",
+            Feedback > 0.0 && LoadStats.nSinkPressureEntries > 0, LoadStats.RatioMax, OverFrac,
+            Feedback, LoadStats.nPressureEntries, LoadStats.nSinkPressureEntries,
+            LoadStats.nAigPressureRatios );
+        printf( "stmap51 midpoint-gain: base-gain = %.2f  midpoint-gain = %.2f  selected-gain = %.2f  severity-threshold = 0.850  sink-pressure-threshold = 8000  selected-midpoint-gain = %d\n",
+            Gain, MidGain, SelectedGain, fUseHighPressureGain );
+        printf( "stmap51 mapper-mode: reused-stmap45-mode = 46  midpoint-gain = %.2f\n", SelectedGain );
+        Abc_NtkDelete( pNtkFirst );
+        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+        pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 46, fUseProfile, fUseBuffs, fVerbose );
+        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+        Abc_Stmap51LoadStatsFree( &LoadStats );
+        if ( pNtkRes == NULL )
+        {
+            if ( fTempMap )
+                Abc_NtkDelete( pNtkMap );
+            Abc_Print( -1, "stmap51 feedback remap has failed.\n" );
+            return 1;
+        }
+    }
+    else
+    {
+        pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, Gain, nGatesMin, fRecovery, fSwitching, 0, fUseProfile, fUseBuffs, fVerbose );
+        if ( pNtkRes == NULL )
+        {
+            if ( fTempMap )
+                Abc_NtkDelete( pNtkMap );
+            Abc_Print( -1, "stmap51 has failed.\n" );
+            return 1;
+        }
+    }
+    if ( fTempMap )
+        Abc_NtkDelete( pNtkMap );
+
+    if ( fSweep )
+    {
+        Abc_NtkFraigSweep( pNtkRes, 0, 0, 0, 0 );
+        if ( Abc_NtkHasMapping(pNtkRes) )
+        {
+            pNtkRes = Abc_NtkDupDfs( pNtk = pNtkRes );
+            Abc_NtkDelete( pNtk );
+        }
+    }
+
+    Abc_Stmap51CollectSclLoadStats( pNtkRes, &LoadStats );
+    Abc_Stmap51PrintSclLoadStats( "scl-load", &LoadStats );
+    Abc_Stmap51LoadStatsFree( &LoadStats );
+    Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+    return 0;
+
+usage:
+    if ( DelayTarget == -1 )
+        sprintf(Buffer, "not used" );
+    else
+        sprintf(Buffer, "%.3f", DelayTarget );
+    Abc_Print( -2, "usage: stmap51 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+    Abc_Print( -2, "\t              performs stmap51 midpoint-gain two-pass mapping using the stmap45 pressure-agreement mapper mode\n" );
+    Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+    Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+    Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+    Abc_Print( -2, "\t-F float : the logarithmic fanout delay parameter [default = %.2f]\n", LogFan );
+    Abc_Print( -2, "\t-S float : the slew parameter used to generate the library [default = %.2f]\n", Slew );
+    Abc_Print( -2, "\t-G float : the SCL/genlib gain parameter used to generate the library [default = %.2f]\n", Gain );
+    Abc_Print( -2, "\t-M num   : skip gate classes whose size is less than this [default = %d]\n", nGatesMin );
+    Abc_Print( -2, "\t-a       : toggles area-only mapping [default = %s]\n", fAreaOnly? "yes": "no" );
+    Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+    Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+    Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+    Abc_Print( -2, "\t-f       : disables the midpoint-gain SCL feedback mapper mode [default = %s]\n", fSkipFanout? "yes": "no" );
+    Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+    Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+    Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+    Abc_Print( -2, "\t-h       : print the command usage\n");
+    return 1;
+}
+
+ABC_NAMESPACE_IMPL_END
+
+exec
+/bin/zsh -lc 'git diff --cached --stat && git diff --cached' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cat .autoeda/runtime/results/stmap51/build.exit; tail -200 .autoeda/runtime/results/stmap51/build.log' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+0
+`` Generating dependency: /src/base/abci/abcStmap_51.c
+`` Generating dependency: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abc.c
+`` Compiling: /src/base/abci/abcStmap_51.c
+`` Building binary: abc
+ld: warning: reducing alignment of section __DATA,__common from 0x8000 to 0x4000 because it exceeds segment maximum alignment
+
+exec
+/bin/zsh -lc 'grep -R "CollectSclLoadStats" -n src/base/abci/abcStmap_*.c | head -50 && grep -R "Map_Stmap45SetSclLoadFeedback" -n . | head -50' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 1512ms:
+src/base/abci/abcStmap_36.c:135:static void Abc_Stmap36CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap36LoadStats_t * pStats )
+src/base/abci/abcStmap_36.c:408:        Abc_Stmap36CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_36.c:450:    Abc_Stmap36CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_37.c:228:static void Abc_Stmap37CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap37LoadStats_t * pStats )
+src/base/abci/abcStmap_37.c:515:        Abc_Stmap37CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_37.c:558:    Abc_Stmap37CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_38.c:254:static void Abc_Stmap38CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap38LoadStats_t * pStats )
+src/base/abci/abcStmap_38.c:543:        Abc_Stmap38CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_38.c:586:    Abc_Stmap38CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_39.c:266:static void Abc_Stmap39CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap39LoadStats_t * pStats )
+src/base/abci/abcStmap_39.c:555:        Abc_Stmap39CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_39.c:598:    Abc_Stmap39CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_40.c:288:static void Abc_Stmap40CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap40LoadStats_t * pStats )
+src/base/abci/abcStmap_40.c:579:        Abc_Stmap40CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_40.c:624:    Abc_Stmap40CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_41.c:338:static void Abc_Stmap41CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap41LoadStats_t * pStats )
+src/base/abci/abcStmap_41.c:648:        Abc_Stmap41CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_41.c:694:    Abc_Stmap41CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_42.c:342:static void Abc_Stmap42CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap42LoadStats_t * pStats )
+src/base/abci/abcStmap_42.c:652:        Abc_Stmap42CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_42.c:698:    Abc_Stmap42CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_43.c:342:static void Abc_Stmap43CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap43LoadStats_t * pStats )
+src/base/abci/abcStmap_43.c:652:        Abc_Stmap43CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_43.c:698:    Abc_Stmap43CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_44.c:342:static void Abc_Stmap44CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap44LoadStats_t * pStats )
+src/base/abci/abcStmap_44.c:653:        Abc_Stmap44CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_44.c:699:    Abc_Stmap44CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_45.c:342:static void Abc_Stmap45CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap45LoadStats_t * pStats )
+src/base/abci/abcStmap_45.c:653:        Abc_Stmap45CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_45.c:699:    Abc_Stmap45CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_46.c:342:static void Abc_Stmap46CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap46LoadStats_t * pStats )
+src/base/abci/abcStmap_46.c:653:        Abc_Stmap46CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_46.c:699:    Abc_Stmap46CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_47.c:342:static void Abc_Stmap47CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap47LoadStats_t * pStats )
+src/base/abci/abcStmap_47.c:654:        Abc_Stmap47CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_47.c:701:    Abc_Stmap47CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_48.c:342:static void Abc_Stmap48CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap48LoadStats_t * pStats )
+src/base/abci/abcStmap_48.c:656:        Abc_Stmap48CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_48.c:710:    Abc_Stmap48CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_49.c:342:static void Abc_Stmap49CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap49LoadStats_t * pStats )
+src/base/abci/abcStmap_49.c:657:        Abc_Stmap49CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_49.c:711:    Abc_Stmap49CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_50.c:342:static void Abc_Stmap50CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap50LoadStats_t * pStats )
+src/base/abci/abcStmap_50.c:657:        Abc_Stmap50CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_50.c:716:    Abc_Stmap50CollectSclLoadStats( pNtkRes, &LoadStats );
+src/base/abci/abcStmap_51.c:342:static void Abc_Stmap51CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap51LoadStats_t * pStats )
+src/base/abci/abcStmap_51.c:656:        Abc_Stmap51CollectSclLoadStats( pNtkFirst, &LoadStats );
+src/base/abci/abcStmap_51.c:710:    Abc_Stmap51CollectSclLoadStats( pNtkRes, &LoadStats );
+Binary file ./abc matches
+./.autoeda/runtime/versions.md:2590:- algorithm summary: `stmap47` is a numbered two-pass `stmap` command. It copies the `stmap45` command-level SCL load/max-cap feedback collector and still remaps with mapper mode `46` through `Map_Stmap45SetSclLoadFeedback()`, so the mapper admission rule and pressure agreement behavior are unchanged from `stmap45`. The only intended algorithmic change is the default SCL/genlib gain parameter, reduced from `250` to `200`, with an explicit `stmap47 mapper-mode: reused-stmap45-mode = 46  reduced-gain = 200.00` diagnostic in candidate logs. Existing `map` and `stmap0` through `stmap46` remain on their prior command paths and mode numbers.
+./.autoeda/runtime/versions.md:2645:- algorithm summary: `stmap48` is a numbered two-pass `stmap` command. It runs the first feedback-load map at the base gain, default `250`, computes the existing SCL load/max-cap feedback severity and dense sink-pressure vector, and then remaps through `Map_Stmap45SetSclLoadFeedback()` using mapper mode `46`. The final remap keeps `Gain = 250` unless `severity >= 0.850` and `sink-pressure-entries >= 8000`, in which case it uses `0.80 * base_gain`, default `200`. Candidate logs print `stmap48 adaptive-gain` and `stmap48 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap47` remain on their prior command paths and mode numbers.
+./.autoeda/runtime/versions.md:2700:- algorithm summary: `stmap49` is a numbered two-pass `stmap` command. It clones the `stmap48` SCL load/max-cap collection, dense sink-pressure feedback, and high-pressure selector, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the selected high-pressure gain: when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, `stmap49` uses `0.90 * base_gain`; otherwise it keeps `base_gain`. Candidate logs print `stmap49 blended-gain` and `stmap49 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap48` remain on their prior command paths and mode numbers.
+./.autoeda/runtime/versions.md:2755:- algorithm summary: `stmap50` is a numbered two-pass `stmap` command. It clones the `stmap49` SCL load/max-cap collection, dense sink-pressure feedback, and high-pressure selector, then remaps through `Map_Stmap45SetSclLoadFeedback()` with mapper mode `46`. The only intended algorithmic change is the high-pressure selected gain: below the high-pressure gate it keeps `base_gain`; when feedback severity is at least `0.850` and sink-pressure entries are at least `8000`, it selects `0.95 * base_gain`; when severity is at least `0.900` under the same pressure-entry gate, it selects `0.90 * base_gain`. Candidate logs print `stmap50 banded-gain` and `stmap50 mapper-mode` diagnostics. Existing `map` and `stmap0` through `stmap49` remain on their prior command paths and mode numbers.
+./.autoeda/runtime/results/stmap49/review_pass1.log:697:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:833:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:882:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:884:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1448:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1585:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1634:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1636:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1732:/bin/zsh -lc 'grep -R "Map_Stmap45SetSclLoadFeedback" -n src | head -20 && grep -R "SclLoadFeedback" -n src/map src/base | head -80' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+./.autoeda/runtime/results/stmap49/review_pass1.log:1734:src/map/mapper/mapperMatch.c:1415:void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+./.autoeda/runtime/results/stmap49/review_pass1.log:1737:src/base/abci/abcStmap_49.c:494:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1738:src/base/abci/abcStmap_49.c:626:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1739:src/base/abci/abcStmap_49.c:675:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1740:src/base/abci/abcStmap_49.c:677:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1742:src/base/abci/abcStmap_47.c:491:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1743:src/base/abci/abcStmap_47.c:623:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1744:src/base/abci/abcStmap_47.c:665:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1745:src/base/abci/abcStmap_47.c:667:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1746:src/base/abci/abcStmap_48.c:493:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1747:src/base/abci/abcStmap_48.c:625:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1748:src/base/abci/abcStmap_48.c:674:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1749:src/base/abci/abcStmap_48.c:676:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1751:src/base/abci/abcStmap_45.c:490:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1752:src/base/abci/abcStmap_45.c:622:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1753:src/base/abci/abcStmap_45.c:663:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1763:src/map/mapper/mapperMatch.c:1415:void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+./.autoeda/runtime/results/stmap49/review_pass1.log:1783:src/base/abci/abcStmap_49.c:494:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1784:src/base/abci/abcStmap_49.c:626:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1785:src/base/abci/abcStmap_49.c:675:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1786:src/base/abci/abcStmap_49.c:677:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1789:src/base/abci/abcStmap_47.c:491:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1790:src/base/abci/abcStmap_47.c:623:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1791:src/base/abci/abcStmap_47.c:665:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1792:src/base/abci/abcStmap_47.c:667:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1801:src/base/abci/abcStmap_48.c:493:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1802:src/base/abci/abcStmap_48.c:625:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1803:src/base/abci/abcStmap_48.c:674:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1804:src/base/abci/abcStmap_48.c:676:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1828:src/base/abci/abcStmap_45.c:490:    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1829:src/base/abci/abcStmap_45.c:622:    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1830:src/base/abci/abcStmap_45.c:663:        Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1831:src/base/abci/abcStmap_45.c:665:        Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+./.autoeda/runtime/results/stmap49/review_pass1.log:1873:void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+./.autoeda/runtime/results/stmap49/review_pass1.log:3001:   494	    extern void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios );
+./.autoeda/runtime/results/stmap49/review_pass1.log:3133:   626	    Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+
+exec
+/bin/zsh -lc "diff -u src/base/abci/abcStmap_50.c src/base/abci/abcStmap_51.c | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+--- src/base/abci/abcStmap_50.c	2026-04-26 01:01:40
++++ src/base/abci/abcStmap_51.c	2026-04-26 01:17:07
+@@ -1,12 +1,12 @@
+ /**CFile****************************************************************
+ 
+-  FileName    [abcStmap_50.c]
++  FileName    [abcStmap_51.c]
+ 
+   SystemName  [ABC: Logic synthesis and verification system.]
+ 
+   PackageName [Versioned AutoEDA standard-cell mapper experiments.]
+ 
+-  Synopsis    [stmap50 command.]
++  Synopsis    [stmap51 command.]
+ 
+ ***********************************************************************/
+ 
+@@ -20,10 +20,10 @@
+ 
+ ABC_NAMESPACE_IMPL_START
+ 
+-#define ABC_STMAP50_TOP_PRESSURES 10
+-#define ABC_STMAP50_TRACK_AIG_ID 5548
++#define ABC_STMAP51_TOP_PRESSURES 10
++#define ABC_STMAP51_TRACK_AIG_ID 5548
+ 
+-typedef struct Abc_Stmap50LoadStats_t_
++typedef struct Abc_Stmap51LoadStats_t_
+ {
+     int fAvailable;
+     int nNodes;
+@@ -56,17 +56,17 @@
+     const char * pTopGates[5];
+     int TopNodes[5];
+     int TopFanouts[5];
+-    int TopPressureAigIds[ABC_STMAP50_TOP_PRESSURES];
+-    int TopPressureNodes[ABC_STMAP50_TOP_PRESSURES];
+-    float TopPressureRatios[ABC_STMAP50_TOP_PRESSURES];
+-} Abc_Stmap50LoadStats_t;
++    int TopPressureAigIds[ABC_STMAP51_TOP_PRESSURES];
++    int TopPressureNodes[ABC_STMAP51_TOP_PRESSURES];
++    float TopPressureRatios[ABC_STMAP51_TOP_PRESSURES];
++} Abc_Stmap51LoadStats_t;
+ 
+-static void Abc_Stmap50LoadStatsClear( Abc_Stmap50LoadStats_t * pStats )
++static void Abc_Stmap51LoadStatsClear( Abc_Stmap51LoadStats_t * pStats )
+ {
+-    memset( pStats, 0, sizeof(Abc_Stmap50LoadStats_t) );
++    memset( pStats, 0, sizeof(Abc_Stmap51LoadStats_t) );
+ }
+ 
+-static void Abc_Stmap50LoadStatsFree( Abc_Stmap50LoadStats_t * pStats )
++static void Abc_Stmap51LoadStatsFree( Abc_Stmap51LoadStats_t * pStats )
+ {
+     ABC_FREE( pStats->pAigPressureRatios );
+     ABC_FREE( pStats->pAigSinkPressureRatios );
+@@ -84,7 +84,7 @@
+   SeeAlso     []
+ 
+ ***********************************************************************/
+-static void Abc_Stmap50TopInsert( float * pRatios, int * pNodes, const char ** ppGates, int * pFanouts, float * pLoads, float * pCaps, float Ratio, int Node, const char * pGate, int Fanouts, float Load, float Cap )
++static void Abc_Stmap51TopInsert( float * pRatios, int * pNodes, const char ** ppGates, int * pFanouts, float * pLoads, float * pCaps, float Ratio, int Node, const char * pGate, int Fanouts, float Load, float Cap )
+ {
+     int i, k;
+     if ( Ratio <= pRatios[4] )
+@@ -112,7 +112,7 @@
+     }
+ }
+ 
+-static int Abc_Stmap50MappedObjAigId( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj )
++static int Abc_Stmap51MappedObjAigId( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj )
+ {
+     int Lit;
+     if ( pNtk == NULL || pObj == NULL || pNtk->vOrigNodeIds == NULL )
+@@ -123,16 +123,16 @@
+     return Lit >= 0 ? Abc_Lit2Var(Lit) : -1;
+ }
+ 
+-static void Abc_Stmap50PressureTopInsert( Abc_Stmap50LoadStats_t * pStats, int AigId, int NodeId, float Ratio )
++static void Abc_Stmap51PressureTopInsert( Abc_Stmap51LoadStats_t * pStats, int AigId, int NodeId, float Ratio )
+ {
+     int i, k;
+-    if ( Ratio <= pStats->TopPressureRatios[ABC_STMAP50_TOP_PRESSURES-1] )
++    if ( Ratio <= pStats->TopPressureRatios[ABC_STMAP51_TOP_PRESSURES-1] )
+         return;
+-    for ( i = 0; i < ABC_STMAP50_TOP_PRESSURES; i++ )
++    for ( i = 0; i < ABC_STMAP51_TOP_PRESSURES; i++ )
+     {
+         if ( Ratio <= pStats->TopPressureRatios[i] )
+             continue;
+-        for ( k = ABC_STMAP50_TOP_PRESSURES - 1; k > i; k-- )
++        for ( k = ABC_STMAP51_TOP_PRESSURES - 1; k > i; k-- )
+         {
+             pStats->TopPressureRatios[k] = pStats->TopPressureRatios[k-1];
+             pStats->TopPressureAigIds[k] = pStats->TopPressureAigIds[k-1];
+@@ -145,7 +145,7 @@
+     }
+ }
+ 
+-static int Abc_Stmap50EnsurePressureCapacity( Abc_Stmap50LoadStats_t * pStats, int AigId )
++static int Abc_Stmap51EnsurePressureCapacity( Abc_Stmap51LoadStats_t * pStats, int AigId )
+ {
+     float * pNew, * pNewSink;
+     int i, nOld, nNew;
+@@ -174,7 +174,7 @@
+     return 1;
+ }
+ 
+-static float Abc_Stmap50ObjCriticality( SC_Man * pTime, Abc_Obj_t * pObj )
++static float Abc_Stmap51ObjCriticality( SC_Man * pTime, Abc_Obj_t * pObj )
+ {
+     float Slack, Window, Criticality;
+     if ( pTime == NULL || pObj == NULL || pTime->MaxDelay <= 0.0 )
+@@ -193,7 +193,7 @@
+     return Criticality > 1.0 ? 1.0 : Criticality;
+ }
+ 
+-static void Abc_Stmap50PressureInsert( Abc_Stmap50LoadStats_t * pStats, int AigId, int NodeId, float Ratio, float SinkCriticality )
++static void Abc_Stmap51PressureInsert( Abc_Stmap51LoadStats_t * pStats, int AigId, int NodeId, float Ratio, float SinkCriticality )
+ {
+     float OldRatio, OldSinkRatio, SinkWeight, SinkRatio;
+     if ( AigId < 0 || Ratio <= 1.0 )
+@@ -204,14 +204,14 @@
+         SinkCriticality = 1.0;
+     SinkWeight = 0.35 + 0.65 * SinkCriticality;
+     SinkRatio = 1.0 + (Ratio - 1.0) * SinkWeight;
+-    if ( AigId == ABC_STMAP50_TRACK_AIG_ID && Ratio > pStats->TrackedRatio )
++    if ( AigId == ABC_STMAP51_TRACK_AIG_ID && Ratio > pStats->TrackedRatio )
+     {
+         pStats->TrackedRatio = Ratio;
+         pStats->TrackedNode = NodeId;
+     }
+-    if ( AigId == ABC_STMAP50_TRACK_AIG_ID && SinkRatio > pStats->TrackedSinkRatio )
++    if ( AigId == ABC_STMAP51_TRACK_AIG_ID && SinkRatio > pStats->TrackedSinkRatio )
+         pStats->TrackedSinkRatio = SinkRatio;
+-    if ( !Abc_Stmap50EnsurePressureCapacity( pStats, AigId ) )
++    if ( !Abc_Stmap51EnsurePressureCapacity( pStats, AigId ) )
+     {
+         pStats->nPressureMissed++;
+         return;
+@@ -231,10 +231,10 @@
+     else
+         pStats->nSinkPressureUpdates++;
+     pStats->pAigSinkPressureRatios[AigId] = SinkRatio;
+-    Abc_Stmap50PressureTopInsert( pStats, AigId, NodeId, SinkRatio );
++    Abc_Stmap51PressureTopInsert( pStats, AigId, NodeId, SinkRatio );
+ }
+ 
+-static void Abc_Stmap50InsertConsumerFanins( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap50LoadStats_t * pStats, float Ratio, float SinkCriticality, int Depth )
++static void Abc_Stmap51InsertConsumerFanins( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap51LoadStats_t * pStats, float Ratio, float SinkCriticality, int Depth )
+ {
+     Abc_Obj_t * pFanin;
+     int i, AigId;
+@@ -242,47 +242,47 @@
+         return;
+     Abc_ObjForEachFanin( pObj, pFanin, i )
+     {
+-        AigId = Abc_Stmap50MappedObjAigId( pNtk, pFanin );
++        AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanin );
+         if ( AigId >= 0 )
+         {
+             pStats->nHotspotFanin++;
+-            Abc_Stmap50PressureInsert( pStats, AigId, Abc_ObjId(pFanin), Ratio, SinkCriticality );
++            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanin), Ratio, SinkCriticality );
+         }
+-        Abc_Stmap50InsertConsumerFanins( pNtk, pFanin, pStats, 0.78 * Ratio, SinkCriticality, Depth - 1 );
++        Abc_Stmap51InsertConsumerFanins( pNtk, pFanin, pStats, 0.78 * Ratio, SinkCriticality, Depth - 1 );
+     }
+ }
+ 
+-static void Abc_Stmap50CollectHotspotCone( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap50LoadStats_t * pStats, SC_Man * pTime, float Ratio )
++static void Abc_Stmap51CollectHotspotCone( Abc_Ntk_t * pNtk, Abc_Obj_t * pObj, Abc_Stmap51LoadStats_t * pStats, SC_Man * pTime, float Ratio )
+ {
+     Abc_Obj_t * pFanout, * pFanout2;
+     float FanoutCriticality;
+     int i, k, AigId;
+     if ( Ratio <= 1.0 )
+         return;
+-    AigId = Abc_Stmap50MappedObjAigId( pNtk, pObj );
++    AigId = Abc_Stmap51MappedObjAigId( pNtk, pObj );
+     if ( AigId >= 0 )
+     {
+         pStats->nHotspotRoots++;
+-        Abc_Stmap50PressureInsert( pStats, AigId, Abc_ObjId(pObj), 0.90 * Ratio, Abc_Stmap50ObjCriticality( pTime, pObj ) );
++        Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pObj), 0.90 * Ratio, Abc_Stmap51ObjCriticality( pTime, pObj ) );
+     }
+     Abc_ObjForEachFanout( pObj, pFanout, i )
+     {
+-        FanoutCriticality = Abc_Stmap50ObjCriticality( pTime, pFanout );
+-        AigId = Abc_Stmap50MappedObjAigId( pNtk, pFanout );
++        FanoutCriticality = Abc_Stmap51ObjCriticality( pTime, pFanout );
++        AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanout );
+         if ( AigId >= 0 )
+         {
+             pStats->nHotspotFanout++;
+-            Abc_Stmap50PressureInsert( pStats, AigId, Abc_ObjId(pFanout), Ratio, FanoutCriticality );
++            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanout), Ratio, FanoutCriticality );
+         }
+-        Abc_Stmap50InsertConsumerFanins( pNtk, pFanout, pStats, 0.86 * Ratio, FanoutCriticality, 3 );
++        Abc_Stmap51InsertConsumerFanins( pNtk, pFanout, pStats, 0.86 * Ratio, FanoutCriticality, 3 );
+         Abc_ObjForEachFanout( pFanout, pFanout2, k )
+         {
+-            FanoutCriticality = Abc_Stmap50ObjCriticality( pTime, pFanout2 );
+-            AigId = Abc_Stmap50MappedObjAigId( pNtk, pFanout2 );
++            FanoutCriticality = Abc_Stmap51ObjCriticality( pTime, pFanout2 );
++            AigId = Abc_Stmap51MappedObjAigId( pNtk, pFanout2 );
+             if ( AigId < 0 )
+                 continue;
+             pStats->nHotspotFanout++;
+-            Abc_Stmap50PressureInsert( pStats, AigId, Abc_ObjId(pFanout2), 0.66 * Ratio, FanoutCriticality );
++            Abc_Stmap51PressureInsert( pStats, AigId, Abc_ObjId(pFanout2), 0.66 * Ratio, FanoutCriticality );
+         }
+     }
+ }
+@@ -298,7 +298,7 @@
+   SeeAlso     []
+ 
+ ***********************************************************************/
+-static float Abc_Stmap50FanoutLoad( SC_Lib * pLib, Abc_Obj_t * pObj, int * pFanouts, int * pPins )
++static float Abc_Stmap51FanoutLoad( SC_Lib * pLib, Abc_Obj_t * pObj, int * pFanouts, int * pPins )
+ {
+     Abc_Obj_t * pFanout;
+     Mio_Gate_t * pGateFan;
+@@ -339,7 +339,7 @@
+   SeeAlso     []
+ 
+ ***********************************************************************/
+-static void Abc_Stmap50CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap50LoadStats_t * pStats )
++static void Abc_Stmap51CollectSclLoadStats( Abc_Ntk_t * pNtk, Abc_Stmap51LoadStats_t * pStats )
+ {
+     SC_Lib * pLib = (SC_Lib *)Abc_FrameReadLibScl();
+     SC_Man * pTime = NULL;
+@@ -348,7 +348,7 @@
+     SC_Cell * pCell;
+     float Load, MaxCap, Ratio, Criticality;
+     int i, CellId, Fanouts, Pins;
+-    Abc_Stmap50LoadStatsClear( pStats );
++    Abc_Stmap51LoadStatsClear( pStats );
+     if ( pLib == NULL || !Abc_SclHasDelayInfo(pLib) )
+         return;
+
+exec
+/bin/zsh -lc "diff -u src/base/abci/abcStmap_50.c src/base/abci/abcStmap_51.c | sed -n '240,520p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+         return;
+     pStats->fAvailable = 1;
+@@ -372,7 +372,7 @@
+         MaxCap = SC_CellPin( pCell, pCell->n_inputs )->max_out_cap;
+         if ( MaxCap <= 0.0 )
+             continue;
+-        Load = Abc_Stmap50FanoutLoad( pLib, pObj, &Fanouts, &Pins );
++        Load = Abc_Stmap51FanoutLoad( pLib, pObj, &Fanouts, &Pins );
+         Ratio = Load / MaxCap;
+         pStats->RatioSum += Ratio;
+         if ( pStats->RatioMax < Ratio )
+@@ -381,59 +381,59 @@
+             pStats->nOver++;
+         pStats->nMatched++;
+         pStats->nPins += Pins;
+-        Criticality = Abc_Stmap50ObjCriticality( pTime, pObj );
++        Criticality = Abc_Stmap51ObjCriticality( pTime, pObj );
+         pStats->CriticalitySum += Criticality;
+         if ( Criticality > 0.0 )
+             pStats->nCriticalNodes++;
+         if ( pStats->CriticalityMax < Criticality )
+             pStats->CriticalityMax = Criticality;
+-        Abc_Stmap50TopInsert( pStats->TopRatios, pStats->TopNodes, pStats->pTopGates, pStats->TopFanouts, pStats->TopLoads, pStats->TopCaps,
++        Abc_Stmap51TopInsert( pStats->TopRatios, pStats->TopNodes, pStats->pTopGates, pStats->TopFanouts, pStats->TopLoads, pStats->TopCaps,
+             Ratio, Abc_ObjId(pObj), Mio_GateReadName(pGate), Fanouts, Load, MaxCap );
+-        Abc_Stmap50CollectHotspotCone( pNtk, pObj, pStats, pTime, Ratio );
++        Abc_Stmap51CollectHotspotCone( pNtk, pObj, pStats, pTime, Ratio );
+     }
+     if ( pTime )
+         Abc_SclManFree( pTime );
+ }
+ 
+-static void Abc_Stmap50PrintSclLoadStats( const char * pLabel, Abc_Stmap50LoadStats_t * pStats )
++static void Abc_Stmap51PrintSclLoadStats( const char * pLabel, Abc_Stmap51LoadStats_t * pStats )
+ {
+     int i;
+     if ( !pStats->fAvailable )
+     {
+-        printf( "stmap50 %s stats: unavailable = 1\n", pLabel );
++        printf( "stmap51 %s stats: unavailable = 1\n", pLabel );
+         return;
+     }
+-    printf( "stmap50 %s stats: nodes = %d  matched = %d  fanout-pins = %d  over-max = %d  avg-load-ratio = %.3f  max-load-ratio = %.3f\n",
++    printf( "stmap51 %s stats: nodes = %d  matched = %d  fanout-pins = %d  over-max = %d  avg-load-ratio = %.3f  max-load-ratio = %.3f\n",
+         pLabel, pStats->nNodes, pStats->nMatched, pStats->nPins, pStats->nOver,
+         pStats->nMatched ? pStats->RatioSum / (float)pStats->nMatched : 0.0, pStats->RatioMax );
+-    printf( "stmap50 %s criticality: timing-delay = %.3f  critical-nodes = %d  avg-criticality = %.3f  max-criticality = %.3f\n",
++    printf( "stmap51 %s criticality: timing-delay = %.3f  critical-nodes = %d  avg-criticality = %.3f  max-criticality = %.3f\n",
+         pLabel, pStats->TimingDelay, pStats->nCriticalNodes,
+         pStats->nMatched ? pStats->CriticalitySum / (float)pStats->nMatched : 0.0,
+         pStats->CriticalityMax );
+     for ( i = 0; i < 5 && pStats->TopRatios[i] > 0.0; i++ )
+-        printf( "stmap50 %s top: rank = %d  node = %d  gate = %s  fanouts = %d  load = %.3f  max-cap = %.3f  load-ratio = %.3f\n",
++        printf( "stmap51 %s top: rank = %d  node = %d  gate = %s  fanouts = %d  load = %.3f  max-cap = %.3f  load-ratio = %.3f\n",
+             pLabel, i + 1, pStats->TopNodes[i], pStats->pTopGates[i] ? pStats->pTopGates[i] : "?",
+             pStats->TopFanouts[i], pStats->TopLoads[i], pStats->TopCaps[i], pStats->TopRatios[i] );
+ }
+ 
+-static void Abc_Stmap50PrintHotspots( Abc_Stmap50LoadStats_t * pStats )
++static void Abc_Stmap51PrintHotspots( Abc_Stmap51LoadStats_t * pStats )
+ {
+     int i;
+     if ( !pStats->fAvailable )
+         return;
+-    printf( "stmap50 sink-pressure stats: roots = %d  consumer-fanin = %d  consumer-fanout = %d  raw-pressure-entries = %d  raw-pressure-updates = %d  sink-pressure-entries = %d  sink-pressure-updates = %d  pressure-missed = %d  pressure-capacity = %d  tracked-aig = %d  tracked-node = %d  tracked-raw-ratio = %.3f  tracked-sink-ratio = %.3f\n",
++    printf( "stmap51 sink-pressure stats: roots = %d  consumer-fanin = %d  consumer-fanout = %d  raw-pressure-entries = %d  raw-pressure-updates = %d  sink-pressure-entries = %d  sink-pressure-updates = %d  pressure-missed = %d  pressure-capacity = %d  tracked-aig = %d  tracked-node = %d  tracked-raw-ratio = %.3f  tracked-sink-ratio = %.3f\n",
+         pStats->nHotspotRoots, pStats->nHotspotFanin, pStats->nHotspotFanout,
+         pStats->nPressureEntries, pStats->nPressureUpdates,
+         pStats->nSinkPressureEntries, pStats->nSinkPressureUpdates,
+         pStats->nPressureMissed,
+-        pStats->nAigPressureRatios, ABC_STMAP50_TRACK_AIG_ID, pStats->TrackedNode,
++        pStats->nAigPressureRatios, ABC_STMAP51_TRACK_AIG_ID, pStats->TrackedNode,
+         pStats->TrackedRatio, pStats->TrackedSinkRatio );
+-    for ( i = 0; i < ABC_STMAP50_TOP_PRESSURES && pStats->TopPressureRatios[i] > 0.0; i++ )
+-        printf( "stmap50 sink-pressure: rank = %d  aig-id = %d  mapped-node = %d  sink-pressure-ratio = %.3f\n",
++    for ( i = 0; i < ABC_STMAP51_TOP_PRESSURES && pStats->TopPressureRatios[i] > 0.0; i++ )
++        printf( "stmap51 sink-pressure: rank = %d  aig-id = %d  mapped-node = %d  sink-pressure-ratio = %.3f\n",
+             i + 1, pStats->TopPressureAigIds[i], pStats->TopPressureNodes[i], pStats->TopPressureRatios[i] );
+ }
+ 
+-static float Abc_Stmap50FeedbackSeverity( Abc_Stmap50LoadStats_t * pStats )
++static float Abc_Stmap51FeedbackSeverity( Abc_Stmap51LoadStats_t * pStats )
+ {
+     float OverFrac, MaxPart, OverPart, Severity;
+     if ( !pStats->fAvailable || pStats->nMatched == 0 )
+@@ -451,24 +451,23 @@
+ 
+ /**Function*************************************************************
+ 
+-  Synopsis    [Runs the stmap50 mapper probe.]
++  Synopsis    [Runs the stmap51 mapper probe.]
+ 
+-  Description [stmap50 measures direct SCL load/max-cap pressure after an
++  Description [stmap51 measures direct SCL load/max-cap pressure after an
+   initial base-gain map, then reuses the stmap45 pressure-agreement mapper
+-  mode with a severity-banded SCL/genlib gain for high-severity, large
+-  pressure cases. The hypothesis is that sub-extreme high pressure can use a
+-  softer 0.95 gain multiplier to reduce area while reserving the stmap49 0.90
+-  multiplier for extreme pressure.]
++  mode with a midpoint SCL/genlib gain for high-severity, large pressure
++  cases. The hypothesis is that 0.925x gain can recover more of the stmap49
++  timing benefit than stmap50 while spending less area than the 0.90x branch.]
+ 
+   SideEffects []
+ 
+   SeeAlso     []
+ 
+ ***********************************************************************/
+-int Abc_CommandStmap50( Abc_Frame_t * pAbc, int argc, char ** argv )
++int Abc_CommandStmap51( Abc_Frame_t * pAbc, int argc, char ** argv )
+ {
+     Abc_Ntk_t * pNtk, * pNtkMap, * pNtkRes, * pNtkFirst;
+-    Abc_Stmap50LoadStats_t LoadStats;
++    Abc_Stmap51LoadStats_t LoadStats;
+     char Buffer[100];
+     double DelayTarget;
+     double AreaMulti;
+@@ -476,7 +475,7 @@
+     float LogFan = 0;
+     float Slew = 0; // choose based on the library
+     float Gain = 250; // base SCL/genlib gain for low and moderate pressure
+-    float SoftGain, LowGain, SelectedGain;
++    float MidGain, SelectedGain;
+     int nGatesMin = 0;
+     int fAreaOnly;
+     int fRecovery;
+@@ -487,7 +486,7 @@
+     int fUseBuffs;
+     int fVerbose;
+     int c, fTempMap = 0;
+-    int fUseHighPressureGain, fUseSoftGain, fUseLowGain;
++    int fUseHighPressureGain;
+     float OverFrac, Feedback;
+     extern Abc_Ntk_t * Abc_NtkMap( Abc_Ntk_t * pNtk, Mio_Library_t* userLib, double DelayTarget, double AreaMulti, double DelayMulti, float LogFan, float Slew, float Gain, int nGatesMin, int fRecovery, int fSwitching, int fSkipFanout, int fUseProfile, int fUseBuffs, int fVerbose );
+     extern int Abc_NtkFraigSweep( Abc_Ntk_t * pNtk, int fUseInv, int fExdc, int fVerbose, int fVeryVerbose );
+@@ -501,7 +500,7 @@
+     fRecovery   = 1;
+     fSweep      = 0;
+     fSwitching  = 0;
+-    fSkipFanout = 46; // stmap45 agreement-admitted mapper mode with banded SCL gain; -f disables it
++    fSkipFanout = 46; // stmap45 agreement-admitted mapper mode with midpoint SCL gain; -f disables it
+     fUseProfile = 0;
+     fUseBuffs   = 0;
+     fVerbose    = 0;
+@@ -630,18 +629,18 @@
+         pNtkMap = Abc_NtkStrash( pNtk, 0, 0, 0 );
+         if ( pNtkMap == NULL )
+         {
+-            Abc_Print( -1, "Strashing before stmap50 has failed.\n" );
++            Abc_Print( -1, "Strashing before stmap51 has failed.\n" );
+             return 1;
+         }
+         pNtkMap = Abc_NtkBalance( pNtkRes = pNtkMap, 0, 0, 1 );
+         Abc_NtkDelete( pNtkRes );
+         if ( pNtkMap == NULL )
+         {
+-            Abc_Print( -1, "Balancing before stmap50 has failed.\n" );
++            Abc_Print( -1, "Balancing before stmap51 has failed.\n" );
+             return 1;
+         }
+         fTempMap = 1;
+-        Abc_Print( 0, "The network was strashed and balanced before stmap50.\n" );
++        Abc_Print( 0, "The network was strashed and balanced before stmap51.\n" );
+     }
+ 
+     if ( fSkipFanout )
+@@ -651,41 +650,36 @@
+         {
+             if ( fTempMap )
+                 Abc_NtkDelete( pNtkMap );
+-            Abc_Print( -1, "stmap50 has failed.\n" );
++            Abc_Print( -1, "stmap51 has failed.\n" );
+             return 1;
+         }
+-        Abc_Stmap50CollectSclLoadStats( pNtkFirst, &LoadStats );
+-        Abc_Stmap50PrintSclLoadStats( "feedback-load", &LoadStats );
+-        Abc_Stmap50PrintHotspots( &LoadStats );
++        Abc_Stmap51CollectSclLoadStats( pNtkFirst, &LoadStats );
++        Abc_Stmap51PrintSclLoadStats( "feedback-load", &LoadStats );
++        Abc_Stmap51PrintHotspots( &LoadStats );
+         OverFrac = LoadStats.nMatched ? (float)LoadStats.nOver / (float)LoadStats.nMatched : 0.0;
+-        Feedback = Abc_Stmap50FeedbackSeverity( &LoadStats );
+-        SoftGain = 0.95 * Gain;
+-        LowGain = 0.90 * Gain;
++        Feedback = Abc_Stmap51FeedbackSeverity( &LoadStats );
++        MidGain = 0.925 * Gain;
+         SelectedGain = Gain;
+         fUseHighPressureGain = Feedback >= 0.85 && LoadStats.nSinkPressureEntries >= 8000;
+-        fUseLowGain = fUseHighPressureGain && Feedback >= 0.90;
+-        fUseSoftGain = fUseHighPressureGain && !fUseLowGain;
+-        if ( fUseLowGain && LowGain > 0.0 )
+-            SelectedGain = LowGain;
+-        else if ( fUseSoftGain && SoftGain > 0.0 )
+-            SelectedGain = SoftGain;
+-        printf( "stmap50 feedback: remap = 1  active = %d  max-load-ratio = %.3f  over-max-frac = %.6f  severity = %.3f  raw-pressure-entries = %d  sink-pressure-entries = %d  pressure-capacity = %d\n",
++        if ( fUseHighPressureGain && MidGain > 0.0 )
++            SelectedGain = MidGain;
++        printf( "stmap51 feedback: remap = 1  active = %d  max-load-ratio = %.3f  over-max-frac = %.6f  severity = %.3f  raw-pressure-entries = %d  sink-pressure-entries = %d  pressure-capacity = %d\n",
+             Feedback > 0.0 && LoadStats.nSinkPressureEntries > 0, LoadStats.RatioMax, OverFrac,
+             Feedback, LoadStats.nPressureEntries, LoadStats.nSinkPressureEntries,
+             LoadStats.nAigPressureRatios );
+-        printf( "stmap50 banded-gain: base-gain = %.2f  soft-gain = %.2f  low-gain = %.2f  selected-gain = %.2f  severity-threshold = 0.850  extreme-severity-threshold = 0.900  sink-pressure-threshold = 8000  selected-soft-gain = %d  selected-low-gain = %d\n",
+-            Gain, SoftGain, LowGain, SelectedGain, fUseSoftGain, fUseLowGain );
+-        printf( "stmap50 mapper-mode: reused-stmap45-mode = 46  banded-gain = %.2f\n", SelectedGain );
++        printf( "stmap51 midpoint-gain: base-gain = %.2f  midpoint-gain = %.2f  selected-gain = %.2f  severity-threshold = 0.850  sink-pressure-threshold = 8000  selected-midpoint-gain = %d\n",
++            Gain, MidGain, SelectedGain, fUseHighPressureGain );
++        printf( "stmap51 mapper-mode: reused-stmap45-mode = 46  midpoint-gain = %.2f\n", SelectedGain );
+         Abc_NtkDelete( pNtkFirst );
+         Map_Stmap45SetSclLoadFeedback( LoadStats.RatioMax, OverFrac, Feedback, LoadStats.pAigSinkPressureRatios, LoadStats.nAigPressureRatios );
+         pNtkRes = Abc_NtkMap( pNtkMap, NULL, DelayTarget, AreaMulti, DelayMulti, LogFan, Slew, SelectedGain, nGatesMin, fRecovery, fSwitching, 46, fUseProfile, fUseBuffs, fVerbose );
+         Map_Stmap45SetSclLoadFeedback( 0.0, 0.0, 0.0, NULL, 0 );
+-        Abc_Stmap50LoadStatsFree( &LoadStats );
++        Abc_Stmap51LoadStatsFree( &LoadStats );
+         if ( pNtkRes == NULL )
+         {
+             if ( fTempMap )
+                 Abc_NtkDelete( pNtkMap );
+-            Abc_Print( -1, "stmap50 feedback remap has failed.\n" );
++            Abc_Print( -1, "stmap51 feedback remap has failed.\n" );
+             return 1;
+         }
+     }
+@@ -696,7 +690,7 @@
+         {
+             if ( fTempMap )
+                 Abc_NtkDelete( pNtkMap );
+-            Abc_Print( -1, "stmap50 has failed.\n" );
++            Abc_Print( -1, "stmap51 has failed.\n" );
+             return 1;
+         }
+     }
+@@ -713,9 +707,9 @@
+         }
+     }
+ 
+-    Abc_Stmap50CollectSclLoadStats( pNtkRes, &LoadStats );
+-    Abc_Stmap50PrintSclLoadStats( "scl-load", &LoadStats );
+-    Abc_Stmap50LoadStatsFree( &LoadStats );
++    Abc_Stmap51CollectSclLoadStats( pNtkRes, &LoadStats );
++    Abc_Stmap51PrintSclLoadStats( "scl-load", &LoadStats );
++    Abc_Stmap51LoadStatsFree( &LoadStats );
+     Abc_FrameReplaceCurrentNetwork( pAbc, pNtkRes );
+     return 0;
+ 
+@@ -724,8 +718,8 @@
+         sprintf(Buffer, "not used" );
+     else
+         sprintf(Buffer, "%.3f", DelayTarget );
+-    Abc_Print( -2, "usage: stmap50 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+-    Abc_Print( -2, "\t              performs stmap50 severity-banded two-pass mapping using the stmap45 pressure-agreement mapper mode\n" );
++    Abc_Print( -2, "usage: stmap51 [-DABFSG float] [-M num] [-arspfuovh]\n" );
++    Abc_Print( -2, "\t              performs stmap51 midpoint-gain two-pass mapping using the stmap45 pressure-agreement mapper mode\n" );
+     Abc_Print( -2, "\t-D float : sets the global required times [default = %s]\n", Buffer );
+     Abc_Print( -2, "\t-A float : \"area multiplier\" to bias gate selection [default = %.2f]\n", AreaMulti );
+     Abc_Print( -2, "\t-B float : \"delay multiplier\" to bias gate selection [default = %.2f]\n", DelayMulti );
+@@ -737,7 +731,7 @@
+     Abc_Print( -2, "\t-r       : toggles area recovery [default = %s]\n", fRecovery? "yes": "no" );
+     Abc_Print( -2, "\t-s       : toggles sweep after mapping [default = %s]\n", fSweep? "yes": "no" );
+     Abc_Print( -2, "\t-p       : optimizes power by minimizing switching [default = %s]\n", fSwitching? "yes": "no" );
+-    Abc_Print( -2, "\t-f       : disables the banded-gain SCL feedback mapper mode [default = %s]\n", fSkipFanout? "yes": "no" );
++    Abc_Print( -2, "\t-f       : disables the midpoint-gain SCL feedback mapper mode [default = %s]\n", fSkipFanout? "yes": "no" );
+     Abc_Print( -2, "\t-u       : use standard-cell profile [default = %s]\n", fUseProfile? "yes": "no" );
+     Abc_Print( -2, "\t-o       : toggles using buffers to decouple combinational outputs [default = %s]\n", fUseBuffs? "yes": "no" );
+     Abc_Print( -2, "\t-v       : toggles verbose output [default = %s]\n", fVerbose? "yes": "no" );
+
+exec
+/bin/zsh -lc "cat .autoeda/runtime/last_prompt.txt && echo '--- state diff'; git diff -- .autoeda/runtime/campaign_state.json .autoeda/runtime/last_prompt.txt | sed -n '1,240p'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+Read the project pack before doing anything and treat /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md as binding.
+
+Project-pack files to read:
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/mission.md
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/agent.md
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/repo_guide.md
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/evaluation.yaml
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/git.yaml
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/supervisor.yaml
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/secrets.ref
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills/implementation/SKILL.md
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills/methods/SKILL.md
+- /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/project_pack/skills/code_structure/SKILL.md
+
+Campaign workspace:
+- workspace root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda
+- runtime state file: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json
+- canonical version log: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+- results dir: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results
+
+Target repo:
+- repo root: /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+
+Current campaign state:
+- status: preflight-complete
+- completed_iterations: 51
+- next_iteration: 51
+- target_iterations: 100
+
+Execution contract:
+- respect the project pack exactly
+- update /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json as the source of truth for campaign progress
+- append completed iteration records to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+- write per-iteration artifacts under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results
+- follow the evaluation contract from evaluation.yaml
+- follow the git policy from git.yaml
+- if the project requires review passes, use fresh local review contexts with the configured review tool `codex_review` and command pattern: codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox "<review prompt here>"
+- stop on explicit irrecoverable blocker and write status=blocked with an explanation
+
+Final report contract:
+- when completed_iterations reaches target_iterations, do not start a new iteration
+- instead generate the final report required by evaluation.yaml
+- write the final markdown report to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md
+- write plots/figures to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots
+- include the required sections: ['setup_summary', 'results_summary', 'per_benchmark_trends', 'best_reproduction_flows', 'correctness_summary', 'review_summary']
+- use versions.md and runtime/results as the canonical evidence sources
+- once the report is complete, set report_generated=true, report_status=report-complete, last_report_time to the current UTC timestamp, and status=complete in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json
+- if report generation fails, set status=report-failed with an explanation in notes
+
+
+For each iteration:
+1. read the current state file
+2. choose the next version name from the family and next_iteration
+3. implement one clear hypothesis
+4. build and run the evaluation flow
+5. run correctness gates
+6. run the configured review loop if the pack requires it
+7. commit and push if policy allows it
+8. update campaign_state.json and versions.md
+
+If canary mode is active:
+- perform exactly one iteration and then stop cleanly
+- do not start a second iteration
+- do not push if git.yaml says canary.push_mode_override: disabled
+
+The evaluation family is:
+- family: stmap
+- baseline_command: map
+- benchmarks: ['benchmarks/i10.aig', 'benchmarks/ode.abc.blif', 'benchmarks/or1200.abc.blif', 'benchmarks/syn2.abc.blif']
+--- state diff
+diff --git a/.autoeda/runtime/campaign_state.json b/.autoeda/runtime/campaign_state.json
+index c222d4b0e..a3bafee07 100644
+--- a/.autoeda/runtime/campaign_state.json
++++ b/.autoeda/runtime/campaign_state.json
+@@ -6,16 +6,16 @@
+   "target_iterations": 100,
+   "completed_iterations": 51,
+   "next_iteration": 51,
+-  "status": "iteration-complete",
+-  "active_iteration": null,
+-  "active_version": null,
++  "status": "evaluation-complete",
++  "active_iteration": 51,
++  "active_version": "stmap51",
+   "last_completed_iteration": 50,
+   "last_completed_version": "stmap50",
+   "last_successful_commit": "local commit created: stmap50: band gain for severe SCL pressure; see git history for hash",
+-  "last_launch_time": "2026-04-26T05:59:38+00:00",
+-  "last_heartbeat_time": "2026-04-26T06:14:01Z",
+-  "launcher_pid": 26740,
+-  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260426T055938Z.log",
++  "last_launch_time": "2026-04-26T06:15:40+00:00",
++  "last_heartbeat_time": "2026-04-26T06:19:25Z",
++  "launcher_pid": 39645,
++  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260426T061540Z.log",
+   "selected_backend": "codex",
+   "report_required": true,
+   "report_generated": false,
+@@ -315,8 +315,12 @@
+     "stmap50 validation before review passed: build, help, smoke, full benchmark metrics, banded-gain diagnostic parsing, and CEC.",
+     "stmap50 review completed with no source findings across two supported review passes; positional configured prompt form failed due local Codex CLI --uncommitted conflict.",
+     "stmap50 validation passed: build, help, smoke, full benchmark metrics, banded-gain diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+-    "stmap50 local commit is planned with push enabled by full-campaign git.yaml."
++    "stmap50 local commit is planned with push enabled by full-campaign git.yaml.",
++    "Warning: launch uses dangerously-bypass-approvals-and-sandbox",
++    "stmap51 active iteration prepared: midpoint high-pressure SCL/genlib gain hypothesis.",
++    "stmap51 implementation built successfully; help and smoke gates passed; full evaluation started.",
++    "stmap51 full benchmark metrics, midpoint-gain diagnostic parsing, and CEC completed successfully; review loop started."
+   ],
+-  "updated_at": "2026-04-26T06:14:01Z",
+-  "updated_at_utc": "2026-04-26T06:14:01Z"
++  "updated_at": "2026-04-26T06:19:25Z",
++  "updated_at_utc": "2026-04-26T06:19:25Z"
+ }
+diff --git a/.autoeda/runtime/last_prompt.txt b/.autoeda/runtime/last_prompt.txt
+index ff47f125d..acf8bbedd 100644
+--- a/.autoeda/runtime/last_prompt.txt
++++ b/.autoeda/runtime/last_prompt.txt
+@@ -23,8 +23,8 @@ Target repo:
+ 
+ Current campaign state:
+ - status: preflight-complete
+-- completed_iterations: 50
+-- next_iteration: 50
++- completed_iterations: 51
++- next_iteration: 51
+ - target_iterations: 100
+ 
+ Execution contract:
+
+exec
+/bin/zsh -lc "cat .autoeda/runtime/results/stmap51/summary.json .autoeda/runtime/results/stmap51/cec_summary.json 2>/dev/null || true; echo 'metrics'; head -20 .autoeda/runtime/results/stmap51/metrics.csv; echo 'review tails'; tail -100 .autoeda/runtime/results/stmap51/review_pass1.log; tail -100 .autoeda/runtime/results/stmap51/review_pass2.log" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+{
+  "command": "stmap51",
+  "library": "7nm_lvt_ff.lib",
+  "benchmarks": [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif"
+  ],
+  "flow_results": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 1263.44,
+        "stime_delay_ps": 207.24
+      },
+      "stats": {},
+      "log": ".autoeda/runtime/results/stmap51/baseline_benchmarks_i10_aig.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 1303.1,
+        "stime_delay_ps": 198.64
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "0",
+          "highest": "0",
+          "lower_mod": "0",
+          "upper_mod": "0",
+          "middle_slack": "0",
+          "middle_relief": "0",
+          "reject_slack": "0",
+          "reject_highest": "0",
+          "reject_arrival": "0",
+          "reject_area": "0"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "0"
+        },
+        "penalty_stats": {
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "3",
+          "consumer_fanin": "651",
+          "consumer_fanout": "252",
+          "raw_pressure_entries": "262",
+          "raw_pressure_updates": "6",
+          "sink_pressure_entries": "262",
+          "sink_pressure_updates": "48",
+          "pressure_missed": "0",
+          "pressure_capacity": "4096",
+          "tracked_aig": "5548",
+          "tracked_node": "0",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "0",
+          "max_load_ratio": "1.544",
+          "over_max_frac": "0.001948",
+          "severity": "0.000",
+          "raw_pressure_entries": "262",
+          "sink_pressure_entries": "262",
+          "pressure_capacity": "4096"
+        },
+        "midpoint_gain_stats": {
+          "base_gain": "250.00",
+          "midpoint_gain": "231.25",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "sink_pressure_threshold": "8000",
+          "selected_midpoint_gain": "0"
+        },
+        "mapper_mode_stats": {
+          "reused_stmap45_mode": "46",
+          "midpoint_gain": "250.00"
+        }
+      },
+      "log": ".autoeda/runtime/results/stmap51/candidate_benchmarks_i10_aig.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap51; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 4798.34,
+        "stime_delay_ps": 587.08
+      },
+      "stats": {},
+      "log": ".autoeda/runtime/results/stmap51/baseline_benchmarks_or1200_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 4895.15,
+        "stime_delay_ps": 561.55
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "22679",
+          "highest": "8550",
+          "lower_mod": "10834",
+          "upper_mod": "3295",
+          "middle_slack": "35",
+          "middle_relief": "2",
+          "reject_slack": "959",
+          "reject_highest": "8476",
+          "reject_arrival": "5835",
+          "reject_area": "7062"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "2"
+        },
+        "penalty_stats": {
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "41",
+          "consumer_fanin": "29938",
+          "consumer_fanout": "6010",
+          "raw_pressure_entries": "4362",
+          "raw_pressure_updates": "1390",
+          "sink_pressure_entries": "4362",
+          "sink_pressure_updates": "1571",
+          "pressure_missed": "0",
+          "pressure_capacity": "32768",
+          "tracked_aig": "5548",
+          "tracked_node": "0",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "10.805",
+          "over_max_frac": "0.005085",
+          "severity": "0.733",
+          "raw_pressure_entries": "4362",
+          "sink_pressure_entries": "4362",
+          "pressure_capacity": "32768"
+        },
+        "midpoint_gain_stats": {
+          "base_gain": "250.00",
+          "midpoint_gain": "231.25",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "sink_pressure_threshold": "8000",
+          "selected_midpoint_gain": "0"
+        },
+        "mapper_mode_stats": {
+          "reused_stmap45_mode": "46",
+          "midpoint_gain": "250.00"
+        }
+      },
+      "log": ".autoeda/runtime/results/stmap51/candidate_benchmarks_or1200_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/or1200.abc.blif; resyn; resyn2; dch -v; stmap51; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 12491.21,
+        "stime_delay_ps": 531.32
+      },
+      "stats": {},
+      "log": ".autoeda/runtime/results/stmap51/baseline_benchmarks_ode_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 11334.38,
+        "stime_delay_ps": 522.05
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "49626",
+          "highest": "22601",
+          "lower_mod": "19542",
+          "upper_mod": "7483",
+          "middle_slack": "765",
+          "middle_relief": "0",
+          "reject_slack": "12974",
+          "reject_highest": "14866",
+          "reject_arrival": "10527",
+          "reject_area": "11095"
+        },
+        "near_miss_stats": {
+          "near_miss": "0"
+        },
+        "early_seed_stats": {
+          "early_seed": "0"
+        },
+        "penalty_stats": {
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "0",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "71",
+          "consumer_fanin": "90011",
+          "consumer_fanout": "16227",
+          "raw_pressure_entries": "4816",
+          "raw_pressure_updates": "3007",
+          "sink_pressure_entries": "4816",
+          "sink_pressure_updates": "3146",
+          "pressure_missed": "0",
+          "pressure_capacity": "32768",
+          "tracked_aig": "5548",
+          "tracked_node": "0",
+          "tracked_raw_ratio": "0.000",
+          "tracked_sink_ratio": "0.000"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "8.715",
+          "over_max_frac": "0.006186",
+          "severity": "0.627",
+          "raw_pressure_entries": "4816",
+          "sink_pressure_entries": "4816",
+          "pressure_capacity": "32768"
+        },
+        "midpoint_gain_stats": {
+          "base_gain": "250.00",
+          "midpoint_gain": "231.25",
+          "selected_gain": "250.00",
+          "severity_threshold": "0.850",
+          "sink_pressure_threshold": "8000",
+          "selected_midpoint_gain": "0"
+        },
+        "mapper_mode_stats": {
+          "reused_stmap45_mode": "46",
+          "midpoint_gain": "250.00"
+        }
+      },
+      "log": ".autoeda/runtime/results/stmap51/candidate_benchmarks_ode_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/ode.abc.blif; resyn; resyn2; dch -v; stmap51; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "kind": "baseline",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 21296.6,
+        "stime_delay_ps": 508.82
+      },
+      "stats": {},
+      "log": ".autoeda/runtime/results/stmap51/baseline_benchmarks_syn2_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime\""
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "kind": "candidate",
+      "returncode": 0,
+      "metrics": {
+        "stime_area": 22328.39,
+        "stime_delay_ps": 505.86
+      },
+      "stats": {
+        "guard_stats": {
+          "exact_risk": "98948",
+          "highest": "49254",
+          "lower_mod": "38367",
+          "upper_mod": "11327",
+          "middle_slack": "2171",
+          "middle_relief": "4",
+          "reject_slack": "36802",
+          "reject_highest": "28173",
+          "reject_arrival": "16139",
+          "reject_area": "17501"
+        },
+        "near_miss_stats": {
+          "near_miss": "18"
+        },
+        "early_seed_stats": {
+          "early_seed": "1"
+        },
+        "penalty_stats": {
+          "moderate_penalty_seed": "0",
+          "moderate_penalty_blocked": "8",
+          "strong_penalty_seed": "0",
+          "strong_penalty_blocked": "0"
+        },
+        "sink_pressure_stats": {
+          "roots": "133",
+          "consumer_fanin": "319126",
+          "consumer_fanout": "35406",
+          "raw_pressure_entries": "8980",
+          "raw_pressure_updates": "7261",
+          "sink_pressure_entries": "8980",
+          "sink_pressure_updates": "7463",
+          "pressure_missed": "0",
+          "pressure_capacity": "65536",
+          "tracked_aig": "5548",
+          "tracked_node": "5656",
+          "tracked_raw_ratio": "2.265",
+          "tracked_sink_ratio": "1.443"
+        },
+        "feedback_stats": {
+          "active": "1",
+          "max_load_ratio": "11.716",
+          "over_max_frac": "0.006413",
+          "severity": "0.884",
+          "raw_pressure_entries": "8980",
+          "sink_pressure_entries": "8980",
+          "pressure_capacity": "65536"
+        },
+        "midpoint_gain_stats": {
+          "base_gain": "250.00",
+          "midpoint_gain": "231.25",
+          "selected_gain": "231.25",
+          "severity_threshold": "0.850",
+          "sink_pressure_threshold": "8000",
+          "selected_midpoint_gain": "1"
+        },
+        "mapper_mode_stats": {
+          "reused_stmap45_mode": "46",
+          "midpoint_gain": "231.25"
+        }
+      },
+      "log": ".autoeda/runtime/results/stmap51/candidate_benchmarks_syn2_abc_blif.log",
+      "command": "./abc -c \"read_lib 7nm_lvt_ff.lib; read benchmarks/syn2.abc.blif; resyn; resyn2; dch -v; stmap51; topo; buffer; upsize -v; dnsize -v; stime\""
+    }
+  ],
+  "comparison": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "baseline_delay_ps": 207.24,
+      "candidate_delay_ps": 198.64,
+      "delay_delta_ps": -8.600000000000023,
+      "delay_delta_pct": -4.149778035128365,
+      "baseline_area": 1263.44,
+      "candidate_area": 1303.1,
+      "area_delta": 39.659999999999854,
+      "area_delta_pct": 3.139048945735441
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "baseline_delay_ps": 531.32,
+      "candidate_delay_ps": 522.05,
+      "delay_delta_ps": -9.270000000000095,
+      "delay_delta_pct": -1.7447112851012752,
+      "baseline_area": 12491.21,
+      "candidate_area": 11334.38,
+      "area_delta": -1156.83,
+      "area_delta_pct": -9.261152442397494
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "baseline_delay_ps": 587.08,
+      "candidate_delay_ps": 561.55,
+      "delay_delta_ps": -25.530000000000086,
+      "delay_delta_pct": -4.348640730394509,
+      "baseline_area": 4798.34,
+      "candidate_area": 4895.15,
+      "area_delta": 96.80999999999949,
+      "area_delta_pct": 2.017572743907257
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "baseline_delay_ps": 508.82,
+      "candidate_delay_ps": 505.86,
+      "delay_delta_ps": -2.9599999999999795,
+      "delay_delta_pct": -0.5817381392240831,
+      "baseline_area": 21296.6,
+      "candidate_area": 22328.39,
+      "area_delta": 1031.7900000000009,
+      "area_delta_pct": 4.844857864635674
+    }
+  ],
+  "cec": [
+    {
+      "benchmark": "benchmarks/i10.aig",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig_stmap51.aig",
+      "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig.log"
+    },
+    {
+      "benchmark": "benchmarks/ode.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif_stmap51.aig",
+      "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/or1200.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif_stmap51.aig",
+      "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif.log"
+    },
+    {
+      "benchmark": "benchmarks/syn2.abc.blif",
+      "passed": true,
+      "returncode": 0,
+      "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif_orig.aig",
+      "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif_stmap51.aig",
+      "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif.log"
+    }
+  ]
+}
+[
+  {
+    "benchmark": "benchmarks/i10.aig",
+    "passed": true,
+    "returncode": 0,
+    "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig_stmap51.aig",
+    "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_i10_aig.log"
+  },
+  {
+    "benchmark": "benchmarks/ode.abc.blif",
+    "passed": true,
+    "returncode": 0,
+    "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif_stmap51.aig",
+    "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_ode_abc_blif.log"
+  },
+  {
+    "benchmark": "benchmarks/or1200.abc.blif",
+    "passed": true,
+    "returncode": 0,
+    "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif_stmap51.aig",
+    "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_or1200_abc_blif.log"
+  },
+  {
+    "benchmark": "benchmarks/syn2.abc.blif",
+    "passed": true,
+    "returncode": 0,
+    "original": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif_orig.aig",
+    "candidate": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif_stmap51.aig",
+    "log": ".autoeda/runtime/results/stmap51/cec_benchmarks_syn2_abc_blif.log"
+  }
+]
+metrics
+benchmark,flow,stime_delay_ps,stime_area,log
+benchmarks/i10.aig,baseline,207.24,1263.44,.autoeda/runtime/results/stmap51/baseline_benchmarks_i10_aig.log
+benchmarks/i10.aig,candidate,198.64,1303.1,.autoeda/runtime/results/stmap51/candidate_benchmarks_i10_aig.log
+benchmarks/ode.abc.blif,baseline,531.32,12491.21,.autoeda/runtime/results/stmap51/baseline_benchmarks_ode_abc_blif.log
+benchmarks/ode.abc.blif,candidate,522.05,11334.38,.autoeda/runtime/results/stmap51/candidate_benchmarks_ode_abc_blif.log
+benchmarks/or1200.abc.blif,baseline,587.08,4798.34,.autoeda/runtime/results/stmap51/baseline_benchmarks_or1200_abc_blif.log
+benchmarks/or1200.abc.blif,candidate,561.55,4895.15,.autoeda/runtime/results/stmap51/candidate_benchmarks_or1200_abc_blif.log
+benchmarks/syn2.abc.blif,baseline,508.82,21296.6,.autoeda/runtime/results/stmap51/baseline_benchmarks_syn2_abc_blif.log
+benchmarks/syn2.abc.blif,candidate,505.86,22328.39,.autoeda/runtime/results/stmap51/candidate_benchmarks_syn2_abc_blif.log
+review tails
+_TEST/
+lib/abc*
+lib/m114*
+lib/bip*
+docs/
+.cache/
+
+src/ext*
+src/xxx/
+src/aig/au/
+src/aig/ssm/
+src/aig/ddb/
+
+*~
+*.orig
+
+*.[od]
+
+*.ncb
+*.opt
+*.plg
+
+*.zip
+*.DS_Store
+
+abcspaceext.dsw
+abcext.dsp
+
+abcexe.vcproj*
+abclib.vcproj*
+/abcspace.sln
+abcspace.suo
+
+*.pyc
+
+src/python/build
+src/python/bdist
+src/python/pyabc.py
+src/python/pyabc_wrap.*
+
+.idea/
+build/
+
+*.rej
+*.orig
+
+tags
+
+/libabc.a
+/abc
+
+/arch_flags
+
+/cmake
+/cscope
+abc.history
+
+# AutoEDA live supervisor state is machine-local and not reproducible.
+/.autoeda/runtime/launch.pid
+/.autoeda/runtime/supervisor.lock
+/.autoeda/runtime/heartbeat.json
+/.autoeda/runtime/supervisor_state.json
+/.autoeda/runtime/logs/launch_*.log
+/.gitcommit export-subst
+* text=auto
+
+*.c text
+*.cpp text
+*.h text
+
+*.py text
+*.sh text
+
+*.make text
+Makefile text
+
+*.txt text
+*.md text
+*.html text
+
+readmeaig text
+LICENSE text
+license text
+CHANGES text
+README text
+
+.hgignore text
+.gitignore text
+.gitattributes text
+
+*.dsp text eol=crlf
+*.dsw text eol=crlf
+
+*.aig binary
+*.lib binary
+*.dll binary
+
+codex
+No actionable correctness issues were found in the current stmap51 source, command registration, build integration, diagnostics, or recorded evaluation artifacts. The implementation matches the intended stmap50-derived midpoint-gain policy and preserves existing command paths.
+No actionable correctness issues were found in the current stmap51 source, command registration, build integration, diagnostics, or recorded evaluation artifacts. The implementation matches the intended stmap50-derived midpoint-gain policy and preserves existing command paths.
+- respect the project pack exactly
+- update /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json as the source of truth for campaign progress
+- append completed iteration records to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/versions.md
+- write per-iteration artifacts under /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/results
+- follow the evaluation contract from evaluation.yaml
+- follow the git policy from git.yaml
+- if the project requires review passes, use fresh local review contexts with the configured review tool `codex_review` and command pattern: codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox "<review prompt here>"
+- stop on explicit irrecoverable blocker and write status=blocked with an explanation
+
+Final report contract:
+- when completed_iterations reaches target_iterations, do not start a new iteration
+- instead generate the final report required by evaluation.yaml
+- write the final markdown report to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/final_report.md
+- write plots/figures to /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/plots
+- include the required sections: ['setup_summary', 'results_summary', 'per_benchmark_trends', 'best_reproduction_flows', 'correctness_summary', 'review_summary']
+- use versions.md and runtime/results as the canonical evidence sources
+- once the report is complete, set report_generated=true, report_status=report-complete, last_report_time to the current UTC timestamp, and status=complete in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/campaign_state.json
+- if report generation fails, set status=report-failed with an explanation in notes
+
+
+For each iteration:
+1. read the current state file
+2. choose the next version name from the family and next_iteration
+3. implement one clear hypothesis
+4. build and run the evaluation flow
+5. run correctness gates
+6. run the configured review loop if the pack requires it
+7. commit and push if policy allows it
+8. update campaign_state.json and versions.md
+
+If canary mode is active:
+- perform exactly one iteration and then stop cleanly
+- do not start a second iteration
+- do not push if git.yaml says canary.push_mode_override: disabled
+
+The evaluation family is:
+- family: stmap
+- baseline_command: map
+- benchmarks: ['benchmarks/i10.aig', 'benchmarks/ode.abc.blif', 'benchmarks/or1200.abc.blif', 'benchmarks/syn2.abc.blif']
+--- state diff
+diff --git a/.autoeda/runtime/campaign_state.json b/.autoeda/runtime/campaign_state.json
+index c222d4b0e..a3bafee07 100644
+--- a/.autoeda/runtime/campaign_state.json
++++ b/.autoeda/runtime/campaign_state.json
+@@ -6,16 +6,16 @@
+   "target_iterations": 100,
+   "completed_iterations": 51,
+   "next_iteration": 51,
+-  "status": "iteration-complete",
+-  "active_iteration": null,
+-  "active_version": null,
++  "status": "evaluation-complete",
++  "active_iteration": 51,
++  "active_version": "stmap51",
+   "last_completed_iteration": 50,
+   "last_completed_version": "stmap50",
+   "last_successful_commit": "local commit created: stmap50: band gain for severe SCL pressure; see git history for hash",
+-  "last_launch_time": "2026-04-26T05:59:38+00:00",
+-  "last_heartbeat_time": "2026-04-26T06:14:01Z",
+-  "launcher_pid": 26740,
+-  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260426T055938Z.log",
++  "last_launch_time": "2026-04-26T06:15:40+00:00",
++  "last_heartbeat_time": "2026-04-26T06:19:25Z",
++  "launcher_pid": 39645,
++  "launcher_log": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness/.autoeda/runtime/logs/launch_20260426T061540Z.log",
+   "selected_backend": "codex",
+   "report_required": true,
+   "report_generated": false,
+@@ -315,8 +315,12 @@
+     "stmap50 validation before review passed: build, help, smoke, full benchmark metrics, banded-gain diagnostic parsing, and CEC.",
+     "stmap50 review completed with no source findings across two supported review passes; positional configured prompt form failed due local Codex CLI --uncommitted conflict.",
+     "stmap50 validation passed: build, help, smoke, full benchmark metrics, banded-gain diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+-    "stmap50 local commit is planned with push enabled by full-campaign git.yaml."
++    "stmap50 local commit is planned with push enabled by full-campaign git.yaml.",
++    "Warning: launch uses dangerously-bypass-approvals-and-sandbox",
++    "stmap51 active iteration prepared: midpoint high-pressure SCL/genlib gain hypothesis.",
++    "stmap51 implementation built successfully; help and smoke gates passed; full evaluation started.",
++    "stmap51 full benchmark metrics, midpoint-gain diagnostic parsing, and CEC completed successfully; review loop started."
+   ],
+-  "updated_at": "2026-04-26T06:14:01Z",
+-  "updated_at_utc": "2026-04-26T06:14:01Z"
++  "updated_at": "2026-04-26T06:19:25Z",
++  "updated_at_utc": "2026-04-26T06:19:25Z"
+ }
+diff --git a/.autoeda/runtime/last_prompt.txt b/.autoeda/runtime/last_prompt.txt
+index ff47f125d..acf8bbedd 100644
+--- a/.autoeda/runtime/last_prompt.txt
++++ b/.autoeda/runtime/last_prompt.txt
+@@ -23,8 +23,8 @@ Target repo:
+ 
+ Current campaign state:
+ - status: preflight-complete
+-- completed_iterations: 50
+-- next_iteration: 50
++- completed_iterations: 51
++- next_iteration: 51
+ - target_iterations: 100
+ 
+ Execution contract:
+
+
+exec
+/bin/zsh -lc "find . -maxdepth 3 -iname '*cmake*' -o -name 'CMakeLists.txt' | head -50; grep -R \"abcStmap_50.c\" -n . --exclude-dir=.git --exclude-dir=.autoeda | head -100" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+2026-04-26T06:26:00.444074Z ERROR codex_core::tools::router: error=write_stdin failed: stdin is closed for this session; rerun exec_command with tty=true to keep stdin open
+exec
+/bin/zsh -lc "rg -n \"abcStmap_50\\.c|abcStmap_51\\.c\" -g '"'!/.git'"' -g '"'!/.autoeda'"' -g '"'!abc'"' -g '"'!libabc.a'"'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 244ms:
+src/base/abci/abcStmap_51.c:3:  FileName    [abcStmap_51.c]
+src/base/abci/module.make:119:    src/base/abci/abcStmap_50.c \
+src/base/abci/module.make:120:    src/base/abci/abcStmap_51.c \
+src/base/abci/abcStmap_50.c:3:  FileName    [abcStmap_50.c]
+
+exec
+/bin/zsh -lc "sed -n '1,220p' CMakeLists.txt | sed -n '1,220p'; grep -n \"module.make\\|glob\\|GLOB\\|src/base/abci\" CMakeLists.txt" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ exited 1 in 0ms:
+cmake_minimum_required(VERSION 3.5.0)
+
+include(CMakeParseArguments)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+# Generate compilation database compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Default c++ standard used unless otherwise specified in target_compile_features.
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "the C++ standard to use for this project")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+function(addprefix var prefix)
+    foreach( s ${ARGN} )
+        list(APPEND tmp "-I${s}")
+    endforeach()
+    set(${var} ${tmp} PARENT_SCOPE)
+endfunction()
+
+# filter out flags that are not appropriate for the compiler being used
+function(target_compile_options_filtered target visibility)
+    foreach( flag ${ARGN} )
+        if( flag MATCHES "^-D.*" )
+            target_compile_options( ${target} ${visibility} ${flag} )
+        else()
+            check_c_compiler_flag( ${flag} C_COMPILER_SUPPORTS__${flag} )
+            if( C_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:C>:${flag}> )
+            endif()
+
+            check_cxx_compiler_flag( ${flag} CXX_COMPILER_SUPPORTS__${flag} )
+            if( CXX_COMPILER_SUPPORTS__${flag} )
+                target_compile_options( ${target} ${visibility} $<$<COMPILE_LANGUAGE:CXX>:${flag}>  )
+            endif()
+        endif()
+    endforeach()
+endfunction()
+
+project(abc)
+
+if(READLINE_FOUND MATCHES TRUE)
+    addprefix(ABC_READLINE_INCLUDES_FLAGS "-I" ${READLINE_INCLUDE})
+    string(REPLACE ";" " " ABC_READLINE_INCLUDES_FLAGS "${ABC_READLINE_INCLUDES_FLAGS}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_INCLUDES=${ABC_READLINE_INCLUDES_FLAGS}")
+
+    string(REPLACE ";" " " ABC_READLINE_LIBRARIES_FLAGS "${READLINE_LIBRARIES}")
+    list(APPEND ABC_READLINE_FLAGS "ABC_READLINE_LIBRARIES=${ABC_READLINE_LIBRARIES_FLAGS}")
+elseif(READLINE_FOUND MATCHES FALSE)
+    list(APPEND ABC_READLINE_FLAGS "ABC_USE_NO_READLINE=1")
+endif()
+
+if(ABC_USE_NAMESPACE)
+    set(ABC_USE_NAMESPACE_FLAGS "ABC_USE_NAMESPACE=${ABC_USE_NAMESPACE}")
+endif()
+
+if( APPLE )
+    set(make_env ${CMAKE_COMMAND} -E env SDKROOT=${CMAKE_OSX_SYSROOT})
+endif()
+
+# run make to extract compiler options, linker options and list of source files
+execute_process(
+  COMMAND
+    ${make_env}
+    make
+        ${ABC_READLINE_FLAGS}
+        ${ABC_USE_NAMESPACE_FLAGS}
+        ARCHFLAGS_EXE=${CMAKE_CURRENT_BINARY_DIR}/abc_arch_flags_program.exe
+        ABC_MAKE_NO_DEPS=1
+        CC=${CMAKE_C_COMPILER}
+        CXX=${CMAKE_CXX_COMPILER}
+        LD=${CMAKE_CXX_COMPILER}
+        cmake_info
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  OUTPUT_VARIABLE MAKE_OUTPUT
+)
+
+# extract options from make output
+function(extract_var SEPARATOR DEST_VARIABLE MAKE_OUTPUT)
+  string(REGEX MATCH "${SEPARATOR} .* ${SEPARATOR}" TMP "${MAKE_OUTPUT}")
+  string(REGEX REPLACE "${SEPARATOR} (.*) ${SEPARATOR}" "\\1" TMP "${TMP}")
+
+  separate_arguments(TMP)
+
+  set(${DEST_VARIABLE} ${TMP} PARENT_SCOPE)
+endfunction()
+
+extract_var(SEPARATOR_SRC ABC_SRC ${MAKE_OUTPUT})
+extract_var(SEPARATOR_LIBS ABC_LIBS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CFLAGS ABC_CFLAGS ${MAKE_OUTPUT})
+extract_var(SEPARATOR_CXXFLAGS ABC_CXXFLAGS ${MAKE_OUTPUT})
+
+if(ABC_USE_NAMESPACE)
+    set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
+endif()
+
+function(abc_properties target visibility)
+    target_include_directories(${target} ${visibility} ${CMAKE_CURRENT_SOURCE_DIR}/src )
+    target_compile_options_filtered(${target} ${visibility} ${ABC_CFLAGS} ${ABC_CXXFLAGS} -Wno-unused-but-set-variable )
+    target_link_libraries(${target} ${visibility} ${ABC_LIBS})
+endfunction()
+
+set(ABC_MAIN_SRC src/base/main/main.c)
+list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
+
+add_library(libabc EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc PUBLIC)
+set_property(TARGET libabc PROPERTY OUTPUT_NAME abc)
+
+add_executable(abc ${ABC_MAIN_SRC})
+target_link_libraries(abc PRIVATE libabc)
+abc_properties(abc PRIVATE)
+
+add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+abc_properties(libabc-pic PUBLIC)
+set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
+
+if(NOT DEFINED ABC_SKIP_TESTS)
+    enable_testing()
+    include(FetchContent)
+    FetchContent_Declare(
+    googletest
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    # Specify the commit you depend on and update it regularly.
+    URL "https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip"
+    )
+    FetchContent_MakeAvailable(googletest)
+    include(GoogleTest)
+    add_subdirectory(test)
+endif()
+ succeeded in 25466ms:
+Binary file ./abc matches
+./src/base/abci/abcStmap_50.c:3:  FileName    [abcStmap_50.c]
+./src/base/abci/abcStmap_50.d:1:src/base/abci/abcStmap_50.d src/base/abci/abcStmap_50.o: src/base/abci/abcStmap_50.c src/base/abc/abc.h \
+./src/base/abci/module.make:119:    src/base/abci/abcStmap_50.c \
+Binary file ./src/base/abci/abcStmap_50.o matches
+./abclib.dsp:682:SOURCE=.\src\base\abci\abcStmap_50.c
+
+exec
+/bin/zsh -lc 'git ls-files .autoeda/runtime | head -50; git status --ignored --short .autoeda/runtime/results/stmap51 | head -100; git ls-files .autoeda/runtime/results | tail -20' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+.autoeda/runtime/campaign_state.json
+.autoeda/runtime/harness_prompt.txt
+.autoeda/runtime/harness_result.json
+.autoeda/runtime/harness_review.md
+.autoeda/runtime/harness_review_prompt.txt
+.autoeda/runtime/last_prompt.txt
+.autoeda/runtime/logs/harness_20260425T141842Z.log
+.autoeda/runtime/logs/harness_review_20260425T142356Z.log
+.autoeda/runtime/preflight_report.json
+.autoeda/runtime/results/stmap0/baseline_i10.log
+.autoeda/runtime/results/stmap0/baseline_i10.stderr
+.autoeda/runtime/results/stmap0/baseline_i10.stdout
+.autoeda/runtime/results/stmap0/baseline_ode.log
+.autoeda/runtime/results/stmap0/baseline_ode.stderr
+.autoeda/runtime/results/stmap0/baseline_ode.stdout
+.autoeda/runtime/results/stmap0/baseline_or1200.log
+.autoeda/runtime/results/stmap0/baseline_or1200.stderr
+.autoeda/runtime/results/stmap0/baseline_or1200.stdout
+.autoeda/runtime/results/stmap0/baseline_syn2.log
+.autoeda/runtime/results/stmap0/baseline_syn2.stderr
+.autoeda/runtime/results/stmap0/baseline_syn2.stdout
+.autoeda/runtime/results/stmap0/build.log
+.autoeda/runtime/results/stmap0/build.stderr
+.autoeda/runtime/results/stmap0/build.stdout
+.autoeda/runtime/results/stmap0/candidate_i10.log
+.autoeda/runtime/results/stmap0/candidate_i10.stderr
+.autoeda/runtime/results/stmap0/candidate_i10.stdout
+.autoeda/runtime/results/stmap0/candidate_ode.log
+.autoeda/runtime/results/stmap0/candidate_ode.stderr
+.autoeda/runtime/results/stmap0/candidate_ode.stdout
+.autoeda/runtime/results/stmap0/candidate_or1200.log
+.autoeda/runtime/results/stmap0/candidate_or1200.stderr
+.autoeda/runtime/results/stmap0/candidate_or1200.stdout
+.autoeda/runtime/results/stmap0/candidate_syn2.log
+.autoeda/runtime/results/stmap0/candidate_syn2.stderr
+.autoeda/runtime/results/stmap0/candidate_syn2.stdout
+.autoeda/runtime/results/stmap0/cec_i10.log
+.autoeda/runtime/results/stmap0/cec_i10.stderr
+.autoeda/runtime/results/stmap0/cec_i10.stdout
+.autoeda/runtime/results/stmap0/cec_i10_candidate.aig
+.autoeda/runtime/results/stmap0/cec_i10_original.aig
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.log
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_candidate.stdout
+.autoeda/runtime/results/stmap0/cec_i10_write_original.log
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stderr
+.autoeda/runtime/results/stmap0/cec_i10_write_original.stdout
+.autoeda/runtime/results/stmap0/cec_ode.log
+.autoeda/runtime/results/stmap0/cec_ode.stderr
+.autoeda/runtime/results/stmap0/cec_ode.stdout
+?? .autoeda/runtime/results/stmap51/
+.autoeda/runtime/results/stmap9/cec_benchmarks_or1200_abc_blif.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_or1200_abc_blif_candidate_write.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_or1200_abc_blif_orig.aig
+.autoeda/runtime/results/stmap9/cec_benchmarks_or1200_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_or1200_abc_blif_stmap9.aig
+.autoeda/runtime/results/stmap9/cec_benchmarks_syn2_abc_blif.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_syn2_abc_blif_candidate_write.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_syn2_abc_blif_orig.aig
+.autoeda/runtime/results/stmap9/cec_benchmarks_syn2_abc_blif_orig_write.log
+.autoeda/runtime/results/stmap9/cec_benchmarks_syn2_abc_blif_stmap9.aig
+.autoeda/runtime/results/stmap9/comparison.csv
+.autoeda/runtime/results/stmap9/help.log
+.autoeda/runtime/results/stmap9/metrics.csv
+.autoeda/runtime/results/stmap9/review_pass1.log
+.autoeda/runtime/results/stmap9/review_pass1_supported.log
+.autoeda/runtime/results/stmap9/review_prompt1.txt
+.autoeda/runtime/results/stmap9/review_summary.md
+.autoeda/runtime/results/stmap9/smoke_i10.log
+.autoeda/runtime/results/stmap9/summary.json
+.autoeda/runtime/results/stmap9/version_log_check.log
+
+exec
+/bin/zsh -lc "sed -n '1380,1485p' src/map/mapper/mapperMatch.c && rg -n \"Stmap45Load|SclLoadFeedback|pAigPressureRatios|nAigPressureRatios|fSkipFanout == 46|== 46\" src/map/mapper/mapperMatch.c src/map/mapper -g '*.c'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    LocalFeedback = (PressureAgreement - 1.75) / 3.0;
+    if ( LocalFeedback > 1.0 )
+        LocalFeedback = 1.0;
+    Penalty *= 0.40 + 0.60 * s_Stmap44SclFeedback * LocalFeedback;
+    return Penalty > 1.0 ? 1.0 : Penalty;
+}
+
+static float Map_MatchStmap44StrongPenaltyFactor( Map_Node_t * pNode, Map_Cut_t * pCut, Map_Match_t * pMatch, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon, float * pLeafLoadAvg, float * pLoadDriveRatio, int * pFanLimit, float * pNodePressureRatio, float * pCutPressureRatio, int * pNodeAigId )
+{
+    float Penalty, LoadDriveRatio, NodePressureRatio, CutPressureRatio, PressureRatio, LocalFeedback;
+    Penalty = Map_MatchStmap34StrongPenaltyFactor( pNode, pCut, pMatch, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon, pLeafLoadAvg, pLoadDriveRatio, pFanLimit );
+    LoadDriveRatio = pLoadDriveRatio ? *pLoadDriveRatio : 0.0;
+    NodePressureRatio = Map_MatchStmap44NodePressureRatio( pNode, pNodeAigId );
+    CutPressureRatio = Map_MatchStmap44CutPressureRatio( pCut );
+    PressureRatio = NodePressureRatio > CutPressureRatio ? NodePressureRatio : CutPressureRatio;
+    if ( pNodePressureRatio )
+        *pNodePressureRatio = NodePressureRatio;
+    if ( pCutPressureRatio )
+        *pCutPressureRatio = CutPressureRatio;
+    if ( Penalty > 0.0 && s_Stmap44SclFeedback > 0.0 && PressureRatio > 1.0 && LoadDriveRatio > 1.0 )
+    {
+        LocalFeedback = (PressureRatio - 1.0) / 4.0;
+        if ( LocalFeedback > 1.0 )
+            LocalFeedback = 1.0;
+        Penalty += 0.16 * s_Stmap44SclFeedback * LocalFeedback * (LoadDriveRatio - 1.0) / LoadDriveRatio;
+    }
+    return Penalty > 0.75 ? 0.75 : Penalty;
+}
+
+static float s_Stmap45SclMaxLoadRatio = 0.0;
+static float s_Stmap45SclOverFrac = 0.0;
+static float s_Stmap45SclFeedback = 0.0;
+static float * s_pStmap45SclPressureRatios = NULL;
+static int s_nStmap45SclPressureRatios = 0;
+
+void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+{
+    s_Stmap45SclMaxLoadRatio = MaxLoadRatio;
+    s_Stmap45SclOverFrac = OverFrac;
+    s_Stmap45SclFeedback = Severity;
+    s_pStmap45SclPressureRatios = pAigPressureRatios;
+    s_nStmap45SclPressureRatios = nAigPressureRatios;
+}
+
+static float Map_MatchStmap45PressureLookup( int AigId )
+{
+    if ( AigId < 0 || AigId >= s_nStmap45SclPressureRatios || s_Stmap45SclFeedback <= 0.0 || s_pStmap45SclPressureRatios == NULL )
+        return 0.0;
+    return s_pStmap45SclPressureRatios[AigId];
+}
+
+static float Map_MatchStmap45NodePressureRatio( Map_Node_t * pNode, int * pAigId )
+{
+    int AigId;
+    if ( pAigId )
+        *pAigId = -1;
+    if ( pNode == NULL || pNode->Num < 0 )
+        return 0.0;
+    AigId = Map_NodeReadAigId( pNode );
+    if ( pAigId )
+        *pAigId = AigId;
+    return Map_MatchStmap45PressureLookup( AigId );
+}
+
+static float Map_MatchStmap45CutPressureRatio( Map_Cut_t * pCut )
+{
+    Map_Node_t * pLeaf;
+    float Ratio, RatioMax = 0.0;
+    int i;
+    if ( pCut == NULL )
+        return 0.0;
+    for ( i = 0; i < (int)pCut->nLeaves; i++ )
+    {
+        pLeaf = Map_Regular( pCut->ppLeaves[i] );
+        if ( pLeaf == NULL )
+            continue;
+        Ratio = Map_MatchStmap45NodePressureRatio( pLeaf, NULL );
+        if ( RatioMax < Ratio )
+            RatioMax = Ratio;
+    }
+    return RatioMax;
+}
+
+static int Map_MatchStmap45HasPressureAgreement( float NodePressureRatio, float CutPressureRatio )
+{
+    float PressureSpread;
+    if ( s_Stmap45SclFeedback <= 0.0 || NodePressureRatio <= 1.75 || CutPressureRatio <= 1.75 )
+        return 0;
+    PressureSpread = NodePressureRatio > CutPressureRatio ? NodePressureRatio / CutPressureRatio : CutPressureRatio / NodePressureRatio;
+    return PressureSpread <= 1.25;
+}
+
+static float Map_MatchStmap45ModeratePenaltyFactor( Map_Node_t * pNode, Map_Cut_t * pCut, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon, float * pNodePressureRatio, float * pCutPressureRatio, int * pNodeAigId )
+{
+    float Penalty, NodePressureRatio, CutPressureRatio, PressureAgreement, LocalFeedback;
+    Penalty = Map_MatchStmap29ModeratePenaltyFactor( pNode, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, Epsilon );
+    NodePressureRatio = Map_MatchStmap45NodePressureRatio( pNode, pNodeAigId );
+    CutPressureRatio = Map_MatchStmap45CutPressureRatio( pCut );
+    if ( pNodePressureRatio )
+        *pNodePressureRatio = NodePressureRatio;
+    if ( pCutPressureRatio )
+        *pCutPressureRatio = CutPressureRatio;
+    if ( Penalty <= 0.0 || !Map_MatchStmap45HasPressureAgreement( NodePressureRatio, CutPressureRatio ) )
+        return 0.0;
+    PressureAgreement = NodePressureRatio < CutPressureRatio ? NodePressureRatio : CutPressureRatio;
+    LocalFeedback = (PressureAgreement - 1.75) / 3.0;
+src/map/mapper/mapperMatch.c:756:void Map_Stmap36SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity )
+src/map/mapper/mapperMatch.c:780:void Map_Stmap37SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:831:void Map_Stmap38SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:907:void Map_Stmap39SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:992:void Map_Stmap40SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:997:    s_pStmap40SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:998:    s_nStmap40SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1068:void Map_Stmap41SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1073:    s_pStmap41SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1074:    s_nStmap41SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1144:void Map_Stmap42SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1149:    s_pStmap42SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1150:    s_nStmap42SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1220:void Map_Stmap43SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1225:    s_pStmap43SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1226:    s_nStmap43SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1316:void Map_Stmap44SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1321:    s_pStmap44SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1322:    s_nStmap44SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1415:void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1420:    s_pStmap45SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1421:    s_nStmap45SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1520:void Map_Stmap46SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1525:    s_pStmap46SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1526:    s_nStmap46SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1984:    float Stmap45ModeratePenaltyFactor, Stmap45StrongPenaltyFactor, Stmap45PenaltyFactor, Stmap45CutLeafLoadAvg, Stmap45LoadDriveRatio, Stmap45NodePressureRatio, Stmap45CutPressureRatio;
+src/map/mapper/mapperMatch.c:2375:                p->fSkipFanout == 46 &&
+src/map/mapper/mapperMatch.c:2393:                p->fSkipFanout == 46 &&
+src/map/mapper/mapperMatch.c:2398:            Stmap45LoadDriveRatio = 0.0;
+src/map/mapper/mapperMatch.c:2401:                Map_MatchStmap45StrongPenaltyFactor( pNode, pCut, pMatch, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon, &Stmap45CutLeafLoadAvg, &Stmap45LoadDriveRatio, &Stmap45FanLimit, &Stmap45NodePressureRatio, &Stmap45CutPressureRatio, &Stmap45NodeAigId ) : 0.0;
+src/map/mapper/mapperMatch.c:2466:                (p->fSkipFanout == 46 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+src/map/mapper/mapperMatch.c:2505:            if ( p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0 && p->pSuperLib )
+src/map/mapper/mapperMatch.c:2824:                if ( p->fSkipFanout == 46 && fStmap45ModeratePenaltyCandidate && Stmap45ModeratePenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:2833:                if ( p->fSkipFanout == 46 && fStmap45StrongPenaltyCandidate && Stmap45StrongPenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:2840:                        Stmap45FanLimit, Stmap45LoadDriveRatio, Stmap45NodePressureRatio,
+src/map/mapper/mapperMatch.c:2875:                 (fStrictFallback || (p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0) || (p->fSkipFanout == 30 && fStmap29ModeratePenaltyCandidate && Stmap29PenaltyFactor > 0.0) || (p->fSkipFanout == 31 && Stmap30PenaltyFactor > 0.0) || (p->fSkipFanout == 32 && Stmap31PenaltyFactor > 0.0) || (p->fSkipFanout == 33 && Stmap32PenaltyFactor > 0.0) || (p->fSkipFanout == 34 && Stmap33PenaltyFactor > 0.0) || (p->fSkipFanout == 35 && Stmap34PenaltyFactor > 0.0) || (p->fSkipFanout == 36 && Stmap35PenaltyFactor > 0.0) || (p->fSkipFanout == 37 && Stmap36PenaltyFactor > 0.0) || (p->fSkipFanout == 38 && Stmap37PenaltyFactor > 0.0) || (p->fSkipFanout == 39 && Stmap38PenaltyFactor > 0.0) || (p->fSkipFanout == 40 && Stmap39PenaltyFactor > 0.0) || (p->fSkipFanout == 41 && Stmap40PenaltyFactor > 0.0) || (p->fSkipFanout == 42 && Stmap41PenaltyFactor > 0.0) || (p->fSkipFanout == 43 && Stmap42PenaltyFactor > 0.0) || (p->fSkipFanout == 44 && Stmap43PenaltyFactor > 0.0) || (p->fSkipFanout == 45 && Stmap44PenaltyFactor > 0.0) || (p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0) || (p->fSkipFanout == 47 && Stmap46PenaltyFactor > 0.0)) &&
+src/map/mapper/mapperMatch.c:2930:                else if ( p->fSkipFanout == 46 )
+src/map/mapper/mapperMatch.c:3227:                if ( p->fSkipFanout == 46 && fStmap45ModerateSoftSeed )
+src/map/mapper/mapperMatch.c:3236:                if ( p->fSkipFanout == 46 && fStmap45StrongPenaltyCandidate && Stmap45StrongPenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:3243:                        Stmap45FanLimit, Stmap45LoadDriveRatio, Stmap45NodePressureRatio,
+src/map/mapper/mapperCore.c:306:    if ( p->fSkipFanout == 46 )
+src/map/mapper/mapperMatch.c:756:void Map_Stmap36SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity )
+src/map/mapper/mapperMatch.c:780:void Map_Stmap37SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:831:void Map_Stmap38SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:907:void Map_Stmap39SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, int * pAigIds, float * pRatios, int nHotspots )
+src/map/mapper/mapperMatch.c:992:void Map_Stmap40SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:997:    s_pStmap40SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:998:    s_nStmap40SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1068:void Map_Stmap41SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1073:    s_pStmap41SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1074:    s_nStmap41SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1144:void Map_Stmap42SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1149:    s_pStmap42SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1150:    s_nStmap42SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1220:void Map_Stmap43SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1225:    s_pStmap43SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1226:    s_nStmap43SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1316:void Map_Stmap44SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1321:    s_pStmap44SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1322:    s_nStmap44SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1415:void Map_Stmap45SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1420:    s_pStmap45SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1421:    s_nStmap45SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1520:void Map_Stmap46SetSclLoadFeedback( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios )
+src/map/mapper/mapperMatch.c:1525:    s_pStmap46SclPressureRatios = pAigPressureRatios;
+src/map/mapper/mapperMatch.c:1526:    s_nStmap46SclPressureRatios = nAigPressureRatios;
+src/map/mapper/mapperMatch.c:1984:    float Stmap45ModeratePenaltyFactor, Stmap45StrongPenaltyFactor, Stmap45PenaltyFactor, Stmap45CutLeafLoadAvg, Stmap45LoadDriveRatio, Stmap45NodePressureRatio, Stmap45CutPressureRatio;
+src/map/mapper/mapperMatch.c:2375:                p->fSkipFanout == 46 &&
+src/map/mapper/mapperMatch.c:2393:                p->fSkipFanout == 46 &&
+src/map/mapper/mapperMatch.c:2398:            Stmap45LoadDriveRatio = 0.0;
+src/map/mapper/mapperMatch.c:2401:                Map_MatchStmap45StrongPenaltyFactor( pNode, pCut, pMatch, ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon, &Stmap45CutLeafLoadAvg, &Stmap45LoadDriveRatio, &Stmap45FanLimit, &Stmap45NodePressureRatio, &Stmap45CutPressureRatio, &Stmap45NodeAigId ) : 0.0;
+src/map/mapper/mapperMatch.c:2466:                (p->fSkipFanout == 46 && (!fArrivalQuality || (!fProfileOpen && !Map_MatchNodeHasStmap20EarlySeedDepth( pNode ) &&
+src/map/mapper/mapperMatch.c:2505:            if ( p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0 && p->pSuperLib )
+src/map/mapper/mapperMatch.c:2824:                if ( p->fSkipFanout == 46 && fStmap45ModeratePenaltyCandidate && Stmap45ModeratePenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:2833:                if ( p->fSkipFanout == 46 && fStmap45StrongPenaltyCandidate && Stmap45StrongPenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:2840:                        Stmap45FanLimit, Stmap45LoadDriveRatio, Stmap45NodePressureRatio,
+src/map/mapper/mapperMatch.c:2875:                 (fStrictFallback || (p->fSkipFanout == 29 && fStmap28ModeratePenaltyCandidate && Stmap28PenaltyFactor > 0.0) || (p->fSkipFanout == 30 && fStmap29ModeratePenaltyCandidate && Stmap29PenaltyFactor > 0.0) || (p->fSkipFanout == 31 && Stmap30PenaltyFactor > 0.0) || (p->fSkipFanout == 32 && Stmap31PenaltyFactor > 0.0) || (p->fSkipFanout == 33 && Stmap32PenaltyFactor > 0.0) || (p->fSkipFanout == 34 && Stmap33PenaltyFactor > 0.0) || (p->fSkipFanout == 35 && Stmap34PenaltyFactor > 0.0) || (p->fSkipFanout == 36 && Stmap35PenaltyFactor > 0.0) || (p->fSkipFanout == 37 && Stmap36PenaltyFactor > 0.0) || (p->fSkipFanout == 38 && Stmap37PenaltyFactor > 0.0) || (p->fSkipFanout == 39 && Stmap38PenaltyFactor > 0.0) || (p->fSkipFanout == 40 && Stmap39PenaltyFactor > 0.0) || (p->fSkipFanout == 41 && Stmap40PenaltyFactor > 0.0) || (p->fSkipFanout == 42 && Stmap41PenaltyFactor > 0.0) || (p->fSkipFanout == 43 && Stmap42PenaltyFactor > 0.0) || (p->fSkipFanout == 44 && Stmap43PenaltyFactor > 0.0) || (p->fSkipFanout == 45 && Stmap44PenaltyFactor > 0.0) || (p->fSkipFanout == 46 && Stmap45PenaltyFactor > 0.0) || (p->fSkipFanout == 47 && Stmap46PenaltyFactor > 0.0)) &&
+src/map/mapper/mapperMatch.c:2930:                else if ( p->fSkipFanout == 46 )
+src/map/mapper/mapperMatch.c:3227:                if ( p->fSkipFanout == 46 && fStmap45ModerateSoftSeed )
+src/map/mapper/mapperMatch.c:3236:                if ( p->fSkipFanout == 46 && fStmap45StrongPenaltyCandidate && Stmap45StrongPenaltyFactor > 0.0 )
+src/map/mapper/mapperMatch.c:3243:                        Stmap45FanLimit, Stmap45LoadDriveRatio, Stmap45NodePressureRatio,
+
+exec
+/bin/zsh -lc "rg -n \"Abc_SclManStart\" src | head -20 && sed -n '1,220p' src/map/scl/sclTime.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ exited 1 in 134ms:
+src/map/scl/sclUpsize.c:893:    p = Abc_SclManStart( pLib, pNtk, pPars->fUseWireLoads, pPars->fUseDept, 0, pPars->BuffTreeEst );
+src/map/scl/sclSize.h:567:extern SC_Man *      Abc_SclManStart( SC_Lib * pLib, Abc_Ntk_t * pNtk, int fUseWireLoads, int fDept, float DUser, int nTreeCRatio );
+src/map/scl/sclDnsize.c:263:    p = Abc_SclManStart( pLib, pNtk, pPars->fUseWireLoads, pPars->fUseDept, pPars->DelayUser, pPars->BuffTreeEst );
+src/map/scl/sclSize.c:648:SC_Man * Abc_SclManStart( SC_Lib * pLib, Abc_Ntk_t * pNtk, int fUseWireLoads, int fDept, float DUser, int nTreeCRatio )
+src/map/scl/sclSize.c:689:    p = Abc_SclManStart( pLib, pNtk, fUseWireLoads, 1, 0, nTreeCRatio );
+src/map/scl/sclSize.c:917:    p = Abc_SclManStart( pLib, pNtk, fUseWireLoads, 1, 0, 10000 ); 
+src/base/abci/abcStmap_51.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_45.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_41.c:353:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_43.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_50.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_44.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_47.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_49.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_48.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_46.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+src/base/abci/abcStmap_42.c:357:        pTime = Abc_SclManStart( pLib, pNtk, 0, 1, 0, 0 );
+sed: src/map/scl/sclTime.c: No such file or directory
+
+exec
+/bin/zsh -lc "sed -n '620,690p' src/map/scl/sclSize.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+        }
+    }
+    if ( Abc_FrameReadDrivingCell() )
+    {
+        int iCell = Abc_SclCellFind( p->pLib, Abc_FrameReadDrivingCell() );
+        if ( iCell == -1 )
+            printf( "Cannot find the default PI driving cell (%s) in the library.\n", Abc_FrameReadDrivingCell() );
+        else
+        {
+//            printf( "Default PI driving cell is specified (%s).\n", Abc_FrameReadDrivingCell() );
+            p->pPiDrive = SC_LibCell( p->pLib, iCell );
+            assert( p->pPiDrive != NULL );
+            assert( p->pPiDrive->n_inputs == 1 );
+        }
+    }
+}
+ 
+/**Function*************************************************************
+
+  Synopsis    [Prepare timing manager.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+SC_Man * Abc_SclManStart( SC_Lib * pLib, Abc_Ntk_t * pNtk, int fUseWireLoads, int fDept, float DUser, int nTreeCRatio )
+{
+    SC_Man * p = Abc_SclManAlloc( pLib, pNtk );
+    if ( nTreeCRatio )
+    {
+        p->EstLoadMax = 0.01 * nTreeCRatio;  // max ratio of Cout/Cave when the estimation is used
+        p->EstLinear  = 100;                  // linear coefficient
+    }
+    Abc_SclMioGates2SclGates( pLib, pNtk );
+    Abc_SclManReadSlewAndLoad( p, pNtk );
+    if ( fUseWireLoads )
+    {
+        if ( pNtk->pWLoadUsed == NULL )
+        {            
+            p->pWLoadUsed = Abc_SclFindWireLoadModel( pLib, Abc_SclGetTotalArea(p->pNtk) );
+            if ( p->pWLoadUsed )
+            pNtk->pWLoadUsed = Abc_UtilStrsav( p->pWLoadUsed->pName );
+        }
+        else
+            p->pWLoadUsed = Abc_SclFetchWireLoadModel( pLib, pNtk->pWLoadUsed );
+    }
+    Abc_SclTimeNtkRecompute( p, &p->SumArea0, &p->MaxDelay0, fDept, DUser );
+    p->SumArea  = p->SumArea0;
+    p->MaxDelay = p->MaxDelay0;
+    return p;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Printing out timing information for the network.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Abc_SclTimePerformInt( SC_Lib * pLib, Abc_Ntk_t * pNtk, int nTreeCRatio, int fUseWireLoads, int fShowAll, int fPrintPath, int fDumpStats )
+{
+    SC_Man * p;
+    p = Abc_SclManStart( pLib, pNtk, fUseWireLoads, 1, 0, nTreeCRatio );
+    Abc_SclTimeNtkPrint( p, fShowAll, fPrintPath );
+
+exec
+/bin/zsh -lc 'cat .autoeda/runtime/results/stmap51/help.log; cat .autoeda/runtime/results/stmap51/help.exit' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+======== ABC command line "stmap51 -h"
+usage: stmap51 [-DABFSG float] [-M num] [-arspfuovh]
+	              performs stmap51 midpoint-gain two-pass mapping using the stmap45 pressure-agreement mapper mode
+	-D float : sets the global required times [default = not used]
+	-A float : "area multiplier" to bias gate selection [default = 0.00]
+	-B float : "delay multiplier" to bias gate selection [default = 0.00]
+	-F float : the logarithmic fanout delay parameter [default = 0.00]
+	-S float : the slew parameter used to generate the library [default = 0.00]
+	-G float : the SCL/genlib gain parameter used to generate the library [default = 250.00]
+	-M num   : skip gate classes whose size is less than this [default = 0]
+	-a       : toggles area-only mapping [default = no]
+	-r       : toggles area recovery [default = yes]
+	-s       : toggles sweep after mapping [default = no]
+	-p       : optimizes power by minimizing switching [default = no]
+	-f       : disables the midpoint-gain SCL feedback mapper mode [default = yes]
+	-u       : use standard-cell profile [default = no]
+	-o       : toggles using buffers to decouple combinational outputs [default = no]
+	-v       : toggles verbose output [default = no]
+	-h       : print the command usage
+0
+
+exec
+/bin/zsh -lc 'git diff --check -- . src/base/abci/abcStmap_51.c' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+warning: in the working copy of 'abclib.dsp', LF will be replaced by CRLF the next time Git touches it
+
+exec
+/bin/zsh -lc "sed -n '1,260p' .autoeda/runtime/results/stmap51/run_stmap51_eval.py" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+#!/usr/bin/env python3
+import concurrent.futures
+import csv
+import json
+import os
+import re
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[4]
+RESULTS = ROOT / ".autoeda" / "runtime" / "results" / "stmap51"
+ABC = ROOT / "abc"
+LIB = "7nm_lvt_ff.lib"
+COMMAND = "stmap51"
+BENCHMARKS = [
+    "benchmarks/i10.aig",
+    "benchmarks/ode.abc.blif",
+    "benchmarks/or1200.abc.blif",
+    "benchmarks/syn2.abc.blif",
+]
+TIMEOUT = 600
+ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+STIME_RE = re.compile(r'WireLoad\s*=\s*"[^"]*".*Area\s*=\s*([0-9]+(?:\.[0-9]+)?).*Delay\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*ps')
+STAT_PATTERNS = {
+    "guard_stats": re.compile(
+        r"stmap45 guard stats: exact-risk = (?P<exact_risk>\d+)  highest = (?P<highest>\d+)  lower-mod = (?P<lower_mod>\d+)  upper-mod = (?P<upper_mod>\d+)  middle-slack = (?P<middle_slack>\d+)  middle-relief = (?P<middle_relief>\d+)  reject-slack = (?P<reject_slack>\d+)  reject-highest = (?P<reject_highest>\d+)  reject-arrival = (?P<reject_arrival>\d+)  reject-area = (?P<reject_area>\d+)"
+    ),
+    "near_miss_stats": re.compile(r"stmap45 near-miss stats: near-miss = (?P<near_miss>\d+)"),
+    "early_seed_stats": re.compile(r"stmap45 early-seed stats: early-seed = (?P<early_seed>\d+)"),
+    "penalty_stats": re.compile(
+        r"stmap45 penalty stats: moderate-penalty-seed = (?P<moderate_penalty_seed>\d+)  moderate-penalty-blocked = (?P<moderate_penalty_blocked>\d+)  strong-penalty-seed = (?P<strong_penalty_seed>\d+)  strong-penalty-blocked = (?P<strong_penalty_blocked>\d+)"
+    ),
+    "sink_pressure_stats": re.compile(
+        r"stmap51 sink-pressure stats: roots = (?P<roots>\d+)  consumer-fanin = (?P<consumer_fanin>\d+)  consumer-fanout = (?P<consumer_fanout>\d+)  raw-pressure-entries = (?P<raw_pressure_entries>\d+)  raw-pressure-updates = (?P<raw_pressure_updates>\d+)  sink-pressure-entries = (?P<sink_pressure_entries>\d+)  sink-pressure-updates = (?P<sink_pressure_updates>\d+)  pressure-missed = (?P<pressure_missed>\d+)  pressure-capacity = (?P<pressure_capacity>\d+)  tracked-aig = (?P<tracked_aig>\d+)  tracked-node = (?P<tracked_node>-?\d+)  tracked-raw-ratio = (?P<tracked_raw_ratio>[0-9]+(?:\.[0-9]+)?)  tracked-sink-ratio = (?P<tracked_sink_ratio>[0-9]+(?:\.[0-9]+)?)"
+    ),
+    "feedback_stats": re.compile(
+        r"stmap51 feedback: remap = 1  active = (?P<active>\d+)  max-load-ratio = (?P<max_load_ratio>[0-9]+(?:\.[0-9]+)?)  over-max-frac = (?P<over_max_frac>[0-9]+(?:\.[0-9]+)?)  severity = (?P<severity>[0-9]+(?:\.[0-9]+)?)  raw-pressure-entries = (?P<raw_pressure_entries>\d+)  sink-pressure-entries = (?P<sink_pressure_entries>\d+)  pressure-capacity = (?P<pressure_capacity>\d+)"
+    ),
+    "midpoint_gain_stats": re.compile(
+        r"stmap51 midpoint-gain: base-gain = (?P<base_gain>[0-9]+(?:\.[0-9]+)?)  midpoint-gain = (?P<midpoint_gain>[0-9]+(?:\.[0-9]+)?)  selected-gain = (?P<selected_gain>[0-9]+(?:\.[0-9]+)?)  severity-threshold = (?P<severity_threshold>[0-9]+(?:\.[0-9]+)?)  sink-pressure-threshold = (?P<sink_pressure_threshold>\d+)  selected-midpoint-gain = (?P<selected_midpoint_gain>\d+)"
+    ),
+    "mapper_mode_stats": re.compile(
+        r"stmap51 mapper-mode: reused-stmap45-mode = (?P<reused_stmap45_mode>\d+)  midpoint-gain = (?P<midpoint_gain>[0-9]+(?:\.[0-9]+)?)"
+    ),
+}
+
+
+def safe_name(bench):
+    return bench.replace("/", "_").replace(".", "_")
+
+
+def clean(text):
+    return ANSI_RE.sub("", text)
+
+
+def run_abc(command, log_path, exit_path):
+    proc = subprocess.run(
+        [str(ABC), "-c", command],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        timeout=TIMEOUT,
+    )
+    log_path.write_text(proc.stdout)
+    exit_path.write_text(f"{proc.returncode}\n")
+    return proc.returncode, proc.stdout
+
+
+def parse_stime(text):
+    matches = STIME_RE.findall(clean(text))
+    if not matches:
+        return None
+    area, delay = matches[-1]
+    return {"stime_area": float(area), "stime_delay_ps": float(delay)}
+
+
+def parse_stats(text):
+    out = {}
+    plain = clean(text)
+    for name, pattern in STAT_PATTERNS.items():
+        matches = list(pattern.finditer(plain))
+        if not matches:
+            continue
+        out[name] = matches[-1].groupdict()
+    return out
+
+
+def run_flow(kind, bench):
+    safe = safe_name(bench)
+    if kind == "baseline":
+        flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; map; topo; buffer; upsize -v; dnsize -v; stime"
+    else:
+        flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; {COMMAND}; topo; buffer; upsize -v; dnsize -v; stime"
+    log = RESULTS / f"{kind}_{safe}.log"
+    exit_file = RESULTS / f"{kind}_{safe}.exit"
+    rc, text = run_abc(flow, log, exit_file)
+    metrics = parse_stime(text)
+    return {
+        "benchmark": bench,
+        "kind": kind,
+        "returncode": rc,
+        "metrics": metrics,
+        "stats": parse_stats(text) if kind == "candidate" else {},
+        "log": str(log.relative_to(ROOT)),
+        "command": f"./abc -c \"{flow}\"",
+    }
+
+
+def write_aig(bench, suffix, flow):
+    safe = safe_name(bench)
+    aig = RESULTS / f"cec_{safe}_{suffix}.aig"
+    log = RESULTS / f"cec_{safe}_{suffix}_write.log"
+    exit_file = RESULTS / f"cec_{safe}_{suffix}_write.exit"
+    rc, _ = run_abc(f"{flow}; strash; write_aiger {aig}", log, exit_file)
+    return rc, aig
+
+
+def run_cec(bench):
+    safe = safe_name(bench)
+    orig_flow = f"read_lib {LIB}; read {bench}"
+    cand_flow = f"read_lib {LIB}; read {bench}; resyn; resyn2; dch -v; {COMMAND}; topo; buffer; upsize -v; dnsize -v; stime"
+    rc_orig, orig = write_aig(bench, "orig", orig_flow)
+    rc_cand, cand = write_aig(bench, COMMAND, cand_flow)
+    log = RESULTS / f"cec_{safe}.log"
+    exit_file = RESULTS / f"cec_{safe}.exit"
+    if rc_orig != 0 or rc_cand != 0:
+        log.write_text(f"write failed: orig={rc_orig} candidate={rc_cand}\n")
+        exit_file.write_text("1\n")
+        return {"benchmark": bench, "passed": False, "returncode": 1, "log": str(log.relative_to(ROOT))}
+    rc, text = run_abc(f"cec {orig} {cand}", log, exit_file)
+    passed = rc == 0 and ("Networks are equivalent" in text or "Networks are equivalent after structural hashing" in text)
+    return {
+        "benchmark": bench,
+        "passed": passed,
+        "returncode": rc,
+        "original": str(orig.relative_to(ROOT)),
+        "candidate": str(cand.relative_to(ROOT)),
+        "log": str(log.relative_to(ROOT)),
+    }
+
+
+def write_csv(path, rows, fields):
+    with path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+
+
+def main():
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        futures = [pool.submit(run_flow, kind, bench) for bench in BENCHMARKS for kind in ("baseline", "candidate")]
+        flow_results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+    by_key = {(r["benchmark"], r["kind"]): r for r in flow_results}
+    metrics_rows = []
+    comparison_rows = []
+    stats_by_name = {name: [] for name in STAT_PATTERNS}
+    for bench in BENCHMARKS:
+        base = by_key[(bench, "baseline")]
+        cand = by_key[(bench, "candidate")]
+        if base["returncode"] != 0 or cand["returncode"] != 0 or base["metrics"] is None or cand["metrics"] is None:
+            raise SystemExit(f"unparseable or failed flow for {bench}: base={base['returncode']} cand={cand['returncode']}")
+        for row in (base, cand):
+            metrics_rows.append({
+                "benchmark": bench,
+                "flow": row["kind"],
+                "stime_delay_ps": row["metrics"]["stime_delay_ps"],
+                "stime_area": row["metrics"]["stime_area"],
+                "log": row["log"],
+            })
+        b = base["metrics"]
+        c = cand["metrics"]
+        comparison_rows.append({
+            "benchmark": bench,
+            "baseline_delay_ps": b["stime_delay_ps"],
+            "candidate_delay_ps": c["stime_delay_ps"],
+            "delay_delta_ps": c["stime_delay_ps"] - b["stime_delay_ps"],
+            "delay_delta_pct": 100.0 * (c["stime_delay_ps"] - b["stime_delay_ps"]) / b["stime_delay_ps"],
+            "baseline_area": b["stime_area"],
+            "candidate_area": c["stime_area"],
+            "area_delta": c["stime_area"] - b["stime_area"],
+            "area_delta_pct": 100.0 * (c["stime_area"] - b["stime_area"]) / b["stime_area"],
+        })
+        for name, parsed in cand["stats"].items():
+            row = {"benchmark": bench}
+            row.update(parsed)
+            stats_by_name[name].append(row)
+
+    write_csv(RESULTS / "metrics.csv", metrics_rows, ["benchmark", "flow", "stime_delay_ps", "stime_area", "log"])
+    write_csv(
+        RESULTS / "comparison.csv",
+        comparison_rows,
+        ["benchmark", "baseline_delay_ps", "candidate_delay_ps", "delay_delta_ps", "delay_delta_pct", "baseline_area", "candidate_area", "area_delta", "area_delta_pct"],
+    )
+    for name, rows in stats_by_name.items():
+        if rows:
+            fields = ["benchmark"] + [k for k in rows[0].keys() if k != "benchmark"]
+            write_csv(RESULTS / f"{name}.csv", rows, fields)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        cec_results = list(pool.map(run_cec, BENCHMARKS))
+    (RESULTS / "cec_summary.json").write_text(json.dumps(cec_results, indent=2) + "\n")
+    if not all(r["passed"] for r in cec_results):
+        raise SystemExit("CEC failed")
+
+    summary = {
+        "command": COMMAND,
+        "library": LIB,
+        "benchmarks": BENCHMARKS,
+        "flow_results": flow_results,
+        "comparison": comparison_rows,
+        "cec": cec_results,
+    }
+    (RESULTS / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()
+
+exec
+/bin/zsh -lc 'grep -n "autoeda" -C2 .gitignore .gitattributes || true' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+.gitignore-66-
+.gitignore-67-# AutoEDA live supervisor state is machine-local and not reproducible.
+.gitignore:68:/.autoeda/runtime/launch.pid
+.gitignore:69:/.autoeda/runtime/supervisor.lock
+.gitignore:70:/.autoeda/runtime/heartbeat.json
+.gitignore:71:/.autoeda/runtime/supervisor_state.json
+.gitignore:72:/.autoeda/runtime/logs/launch_*.log
+
+exec
+/bin/zsh -lc "find . -maxdepth 1 -name '*.dsp' -print; rg -n \"abcStmap_50\" *.dsp src -g '"'!src/base/abci/abcStmap_50.c'"' -g '"'!src/base/abci/abcStmap_51.c'"'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 140ms:
+exec
+/bin/zsh -lc "rg -n \"Abc_SclMioGates2SclGates|MioGates\" src/map/scl src/map | head -20 && sed -n '530,620p' src/map/scl/sclSize.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/scl/sclBufSize.c:498:    Abc_SclMioGates2SclGates( pLib, pNtk );
+src/map/scl/sclBufSize.c:503:    Abc_SclSclGates2MioGates( pLib, pNtk );
+src/map/scl/sclDnsize.c:345:    Abc_SclSclGates2MioGates( pLib, pNtk ); // updates gate pointers
+src/map/scl/sclUtil.c:47:void Abc_SclMioGates2SclGates( SC_Lib * pLib, Abc_Ntk_t * p )
+src/map/scl/sclUtil.c:70:void Abc_SclSclGates2MioGates( SC_Lib * pLib, Abc_Ntk_t * p )
+src/map/scl/sclUtil.c:158:    Abc_SclMioGates2SclGates( pLib, p );
+src/map/scl/sclUtil.c:160:    Abc_SclSclGates2MioGates( pLib, p );
+src/map/scl/sclUtil.c:210:    Abc_SclMioGates2SclGates( pLib, p );
+src/map/scl/sclUtil.c:219:    Abc_SclSclGates2MioGates( pLib, p );
+src/map/scl/sclSize.c:656:    Abc_SclMioGates2SclGates( pLib, pNtk );
+src/map/scl/sclSize.h:579:extern void          Abc_SclMioGates2SclGates( SC_Lib * pLib, Abc_Ntk_t * p );
+src/map/scl/sclSize.h:580:extern void          Abc_SclSclGates2MioGates( SC_Lib * pLib, Abc_Ntk_t * p );
+src/map/scl/sclUpsize.c:1012:    Abc_SclSclGates2MioGates( pLib, pNtk ); // updates gate pointers
+src/map/scl/sclSize.h:579:extern void          Abc_SclMioGates2SclGates( SC_Lib * pLib, Abc_Ntk_t * p );
+src/map/scl/sclSize.h:580:extern void          Abc_SclSclGates2MioGates( SC_Lib * pLib, Abc_Ntk_t * p );
+src/map/scl/sclSize.c:656:    Abc_SclMioGates2SclGates( pLib, pNtk );
+src/map/scl/sclUtil.c:47:void Abc_SclMioGates2SclGates( SC_Lib * pLib, Abc_Ntk_t * p )
+src/map/scl/sclUtil.c:70:void Abc_SclSclGates2MioGates( SC_Lib * pLib, Abc_Ntk_t * p )
+src/map/scl/sclUtil.c:158:    Abc_SclMioGates2SclGates( pLib, p );
+src/map/scl/sclUtil.c:160:    Abc_SclSclGates2MioGates( pLib, p );
+    Abc_Obj_t * pObj;
+    float E = (float)0.1;
+    int i, k;
+    Vec_WecForEachLevelReverse( p->vLevels, vLevel, i )
+    {
+        Abc_NtkForEachObjVec( vLevel, p->pNtk, pObj, k )
+        {
+            pDepOut = Abc_SclObjDept( p, pObj );
+            SC_PairMove( &DepOut, pDepOut );
+            Abc_SclDeptObj( p, pObj );
+//            if ( !SC_PairEqual(&DepOut, pDepOut) )
+            if ( !SC_PairEqualE(&DepOut, pDepOut, E) )
+                Abc_SclTimeIncAddFanins( p, pObj );
+        }
+    } 
+    p->MaxDelay = Abc_SclReadMaxDelay( p );
+}
+void Abc_SclTimeIncCheckLevel( Abc_Ntk_t * pNtk )
+{
+    Abc_Obj_t * pObj;
+    int i;
+    Abc_NtkForEachObj( pNtk, pObj, i )
+        if ( (int)pObj->Level != Abc_ObjLevelNew(pObj) )
+            printf( "Level of node %d is out of date!\n", i );
+}
+int Abc_SclTimeIncUpdate( SC_Man * p )
+{
+    Abc_Obj_t * pObj;
+    int i, RetValue;
+    if ( Vec_IntSize(p->vChanged) == 0 )
+        return 0;
+//    Abc_SclTimeIncCheckLevel( p->pNtk );
+    Abc_NtkForEachObjVec( p->vChanged, p->pNtk, pObj, i )
+    {
+        Abc_SclTimeIncAddFanins( p, pObj );
+        if ( pObj->fMarkC )
+            continue;
+        Abc_SclTimeIncAddNode( p, pObj );
+    }
+    Vec_IntClear( p->vChanged );
+    Abc_SclTimeIncUpdateArrival( p );
+    Abc_SclTimeIncUpdateDeparture( p );
+    Abc_SclTimeIncUpdateClean( p );
+    RetValue = p->nIncUpdates;
+    p->nIncUpdates = 0;
+    return RetValue;
+}
+void Abc_SclTimeIncInsert( SC_Man * p, Abc_Obj_t * pObj )
+{
+    Vec_IntPush( p->vChanged, Abc_ObjId(pObj) );
+}
+void Abc_SclTimeIncUpdateLevel_rec( Abc_Obj_t * pObj )
+{
+    Abc_Obj_t * pFanout;
+    int i, LevelNew = Abc_ObjLevelNew(pObj);
+    if ( LevelNew == (int)pObj->Level && Abc_ObjIsNode(pObj) && Abc_ObjFaninNum(pObj) > 0 )
+        return;
+    pObj->Level = LevelNew;
+    Abc_ObjForEachFanout( pObj, pFanout, i )
+        Abc_SclTimeIncUpdateLevel_rec( pFanout );
+}
+void Abc_SclTimeIncUpdateLevel( Abc_Obj_t * pObj )
+{
+    Abc_SclTimeIncUpdateLevel_rec( pObj );
+}
+
+
+
+/**Function*************************************************************
+
+  Synopsis    [Read input slew and output load.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Abc_SclManReadSlewAndLoad( SC_Man * p, Abc_Ntk_t * pNtk )
+{
+    if ( Abc_FrameReadMaxLoad() )
+    {
+        Abc_Obj_t * pObj;  int i;
+        float MaxLoad = Abc_FrameReadMaxLoad();
+//        printf( "Default output load is specified (%.2f ff).\n", MaxLoad );
+        Abc_NtkForEachPo( pNtk, pObj, i )
+        {
+            SC_Pair * pLoad = Abc_SclObjLoad( p, pObj );
+            pLoad->rise = pLoad->fall = MaxLoad;
+        }
+
+exec
+/bin/zsh -lc "sed -n '1,95p' src/map/scl/sclUtil.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+/**CFile****************************************************************
+
+  FileName    [sclUtil.c]
+
+  SystemName  [ABC: Logic synthesis and verification system.]
+
+  PackageName [Standard-cell library representation.]
+
+  Synopsis    [Various utilities.]
+
+  Author      [Alan Mishchenko, Niklas Een]
+  
+  Affiliation [UC Berkeley]
+
+  Date        [Ver. 1.0. Started - August 24, 2012.]
+
+  Revision    [$Id: sclUtil.c,v 1.0 2012/08/24 00:00:00 alanmi Exp $]
+
+***********************************************************************/
+
+#include "sclSize.h"
+#include "map/mio/mio.h"
+#include "base/main/main.h"
+
+ABC_NAMESPACE_IMPL_START
+
+
+////////////////////////////////////////////////////////////////////////
+///                        DECLARATIONS                              ///
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
+///                     FUNCTION DEFINITIONS                         ///
+////////////////////////////////////////////////////////////////////////
+
+/**Function*************************************************************
+
+  Synopsis    [Converts pNode->pData gates into array of SC_Lit gate IDs and back.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+void Abc_SclMioGates2SclGates( SC_Lib * pLib, Abc_Ntk_t * p )
+{
+    Abc_Obj_t * pObj;
+    int i, gateId, bufferId;
+    // find buffer
+    if ( Mio_LibraryReadBuf((Mio_Library_t *)p->pManFunc) == NULL )
+    {
+        printf( "Cannot find buffer in the current library. Quitting.\n" );
+        return;
+    }
+    bufferId = Abc_SclCellFind( pLib, Mio_GateReadName(Mio_LibraryReadBuf((Mio_Library_t *)p->pManFunc)) );
+    assert( bufferId >= 0 );
+    // remap cells
+    assert( p->vGates == NULL );
+    p->vGates = Vec_IntStartFull( Abc_NtkObjNumMax(p) );
+    Abc_NtkForEachNodeNotBarBuf1( p, pObj, i )
+    {
+        gateId = Abc_SclCellFind( pLib, Mio_GateReadName((Mio_Gate_t *)pObj->pData) );
+        assert( gateId >= 0 );
+        Vec_IntWriteEntry( p->vGates, i, gateId );
+    }
+    p->pSCLib = pLib;
+}
+void Abc_SclSclGates2MioGates( SC_Lib * pLib, Abc_Ntk_t * p )
+{
+    Abc_Obj_t * pObj;
+    SC_Cell * pCell;
+    int i, Counter = 0, CounterAll = 0;
+    assert( p->vGates != NULL );
+    Abc_NtkForEachNodeNotBarBuf1( p, pObj, i )
+    {
+        pCell = Abc_SclObjCell(pObj);
+        assert( pCell->n_inputs == Abc_ObjFaninNum(pObj) );
+        pObj->pData = Mio_LibraryReadGateByName( (Mio_Library_t *)p->pManFunc, pCell->pName, NULL );
+        Counter += (pObj->pData == NULL);
+        assert( pObj->fMarkA == 0 && pObj->fMarkB == 0 );
+        CounterAll++;
+    }
+    if ( Counter )
+        printf( "Could not find %d (out of %d) gates in the current library.\n", Counter, CounterAll );
+    Vec_IntFreeP( &p->vGates );
+    p->pSCLib = NULL;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Transfer gate sizes from AIG without barbufs.]
+
+  Description []
+
+exec
+/bin/zsh -lc "rg -n \"Abc_SclManAlloc|Abc_SclManFree\" src/map/scl/sclSize.c src/map/scl -g '*.c' && sed -n '40,130p' src/map/scl/sclSize.c" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/scl/sclSize.c:650:    SC_Man * p = Abc_SclManAlloc( pLib, pNtk );
+src/map/scl/sclSize.c:693:    Abc_SclManFree( p );
+src/map/scl/sclSize.c:920:    Abc_SclManFree( p );
+src/map/scl/sclUpsize.c:1013:    Abc_SclManFree( p );
+src/map/scl/sclDnsize.c:346:    Abc_SclManFree( p );
+src/map/scl/sclSize.c:650:    SC_Man * p = Abc_SclManAlloc( pLib, pNtk );
+src/map/scl/sclSize.c:693:    Abc_SclManFree( p );
+src/map/scl/sclSize.c:920:    Abc_SclManFree( p );
+
+/**Function*************************************************************
+
+  Synopsis    [Finding most critical objects.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+Abc_Obj_t * Abc_SclFindCriticalCo( SC_Man * p, int * pfRise )
+{
+    Abc_Obj_t * pObj, * pPivot = NULL;
+    float fMaxArr = 0;
+    int i;
+    assert( Abc_NtkPoNum(p->pNtk) > 0 );
+    Abc_NtkForEachCo( p->pNtk, pObj, i )
+    {
+        SC_Pair * pArr = Abc_SclObjTime( p, pObj );
+        if ( fMaxArr < pArr->rise )  fMaxArr = pArr->rise, *pfRise = 1, pPivot = pObj;
+        if ( fMaxArr < pArr->fall )  fMaxArr = pArr->fall, *pfRise = 0, pPivot = pObj;
+    }
+    if ( fMaxArr == 0 )
+        pPivot = Abc_NtkPo(p->pNtk, 0);
+    assert( pPivot != NULL );
+    return pPivot;
+}
+// assumes that slacks are not available (uses arrival times)
+Abc_Obj_t * Abc_SclFindMostCriticalFanin2( SC_Man * p, int * pfRise, Abc_Obj_t * pNode )
+{
+    Abc_Obj_t * pFanin, * pPivot = NULL;
+    float fMaxArr = 0;
+    int i;
+    Abc_ObjForEachFanin( pNode, pFanin, i )
+    {
+        SC_Pair * pArr = Abc_SclObjTime( p, pFanin );
+        if ( fMaxArr < pArr->rise )  fMaxArr = pArr->rise, *pfRise = 1, pPivot = pFanin;
+        if ( fMaxArr < pArr->fall )  fMaxArr = pArr->fall, *pfRise = 0, pPivot = pFanin;
+    }
+    return pPivot;
+}
+// assumes that slack are available
+Abc_Obj_t * Abc_SclFindMostCriticalFanin( SC_Man * p, int * pfRise, Abc_Obj_t * pNode )
+{
+    Abc_Obj_t * pFanin, * pPivot = NULL;
+    float fMinSlack = ABC_INFINITY;
+    SC_Pair * pArr;
+    int i;
+    *pfRise = 0;
+    // find min-slack node
+    Abc_ObjForEachFanin( pNode, pFanin, i )
+        if ( fMinSlack > Abc_SclObjGetSlack( p, pFanin, p->MaxDelay0 ) )
+        {
+            fMinSlack = Abc_SclObjGetSlack( p, pFanin, p->MaxDelay0 );
+            pPivot = pFanin;
+        }
+    if ( pPivot == NULL )
+        return NULL;
+    // find its leading phase
+    pArr = Abc_SclObjTime( p, pPivot );
+    *pfRise = (pArr->rise >= pArr->fall);
+    return pPivot;
+}
+
+/**Function*************************************************************
+
+  Synopsis    [Printing timing information for the node/network.]
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static inline void Abc_SclTimeNodePrint( SC_Man * p, Abc_Obj_t * pObj, int fRise, int Length, float maxDelay )
+{
+    SC_Cell * pCell = Abc_ObjIsNode(pObj) ? Abc_SclObjCell(pObj) : NULL;
+    printf( "%8d : ",           Abc_ObjId(pObj) );
+    printf( "%d ",              Abc_ObjFaninNum(pObj) );
+    printf( "%4d ",             Abc_ObjFanoutNum(pObj) );
+    printf( "%-*s ",            Length, pCell ? pCell->pName : "pi" );
+    printf( "A =%7.2f  ",       pCell ? pCell->area : 0.0 );
+    printf( "D%s =",            fRise ? "r" : "f" );
+    printf( "%6.1f",            Abc_SclObjTimeMax(p, pObj) );
+    printf( "%7.1f ps  ",       -Abc_AbsFloat(Abc_SclObjTimeOne(p, pObj, 0) - Abc_SclObjTimeOne(p, pObj, 1)) );
+    printf( "S =%6.1f ps  ",    Abc_SclObjSlewMax(p, pObj) );
+    printf( "Cin =%5.1f ff  ",  pCell ? SC_CellPinCapAve(pCell) : 0.0 );
+    printf( "Cout =%6.1f ff  ", Abc_SclObjLoadMax(p, pObj) );
+
+exec
+/bin/zsh -lc "rg -n \"SC_Man \\* Abc_SclManAlloc|void Abc_SclManFree|Abc_SclManFree\" src/map/scl -g '*.c' -g '*.h' -C2" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/map/scl/sclUpsize.c-1011-    // save the result and quit
+src/map/scl/sclUpsize.c-1012-    Abc_SclSclGates2MioGates( pLib, pNtk ); // updates gate pointers
+src/map/scl/sclUpsize.c:1013:    Abc_SclManFree( p );
+src/map/scl/sclUpsize.c-1014-//    Abc_NtkCleanMarkAB( pNtk );
+src/map/scl/sclUpsize.c-1015-}
+--
+src/map/scl/sclDnsize.c-344-    // save the result and quit
+src/map/scl/sclDnsize.c-345-    Abc_SclSclGates2MioGates( pLib, pNtk ); // updates gate pointers
+src/map/scl/sclDnsize.c:346:    Abc_SclManFree( p );
+src/map/scl/sclDnsize.c-347-//    Abc_NtkCleanMarkAB( pNtk );
+src/map/scl/sclDnsize.c-348-}
+--
+src/map/scl/sclSize.h-146-
+src/map/scl/sclSize.h-147-***********************************************************************/
+src/map/scl/sclSize.h:148:static inline SC_Man * Abc_SclManAlloc( SC_Lib * pLib, Abc_Ntk_t * pNtk )
+src/map/scl/sclSize.h-149-{
+src/map/scl/sclSize.h-150-    SC_Man * p;
+--
+src/map/scl/sclSize.h-191-    return p;
+src/map/scl/sclSize.h-192-}
+src/map/scl/sclSize.h:193:static inline void Abc_SclManFree( SC_Man * p )
+src/map/scl/sclSize.h-194-{
+src/map/scl/sclSize.h-195-    Abc_Obj_t * pObj;
+--
+src/map/scl/sclSize.c-691-    if ( fDumpStats )
+src/map/scl/sclSize.c-692-        Abc_SclDumpStats( p, "stats.txt", 0 );
+src/map/scl/sclSize.c:693:    Abc_SclManFree( p );
+src/map/scl/sclSize.c-694-}
+src/map/scl/sclSize.c-695-
+--
+src/map/scl/sclSize.c-918-    Abc_SclPrintBufferTrees( p, pNtk ); 
+src/map/scl/sclSize.c-919-//    Abc_SclPrintFaninPairs( p, pNtk );
+src/map/scl/sclSize.c:920:    Abc_SclManFree( p );
+src/map/scl/sclSize.c-921-}
+src/map/scl/sclSize.c-922-
+
+exec
+/bin/zsh -lc "sed -n '140,220p' src/map/scl/sclSize.h" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+
+  Description []
+               
+  SideEffects []
+
+  SeeAlso     []
+
+***********************************************************************/
+static inline SC_Man * Abc_SclManAlloc( SC_Lib * pLib, Abc_Ntk_t * pNtk )
+{
+    SC_Man * p;
+    Abc_Obj_t * pObj;
+    int i;
+    assert( pLib->unit_time == 12 );
+    assert( pLib->unit_cap_snd == 15 );
+    assert( Abc_NtkHasMapping(pNtk) );
+    p = ABC_CALLOC( SC_Man, 1 );
+    p->pLib      = pLib;
+    p->pNtk      = pNtk;
+    p->nObjs     = Abc_NtkObjNumMax(pNtk);
+    p->pLoads    = ABC_CALLOC( SC_Pair, p->nObjs );
+    p->pDepts    = ABC_CALLOC( SC_Pair, p->nObjs );
+    p->pTimes    = ABC_CALLOC( SC_Pair, p->nObjs );
+    p->pSlews    = ABC_CALLOC( SC_Pair, p->nObjs );
+    p->vBestFans = Vec_IntStart( p->nObjs );
+    p->vTimesOut = Vec_FltStart( Abc_NtkCoNum(pNtk) );
+    p->vQue      = Vec_QueAlloc( Abc_NtkCoNum(pNtk) );
+    Vec_QueSetPriority( p->vQue, Vec_FltArrayP(p->vTimesOut) );
+    for ( i = 0; i < Abc_NtkCoNum(pNtk); i++ )
+        Vec_QuePush( p->vQue, i );
+    p->vUpdates  = Vec_IntAlloc( 1000 );
+    p->vUpdates2 = Vec_IntAlloc( 1000 );
+    p->vLoads2   = Vec_FltAlloc( 1000 );
+    p->vLoads3   = Vec_FltAlloc( 1000 );
+    p->vTimes2   = Vec_FltAlloc( 1000 );
+    p->vTimes3   = Vec_FltAlloc( 1000 );
+    // intermediate data
+    p->vNode2Gain  = Vec_FltStart( p->nObjs );
+    p->vNode2Gate  = Vec_IntStart( p->nObjs );
+    p->vNodeByGain = Vec_QueAlloc( p->nObjs );
+    Vec_QueSetPriority( p->vNodeByGain, Vec_FltArrayP(p->vNode2Gain) );
+    p->vNodeIter   = Vec_IntStartFull( p->nObjs );
+    p->vLevels     = Vec_WecStart( 2 * Abc_NtkLevel(pNtk) + 1 );
+    p->vChanged    = Vec_IntAlloc( 100 );
+    Abc_NtkForEachCo( pNtk, pObj, i )
+        pObj->Level = Abc_ObjFanin0(pObj)->Level + 1;
+    // set CI/CO ids
+    Abc_NtkForEachCi( pNtk, pObj, i )
+        pObj->iData = i;
+    Abc_NtkForEachCo( pNtk, pObj, i )
+        pObj->iData = i;
+    return p;
+}
+static inline void Abc_SclManFree( SC_Man * p )
+{
+    Abc_Obj_t * pObj;
+    int i;
+    // set CI/CO ids
+    Abc_NtkForEachCi( p->pNtk, pObj, i )
+        pObj->iData = 0;
+    Abc_NtkForEachCo( p->pNtk, pObj, i )
+        pObj->iData = 0;
+    // other
+    p->pNtk->pSCLib = NULL;
+    Vec_IntFreeP( &p->pNtk->vGates );
+    Vec_IntFreeP( &p->vNodeIter );
+    Vec_QueFreeP( &p->vNodeByGain );
+    Vec_FltFreeP( &p->vNode2Gain );
+    Vec_IntFreeP( &p->vNode2Gate );
+    // intermediate data
+    Vec_FltFreeP( &p->vLoads2 );
+    Vec_FltFreeP( &p->vLoads3 );
+    Vec_FltFreeP( &p->vTimes2 );
+    Vec_FltFreeP( &p->vTimes3 );
+    Vec_IntFreeP( &p->vUpdates );
+    Vec_IntFreeP( &p->vUpdates2 );
+    Vec_IntFreeP( &p->vGatesBest );
+    Vec_WecFreeP( &p->vLevels );
+    Vec_IntFreeP( &p->vChanged );
+//    Vec_QuePrint( p->vQue );
+    Vec_QueCheck( p->vQue );
+
+exec
+/bin/zsh -lc "sed -n '220,270p' src/map/scl/sclSize.h" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+    Vec_QueCheck( p->vQue );
+    Vec_QueFreeP( &p->vQue );
+    Vec_FltFreeP( &p->vTimesOut );
+    Vec_IntFreeP( &p->vBestFans );
+    Vec_FltFreeP( &p->vInDrive );
+    Vec_FltFreeP( &p->vWireCaps );
+    ABC_FREE( p->pLoads );
+    ABC_FREE( p->pDepts );
+    ABC_FREE( p->pTimes );
+    ABC_FREE( p->pSlews );
+    ABC_FREE( p );
+}
+/*
+static inline void Abc_SclManCleanTime( SC_Man * p )
+{
+    Vec_Flt_t * vSlews;
+    Abc_Obj_t * pObj;
+    int i;
+    vSlews = Vec_FltAlloc( 2 * Abc_NtkPiNum(p->pNtk) );
+    Abc_NtkForEachPi( p->pNtk, pObj, i )
+    {
+        SC_Pair * pSlew = Abc_SclObjSlew( p, pObj );
+        Vec_FltPush( vSlews, pSlew->rise );
+        Vec_FltPush( vSlews, pSlew->fall );
+    }
+    memset( p->pDepts, 0, sizeof(SC_Pair) * p->nObjs );
+    memset( p->pTimes, 0, sizeof(SC_Pair) * p->nObjs );
+    memset( p->pSlews, 0, sizeof(SC_Pair) * p->nObjs );
+    Abc_NtkForEachPi( p->pNtk, pObj, i )
+    {
+        SC_Pair * pSlew = Abc_SclObjSlew( p, pObj );
+        pSlew->rise = Vec_FltEntry( vSlews, 2 * i + 0 );
+        pSlew->fall = Vec_FltEntry( vSlews, 2 * i + 1 );
+    }
+    Vec_FltFree( vSlews );
+}
+*/
+static inline void Abc_SclManCleanTime( SC_Man * p )
+{
+    memset( p->pTimes, 0, sizeof(SC_Pair) * p->nObjs );
+    memset( p->pSlews, 0, sizeof(SC_Pair) * p->nObjs );
+    memset( p->pDepts, 0, sizeof(SC_Pair) * p->nObjs );
+/*
+    if ( p->pPiDrive != NULL )
+    {
+        SC_Pair * pSlew, * pTime, * pLoad;
+        Abc_Obj_t * pObj;
+        int i;
+        Abc_NtkForEachPi( p->pNtk, pObj, i )
+        {
+            pLoad = Abc_SclObjLoad( p, pObj );
+
+exec
+/bin/zsh -lc 'git log --oneline --decorate -5 && git show --stat --oneline HEAD | head -60' in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+6e33c3cbe (HEAD -> master, origin/master, origin/HEAD) stmap50: band gain for severe SCL pressure
+6138139ae stmap49: blend gain for severe SCL pressure
+3188f304d stmap48: adapt gain for severe SCL pressure
+d55c6a31f stmap47: reduce SCL genlib gain for pressure mode
+a130c05c3 stmap46: bound tight-critical recovery by slack
+6e33c3cbe stmap50: band gain for severe SCL pressure
+ .autoeda/runtime/campaign_state.json               |   30 +-
+ .autoeda/runtime/last_prompt.txt                   |    4 +-
+ .../runtime/results/stmap50/artifact_check.exit    |    1 +
+ .../runtime/results/stmap50/artifact_check.log     |   10 +
+ .../runtime/results/stmap50/banded_gain_stats.csv  |    5 +
+ .../stmap50/baseline_benchmarks_i10_aig.exit       |    1 +
+ .../stmap50/baseline_benchmarks_i10_aig.log        |  189 ++
+ .../stmap50/baseline_benchmarks_ode_abc_blif.exit  |    1 +
+ .../stmap50/baseline_benchmarks_ode_abc_blif.log   |  234 ++
+ .../baseline_benchmarks_or1200_abc_blif.exit       |    1 +
+ .../baseline_benchmarks_or1200_abc_blif.log        |  164 +
+ .../stmap50/baseline_benchmarks_syn2_abc_blif.exit |    1 +
+ .../stmap50/baseline_benchmarks_syn2_abc_blif.log  |  232 ++
+ .autoeda/runtime/results/stmap50/build.exit        |    1 +
+ .autoeda/runtime/results/stmap50/build.log         |    1 +
+ .../stmap50/candidate_benchmarks_i10_aig.exit      |    1 +
+ .../stmap50/candidate_benchmarks_i10_aig.log       |  316 ++
+ .../stmap50/candidate_benchmarks_ode_abc_blif.exit |    1 +
+ .../stmap50/candidate_benchmarks_ode_abc_blif.log  |  242 ++
+ .../candidate_benchmarks_or1200_abc_blif.exit      |    1 +
+ .../candidate_benchmarks_or1200_abc_blif.log       |  281 ++
+ .../candidate_benchmarks_syn2_abc_blif.exit        |    1 +
+ .../stmap50/candidate_benchmarks_syn2_abc_blif.log |  300 ++
+ .../results/stmap50/cec_benchmarks_i10_aig.exit    |    1 +
+ .../results/stmap50/cec_benchmarks_i10_aig.log     |    2 +
+ .../stmap50/cec_benchmarks_i10_aig_orig.aig        |  Bin 0 -> 8880 bytes
+ .../stmap50/cec_benchmarks_i10_aig_orig_write.exit |    1 +
+ .../stmap50/cec_benchmarks_i10_aig_orig_write.log  |    3 +
+ .../stmap50/cec_benchmarks_i10_aig_stmap50.aig     |  Bin 0 -> 7808 bytes
+ .../cec_benchmarks_i10_aig_stmap50_write.exit      |    1 +
+ .../cec_benchmarks_i10_aig_stmap50_write.log       |  316 ++
+ .../stmap50/cec_benchmarks_ode_abc_blif.exit       |    1 +
+ .../stmap50/cec_benchmarks_ode_abc_blif.log        |    2 +
+ .../stmap50/cec_benchmarks_ode_abc_blif_orig.aig   |  Bin 0 -> 55745 bytes
+ .../cec_benchmarks_ode_abc_blif_orig_write.exit    |    1 +
+ .../cec_benchmarks_ode_abc_blif_orig_write.log     |    4 +
+ .../cec_benchmarks_ode_abc_blif_stmap50.aig        |  Bin 0 -> 60807 bytes
+ .../cec_benchmarks_ode_abc_blif_stmap50_write.exit |    1 +
+ .../cec_benchmarks_ode_abc_blif_stmap50_write.log  |  242 ++
+ .../stmap50/cec_benchmarks_or1200_abc_blif.exit    |    1 +
+ .../stmap50/cec_benchmarks_or1200_abc_blif.log     |    2 +
+ .../cec_benchmarks_or1200_abc_blif_orig.aig        |  Bin 0 -> 46075 bytes
+ .../cec_benchmarks_or1200_abc_blif_orig_write.exit |    1 +
+ .../cec_benchmarks_or1200_abc_blif_orig_write.log  |    4 +
+ .../cec_benchmarks_or1200_abc_blif_stmap50.aig     |  Bin 0 -> 43825 bytes
+ ...c_benchmarks_or1200_abc_blif_stmap50_write.exit |    1 +
+ ...ec_benchmarks_or1200_abc_blif_stmap50_write.log |  281 ++
+ .../stmap50/cec_benchmarks_syn2_abc_blif.exit      |    1 +
+ .../stmap50/cec_benchmarks_syn2_abc_blif.log       |    2 +
+ .../stmap50/cec_benchmarks_syn2_abc_blif_orig.aig  |  Bin 0 -> 104425 bytes
+ .../cec_benchmarks_syn2_abc_blif_orig_write.exit   |    1 +
+ .../cec_benchmarks_syn2_abc_blif_orig_write.log    |    4 +
+ .../cec_benchmarks_syn2_abc_blif_stmap50.aig       |  Bin 0 -> 115284 bytes
+ ...cec_benchmarks_syn2_abc_blif_stmap50_write.exit |    1 +
+ .../cec_benchmarks_syn2_abc_blif_stmap50_write.log |  300 ++
+ .autoeda/runtime/results/stmap50/cec_summary.json  |   34 +
+ .autoeda/runtime/results/stmap50/comparison.csv    |    5 +
+ .../runtime/results/stmap50/early_seed_stats.csv   |    5 +
+ .autoeda/runtime/results/stmap50/eval_driver.log   |    0
+
+exec
+/bin/zsh -lc "ls .autoeda/runtime/results/stmap50 | grep 'review_pass2' && ls .autoeda/runtime/results/stmap51 | grep 'review_pass2'" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+review_pass2.exit
+review_pass2.log
+review_pass2_positional.exit
+review_pass2_positional.log
+review_pass2.log
+review_pass2_positional.exit
+review_pass2_positional.log
+
+exec
+/bin/zsh -lc "rg -n \"Extra_UtilGetopt\\( argc, argv\" src/base/abci/abc*.c | head -20" in /Users/cunxiy/Documents/research/autoresearch-eda/abc-harness
+ succeeded in 0ms:
+src/base/abci/abc.c:1736:    while ( ( c = Extra_UtilGetopt( argc, argv, "fbdltmpgscuh" ) ) != EOF )
+src/base/abci/abc.c:1842:    while ( ( c = Extra_UtilGetopt( argc, argv, "sdh" ) ) != EOF )
+src/base/abci/abc.c:1923:    while ( ( c = Extra_UtilGetopt( argc, argv, "fh" ) ) != EOF )
+src/base/abci/abc.c:1994:    while ( ( c = Extra_UtilGetopt( argc, argv, "sh" ) ) != EOF )
+src/base/abci/abc.c:2049:    while ( ( c = Extra_UtilGetopt( argc, argv, "fiscmvh" ) ) != EOF )
+src/base/abci/abc.c:2126:    while ( ( c = Extra_UtilGetopt( argc, argv, "h" ) ) != EOF )
+src/base/abci/abc.c:2178:    while ( ( c = Extra_UtilGetopt( argc, argv, "snh" ) ) != EOF )
+src/base/abci/abc.c:2271:    while ( ( c = Extra_UtilGetopt( argc, argv, "npovh" ) ) != EOF )
+src/base/abci/abc.c:2366:    while ( ( c = Extra_UtilGetopt( argc, argv, "svwh" ) ) != EOF )
+src/base/abci/abc.c:2442:    while ( ( c = Extra_UtilGetopt( argc, argv, "vh" ) ) != EOF )
+src/base/abci/abc.c:2501:    while ( ( c = Extra_UtilGetopt( argc, argv, "svwh" ) ) != EOF )
+src/base/abci/abc.c:2571:    while ( ( c = Extra_UtilGetopt( argc, argv, "bnrvh" ) ) != EOF )
+src/base/abci/abc.c:2649:    while ( ( c = Extra_UtilGetopt( argc, argv, "bnvh" ) ) != EOF )
+src/base/abci/abc.c:2716:    while ( ( c = Extra_UtilGetopt( argc, argv, "Onvh" ) ) != EOF )
+src/base/abci/abc.c:2791:    while ( ( c = Extra_UtilGetopt( argc, argv, "nh" ) ) != EOF )
+src/base/abci/abc.c:2883:    while ( ( c = Extra_UtilGetopt( argc, argv, "luvh" ) ) != EOF )
+src/base/abci/abc.c:2951:    while ( ( c = Extra_UtilGetopt( argc, argv, "lh" ) ) != EOF )
+src/base/abci/abc.c:3003:    while ( ( c = Extra_UtilGetopt( argc, argv, "lh" ) ) != EOF )
+src/base/abci/abc.c:3063:    while ( ( c = Extra_UtilGetopt( argc, argv, "Npcdh" ) ) != EOF )
+src/base/abci/abc.c:3175:    while ( ( c = Extra_UtilGetopt( argc, argv, "lh" ) ) != EOF )
+
+codex
+No actionable correctness issues were found in the current source, command registration, build integration, or evaluation artifacts. The stmap51 change appears consistent with the existing stmap versioning pattern.
+No actionable correctness issues were found in the current source, command registration, build integration, or evaluation artifacts. The stmap51 change appears consistent with the existing stmap versioning pattern.

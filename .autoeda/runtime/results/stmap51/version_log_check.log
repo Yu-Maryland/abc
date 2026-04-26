@@ -1,0 +1,3 @@
+version_log_check: entry = present
+version_log_check: required_fields = present
+version_log_check: PASS
