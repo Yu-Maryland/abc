@@ -1414,6 +1414,8 @@ static int s_nStmap45SclPressureRatios = 0;
 static int s_nStmap45SclPressureEntries = 0;
 static int s_fStmap60NearMissLeafDiag = 0;
 static int s_Stmap60NearMissLeafDiagTarget = -1;
+static int s_fStmap61CutOnlyGateDiag = 0;
+static int s_Stmap61CutOnlyGateDiagTarget = -1;
 
 void Map_Stmap45SetSclLoadFeedbackWithEntries( float MaxLoadRatio, float OverFrac, float Severity, float * pAigPressureRatios, int nAigPressureRatios, int nPressureEntries )
 {
@@ -1444,6 +1446,22 @@ int Map_Stmap60NearMissLeafDiagEnabled( void )
 int Map_Stmap60NearMissLeafDiagTarget( void )
 {
     return s_Stmap60NearMissLeafDiagTarget;
+}
+
+void Map_Stmap61SetCutOnlyGateDiag( int fEnable, int TrackNode )
+{
+    s_fStmap61CutOnlyGateDiag = fEnable;
+    s_Stmap61CutOnlyGateDiagTarget = fEnable ? TrackNode : -1;
+}
+
+int Map_Stmap61CutOnlyGateDiagEnabled( void )
+{
+    return s_fStmap61CutOnlyGateDiag;
+}
+
+int Map_Stmap61CutOnlyGateDiagTarget( void )
+{
+    return s_Stmap61CutOnlyGateDiagTarget;
 }
 
 static float Map_MatchStmap45PressureLookup( int AigId )
@@ -1533,6 +1551,103 @@ static int Map_MatchStmap45HasPressureAgreement( float NodePressureRatio, float 
         return 0;
     PressureSpread = NodePressureRatio > CutPressureRatio ? NodePressureRatio / CutPressureRatio : CutPressureRatio / NodePressureRatio;
     return PressureSpread <= 1.25;
+}
+
+static const char * Map_MatchStmap61CutOnlyFirstBlocker( int fModerateSoftSeed, int fModeratePenaltyCandidate, int fPressureAgreement, int fPressureNear, int fFeedbackGate, int fEntryGate, int fModerateGainGate, int fNodeZeroGate, int fCutBandGate, int fArrivalStrongGate, int fSlackGate, int fAreaCapGate )
+{
+    if ( !fModerateSoftSeed )
+        return "soft-seed";
+    if ( fPressureAgreement )
+        return "pressure-agreement";
+    if ( !fModeratePenaltyCandidate )
+        return "moderate-candidate";
+    if ( fPressureNear )
+        return "pressure-near";
+    if ( !fFeedbackGate )
+        return "feedback";
+    if ( !fEntryGate )
+        return "pressure-entries";
+    if ( !fModerateGainGate )
+        return "moderate-gain";
+    if ( !fNodeZeroGate )
+        return "node-pressure";
+    if ( !fCutBandGate )
+        return "cut-band";
+    if ( !fArrivalStrongGate )
+        return "arrival-strength";
+    if ( !fSlackGate )
+        return "slack";
+    if ( !fAreaCapGate )
+        return "area-cap";
+    return "none";
+}
+
+static void Map_MatchStmap61PrintCutOnlyGateDiag( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int NearMissIndex, const char * pReason, int fProfileOpen, int fModerateSoftSeed, int fModeratePenaltyCandidate, int fPressureAgreement, int fPressureNear, int fCutOnlyRaw, int fCutOnlyAreaCapBlocked, int fCutOnlyPressure, float Slack, float SlackMargin, float AreaSave, float OneInvArea, float ArrivalDelta, float ArrivalGainMargin, float AreaMargin, float NodePressureRatio, float CutPressureRatio )
+{
+    int NodeAigId, fEarlyDepth, fTightCritical, fSlack125Gate;
+    int fFeedbackGate, fEntryGate, fModerateGainGate, fNodeZeroGate, fCutBandGate, fArrivalStrongGate, fSlackGate, fAreaCapGate;
+    int fPrimitivePass, fRawExpected;
+    const char * pFirstBlocker;
+    if ( !s_fStmap61CutOnlyGateDiag || p == NULL || pNode == NULL || pCut == NULL || pNode->Num != s_Stmap61CutOnlyGateDiagTarget )
+        return;
+    NodeAigId = Map_NodeReadAigId( pNode );
+    fEarlyDepth = Map_MatchNodeHasStmap20EarlySeedDepth( pNode );
+    fTightCritical = Map_MatchHasStmap24TightCriticalModerateDeepSeed( ArrivalDelta, ArrivalGainMargin, Slack, SlackMargin, p->fEpsilon );
+    fSlack125Gate = Slack <= 1.25 * SlackMargin + p->fEpsilon;
+    fFeedbackGate = s_Stmap45SclFeedback >= 0.85;
+    fEntryGate = s_nStmap45SclPressureEntries >= 8000;
+    fModerateGainGate = Map_MatchHasStmap22ModerateDeepSeedGain( ArrivalDelta, ArrivalGainMargin, p->fEpsilon );
+    fNodeZeroGate = NodePressureRatio <= 0.0;
+    fCutBandGate = CutPressureRatio >= 1.60 && CutPressureRatio <= 2.20;
+    fArrivalStrongGate = ArrivalDelta <= -2.0 * ArrivalGainMargin - p->fEpsilon;
+    fSlackGate = Slack >= SlackMargin + p->fEpsilon;
+    fAreaCapGate = OneInvArea > 0.0 && AreaSave <= 1.35 * OneInvArea + p->fEpsilon;
+    fPrimitivePass = fFeedbackGate && fEntryGate && !fPressureAgreement && fModerateGainGate && fNodeZeroGate && fCutBandGate && fArrivalStrongGate && fSlackGate;
+    fRawExpected = fModeratePenaltyCandidate && fPrimitivePass;
+    pFirstBlocker = Map_MatchStmap61CutOnlyFirstBlocker( fModerateSoftSeed, fModeratePenaltyCandidate, fPressureAgreement, fPressureNear, fFeedbackGate, fEntryGate, fModerateGainGate, fNodeZeroGate, fCutBandGate, fArrivalStrongGate, fSlackGate, fAreaCapGate );
+    p->nStmap61CutOnlyGateDiag++;
+    if ( fPrimitivePass )
+        p->nStmap61CutOnlyPrimitivePass++;
+    if ( fCutOnlyRaw )
+        p->nStmap61CutOnlyRawPass++;
+    if ( fPrimitivePass && !fModeratePenaltyCandidate )
+        p->nStmap61CutOnlyRawBlockedByModerate++;
+    if ( fModeratePenaltyCandidate && !fPrimitivePass )
+        p->nStmap61CutOnlyRawBlockedByPrimitive++;
+    if ( fCutOnlyRaw && fAreaCapGate )
+        p->nStmap61CutOnlyAreaCapPass++;
+    if ( fCutOnlyAreaCapBlocked )
+        p->nStmap61CutOnlyAreaCapBlocked++;
+    if ( fCutOnlyPressure )
+        p->nStmap61CutOnlyAccepted++;
+    if ( !fModerateSoftSeed )
+        p->nStmap61CutOnlySoftSeedFail++;
+    if ( !fModeratePenaltyCandidate )
+        p->nStmap61CutOnlyModerateCandidateFail++;
+    if ( !fFeedbackGate )
+        p->nStmap61CutOnlyFeedbackFail++;
+    if ( !fEntryGate )
+        p->nStmap61CutOnlyEntryFail++;
+    if ( fPressureAgreement )
+        p->nStmap61CutOnlyAgreementBlocked++;
+    if ( !fNodeZeroGate )
+        p->nStmap61CutOnlyNodeZeroFail++;
+    if ( !fCutBandGate )
+        p->nStmap61CutOnlyCutBandFail++;
+    if ( !fArrivalStrongGate )
+        p->nStmap61CutOnlyArrivalFail++;
+    if ( !fSlackGate )
+        p->nStmap61CutOnlySlackFail++;
+    printf( "stmap61 cut-only gate diag: index = %d  near-miss-index = %d  tracked-node = %d  node-aig-id = %d  phase = %d  reason = %s  first-blocker = %s  profile-open = %d  early-depth = %d  soft-seed = %d  moderate-candidate = %d  tight-critical = %d  slack-1p25-pass = %d  pressure-agreement = %d  pressure-near = %d  primitive-pass = %d  raw-expected = %d  raw-pass = %d  area-cap-pass = %d  area-cap-blocked = %d  accepted = %d  severe-feedback-pass = %d  pressure-entries = %d  pressure-entries-pass = %d  moderate-gain-pass = %d  node-zero-pass = %d  cut-band-pass = %d  arrival-strength-pass = %d  slack-pass = %d  node-sink-pressure-ratio = %.3f  cut-sink-pressure-ratio = %.3f  slack = %.6f  slack-margin = %.6f  area-save = %.6f  area-save-cap = %.6f  arrival-delta = %.6f  arrival-gain-margin = %.6f  area-margin = %.6f  one-inv-area = %.6f  scl-feedback = %.3f\n",
+        p->nStmap61CutOnlyGateDiag, NearMissIndex, pNode->Num, NodeAigId, fPhase,
+        pReason, pFirstBlocker, fProfileOpen, fEarlyDepth, fModerateSoftSeed,
+        fModeratePenaltyCandidate, fTightCritical, fSlack125Gate, fPressureAgreement,
+        fPressureNear, fPrimitivePass, fRawExpected, fCutOnlyRaw, fAreaCapGate,
+        fCutOnlyAreaCapBlocked, fCutOnlyPressure, fFeedbackGate, s_nStmap45SclPressureEntries,
+        fEntryGate, fModerateGainGate, fNodeZeroGate, fCutBandGate, fArrivalStrongGate,
+        fSlackGate, NodePressureRatio, CutPressureRatio, Slack, SlackMargin, AreaSave,
+        1.35 * OneInvArea, ArrivalDelta, ArrivalGainMargin, AreaMargin, OneInvArea,
+        s_Stmap45SclFeedback );
 }
 
 static float Map_MatchStmap45ModeratePenaltyFactor( Map_Node_t * pNode, Map_Cut_t * pCut, float ArrivalDelta, float ArrivalGainMargin, float Slack, float SlackMargin, float Epsilon, float * pNodePressureRatio, float * pCutPressureRatio, int * pNodeAigId )
@@ -4013,6 +4128,8 @@ static int Map_MatchSkipAreaSensitiveFanout( Map_Man_t * p, Map_Node_t * pNode, 
                         Stmap56CutPressureRatio, s_Stmap45SclFeedback );
                 }
                 p->nStmap18NearMiss++;
+                if ( p->fSkipFanout == 57 )
+                    Map_MatchStmap61PrintCutOnlyGateDiag( p, pNode, pCut, fPhase, p->nStmap18NearMiss, pReason, fProfileOpen, fStmap56ModerateSoftSeed, fStmap56ModeratePenaltyCandidate, fStmap56ModeratePressureAgreement, fStmap56ModeratePressureNear, fStmap56CutOnlyPressureRaw, fStmap56CutOnlyAreaCapBlocked, fStmap56CutOnlyPressure, Slack, SlackMargin, AreaSave, OneInvArea, ArrivalDelta, ArrivalGainMargin, AreaMargin, Stmap56NodePressureRatio, Stmap56CutPressureRatio );
                 if ( p->fSkipFanout == 57 )
                     Map_MatchStmap60PrintNearMissLeafDiag( p, pNode, pCut, fPhase, p->nStmap18NearMiss, pReason, Slack, AreaSave, ArrivalDelta, ArrivalGainMargin, AreaMargin, Stmap56NodePressureRatio, Stmap56CutPressureRatio );
                 if ( p->nStmap18NearMiss <= 128 )

@@ -257,6 +257,23 @@ struct Map_ManStruct_t_
     int                 Stmap60NearMissMaxLeafAigId; // stmap60 max-pressure leaf AIG ID
     int                 Stmap60NearMissMaxLeafNode; // stmap60 max-pressure leaf mapper node
     float               Stmap60NearMissMaxLeafRatio; // stmap60 max leaf pressure ratio
+    int                 nStmap61CutOnlyGateDiag; // stmap61 tracked cut-only gate diagnostics
+    int                 nStmap61CutOnlyPrimitivePass; // stmap61 primitive cut-only gate passes
+    int                 nStmap61CutOnlyRawPass; // stmap61 raw cut-only exception passes
+    int                 nStmap61CutOnlyRawBlockedByModerate; // stmap61 primitive pass blocked by moderate-candidate ordering
+    int                 nStmap61CutOnlyRawBlockedByPrimitive; // stmap61 moderate candidate blocked by primitive cut-only gates
+    int                 nStmap61CutOnlyAreaCapPass; // stmap61 raw cut-only passes within relaxed area cap
+    int                 nStmap61CutOnlyAreaCapBlocked; // stmap61 raw cut-only passes blocked by relaxed area cap
+    int                 nStmap61CutOnlyAccepted; // stmap61 final cut-only accepted candidates
+    int                 nStmap61CutOnlySoftSeedFail; // stmap61 tracked candidates missing the soft seed
+    int                 nStmap61CutOnlyModerateCandidateFail; // stmap61 tracked candidates failing moderate-candidate ordering
+    int                 nStmap61CutOnlyFeedbackFail; // stmap61 tracked candidates failing severe-feedback gate
+    int                 nStmap61CutOnlyEntryFail; // stmap61 tracked candidates failing pressure-entry gate
+    int                 nStmap61CutOnlyAgreementBlocked; // stmap61 tracked candidates blocked by node/cut pressure agreement
+    int                 nStmap61CutOnlyNodeZeroFail; // stmap61 tracked candidates with nonzero node pressure
+    int                 nStmap61CutOnlyCutBandFail; // stmap61 tracked candidates outside cut-pressure band
+    int                 nStmap61CutOnlyArrivalFail; // stmap61 tracked candidates failing strong-arrival gate
+    int                 nStmap61CutOnlySlackFail; // stmap61 tracked candidates failing slack gate
 
     // the supergate library
     Map_SuperLib_t *    pSuperLib;     // the current supergate library

@@ -1,0 +1,17 @@
+missing_required = []
+build.exit = 0
+help.exit = 0
+smoke_i10.exit = 0
+eval_driver.exit = 0
+review_pass1.exit = 0
+review_pass2.exit = 0
+version_log_check.exit = 0
+review_pass1_positional.exit = 2 (expected local CLI positional-prompt rejection)
+review_pass2_positional.exit = 2 (expected local CLI positional-prompt rejection)
+comparison_rows = 4
+metrics_rows = 8
+cut_only_gate_stats_rows = 4
+syn2_cut_only_hits = 2 primitive_pass = 1 raw_pass = 0 raw_blocked_by_moderate = 1
+cut_only_gate_diag_rows = 2 reasons = ['cut-only-moderate-block', 'moderate-gain-gate'] first_blockers = ['moderate-candidate', 'soft-seed']
+cec_rows = 4 all_passed = True
+artifact_check = pass

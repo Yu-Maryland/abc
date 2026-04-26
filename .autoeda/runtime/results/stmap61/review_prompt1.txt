@@ -1,0 +1,17 @@
+Review the uncommitted stmap61 AutoEDA iteration in this ABC repository. Focus on correctness risks and regressions, not style.
+
+Context:
+- stmap61 adds src/base/abci/abcStmap_61.c as a versioned command cloned from stmap60.
+- stmap61 should preserve existing map and stmap0..stmap60 behavior.
+- It reuses the reviewed mode-57 bounded-pressure mapping policy and adds only a mapper-side diagnostic for tracked node 23628.
+- Shared mapper edits add Map_Stmap61SetCutOnlyGateDiag(), counters, a summary line, and a per-hit stmap61 cut-only gate diagnostic.
+- The diagnostic should only print when explicitly enabled by stmap61, and should reset after the final remap.
+- Build, help, smoke, full metrics, diagnostic parsing, and CEC have already passed locally.
+
+Please check for:
+1. source-level bugs, lifecycle/reset problems, or unintended behavior changes to older commands;
+2. incorrect diagnostic gate logic or misleading counters;
+3. memory or pointer lifetime hazards around bounded pressure handoff;
+4. missing build/registration integration.
+
+Return findings with severity and file/line references. If there are no actionable findings, say so explicitly.

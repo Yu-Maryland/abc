@@ -3391,3 +3391,65 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap60: trace near-miss cut leaf pressure`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap61`, keep the policy unchanged and add a narrow mapper-side gate diagnostic for tracked node `23628` that records why `fStmap56CutOnlyPressureRaw` remains false despite node pressure `0.000`, cut pressure `2.100`, strong arrival gain, and a local area-save value just under the `1.35x` cap. If that shows only the moderate-soft-seed ordering blocks the candidate, the next algorithmic version can move the cut-only exception test before that soft-seed gate for this severe-feedback class.
+
+
+## version61 / stmap61
+
+- hypothesis: Preserve the reviewed `stmap60` bounded-pressure transfer and inherited mapper mode `57`, but add a mapper-side cut-only gate diagnostic for tracked node `23628`. This tests whether the `syn2` candidate is blocked by primitive cut-only eligibility, bounded-pressure agreement, the area cap, or by the earlier moderate-candidate gate ordering.
+- motivation: `stmap60` resolved the prior visibility question by showing that mode `57` still sees the former useful AIG ID `27645` as tracked mapper node `23628`, and that its near-miss cuts include pressure-bearing leaves. The remaining unknown was why the mode still classified the useful event as `cut-only-moderate-block`.
+- command name: `stmap61`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_61.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `src/map/mapper/mapperCore.c`
+  - `src/map/mapper/mapperInt.h`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap61/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+  - `.autoeda/runtime/last_prompt.txt`
+- algorithm summary: `stmap61` clones the `stmap60` two-pass command structure and preserves classic `map` plus `stmap0` through `stmap60`. It first maps through the established SCL load/max-cap collector, builds the same bounded pressure table, and remaps through inherited mapper mode `57`. During the final remap it enables the existing `stmap60` tracked-node cut-leaf diagnostic and a new `stmap61` cut-only gate diagnostic for mapper node `23628`, then resets both flags immediately after the remap. The new diagnostic records the first failed gate, primitive cut-only status, raw cut-only expectation, raw-pass status, bounded-pressure agreement, node and cut pressure ratios, severe-feedback state, area-cap state, timing/slack gates, and acceptance counters. No mapper scoring, area gate, timing gate, cut selection, or reconstruction behavior is changed.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap61/build.log`.
+  - help: `./abc -c "stmap61 -h"` printed command usage for bounded-pressure transfer with node-23628 cut-only gate diagnostics. Log: `.autoeda/runtime/results/stmap61/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap61; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap61/smoke_i10.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap61/summary.json`, `metrics.csv`, `comparison.csv`, inherited guard/near-miss/early-seed/penalty diagnostics, feedback/bounded-pressure/mapper-mode/sink-pressure diagnostics, inherited near-miss cut-leaf diagnostics, new `cut_only_gate_stats.csv`, new `cut_only_gate_diag.csv`, raw baseline/candidate logs, CEC temporaries and logs, review prompts, review logs, review summary, and artifact check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`); selected gain `250.00`; pressure feed `sink-fallback`; cut-only gate hits `0`.
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`); selected gain `250.00`; pressure feed `sink-fallback`; cut-only gate hits `0`.
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`); selected gain `250.00`; pressure feed `sink-fallback`; cut-only gate hits `0`.
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`); selected gain `225.00`; pressure feed `bounded-raw`; cut-only gate hits `2`.
+- cut-only gate diagnostics:
+  - `stmap61` used inherited mapper mode `57` on all candidate benchmark runs; only `syn2` opened severe bounded-raw transfer.
+  - `cut_only_gate_stats.csv`: `i10`, `ode`, and `or1200` had zero tracked-node hits. `syn2` had `2` tracked-node hits, `1` primitive cut-only pass, `0` raw cut-only passes, `1` raw block by the moderate-candidate gate, `0` primitive raw blocks, `0` accepted cut-only exceptions, `1` soft-seed failure, and `2` moderate-candidate failures.
+  - `cut_only_gate_diag.csv`: the first `syn2` tracked event was `moderate-gain-gate` and the first blocker was `soft-seed`; it had node pressure `0.000`, cut pressure `0.000`, area save `0.930000`, arrival delta `-2.330002`, and failed the cut-band and arrival-strength checks.
+  - `cut_only_gate_diag.csv`: the second `syn2` tracked event was `cut-only-moderate-block` and the first blocker was `moderate-candidate`; it had primitive-pass `1`, tight-critical `1`, slack-1p25-pass `1`, severe-feedback-pass `1`, pressure-entry-pass `1`, node-zero-pass `1`, cut-band-pass `1`, arrival-strength-pass `1`, slack-pass `1`, node pressure `0.000`, cut pressure `2.100`, slack `6.719986`, area save `0.930000`, arrival delta `-12.100006`, one-inverter area `0.700000`, and SCL feedback severity `0.884`.
+  - The diagnostic hypothesis is resolved: the useful `syn2` event is not blocked by primitive cut-only eligibility, pressure entries, pressure banding, local slack, or arrival strength. It is blocked before raw cut-only admission because the current mode-57 ordering requires `Map_MatchIsStmap28ModeratePenaltyCandidate` to pass before the cut-only exception can be considered.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_61.c`.
+  - numbered command exists and is registered as `stmap61`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics passed for all four required designs.
+  - feedback, bounded-pressure, mapper-mode, sink-pressure, inherited guard, inherited near-miss, inherited early-seed, inherited penalty, inherited near-miss cut-leaf, and new cut-only gate diagnostic parsing passed and is recorded under `.autoeda/runtime/results/stmap61/`.
+  - CEC passed for all four required designs using original and candidate strashed AIG temporaries under `.autoeda/runtime/results/stmap61/`.
+  - artifact check passed and is recorded in `.autoeda/runtime/results/stmap61/artifact_check.log`.
+  - version-log check passed and is recorded in `.autoeda/runtime/results/stmap61/version_log_check.log`.
+  - review summary is recorded in `.autoeda/runtime/results/stmap61/review_summary.md`.
+- review pass 1:
+  - configured prompt-form review was attempted with `codex exec review --uncommitted ... "<prompt>"`; the installed Codex CLI rejected the positional prompt with `--uncommitted`. The failure is logged in `.autoeda/runtime/results/stmap61/review_pass1_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin: `codex exec review --uncommitted --model gpt-5.5 -c model_reasoning_effort="xhigh" -c service_tier="fast" --dangerously-bypass-approvals-and-sandbox`; log: `.autoeda/runtime/results/stmap61/review_pass1.log`.
+  - accepted source findings: none. Pass 1 reported no actionable correctness issues.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected for the same local CLI argument conflict; the failure is logged in `.autoeda/runtime/results/stmap61/review_pass2_positional.log`.
+  - supported configured-tool invocation completed with the same prompt via stdin; log: `.autoeda/runtime/results/stmap61/review_pass2.log`.
+  - accepted source findings: none. Pass 2 reported no actionable correctness issues in the final uncommitted changes.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact checks, canonical logging, version checks, campaign-state finalization, and git bookkeeping were added after the clean final review pass.
+- commit: local commit to be created with message `stmap61: diagnose cut-only gate ordering`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap62`, make one narrow policy change that tests the cut-only exception before, or independently of, the moderate-candidate gate for severe-feedback, tight-critical events with node pressure `0.000`, cut pressure near the bounded cap, passing pressure entries, passing cut-band, passing arrival-strength, passing slack, primitive-pass `1`, and local area save under the inherited `1.35x` inverter cap. Keep the new `stmap61` gate diagnostic active for node `23628` to confirm whether the event moves from `cut-only-moderate-block` to accepted without broadening unrelated mapper behavior.

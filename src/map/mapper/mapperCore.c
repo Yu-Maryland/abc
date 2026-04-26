@@ -28,6 +28,8 @@ ABC_NAMESPACE_IMPL_START
 
 extern int Map_Stmap60NearMissLeafDiagEnabled( void );
 extern int Map_Stmap60NearMissLeafDiagTarget( void );
+extern int Map_Stmap61CutOnlyGateDiagEnabled( void );
+extern int Map_Stmap61CutOnlyGateDiagTarget( void );
 
 ////////////////////////////////////////////////////////////////////////
 ///                     FUNCTION DEFINITIONS                         ///
@@ -351,6 +353,17 @@ ABC_PRT( "Time", Abc_Clock() - clk );
             p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafNode : -1,
             p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafAigId : -1,
             p->nStmap60NearMissLeafDiag ? p->Stmap60NearMissMaxLeafRatio : 0.0 );
+    if ( Map_Stmap61CutOnlyGateDiagEnabled() )
+        printf( "stmap61 cut-only gate stats: tracked-node = %d  hits = %d  primitive-pass = %d  raw-pass = %d  raw-blocked-by-moderate = %d  raw-blocked-by-primitive = %d  area-cap-pass = %d  area-cap-blocked = %d  accepted = %d  soft-seed-fail = %d  moderate-candidate-fail = %d  feedback-fail = %d  entry-fail = %d  agreement-blocked = %d  node-zero-fail = %d  cut-band-fail = %d  arrival-fail = %d  slack-fail = %d\n",
+            Map_Stmap61CutOnlyGateDiagTarget(), p->nStmap61CutOnlyGateDiag,
+            p->nStmap61CutOnlyPrimitivePass, p->nStmap61CutOnlyRawPass,
+            p->nStmap61CutOnlyRawBlockedByModerate, p->nStmap61CutOnlyRawBlockedByPrimitive,
+            p->nStmap61CutOnlyAreaCapPass, p->nStmap61CutOnlyAreaCapBlocked,
+            p->nStmap61CutOnlyAccepted, p->nStmap61CutOnlySoftSeedFail,
+            p->nStmap61CutOnlyModerateCandidateFail, p->nStmap61CutOnlyFeedbackFail,
+            p->nStmap61CutOnlyEntryFail, p->nStmap61CutOnlyAgreementBlocked,
+            p->nStmap61CutOnlyNodeZeroFail, p->nStmap61CutOnlyCutBandFail,
+            p->nStmap61CutOnlyArrivalFail, p->nStmap61CutOnlySlackFail );
 
     // print the arrival times of the latest outputs
     if ( p->fVerbose )
