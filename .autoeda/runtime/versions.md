@@ -5304,3 +5304,57 @@ Each completed version should append a new `## versionN` section.
 - commit: local commit to be created with message `stmap92: target emitted critical drive`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
 - push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
 - next-step recommendation: For `stmap93`, use the stmap92 negative result to relax the exact-area area window only for the final-critical emitted AIG/phase and only when the candidate materially improves drive. The main blocker was not phase survival anymore; it was that exact-area candidates with better drive were blocked by area-premium/ratio rules or were already selected. A bounded area-premium override around `or1200` AIG `11491` phase `0` is the next clean probe.
+
+
+## version93 / stmap93
+
+- hypothesis: The exact-area pass can miss a downstream-useful stronger-drive match when the current best has zero area-flow bookkeeping, making the normal area-ratio guard infinite. A bounded absolute area premium for the final-critical emitted AIG/phase should allow the intended drive-improved `or1200` match without broadly changing the mapper.
+- motivation: `stmap92` targeted final-critical emitted AIG phases directly and found drive-improved exact-area rows for `or1200` AIG `11491` phase `0`, but they were blocked by the area window because the best area-flow was zero. `stmap93` keeps the same target set and relaxes only that exact-area zero-best case.
+- command name: `stmap93`
+- files changed:
+  - `src/base/abci/abc.c`
+  - `src/base/abci/abcStmap_65.c`
+  - `src/base/abci/abcStmap_93.c`
+  - `src/base/abci/module.make`
+  - `src/map/mapper/mapperMatch.c`
+  - `abclib.dsp`
+  - `.autoeda/runtime/results/stmap93/*`
+  - `.autoeda/runtime/versions.md`
+  - `.autoeda/runtime/campaign_state.json`
+- algorithm summary: `stmap93` adds `Map_Stmap93SetEmittedDriveTarget()` and `Map_Stmap93MaybeTargetEmittedDrive()` in `mapperMatch.c`. It is inactive by default and is enabled only by `stmap93` during the `stmap65` final remap. It watches the same final-critical emitted AIG/phase targets as `stmap92`. In modes `1`, `2`, and `3`, candidates must match the target phase, have an existing best match/cut, stay within `0.75 ps` arrival, and have materially stronger drive. Normal area guards remain `1.20` area premium and `2.50x` ratio; exact-area modes may instead use a `2.20` absolute area-premium window only when the current best area-flow is zero.
+- validation run:
+  - build: `make ABC_USE_NO_READLINE=1` passed and produced `./abc`. Log: `.autoeda/runtime/results/stmap93/build.log`.
+  - help: `./abc -c "stmap93 -h"` printed usage text. Log: `.autoeda/runtime/results/stmap93/help.log`.
+  - smoke: `read_lib 7nm_lvt_ff.lib; read benchmarks/i10.aig; resyn; resyn2; dch -v; stmap93; topo; buffer; upsize -v; dnsize -v; stime` passed with final delay `198.64 ps` and area `1303.10`. Log: `.autoeda/runtime/results/stmap93/smoke_i10.log`.
+  - path-normalization check: direct `./benchmarks/i10.aig` and `./i10.aig` selected target AIG `855`, downstream AIG `861`, target phase `0`, and emitted-drive targeting was active in both normalized names. Log: `.autoeda/runtime/results/stmap93/path_norm_i10.log`.
+  - stale-state check: one ABC process ran watched `i10` and then `.autoeda/runtime/results/stmap93/unknown.blif`; the unknown network reported selected-watch count `0`, emitted-drive target disabled, and emitted-relaxed-drive-target rows `0`. Log: `.autoeda/runtime/results/stmap93/unknown_aig_stale_check.log`.
+  - full evaluation artifacts: `.autoeda/runtime/results/stmap93/summary.json`, `metrics.csv`, `comparison.csv`, `emitted_relaxed_drive_target.csv`, `emitted_relaxed_drive_target_stats.csv`, selected-match diagnostics, phase-survival diagnostics, parent/candidate/demand/reconstruction/final-critical diagnostics, CEC logs and temporaries, review logs, review summary, artifact check, and version-log check.
+- benchmark results:
+  - `benchmarks/i10.aig`: baseline delay `207.24 ps`, area `1263.44`; candidate delay `198.64 ps`, area `1303.10`; delay delta `-8.60 ps` (`-4.15%`), area delta `+39.66` (`+3.14%`).
+  - `benchmarks/ode.abc.blif`: baseline delay `531.32 ps`, area `12491.21`; candidate delay `522.05 ps`, area `11334.38`; delay delta `-9.27 ps` (`-1.74%`), area delta `-1156.83` (`-9.26%`).
+  - `benchmarks/or1200.abc.blif`: baseline delay `587.08 ps`, area `4798.34`; candidate delay `561.55 ps`, area `4895.15`; delay delta `-25.53 ps` (`-4.35%`), area delta `+96.81` (`+2.02%`).
+  - `benchmarks/syn2.abc.blif`: baseline delay `508.82 ps`, area `21296.60`; candidate delay `479.78 ps`, area `22203.59`; delay delta `-29.04 ps` (`-5.71%`), area delta `+906.99` (`+4.26%`).
+- emitted-relaxed-drive diagnostic results:
+  - `i10`: target AIG `855` phase `0`; `13` rows, `7` target-phase rows, `1` material-drive row, `0` eligible overrides, and `0` overrides.
+  - `ode`: target AIG `5219` phase `1`; `28` rows, `6` target-phase rows, `1` material-drive row, `0` eligible overrides, and `0` overrides.
+  - `or1200`: target AIG `11491` phase `0`; `50` rows, `26` target-phase rows, `8` material-drive rows, `4` eligible rows, `2` relaxed-eligible rows, `2` overrides, and `2` already-selected rows. The relaxed overrides selected `OAI21xp33_ASAP7_75t_L` over `A2O1A1Ixp33_ASAP7_75t_L` in modes `2` and `3`.
+  - `syn2`: target AIG `18002` phase `1`; `52` rows, `26` target-phase rows, `1` material-drive row, `0` eligible overrides, and `0` overrides.
+  - Final QoR stayed unchanged. Reconstruction and phase-survival diagnostics still show `or1200` AIG `11491` phase `0` emitted as `A2O1A1Ixp33_ASAP7_75t_L`, so the exact-area override did not survive into reconstructed output.
+- correctness results:
+  - build passed.
+  - numbered implementation exists: `src/base/abci/abcStmap_93.c`.
+  - numbered command exists and is registered as `stmap93`.
+  - command help passed.
+  - smoke flow passed.
+  - benchmark metrics and CEC passed for all four required designs.
+  - emitted-relaxed-drive-target, selected-match, phase-survival, parent-cut, candidate-cut, demand-path, reconstruction, path-normalization, stale-state, artifact check, and version-log check passed.
+- review pass 1:
+  - configured prompt-form review was attempted and rejected by the known local Codex CLI `--uncommitted` positional prompt conflict; stdin review completed with exit `0` and no actionable correctness issues in the changed source, build wiring, or newly added command implementation.
+- review pass 2:
+  - configured prompt-form review was attempted and rejected by the same local CLI conflict; stdin review completed with exit `0` and no actionable correctness issues in source, build wiring, command registration, or stmap93 artifacts.
+- rejected findings: none.
+- open findings: none after pass 2.
+- source changes after final review: none; only runtime review summary, artifact check, canonical logging, version check, campaign-state finalization, and git bookkeeping were added after the clean final source review.
+- commit: local commit to be created with message `stmap93: relax emitted drive area window`; the exact hash is intentionally left to Git history rather than embedded in this self-referential log record.
+- push: enabled by full-campaign `git.yaml`; push is to be performed after the local commit.
+- next-step recommendation: For `stmap94`, stop relying on exact-area match-table overrides for `or1200` AIG `11491`; the override fires but reconstruction still emits the old gate. The next useful probe is reconstruction-side selection for that final emitted phase, or direct reconstruction diagnostics that compare `pCutBest[0]` versus emitted supergate for the same AIG immediately before `Abc_NtkFromMap` materializes the cell.
