@@ -1,0 +1,6 @@
+benchmark,watch_index,aig_id,phase,top_node,top_gate,top_criticality,top_slack,top_load_ratio,final_fanouts,node_fanouts,co_fanouts,best_fanout_node,best_fanout_aig_id,best_fanout_phase,best_fanout_gate,best_fanout_criticality,best_fanout_slack
+benchmarks/i10.aig,0,855,0,732,NAND5xp2_ASAP7_75t_L,1.000,0.000000,0.313,8,8,0,734,861,1,AOI22xp5_ASAP7_75t_L,1.000,0.000000
+benchmarks/i10.aig,0,855,1,635,NOR4xp25_ASAP7_75t_L,0.996,0.139130,0.196,5,5,0,724,860,1,NOR4xp25_ASAP7_75t_L,0.996,0.139130
+benchmarks/ode.abc.blif,0,5219,1,5087,O2A1O1Ixp33_ASAP7_75t_L,1.000,0.000000,0.338,9,9,0,5093,5229,0,OAI211xp5_ASAP7_75t_L,1.000,0.000000
+benchmarks/or1200.abc.blif,0,11491,0,7025,A2O1A1Ixp33_ASAP7_75t_L,1.000,0.000000,0.187,6,5,1,7919,13829,1,NOR2xp33_ASAP7_75t_L,1.000,0.000000
+benchmarks/syn2.abc.blif,0,18002,1,11965,NOR2xp33_ASAP7_75t_L,1.000,0.000000,0.234,6,6,0,12170,18467,1,AOI32xp33_ASAP7_75t_L,1.000,0.000000

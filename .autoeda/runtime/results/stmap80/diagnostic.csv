@@ -1,0 +1,5 @@
+benchmark,inherited_policy,mapper_selected_match_watch,network,child_aig,parent_aig,source,reconstruction_phase_trace,demand_path_trace,parent_cut_trace,candidate_cut_trace,final_phase_survival,mapping_policy_change
+benchmarks/i10.aig,stmap65,1,benchmarks/i10,855,861,stmap79-candidate-cut-hypothesis,1,1,1,1,1,0
+benchmarks/ode.abc.blif,stmap65,1,ode,5219,5229,stmap79-candidate-cut-hypothesis,1,1,1,1,1,0
+benchmarks/or1200.abc.blif,stmap65,1,or1200_flat,11491,13829,stmap79-candidate-cut-hypothesis,1,1,1,1,1,0
+benchmarks/syn2.abc.blif,stmap65,1,syn2,18002,18467,stmap79-candidate-cut-hypothesis,1,1,1,1,1,0

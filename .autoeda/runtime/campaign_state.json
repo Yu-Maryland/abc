@@ -4,14 +4,14 @@
   "repo_root": "/Users/cunxiy/Documents/research/autoresearch-eda/abc-harness",
   "family": "stmap",
   "target_iterations": 100,
-  "completed_iterations": 80,
-  "next_iteration": 80,
+  "completed_iterations": 81,
+  "next_iteration": 81,
   "status": "iteration-complete",
   "active_iteration": null,
   "active_version": null,
-  "last_completed_iteration": 79,
-  "last_completed_version": "stmap79",
-  "last_successful_commit": "local commit to be created: stmap79: trace downstream parent cuts; see git history for hash",
+  "last_completed_iteration": 80,
+  "last_completed_version": "stmap80",
+  "last_successful_commit": "local commit to be created: stmap80: trace parent candidate cuts; see git history for hash",
   "last_launch_time": "2026-04-26T15:37:52+00:00",
   "last_heartbeat_time": "2026-04-26T14:35:43.985175Z",
   "launcher_pid": 60423,
@@ -513,8 +513,13 @@
     "stmap79 full evaluation and CEC passed; review loop started.",
     "stmap79 review pass 1 completed with no findings; review pass 2 started.",
     "stmap79 validation passed: build, help, smoke, full benchmark metrics, parent-cut diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
-    "stmap79 review completed with no findings across two supported review passes; local commit is planned with push enabled by full-campaign git.yaml."
+    "stmap79 review completed with no findings across two supported review passes; local commit is planned with push enabled by full-campaign git.yaml.",
+    "stmap80 active iteration prepared: mapper candidate-cut polarity diagnostic for downstream parent AIGs.",
+    "stmap80 full benchmark metrics, candidate-cut diagnostic parsing, and CEC completed successfully; review loop started.",
+    "stmap80 validation passed: build, help, smoke, full benchmark metrics, candidate-cut diagnostic parsing, CEC, artifact check, version-log check, and two-pass review.",
+    "stmap80 review completed with no findings across two supported review passes; no source changes were made after final review.",
+    "stmap80 local commit is planned with push enabled by full-campaign git.yaml."
   ],
   "updated_at": "2026-04-26T16:23:11Z",
-  "updated_at_utc": "2026-04-26T17:08:33.710502Z"
+  "updated_at_utc": "2026-04-26T17:33:28Z"
 }

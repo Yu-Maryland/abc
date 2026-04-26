@@ -1,0 +1,11 @@
+Review the uncommitted stmap80 implementation for correctness, build integration, diagnostic lifecycle, and campaign-artifact risks.
+
+Context: stmap80 is intended to be diagnostic-only. It keeps the reviewed stmap65 mapping policy unchanged, adds a mapper-side candidate-cut trace for benchmark-specific downstream parent AIGs, and reuses stmap77/stmap78/stmap79 final reconstruction, demand-path, and parent-cut diagnostics under the stmap80 label.
+
+Focus on:
+- `src/map/mapper/mapperMatch.c` candidate-cut instrumentation in `Map_MatchNodePhase`
+- `src/base/abci/abcStmap_65.c` active/inactive scoping around feedback and final mapping passes
+- `src/base/abci/abcStmap_80.c` command setup/cleanup and help text
+- command registration/build wiring in `src/base/abci/abc.c`, `src/base/abci/module.make`, and `abclib.dsp`
+
+Validation already run: build, `stmap80 -h`, i10 smoke, path-normalization, stale-state, full four-benchmark eval, parsed candidate-cut summaries, and CEC 4/4. Treat source findings as primary; runtime-log wording findings are secondary unless they affect reproducibility.

@@ -1,0 +1,5 @@
+Second review pass for stmap80 after pass 1 reported no blocking findings and no source changes were made.
+
+Please re-review the uncommitted stmap80 source and runtime evidence for any remaining correctness, build-integration, diagnostic lifecycle, or reproducibility issue. Pay particular attention to whether the new mapper-side candidate-cut diagnostic can perturb mapper selection, leak state across commands, or leave older stmap commands affected when stmap80 is not active.
+
+Validation evidence remains: build, help, smoke, path-normalization, stale-state, full four-benchmark evaluation, candidate-cut CSV summaries, and CEC 4/4 under `.autoeda/runtime/results/stmap80/`.

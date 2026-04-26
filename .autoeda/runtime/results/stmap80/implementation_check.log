@@ -1,0 +1,55 @@
+src/base/abci/abcStmap_65.c:581:    extern int Map_Stmap80CandidateCutDiagConfigured( void );
+src/base/abci/abcStmap_65.c:582:    extern void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel );
+src/base/abci/abcStmap_65.c:747:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+src/base/abci/abcStmap_65.c:748:            Map_Stmap80SetCandidateCutActive( 0, "feedback" );
+src/base/abci/abcStmap_65.c:801:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+src/base/abci/abcStmap_65.c:802:            Map_Stmap80SetCandidateCutActive( 1, "final" );
+src/base/abci/abcStmap_65.c:810:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+src/base/abci/abcStmap_65.c:811:            Map_Stmap80SetCandidateCutActive( 0, "final" );
+src/base/abci/abcStmap_65.c:835:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+src/base/abci/abcStmap_65.c:836:            Map_Stmap80SetCandidateCutActive( 1, "final" );
+src/base/abci/abcStmap_65.c:844:        if ( Map_Stmap80CandidateCutDiagConfigured() )
+src/base/abci/abcStmap_65.c:845:            Map_Stmap80SetCandidateCutActive( 0, "final" );
+src/map/mapper/mapperMatch.c:78:static const char * s_pStmap80CandidateCutLabel = "stmap80";
+src/map/mapper/mapperMatch.c:94:static const char * Map_Stmap80ReasonName( int Reason )
+src/map/mapper/mapperMatch.c:117:static void Map_Stmap80ResetCandidateCutCounters( void )
+src/map/mapper/mapperMatch.c:133:static void Map_Stmap80ClearCandidateCutDiag( void )
+src/map/mapper/mapperMatch.c:137:    s_pStmap80CandidateCutLabel = "stmap80";
+src/map/mapper/mapperMatch.c:140:    Map_Stmap80ResetCandidateCutCounters();
+src/map/mapper/mapperMatch.c:143:void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+src/map/mapper/mapperMatch.c:145:    Map_Stmap80ClearCandidateCutDiag();
+src/map/mapper/mapperMatch.c:146:    s_pStmap80CandidateCutLabel = pLabel && pLabel[0] ? pLabel : "stmap80";
+src/map/mapper/mapperMatch.c:154:int Map_Stmap80CandidateCutDiagConfigured( void )
+src/map/mapper/mapperMatch.c:159:void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel )
+src/map/mapper/mapperMatch.c:164:        Map_Stmap80ResetCandidateCutCounters();
+src/map/mapper/mapperMatch.c:169:static void Map_Stmap80RecordCandidateCut( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int Reason, int fSelectedUpdate, int fViable )
+src/map/mapper/mapperMatch.c:252:        CutOrdinal, Map_Stmap80ReasonName( Reason ), fViable, fSelectedUpdate,
+src/map/mapper/mapperMatch.c:263:void Map_Stmap80PrintCandidateCutSummary( void )
+src/map/mapper/mapperMatch.c:5273:            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pCut->M + fPhase, &MatchBest, MAP_STMAP80_REASON_SKIP_FANOUT, 0, 0 );
+src/map/mapper/mapperMatch.c:5279:            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, MAP_STMAP80_REASON_NO_SUPERS, 0, 0 );
+src/map/mapper/mapperMatch.c:5287:            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, pMatch->pSuperBest == NULL ? MAP_STMAP80_REASON_NO_SUPER_BEST : MAP_STMAP80_REASON_REQUIRED, 0, 0 );
+src/map/mapper/mapperMatch.c:5293:            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, MAP_STMAP80_REASON_AREA_SENSITIVE, 0, 0 );
+src/map/mapper/mapperMatch.c:5299:        Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
+src/base/abci/abc.c:380:extern int Abc_CommandStmap80                ( Abc_Frame_t * pAbc, int argc, char ** argv );
+src/base/abci/abc.c:1307:    Cmd_CommandAdd( pAbc, "SC mapping",   "stmap80",       Abc_CommandStmap80,          1 );
+src/base/abci/abcStmap_80.c:9:  Synopsis    [stmap80 command.]
+src/base/abci/abcStmap_80.c:65:  Synopsis    [Runs the stmap80 mapper candidate-cut diagnostic.]
+src/base/abci/abcStmap_80.c:67:  Description [stmap80 keeps the reviewed stmap65 mapping policy unchanged,
+src/base/abci/abcStmap_80.c:76:int Abc_CommandStmap80( Abc_Frame_t * pAbc, int argc, char ** argv )
+src/base/abci/abcStmap_80.c:92:    extern void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId );
+src/base/abci/abcStmap_80.c:93:    extern void Map_Stmap80PrintCandidateCutSummary( void );
+src/base/abci/abcStmap_80.c:104:    printf( "stmap80 diagnostic: inherited-policy = stmap65  mapper-selected-match-watch = %d  network = %s  child-aig = %d  parent-aig = %d  source = stmap79-candidate-cut-hypothesis  reconstruction-phase-trace = 1  demand-path-trace = 1  parent-cut-trace = 1  candidate-cut-trace = 1  final-phase-survival = 1  mapping-policy-change = 0\n",
+src/base/abci/abcStmap_80.c:108:    Map_Stmap75SetFinalCriticalAigDiagLabel( "stmap80" );
+src/base/abci/abcStmap_80.c:109:    Abc_Stmap77SetReconstructionDiag( ChildAigId >= 0, "stmap80", WatchAigs, ChildAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_80.c:110:    Abc_Stmap78SetDemandPathDiag( ChildAigId >= 0, "stmap80", ChildAigId, ParentAigId );
+src/base/abci/abcStmap_80.c:111:    Abc_Stmap79SetParentCutDiag( ChildAigId >= 0, "stmap80", ChildAigId, ParentAigId );
+src/base/abci/abcStmap_80.c:112:    Map_Stmap80SetCandidateCutDiag( ChildAigId >= 0, "stmap80", ParentAigId, ChildAigId );
+src/base/abci/abcStmap_80.c:117:    Map_Stmap80PrintCandidateCutSummary();
+src/base/abci/abcStmap_80.c:118:    Map_Stmap80SetCandidateCutDiag( 0, "stmap80", -1, -1 );
+src/base/abci/abcStmap_80.c:119:    Abc_Stmap79SetParentCutDiag( 0, "stmap80", -1, -1 );
+src/base/abci/abcStmap_80.c:120:    Abc_Stmap78SetDemandPathDiag( 0, "stmap80", -1, -1 );
+src/base/abci/abcStmap_80.c:121:    Abc_Stmap77SetReconstructionDiag( 0, "stmap80", NULL, 0 );
+src/base/abci/abcStmap_80.c:127:        Abc_Stmap74EnableFinalCriticalScope( pNtkRes, "stmap80" );
+src/base/abci/abcStmap_80.c:128:        Abc_Stmap76EnablePhaseSurvivalScope( pNtkRes, "stmap80", WatchAigs, ChildAigId >= 0 ? 1 : 0 );
+src/base/abci/abcStmap_80.c:133:    Abc_Print( -2, "usage: stmap80 [-DABFSG float] [-M num] [-arspfuovh]\n" );
+src/base/abci/abcStmap_80.c:134:    Abc_Print( -2, "\t              performs stmap80 bounded-pressure mapping with downstream parent candidate-cut diagnostics\n" );

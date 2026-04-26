@@ -63,6 +63,215 @@ void Map_MatchClean( Map_Match_t * pMatch )
     pMatch->tArrive.Worst  = MAP_FLOAT_LARGE; // unassigned
 }
 
+enum {
+    MAP_STMAP80_REASON_SKIP_FANOUT = 0,
+    MAP_STMAP80_REASON_NO_SUPERS,
+    MAP_STMAP80_REASON_NO_SUPER_BEST,
+    MAP_STMAP80_REASON_REQUIRED,
+    MAP_STMAP80_REASON_AREA_SENSITIVE,
+    MAP_STMAP80_REASON_ACCEPTED_BEST,
+    MAP_STMAP80_REASON_NONSELECTED
+};
+
+static int s_fStmap80CandidateCutDiag = 0;
+static int s_fStmap80CandidateCutActive = 0;
+static const char * s_pStmap80CandidateCutLabel = "stmap80";
+static int s_Stmap80ParentAigId = -1;
+static int s_Stmap80ChildAigId = -1;
+static int s_nStmap80CandidateCutRows = 0;
+static int s_nStmap80CandidateCutViable = 0;
+static int s_nStmap80CandidateCutAccepted = 0;
+static int s_nStmap80CandidateChildPhase0 = 0;
+static int s_nStmap80CandidateChildPhase1 = 0;
+static int s_nStmap80CandidateChildUnknown = 0;
+static int s_nStmap80CandidateChildMissing = 0;
+static int s_nStmap80CandidateSkipFanout = 0;
+static int s_nStmap80CandidateNoSupers = 0;
+static int s_nStmap80CandidateNoSuperBest = 0;
+static int s_nStmap80CandidateRequired = 0;
+static int s_nStmap80CandidateAreaSensitive = 0;
+
+static const char * Map_Stmap80ReasonName( int Reason )
+{
+    switch ( Reason )
+    {
+    case MAP_STMAP80_REASON_SKIP_FANOUT:
+        return "skip-fanout";
+    case MAP_STMAP80_REASON_NO_SUPERS:
+        return "no-supers";
+    case MAP_STMAP80_REASON_NO_SUPER_BEST:
+        return "no-super-best";
+    case MAP_STMAP80_REASON_REQUIRED:
+        return "violates-required";
+    case MAP_STMAP80_REASON_AREA_SENSITIVE:
+        return "area-sensitive-skip";
+    case MAP_STMAP80_REASON_ACCEPTED_BEST:
+        return "accepted-best";
+    case MAP_STMAP80_REASON_NONSELECTED:
+        return "nonselected";
+    default:
+        return "unknown";
+    }
+}
+
+static void Map_Stmap80ResetCandidateCutCounters( void )
+{
+    s_nStmap80CandidateCutRows = 0;
+    s_nStmap80CandidateCutViable = 0;
+    s_nStmap80CandidateCutAccepted = 0;
+    s_nStmap80CandidateChildPhase0 = 0;
+    s_nStmap80CandidateChildPhase1 = 0;
+    s_nStmap80CandidateChildUnknown = 0;
+    s_nStmap80CandidateChildMissing = 0;
+    s_nStmap80CandidateSkipFanout = 0;
+    s_nStmap80CandidateNoSupers = 0;
+    s_nStmap80CandidateNoSuperBest = 0;
+    s_nStmap80CandidateRequired = 0;
+    s_nStmap80CandidateAreaSensitive = 0;
+}
+
+static void Map_Stmap80ClearCandidateCutDiag( void )
+{
+    s_fStmap80CandidateCutDiag = 0;
+    s_fStmap80CandidateCutActive = 0;
+    s_pStmap80CandidateCutLabel = "stmap80";
+    s_Stmap80ParentAigId = -1;
+    s_Stmap80ChildAigId = -1;
+    Map_Stmap80ResetCandidateCutCounters();
+}
+
+void Map_Stmap80SetCandidateCutDiag( int fEnable, const char * pLabel, int ParentAigId, int ChildAigId )
+{
+    Map_Stmap80ClearCandidateCutDiag();
+    s_pStmap80CandidateCutLabel = pLabel && pLabel[0] ? pLabel : "stmap80";
+    if ( !fEnable || ParentAigId < 0 || ChildAigId < 0 )
+        return;
+    s_fStmap80CandidateCutDiag = 1;
+    s_Stmap80ParentAigId = ParentAigId;
+    s_Stmap80ChildAigId = ChildAigId;
+}
+
+int Map_Stmap80CandidateCutDiagConfigured( void )
+{
+    return s_fStmap80CandidateCutDiag;
+}
+
+void Map_Stmap80SetCandidateCutActive( int fActive, const char * pPassLabel )
+{
+    if ( !s_fStmap80CandidateCutDiag )
+        return;
+    if ( fActive )
+        Map_Stmap80ResetCandidateCutCounters();
+    s_fStmap80CandidateCutActive = fActive;
+    (void)pPassLabel;
+}
+
+static void Map_Stmap80RecordCandidateCut( Map_Man_t * p, Map_Node_t * pNode, Map_Cut_t * pCut, int fPhase, int CutOrdinal, Map_Match_t * pMatch, Map_Match_t * pBestBefore, int Reason, int fSelectedUpdate, int fViable )
+{
+    Map_Node_t * pNodeRegular;
+    Map_Super_t * pSuperBest, * pSuperBestBefore;
+    Mio_Gate_t * pGate, * pGateBefore;
+    unsigned uPhaseBest;
+    int AigId, nLeaves, i, ChildLeaf, ChildPhase, ChildInverted, LeafAigId[6], LeafPhase[6];
+    float Arrive, Required, Slack, AreaFlow, BestArrive, BestArea;
+    if ( !s_fStmap80CandidateCutDiag || !s_fStmap80CandidateCutActive || pNode == NULL || pCut == NULL )
+        return;
+    pNodeRegular = Map_Regular( pNode );
+    if ( Map_NodeIsConst( pNodeRegular ) )
+        return;
+    AigId = Map_NodeReadAigId( pNodeRegular );
+    if ( AigId != s_Stmap80ParentAigId )
+        return;
+    pSuperBest = pMatch ? pMatch->pSuperBest : NULL;
+    pSuperBestBefore = pBestBefore ? pBestBefore->pSuperBest : NULL;
+    pGate = pSuperBest ? pSuperBest->pRoot : NULL;
+    pGateBefore = pSuperBestBefore ? pSuperBestBefore->pRoot : NULL;
+    uPhaseBest = pSuperBest && pMatch ? pMatch->uPhaseBest : 0;
+    nLeaves = pCut->nLeaves;
+    ChildLeaf = -1;
+    ChildPhase = -1;
+    for ( i = 0; i < 6; i++ )
+    {
+        LeafAigId[i] = -1;
+        LeafPhase[i] = -1;
+    }
+    for ( i = 0; i < nLeaves && i < 6; i++ )
+    {
+        LeafAigId[i] = Map_NodeReadAigId( Map_Regular(pCut->ppLeaves[i]) );
+        if ( pSuperBest )
+            LeafPhase[i] = ((uPhaseBest & (1 << i)) > 0) ? 0 : 1;
+        if ( LeafAigId[i] == s_Stmap80ChildAigId )
+        {
+            ChildLeaf = i;
+            ChildPhase = LeafPhase[i];
+        }
+    }
+    ChildInverted = ChildPhase >= 0 ? !ChildPhase : -1;
+    Arrive = pMatch ? pMatch->tArrive.Worst : MAP_FLOAT_LARGE;
+    AreaFlow = pMatch ? pMatch->AreaFlow : MAP_FLOAT_LARGE;
+    Required = pNodeRegular->tRequired[fPhase].Worst;
+    Slack = Required - Arrive;
+    BestArrive = pBestBefore ? pBestBefore->tArrive.Worst : MAP_FLOAT_LARGE;
+    BestArea = pBestBefore ? pBestBefore->AreaFlow : MAP_FLOAT_LARGE;
+    s_nStmap80CandidateCutRows++;
+    if ( fViable )
+        s_nStmap80CandidateCutViable++;
+    if ( fSelectedUpdate )
+        s_nStmap80CandidateCutAccepted++;
+    if ( ChildPhase == 0 )
+        s_nStmap80CandidateChildPhase0++;
+    else if ( ChildPhase == 1 )
+        s_nStmap80CandidateChildPhase1++;
+    else if ( ChildLeaf >= 0 )
+        s_nStmap80CandidateChildUnknown++;
+    else
+        s_nStmap80CandidateChildMissing++;
+    switch ( Reason )
+    {
+    case MAP_STMAP80_REASON_SKIP_FANOUT:
+        s_nStmap80CandidateSkipFanout++;
+        break;
+    case MAP_STMAP80_REASON_NO_SUPERS:
+        s_nStmap80CandidateNoSupers++;
+        break;
+    case MAP_STMAP80_REASON_NO_SUPER_BEST:
+        s_nStmap80CandidateNoSuperBest++;
+        break;
+    case MAP_STMAP80_REASON_REQUIRED:
+        s_nStmap80CandidateRequired++;
+        break;
+    case MAP_STMAP80_REASON_AREA_SENSITIVE:
+        s_nStmap80CandidateAreaSensitive++;
+        break;
+    default:
+        break;
+    }
+    printf( "%s candidate-cut: index = %d  parent-aig = %d  child-aig = %d  mapper-mode = %d  phase = %d  cut-ordinal = %d  reason = %s  viable = %d  selected-update = %d  node = %d  level = %d  refs = %d  gate = %s  leaves = %d  u-phase-best = %u  fanout-limit = %d  arrival = %.3f  required = %.3f  slack = %.3f  area-flow = %.3f  best-gate = %s  best-arrival = %.3f  best-area-flow = %.3f  child-leaf-index = %d  child-requested-phase = %d  child-inverted-pin = %d  leaf0-aig-id = %d  leaf0-phase = %d  leaf1-aig-id = %d  leaf1-phase = %d  leaf2-aig-id = %d  leaf2-phase = %d  leaf3-aig-id = %d  leaf3-phase = %d  leaf4-aig-id = %d  leaf4-phase = %d  leaf5-aig-id = %d  leaf5-phase = %d\n",
+        s_pStmap80CandidateCutLabel, s_nStmap80CandidateCutRows,
+        s_Stmap80ParentAigId, s_Stmap80ChildAigId, p->fMappingMode, fPhase,
+        CutOrdinal, Map_Stmap80ReasonName( Reason ), fViable, fSelectedUpdate,
+        pNodeRegular->Num, pNodeRegular->Level, pNodeRegular->nRefs,
+        pGate ? Mio_GateReadName(pGate) : "?", nLeaves, uPhaseBest,
+        pSuperBest ? (int)pSuperBest->nFanLimit : -1, Arrive, Required, Slack,
+        AreaFlow, pGateBefore ? Mio_GateReadName(pGateBefore) : "?",
+        BestArrive, BestArea, ChildLeaf, ChildPhase, ChildInverted,
+        LeafAigId[0], LeafPhase[0], LeafAigId[1], LeafPhase[1],
+        LeafAigId[2], LeafPhase[2], LeafAigId[3], LeafPhase[3],
+        LeafAigId[4], LeafPhase[4], LeafAigId[5], LeafPhase[5] );
+}
+
+void Map_Stmap80PrintCandidateCutSummary( void )
+{
+    printf( "%s candidate-cut stats: parent-aig = %d  child-aig = %d  rows = %d  viable = %d  accepted-updates = %d  child-phase0 = %d  child-phase1 = %d  child-unknown = %d  child-missing = %d  skip-fanout = %d  no-supers = %d  no-super-best = %d  violates-required = %d  area-sensitive-skip = %d\n",
+        s_pStmap80CandidateCutLabel, s_Stmap80ParentAigId, s_Stmap80ChildAigId,
+        s_nStmap80CandidateCutRows, s_nStmap80CandidateCutViable,
+        s_nStmap80CandidateCutAccepted, s_nStmap80CandidateChildPhase0,
+        s_nStmap80CandidateChildPhase1, s_nStmap80CandidateChildUnknown,
+        s_nStmap80CandidateChildMissing, s_nStmap80CandidateSkipFanout,
+        s_nStmap80CandidateNoSupers, s_nStmap80CandidateNoSuperBest,
+        s_nStmap80CandidateRequired, s_nStmap80CandidateAreaSensitive );
+}
+
 /**Function*************************************************************
 
   Synopsis    [Returns 1 if the cut is a high-fanout wide-cut risk.]
@@ -5007,6 +5216,7 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
     Map_Cut_t * pCut, * pCutBest;
     float Area1 = 0.0; // Suppress "might be used uninitialized
     float Area2, fWorstLimit;
+    int CutOrdinal, fSkipFanout, fAreaSkip, fAccepted;
 
     // skip the cuts that have been unassigned during area recovery
     pCutBest = pNode->pCutBest[fPhase];
@@ -5054,24 +5264,40 @@ int Map_MatchNodePhase( Map_Man_t * p, Map_Node_t * pNode, int fPhase )
  
     // select the new best cut
     fWorstLimit = pNode->tRequired[fPhase].Worst;
-    for ( pCut = pNode->pCuts->pNext; pCut; pCut = pCut->pNext )
+    for ( pCut = pNode->pCuts->pNext, CutOrdinal = 0; pCut; pCut = pCut->pNext, CutOrdinal++ )
     {
         // limit gate sizes based on fanout count
-        if ( Map_MatchSkipCutForFanout( p, pNode, pCut, fPhase ) )
+        fSkipFanout = Map_MatchSkipCutForFanout( p, pNode, pCut, fPhase );
+        if ( fSkipFanout )
+        {
+            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pCut->M + fPhase, &MatchBest, MAP_STMAP80_REASON_SKIP_FANOUT, 0, 0 );
             continue;
+        }
         pMatch = pCut->M + fPhase;
         if ( pMatch->pSupers == NULL )
+        {
+            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, MAP_STMAP80_REASON_NO_SUPERS, 0, 0 );
             continue;
+        }
 
         // find the matches for the cut
         Map_MatchNodeCut( p, pNode, pCut, fPhase, fWorstLimit );
         if ( pMatch->pSuperBest == NULL || pMatch->tArrive.Worst > fWorstLimit + p->fEpsilon )
+        {
+            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, pMatch->pSuperBest == NULL ? MAP_STMAP80_REASON_NO_SUPER_BEST : MAP_STMAP80_REASON_REQUIRED, 0, 0 );
             continue;
-        if ( Map_MatchSkipAreaSensitiveFanout( p, pNode, pCut, fPhase, &MatchBest, pMatch ) )
+        }
+        fAreaSkip = Map_MatchSkipAreaSensitiveFanout( p, pNode, pCut, fPhase, &MatchBest, pMatch );
+        if ( fAreaSkip )
+        {
+            Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, MAP_STMAP80_REASON_AREA_SENSITIVE, 0, 0 );
             continue;
+        }
 
         // if the cut can be matched compare the matchings
-        if ( Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode ) )
+        fAccepted = Map_MatchCompare( p, &MatchBest, pMatch, p->fMappingMode );
+        Map_Stmap80RecordCandidateCut( p, pNode, pCut, fPhase, CutOrdinal, pMatch, &MatchBest, fAccepted ? MAP_STMAP80_REASON_ACCEPTED_BEST : MAP_STMAP80_REASON_NONSELECTED, fAccepted, 1 );
+        if ( fAccepted )
         {
             pCutBest  =  pCut;
             MatchBest = *pMatch;
